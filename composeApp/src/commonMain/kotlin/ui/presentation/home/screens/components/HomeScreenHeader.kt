@@ -1,14 +1,12 @@
 package ui.presentation.home.screens.components
 
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.sizeIn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
@@ -33,7 +31,7 @@ import themedbingo.composeapp.generated.resources.mobile_apps_development
 @Composable
 fun HomeScreenHeader(
     modifier: Modifier = Modifier,
-    pictureSize: Dp = 240.dp
+    maxPictureWidth: Dp = 240.dp
 ) {
 
     Column(
@@ -47,8 +45,12 @@ fun HomeScreenHeader(
             ),
             contentDescription = "Hot Water Software Logo",
             modifier = Modifier
-                .size(pictureSize)
                 .clip(RoundedCornerShape(16.dp))
+                .sizeIn(
+                    minWidth = 160.dp,
+                    maxWidth = maxPictureWidth
+                )
+                .aspectRatio(1f)
         )
 
         Spacer(modifier = Modifier.height(12.dp))
