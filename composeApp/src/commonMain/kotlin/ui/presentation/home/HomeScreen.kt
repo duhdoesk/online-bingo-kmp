@@ -8,6 +8,7 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import ui.navigation.Configuration
 
 @Composable
 fun HomeScreen(component: HomeScreenComponent) {
@@ -17,10 +18,35 @@ fun HomeScreen(component: HomeScreenComponent) {
         modifier = Modifier.fillMaxSize()
     ) {
         Text("Home Screen")
+
         Button(
-            onClick = { component.navigate() }
+            onClick = { component.navigate(Configuration.CreateScreen) }
         ) {
-            Text("Navigate")
+            Text("Create")
+        }
+
+        Button(
+            onClick = { component.navigate(Configuration.JoinScreen) }
+        ) {
+            Text("Join")
+        }
+
+        Button(
+            onClick = { component.navigate(Configuration.ThemesScreen) }
+        ) {
+            Text("Themes")
+        }
+
+        Button(
+            onClick = { component.navigate(Configuration.HostScreen) }
+        ) {
+            Text("Host")
+        }
+
+        Button(
+            onClick = { component.navigate(Configuration.PlayScreen) }
+        ) {
+            Text("Play")
         }
     }
 }

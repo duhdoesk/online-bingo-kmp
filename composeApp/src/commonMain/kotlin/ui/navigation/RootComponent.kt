@@ -5,9 +5,12 @@ import com.arkivanov.decompose.ExperimentalDecomposeApi
 import com.arkivanov.decompose.router.stack.StackNavigation
 import com.arkivanov.decompose.router.stack.childStack
 import com.arkivanov.decompose.router.stack.pop
-import com.arkivanov.decompose.router.stack.push
 import com.arkivanov.decompose.router.stack.pushNew
+import ui.presentation.create_room.CreateScreenComponent
 import ui.presentation.home.HomeScreenComponent
+import ui.presentation.host.HostScreenComponent
+import ui.presentation.join_room.JoinScreenComponent
+import ui.presentation.play.PlayScreenComponent
 import ui.presentation.themes.ThemesScreenComponent
 
 class RootComponent(
@@ -33,12 +36,42 @@ class RootComponent(
             Configuration.HomeScreen -> Child.HomeScreen(
                 HomeScreenComponent(
                     componentContext = context,
-                    onNavigate = { navigation.pushNew(configuration = Configuration.ThemesScreen) }
+                    onNavigate = { receivedConfig ->
+                        navigation.pushNew(configuration = receivedConfig)
+                    }
                 )
             )
 
             Configuration.ThemesScreen -> Child.ThemesScreen(
                 ThemesScreenComponent(
+                    componentContext = context,
+                    onPopBack = { navigation.pop() }
+                )
+            )
+
+            Configuration.CreateScreen -> Child.CreateScreen(
+                CreateScreenComponent(
+                    componentContext = context,
+                    onPopBack = { navigation.pop() }
+                )
+            )
+
+            Configuration.HostScreen -> Child.HostScreen(
+                HostScreenComponent(
+                    componentContext = context,
+                    onPopBack = { navigation.pop() }
+                )
+            )
+
+            Configuration.JoinScreen -> Child.JoinScreen(
+                JoinScreenComponent(
+                    componentContext = context,
+                    onPopBack = { navigation.pop() }
+                )
+            )
+
+            Configuration.PlayScreen -> Child.PlayScreen(
+                PlayScreenComponent(
                     componentContext = context,
                     onPopBack = { navigation.pop() }
                 )
