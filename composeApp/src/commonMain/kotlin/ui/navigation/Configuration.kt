@@ -16,4 +16,6 @@ sealed class Configuration {
     data object HostScreen: Configuration()
     @Serializable
     data object PlayScreen: Configuration()
+    @Serializable
+    data object ProfileScreen: Configuration()
 }

@@ -11,6 +11,8 @@ import ui.presentation.home.HomeScreenComponent
 import ui.presentation.host.HostScreenComponent
 import ui.presentation.join_room.JoinScreenComponent
 import ui.presentation.play.PlayScreenComponent
+import ui.presentation.profile.ProfileScreen
+import ui.presentation.profile.ProfileScreenComponent
 import ui.presentation.themes.ThemesScreenComponent
 
 class RootComponent(
@@ -72,6 +74,13 @@ class RootComponent(
 
             Configuration.PlayScreen -> Child.PlayScreen(
                 PlayScreenComponent(
+                    componentContext = context,
+                    onPopBack = { navigation.pop() }
+                )
+            )
+
+            Configuration.ProfileScreen -> Child.ProfileScreen(
+                ProfileScreenComponent(
                     componentContext = context,
                     onPopBack = { navigation.pop() }
                 )

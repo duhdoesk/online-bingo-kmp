@@ -8,9 +8,13 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import ui.presentation.util.WindowInfo
 
 @Composable
-fun HostScreen(component: HostScreenComponent) {
+fun HostScreen(
+    component: HostScreenComponent,
+    windowInfo: WindowInfo
+) {
     Column(
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally,

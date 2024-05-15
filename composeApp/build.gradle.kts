@@ -122,3 +122,5 @@ compose.desktop {
 compose.experimental {
     web.application {}
 }
+
+task("testClasses")

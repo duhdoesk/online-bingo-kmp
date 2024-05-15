@@ -1,0 +1,10 @@
+<resources>
+
+<!--    Home Screen -->
+    <string name="hot_water_software">Hot Water Software</string>
+    <string name="mobile_apps_development">Mobile Apps Development</string>
+    <string name="new_room">New Room</string>
+    <string name="join_room">Join Room</string>
+    <string name="profile">Profile</string>
+
+</resources>
