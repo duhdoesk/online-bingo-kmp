@@ -9,17 +9,17 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.Button
-import androidx.compose.material.ButtonDefaults
-import androidx.compose.material.Divider
-import androidx.compose.material.Icon
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.OutlinedButton
-import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Create
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.Search
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedButton
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -31,7 +31,6 @@ import themedbingo.composeapp.generated.resources.join_room
 import themedbingo.composeapp.generated.resources.new_room
 import themedbingo.composeapp.generated.resources.profile
 import ui.navigation.Configuration
-import ui.presentation.home.HomeScreenComponent
 import ui.presentation.home.event.HomeScreenEvent
 import ui.presentation.home.screens.components.HomeScreenHeader
 
@@ -85,8 +84,8 @@ fun LandscapeHomeScreen(
                 },
                 modifier = buttonModifier,
                 colors = ButtonDefaults.buttonColors(
-                    backgroundColor = MaterialTheme.colors.secondary,
-                    contentColor = MaterialTheme.colors.onSecondary
+                    containerColor = MaterialTheme.colorScheme.secondary,
+                    contentColor = MaterialTheme.colorScheme.onSecondary
                 )
             ) {
                 Icon(
@@ -97,7 +96,7 @@ fun LandscapeHomeScreen(
                 Text(stringResource(resource = Res.string.join_room))
             }
 
-            Divider(
+            HorizontalDivider(
                 modifier = Modifier
                     .padding(vertical = 24.dp)
                     .width(120.dp)
