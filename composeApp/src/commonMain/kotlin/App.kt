@@ -1,9 +1,11 @@
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material.MaterialTheme
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import coil3.annotation.ExperimentalCoilApi
+import coil3.compose.setSingletonImageLoaderFactory
 import com.arkivanov.decompose.extensions.compose.stack.Children
 import com.arkivanov.decompose.extensions.compose.stack.animation.slide
 import com.arkivanov.decompose.extensions.compose.stack.animation.stackAnimation
@@ -11,21 +13,27 @@ import com.arkivanov.decompose.extensions.compose.subscribeAsState
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import ui.navigation.Child
 import ui.navigation.RootComponent
-import ui.presentation.create_room.CreateScreen
+import ui.presentation.create_room.CreateRoomScreen
 import ui.presentation.home.HomeScreen
 import ui.presentation.host.HostScreen
 import ui.presentation.join_room.JoinScreen
 import ui.presentation.play.PlayScreen
 import ui.presentation.profile.ProfileScreen
 import ui.presentation.themes.ThemesScreen
+import ui.presentation.util.getAsyncImageLoader
 import ui.presentation.util.rememberWindowInfo
 
+@OptIn(ExperimentalCoilApi::class)
 @Composable
 @Preview
 fun App(rootComponent: RootComponent) {
     MaterialTheme {
 
         val childStack by rootComponent.childStack.subscribeAsState()
+
+        setSingletonImageLoaderFactory { context ->
+            getAsyncImageLoader(context)
+        }
 
         BoxWithConstraints(
             modifier = Modifier.fillMaxSize(),
@@ -52,7 +60,7 @@ fun App(rootComponent: RootComponent) {
                         windowInfo = windowInfo
                     )
 
-                    is Child.CreateScreen -> CreateScreen(
+                    is Child.CreateScreen -> CreateRoomScreen(
                         component = instance.component,
                         windowInfo = windowInfo
                     )

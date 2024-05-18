@@ -1,10 +1,21 @@
 <resources>
 
-<!--    Home Screen -->
+    <!--    Home Screen -->
     <string name="hot_water_software">Hot Water Software</string>
     <string name="mobile_apps_development">Mobile Apps Development</string>
     <string name="new_room">New Room</string>
     <string name="join_room">Join Room</string>
     <string name="profile">Profile</string>
+
+
+    <!--    Create Room Screen -->
+    <string name="create_session_button">Create</string>
+    <string name="name_textField">Name</string>
+    <string name="theme_textField">Theme</string>
+    <string name="password_textField">Password</string>
+    <string name="private_session_checkbox">Private Room</string>
+    <string name="max_winners">Max Winners</string>
+    <string name="theme_picture">Theme Picture</string>
+    <string name="key_icon">Key Icon</string>
 
 </resources>

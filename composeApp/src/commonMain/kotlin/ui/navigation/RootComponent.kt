@@ -6,12 +6,11 @@ import com.arkivanov.decompose.router.stack.StackNavigation
 import com.arkivanov.decompose.router.stack.childStack
 import com.arkivanov.decompose.router.stack.pop
 import com.arkivanov.decompose.router.stack.pushNew
-import ui.presentation.create_room.CreateScreenComponent
+import ui.presentation.create_room.CreateRoomScreenComponent
 import ui.presentation.home.HomeScreenComponent
 import ui.presentation.host.HostScreenComponent
 import ui.presentation.join_room.JoinScreenComponent
 import ui.presentation.play.PlayScreenComponent
-import ui.presentation.profile.ProfileScreen
 import ui.presentation.profile.ProfileScreenComponent
 import ui.presentation.themes.ThemesScreenComponent
 
@@ -52,7 +51,7 @@ class RootComponent(
             )
 
             Configuration.CreateScreen -> Child.CreateScreen(
-                CreateScreenComponent(
+                CreateRoomScreenComponent(
                     componentContext = context,
                     onPopBack = { navigation.pop() }
                 )
