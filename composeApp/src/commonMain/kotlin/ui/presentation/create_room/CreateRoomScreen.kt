@@ -30,7 +30,10 @@ fun CreateRoomScreen(
     when (windowInfo.screenOrientation) {
         is WindowInfo.DeviceOrientation.Landscape ->
             LandscapeCreateRoomScreen(
-                themes = themes
+                themes = themes,
+                uiState = uiState,
+                isFormOk = isFormOk,
+                windowInfo = windowInfo
             ) { event ->
                 createRoomScreenEventHandler(component, event)
             }

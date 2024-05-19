@@ -18,6 +18,7 @@ import androidx.compose.material.icons.automirrored.filled.KeyboardArrowLeft
 import androidx.compose.material.icons.automirrored.filled.KeyboardArrowRight
 import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
@@ -25,8 +26,14 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import domain.theme.model.BingoTheme
+import org.jetbrains.compose.resources.ExperimentalResourceApi
+import org.jetbrains.compose.resources.stringResource
+import themedbingo.composeapp.generated.resources.Res
+import themedbingo.composeapp.generated.resources.create_room_title
+import themedbingo.composeapp.generated.resources.create_session_button
 import ui.presentation.create_room.event.CreateScreenEvent
 import ui.presentation.create_room.screens.components.CreateRoomHeader
 import ui.presentation.create_room.screens.components.CreateRoomMaxWinners
@@ -35,6 +42,7 @@ import ui.presentation.create_room.screens.components.SessionPasswordComponent
 import ui.presentation.create_room.screens.components.CreateRoomThemePicker
 import ui.presentation.create_room.state.CreateScreenUiState
 
+@OptIn(ExperimentalResourceApi::class)
 @Composable
 fun PortraitCreateRoomScreen(
     themes: List<BingoTheme>,
@@ -67,6 +75,15 @@ fun PortraitCreateRoomScreen(
             CreateRoomHeader()
 
             Spacer(Modifier.height(60.dp))
+
+            Text(
+                text = stringResource(Res.string.create_room_title),
+                style = MaterialTheme.typography.titleLarge,
+                fontWeight = FontWeight.Bold,
+                modifier = Modifier.fillMaxWidth()
+            )
+
+            Spacer(Modifier.height(12.dp))
 
             CreateRoomName(
                 modifier = rowModifier,

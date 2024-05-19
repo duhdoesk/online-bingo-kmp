@@ -9,6 +9,7 @@
 
 
     <!--    Create Room Screen -->
+    <string name="create_room_title">Create Room</string>
     <string name="create_session_button">Create</string>
     <string name="name_textField">Name</string>
     <string name="theme_textField">Theme</string>
@@ -17,5 +18,10 @@
     <string name="max_winners">Max Winners</string>
     <string name="theme_picture">Theme Picture</string>
     <string name="key_icon">Key Icon</string>
+
+
+    <!--    Rotate Screen -->
+    <string name="rotate_your_device">Please, rotate your device.</string>
+    <string name="screen_rotation">Screen Rotation</string>
 
 </resources>
