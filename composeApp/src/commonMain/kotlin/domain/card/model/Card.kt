@@ -4,5 +4,5 @@ import domain.character.model.Character
 
 data class Card(
     val userId: String,
-    val characters: List<Character>
+    val characters: List<String>
 )
