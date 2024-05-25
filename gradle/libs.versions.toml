@@ -12,13 +12,21 @@ androidx-material = "1.11.0"
 androidx-test-junit = "1.1.5"
 compose = "1.6.6"
 compose-plugin = "1.6.2"
+firebaseCommonKtx = "21.0.0"
+firebaseFirestoreVersion = "1.12.0"
 junit = "4.13.2"
 kotlin = "1.9.23"
 decompose = "3.0.0-alpha07"
 coil3 = "3.0.0-alpha06"
+kotlinxSerializationJsonVersion = "1.6.3"
 ktor = "3.0.0-wasm2"
+firebasePlugin = "4.4.1"
 
 [libraries]
+dev-firebase-common = { module = "dev.gitlive:firebase-common", version.ref = "firebaseFirestoreVersion" }
+firebase-common-ktx = { module = "com.google.firebase:firebase-common-ktx", version.ref = "firebaseCommonKtx" }
+gitlive-firebase-firestore = { module = "dev.gitlive:firebase-firestore", version.ref = "firebaseFirestoreVersion" }
+jetbrains-kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinxSerializationJsonVersion" }
 ktor-client-core = { group = "io.ktor", name = "ktor-client-core", version.ref = "ktor" }
 coil-compose = { module = "io.coil-kt.coil3:coil-compose", version.ref = "coil3" }
 coil-compose-core = { module = "io.coil-kt.coil3:coil-compose-core", version.ref = "coil3" }
@@ -47,3 +55,4 @@ androidLibrary = { id = "com.android.library", version.ref = "agp" }
 jetbrainsCompose = { id = "org.jetbrains.compose", version.ref = "compose-plugin" }
 kotlinMultiplatform = { id = "org.jetbrains.kotlin.multiplatform", version.ref = "kotlin" }
 kotlinSerialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
+firebasePlugin = { id = "com.google.gms.google-services", version.ref = "firebasePlugin" }

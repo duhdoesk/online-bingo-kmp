@@ -1,13 +1,20 @@
 package ui.presentation.create_room
 
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.mutableStateListOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.toMutableStateList
 import com.arkivanov.decompose.ComponentContext
 import data.theme.repository.BingoThemeRepositoryImpl
+import domain.theme.model.BingoTheme
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
 import ui.presentation.create_room.state.CreateScreenUiState
 import util.componentCoroutineScope
 
@@ -16,8 +23,15 @@ class CreateRoomScreenComponent(
     private val onPopBack: () -> Unit
 ) : ComponentContext by componentContext {
 
-    val bingoThemesList = BingoThemeRepositoryImpl()
-        .getAllThemes()
+    val bingoThemesList = MutableStateFlow(emptyList<BingoTheme>())
+
+    init {
+        componentContext.componentCoroutineScope().launch {
+            bingoThemesList.update {
+                BingoThemeRepositoryImpl().getAllThemes()
+            }
+        }
+    }
 
     private val _uiState = MutableStateFlow(CreateScreenUiState())
     val uiState = _uiState
@@ -26,6 +40,7 @@ class CreateRoomScreenComponent(
                 !((_uiState.value.name.length < 4 || _uiState.value.themeId == "") ||
                         (_uiState.value.locked && _uiState.value.password.length < 4))
             }
+            println(_uiState.value.themeId)
         }
         .stateIn(
             componentContext.componentCoroutineScope(),

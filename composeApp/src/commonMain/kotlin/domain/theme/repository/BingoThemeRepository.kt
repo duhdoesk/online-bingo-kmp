@@ -4,6 +4,6 @@ import kotlinx.coroutines.flow.Flow
 import domain.theme.model.BingoTheme
 
 interface BingoThemeRepository {
-    fun getThemeById(id: String): Flow<BingoTheme>
-    fun getAllThemes(): Flow<List<BingoTheme>>
+    suspend fun getThemeById(id: String): BingoTheme
+    suspend fun getAllThemes(): List<BingoTheme>
 }

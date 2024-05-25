@@ -15,7 +15,7 @@ fun CreateRoomScreen(
 
     val themes = component
         .bingoThemesList
-        .collectAsState(emptyList())
+        .collectAsState()
         .value
 
     val uiState = component
