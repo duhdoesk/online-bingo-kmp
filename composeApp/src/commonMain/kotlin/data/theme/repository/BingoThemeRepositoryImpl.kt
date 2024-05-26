@@ -1,18 +1,17 @@
 package data.theme.repository
 
 import data.theme.model.BingoThemeDTO
-import dev.gitlive.firebase.Firebase
-import dev.gitlive.firebase.firestore.firestore
+import dev.gitlive.firebase.firestore.FirebaseFirestore
 import domain.theme.model.BingoTheme
-import domain.theme.model.mockBingoThemeList
 import domain.theme.repository.BingoThemeRepository
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flow
+import org.koin.core.component.KoinComponent
+import org.koin.core.component.inject
 
-class BingoThemeRepositoryImpl() : BingoThemeRepository {
+class BingoThemeRepositoryImpl : BingoThemeRepository, KoinComponent {
 
-    val collection = Firebase
-        .firestore
+    private val firestore: FirebaseFirestore by inject()
+
+    private val collection = firestore
         .collection("themes")
 
     override suspend fun getThemeById(id: String): BingoTheme {

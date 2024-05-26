@@ -1,18 +1,19 @@
 package com.duscaranari.themedbingocardsgenerator
 
 import android.app.Application
-import com.google.firebase.FirebaseApp
+import com.google.firebase.ktx.app
+import com.google.firebase.ktx.initialize
+import data.di.initKoin
 import dev.gitlive.firebase.Firebase
-import dev.gitlive.firebase.initialize
-import org.koin.android.ext.koin.androidContext
-import org.koin.core.context.startKoin
+import dev.gitlive.firebase.app
 
 class MainApplication: Application() {
     override fun onCreate() {
         super.onCreate()
-        startKoin{
-            androidContext(this@MainApplication)
-            modules()
-        }
+//        startKoin{
+//            androidContext(this@MainApplication)
+//            modules(dataModule())
+//        }
+        initKoin()
     }
 }

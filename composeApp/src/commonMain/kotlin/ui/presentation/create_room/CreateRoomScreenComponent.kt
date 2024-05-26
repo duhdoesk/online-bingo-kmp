@@ -1,13 +1,8 @@
 package ui.presentation.create_room
 
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.mutableStateListOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.toMutableStateList
 import com.arkivanov.decompose.ComponentContext
 import data.theme.repository.BingoThemeRepositoryImpl
 import domain.theme.model.BingoTheme
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.asStateFlow
