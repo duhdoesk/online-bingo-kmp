@@ -1,13 +1,11 @@
 import org.jetbrains.compose.desktop.application.dsl.TargetFormat
-import org.jetbrains.kotlin.gradle.targets.js.dsl.ExperimentalWasmDsl
-import org.jetbrains.kotlin.gradle.targets.js.webpack.KotlinWebpackConfig
 
 plugins {
     alias(libs.plugins.kotlinMultiplatform)
     alias(libs.plugins.androidApplication)
     alias(libs.plugins.jetbrainsCompose)
-    alias(libs.plugins.kotlinSerialization)
     alias(libs.plugins.firebasePlugin) apply false
+    alias(libs.plugins.kotlinSerialization)
 }
 
 kotlin {
@@ -57,13 +55,8 @@ kotlin {
             implementation(libs.androidx.activity.compose)
 
             implementation(libs.ktor.client.okhttp)
-
-//            Firebase
-//            implementation(project.dependencies.platform("com.google.firebase:firebase-bom:30.0.1"))
-//            implementation("com.google.firebase:firebase-firestore-ktx")
-//            implementation(libs.firebase.common.ktx)
-
-//            Koin
+            implementation(project.dependencies.platform("com.google.firebase:firebase-bom:30.0.1"))
+//
             implementation(project.dependencies.platform("io.insert-koin:koin-bom:3.5.3"))
             implementation("io.insert-koin:koin-core")
             implementation("io.insert-koin:koin-android")
@@ -108,6 +101,7 @@ kotlin {
 }
 
 android {
+    apply(plugin = "com.google.gms.google-services")
     namespace = "com.duscaranari.themedbingocardsgenerator"
     compileSdk = libs.versions.android.compileSdk.get().toInt()
 
