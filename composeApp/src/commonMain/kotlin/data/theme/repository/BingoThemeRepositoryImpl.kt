@@ -1,15 +1,14 @@
 package data.theme.repository
 
 import data.theme.model.BingoThemeDTO
-import dev.gitlive.firebase.firestore.FirebaseFirestore
+import dev.gitlive.firebase.Firebase
+import dev.gitlive.firebase.firestore.firestore
 import domain.theme.model.BingoTheme
 import domain.theme.repository.BingoThemeRepository
-import org.koin.core.component.KoinComponent
-import org.koin.core.component.inject
 
-class BingoThemeRepositoryImpl : BingoThemeRepository, KoinComponent {
+class BingoThemeRepositoryImpl : BingoThemeRepository {
 
-    private val firestore: FirebaseFirestore by inject()
+    private val firestore = Firebase.firestore
 
     private val collection = firestore
         .collection("themes")
