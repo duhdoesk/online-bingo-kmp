@@ -17,7 +17,13 @@ class BingoThemeRepositoryImpl : BingoThemeRepository {
         return collection
             .document(id)
             .get()
-            .data<BingoThemeDTO>()
+            .let { documentSnapshot ->
+                BingoThemeDTO(
+                    id = documentSnapshot.id,
+                    name = documentSnapshot.get("name"),
+                    picture = documentSnapshot.get("picture")
+                )
+            }
             .toModel()
     }
 
@@ -25,7 +31,13 @@ class BingoThemeRepositoryImpl : BingoThemeRepository {
         return collection
             .get()
             .documents
-            .map { it.data<BingoThemeDTO>() }
+            .map { documentSnapshot ->
+                BingoThemeDTO(
+                    id = documentSnapshot.id,
+                    name = documentSnapshot.get("name"),
+                    picture = documentSnapshot.get("picture")
+                )
+            }
             .map { it.toModel() }
     }
 }
