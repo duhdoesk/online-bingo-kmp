@@ -1,7 +1,9 @@
 package ui.presentation.create_room
 
 import com.arkivanov.decompose.ComponentContext
+import data.room.repository.BingoBingoRoomRepositoryImpl
 import data.theme.repository.BingoThemeRepositoryImpl
+import domain.room.model.BingoType
 import domain.theme.model.BingoTheme
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -35,7 +37,6 @@ class CreateRoomScreenComponent(
                 !((_uiState.value.name.length < 4 || _uiState.value.themeId == "") ||
                         (_uiState.value.locked && _uiState.value.password.length < 4))
             }
-            println(_uiState.value.themeId)
         }
         .stateIn(
             componentContext.componentCoroutineScope(),
@@ -102,7 +103,22 @@ class CreateRoomScreenComponent(
         }
     }
 
-    fun createRoom() {}
+    fun createRoom() {
+        componentCoroutineScope().launch {
+            uiState.value.run {
+                BingoBingoRoomRepositoryImpl()
+                    .createRoom(
+                        name = name,
+                        locked = locked,
+                        password = password,
+                        maxWinners = maxWinners,
+                        type = BingoType.THEMED,
+                        themeId = themeId
+                    )
+                popBack()
+            }
+        }
+    }
 
     fun popBack() {
         onPopBack()

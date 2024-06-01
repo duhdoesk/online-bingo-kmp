@@ -14,7 +14,5 @@ data class BingoRoom(
     val password: String?,
     val drawnCharactersIds: List<String>,
     val state: RoomState,
-    val players: List<User>,
-    val winners: List<String>,
-    val cards: List<Card>
+    val winners: List<String>
 )

@@ -152,7 +152,7 @@ fun PortraitCreateRoomScreen(
                 Spacer(Modifier.weight(1f))
 
                 Button(
-                    onClick = { event(CreateScreenEvent.PopBack) },
+                    onClick = { event(CreateScreenEvent.CreateRoom) },
                     enabled = isFormOk
                 ) {
                     Text(
