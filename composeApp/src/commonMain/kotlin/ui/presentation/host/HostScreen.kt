@@ -20,7 +20,7 @@ fun HostScreen(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier.fillMaxSize()
     ) {
-        Text("Host Screen")
+        Text(component.roomId)
         Button(
             onClick = { component.popBack() }
         ) {

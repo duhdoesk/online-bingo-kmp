@@ -12,12 +12,14 @@ import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import ui.navigation.Configuration
 import ui.presentation.create_room.state.CreateScreenUiState
 import util.componentCoroutineScope
 
 class CreateRoomScreenComponent(
     componentContext: ComponentContext,
-    private val onPopBack: () -> Unit
+    private val onPopBack: () -> Unit,
+    private val onCreateRoom: (configuration: Configuration) -> Unit
 ) : ComponentContext by componentContext {
 
     val bingoThemesList = MutableStateFlow(emptyList<BingoTheme>())
@@ -51,7 +53,7 @@ class CreateRoomScreenComponent(
         val errors = mutableListOf<String>()
 
         if (name.length in 1..3) {
-            errors.add("The name must be at least 4 characters.")
+            errors.add("The name must be at least 4 characters.") // refactor later
         }
 
         _uiState.update {
@@ -76,7 +78,7 @@ class CreateRoomScreenComponent(
         val errors = mutableListOf<String>()
 
         if (password.length in 1..3) {
-            errors.add("The password must be at least 4 characters.")
+            errors.add("The password must be at least 4 characters.") // refactor later
         }
 
         _uiState.update {
@@ -108,6 +110,7 @@ class CreateRoomScreenComponent(
             uiState.value.run {
                 BingoBingoRoomRepositoryImpl()
                     .createRoom(
+                        hostId = "", // refactor later
                         name = name,
                         locked = locked,
                         password = password,
@@ -115,7 +118,11 @@ class CreateRoomScreenComponent(
                         type = BingoType.THEMED,
                         themeId = themeId
                     )
-                popBack()
+                    .collect() { snapshot ->
+                        if (snapshot.exists) {
+                            onCreateRoom(Configuration.HostScreen(roomId = snapshot.id))
+                        }
+                    }
             }
         }
     }

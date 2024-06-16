@@ -1,7 +1,6 @@
 package data.room.repository
 
 import data.room.model.BingoRoomDTO
-import data.room.model.bingoRoomDTOFromModel
 import dev.gitlive.firebase.Firebase
 import dev.gitlive.firebase.firestore.firestore
 import domain.room.model.BingoRoom
@@ -33,25 +32,28 @@ class BingoBingoRoomRepositoryImpl : BingoRoomRepository {
             }
 
     override suspend fun createRoom(
+        hostId: String,
         name: String,
         locked: Boolean,
         password: String?,
         maxWinners: Int,
         type: BingoType,
         themeId: String?
-    ): String {
-        return collection
+    ) =
+        collection
             .add(
                 data = hashMapOf(
+                    "hostId" to hostId,
                     "name" to name,
                     "locked" to locked,
                     "password" to password,
                     "maxWinners" to maxWinners,
                     "type" to type.name,
                     "themeId" to themeId,
-                    "state" to "NOT_STARTED"
+                    "state" to "NOT_STARTED",
+                    "winners" to emptyList<String>(),
+                    "players" to emptyList<String>(),
                 )
             )
-            .id
-    }
+            .snapshots
 }

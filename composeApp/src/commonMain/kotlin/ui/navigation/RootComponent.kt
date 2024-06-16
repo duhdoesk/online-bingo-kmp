@@ -6,6 +6,7 @@ import com.arkivanov.decompose.router.stack.StackNavigation
 import com.arkivanov.decompose.router.stack.childStack
 import com.arkivanov.decompose.router.stack.pop
 import com.arkivanov.decompose.router.stack.pushNew
+import com.arkivanov.decompose.router.stack.replaceCurrent
 import ui.presentation.create_room.CreateRoomScreenComponent
 import ui.presentation.home.HomeScreenComponent
 import ui.presentation.host.HostScreenComponent
@@ -53,14 +54,17 @@ class RootComponent(
             Configuration.CreateScreen -> Child.CreateScreen(
                 CreateRoomScreenComponent(
                     componentContext = context,
-                    onPopBack = { navigation.pop() }
+                    onPopBack = { navigation.pop() },
+                    onCreateRoom = { receivedConfig ->
+                        navigation.replaceCurrent(configuration = receivedConfig) }
                 )
             )
 
-            Configuration.HostScreen -> Child.HostScreen(
+            is Configuration.HostScreen -> Child.HostScreen(
                 HostScreenComponent(
                     componentContext = context,
-                    onPopBack = { navigation.pop() }
+                    onPopBack = { navigation.pop() },
+                    roomId = configuration.roomId
                 )
             )
 

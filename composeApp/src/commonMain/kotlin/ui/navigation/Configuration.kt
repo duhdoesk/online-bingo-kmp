@@ -13,7 +13,7 @@ sealed class Configuration {
     @Serializable
     data object JoinScreen: Configuration()
     @Serializable
-    data object HostScreen: Configuration()
+    data class HostScreen(val roomId: String): Configuration()
     @Serializable
     data object PlayScreen: Configuration()
     @Serializable
