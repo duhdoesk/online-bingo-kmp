@@ -15,7 +15,7 @@ sealed class Configuration {
     @Serializable
     data class HostScreen(val roomId: String): Configuration()
     @Serializable
-    data object PlayScreen: Configuration()
+    data class PlayScreen(val roomId: String): Configuration()
     @Serializable
     data object ProfileScreen: Configuration()
 }

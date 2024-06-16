@@ -20,7 +20,7 @@ fun PlayScreen(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier.fillMaxSize()
     ) {
-        Text("Play Screen")
+        Text(component.roomId)
         Button(
             onClick = { component.popBack() }
         ) {

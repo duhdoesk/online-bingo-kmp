@@ -71,14 +71,17 @@ class RootComponent(
             Configuration.JoinScreen -> Child.JoinScreen(
                 JoinScreenComponent(
                     componentContext = context,
-                    onPopBack = { navigation.pop() }
+                    onPopBack = { navigation.pop() },
+                    onJoinRoom = { receivedConfig ->
+                        navigation.replaceCurrent(configuration = receivedConfig) }
                 )
             )
 
-            Configuration.PlayScreen -> Child.PlayScreen(
+            is Configuration.PlayScreen -> Child.PlayScreen(
                 PlayScreenComponent(
                     componentContext = context,
-                    onPopBack = { navigation.pop() }
+                    onPopBack = { navigation.pop() },
+                    roomId = configuration.roomId
                 )
             )
 
