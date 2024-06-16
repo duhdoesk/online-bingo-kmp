@@ -17,9 +17,23 @@ class BingoBingoRoomRepositoryImpl : BingoRoomRepository {
     override fun getRooms(): Flow<List<BingoRoom>> =
         collection
             .snapshots
-            .map { query ->
-                query.documents.map { document ->
-                    document.data(BingoRoomDTO.serializer()).toModel()
+            .map { querySnapshot ->
+                querySnapshot.documents.map { documentSnapshot ->
+                    BingoRoomDTO(
+                        id = documentSnapshot.id,
+                        hostId = documentSnapshot.get("hostId"),
+                        type = documentSnapshot.get("type"),
+                        name = documentSnapshot.get("name"),
+                        themeId = documentSnapshot.get("themeId"),
+                        maxWinners = documentSnapshot.get("maxWinners"),
+                        locked = documentSnapshot.get("locked"),
+                        password = documentSnapshot.get("password"),
+                        drawnCharactersIds = documentSnapshot.get("drawnCharactersIds") ?: emptyList(),
+                        state = documentSnapshot.get("state"),
+                        winners = documentSnapshot.get("winners") ?: emptyList(),
+                        players = documentSnapshot.get("players") ?: emptyList()
+                    )
+                        .toModel()
                 }
             }
 
@@ -27,8 +41,24 @@ class BingoBingoRoomRepositoryImpl : BingoRoomRepository {
         collection
             .document(id)
             .snapshots
-            .map { document ->
-                document.data(BingoRoomDTO.serializer()).toModel()
+            .map { documentSnapshot ->
+                BingoRoomDTO(
+                    id = documentSnapshot.id,
+                    hostId = documentSnapshot.get("hostId"),
+                    type = documentSnapshot.get("type"),
+                    name = documentSnapshot.get("name"),
+                    themeId = documentSnapshot.get("themeId"),
+                    maxWinners = documentSnapshot.get("maxWinners"),
+                    locked = documentSnapshot.get("locked"),
+                    password = documentSnapshot.get("password"),
+                    drawnCharactersIds = documentSnapshot.get("drawnCharactersIds"),
+                    state = documentSnapshot.get("state"),
+                    winners = documentSnapshot.get("winners"),
+                    players = documentSnapshot.get("players") ?: emptyList()
+                )
+            }
+            .map { dto ->
+                dto.toModel()
             }
 
     override suspend fun createRoom(
@@ -53,6 +83,7 @@ class BingoBingoRoomRepositoryImpl : BingoRoomRepository {
                     "state" to "NOT_STARTED",
                     "winners" to emptyList<String>(),
                     "players" to emptyList<String>(),
+                    "drawnCharactersIds" to emptyList<String>()
                 )
             )
             .snapshots

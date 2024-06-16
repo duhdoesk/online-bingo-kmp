@@ -21,6 +21,7 @@ class BingoRoomDTO(
     private val password: String?,
     private val drawnCharactersIds: List<String>,
     private val state: String,
+    private val players: List<String>,
     private val winners: List<String>
 ) {
     fun toModel(): BingoRoom {
@@ -46,7 +47,8 @@ class BingoRoomDTO(
             password = password,
             drawnCharactersIds = drawnCharactersIds,
             state = modelState,
-            winners = winners
+            winners = winners,
+            players = players
         )
     }
 }
@@ -64,6 +66,7 @@ fun bingoRoomDTOFromModel(room: BingoRoom): BingoRoomDTO =
             password = password,
             drawnCharactersIds = drawnCharactersIds,
             state = state.name,
-            winners = winners
+            winners = winners,
+            players = players
         )
     }
