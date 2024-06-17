@@ -18,4 +18,6 @@ sealed class Configuration {
     data class PlayScreen(val roomId: String): Configuration()
     @Serializable
     data object ProfileScreen: Configuration()
+    @Serializable
+    data object SignInScreen: Configuration()
 }

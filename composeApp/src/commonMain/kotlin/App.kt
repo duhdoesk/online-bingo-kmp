@@ -19,6 +19,7 @@ import ui.presentation.host.HostScreen
 import ui.presentation.join_room.JoinScreen
 import ui.presentation.play.PlayScreen
 import ui.presentation.profile.ProfileScreen
+import ui.presentation.sign_in.SignInScreen
 import ui.presentation.themes.ThemesScreen
 import ui.presentation.util.getAsyncImageLoader
 import ui.presentation.util.rememberWindowInfo
@@ -81,6 +82,11 @@ fun App(rootComponent: RootComponent) {
                     )
 
                     is Child.ProfileScreen -> ProfileScreen(
+                        component = instance.component,
+                        windowInfo = windowInfo
+                    )
+
+                    is Child.SignInScreen -> SignInScreen(
                         component = instance.component,
                         windowInfo = windowInfo
                     )

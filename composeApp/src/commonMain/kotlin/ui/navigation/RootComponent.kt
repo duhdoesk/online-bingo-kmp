@@ -13,6 +13,7 @@ import ui.presentation.host.HostScreenComponent
 import ui.presentation.join_room.JoinScreenComponent
 import ui.presentation.play.PlayScreenComponent
 import ui.presentation.profile.ProfileScreenComponent
+import ui.presentation.sign_in.SignInScreenComponent
 import ui.presentation.themes.ThemesScreenComponent
 
 class RootComponent(
@@ -24,7 +25,7 @@ class RootComponent(
     val childStack = childStack(
         source = navigation,
         serializer = Configuration.serializer(),
-        initialConfiguration = Configuration.HomeScreen,
+        initialConfiguration = Configuration.SignInScreen,
         handleBackButton = true,
         childFactory = ::createChild
     )
@@ -89,6 +90,13 @@ class RootComponent(
                 ProfileScreenComponent(
                     componentContext = context,
                     onPopBack = { navigation.pop() }
+                )
+            )
+
+            Configuration.SignInScreen -> Child.SignInScreen(
+                SignInScreenComponent(
+                    componentContext = context,
+                    onSignIn = { navigation.replaceCurrent(Configuration.HomeScreen) }
                 )
             )
         }
