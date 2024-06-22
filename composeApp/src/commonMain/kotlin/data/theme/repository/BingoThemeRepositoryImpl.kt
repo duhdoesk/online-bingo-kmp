@@ -2,13 +2,14 @@ package data.theme.repository
 
 import data.theme.model.BingoThemeDTO
 import dev.gitlive.firebase.Firebase
+import dev.gitlive.firebase.firestore.FirebaseFirestore
 import dev.gitlive.firebase.firestore.firestore
 import domain.theme.model.BingoTheme
 import domain.theme.repository.BingoThemeRepository
 
-class BingoThemeRepositoryImpl : BingoThemeRepository {
-
-    private val firestore = Firebase.firestore
+class BingoThemeRepositoryImpl(
+    private val firestore: FirebaseFirestore
+) : BingoThemeRepository {
 
     private val collection = firestore
         .collection("themes")

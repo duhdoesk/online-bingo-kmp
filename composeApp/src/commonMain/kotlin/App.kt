@@ -11,6 +11,7 @@ import com.arkivanov.decompose.extensions.compose.stack.animation.slide
 import com.arkivanov.decompose.extensions.compose.stack.animation.stackAnimation
 import com.arkivanov.decompose.extensions.compose.subscribeAsState
 import org.jetbrains.compose.ui.tooling.preview.Preview
+import org.koin.compose.KoinContext
 import ui.navigation.Child
 import ui.navigation.RootComponent
 import ui.presentation.create_room.CreateRoomScreen
@@ -28,68 +29,70 @@ import ui.presentation.util.rememberWindowInfo
 @Composable
 @Preview
 fun App(rootComponent: RootComponent) {
-    MaterialTheme {
+    KoinContext {
+        MaterialTheme {
 
-        val childStack by rootComponent.childStack.subscribeAsState()
+            val childStack by rootComponent.childStack.subscribeAsState()
 
-        setSingletonImageLoaderFactory { context ->
-            getAsyncImageLoader(context)
-        }
+            setSingletonImageLoaderFactory { context ->
+                getAsyncImageLoader(context)
+            }
 
-        BoxWithConstraints(
-            modifier = Modifier.fillMaxSize(),
-            propagateMinConstraints = true
-        ) {
+            BoxWithConstraints(
+                modifier = Modifier.fillMaxSize(),
+                propagateMinConstraints = true
+            ) {
 
-            val boxWidth = this.maxWidth
-            val boxHeight = this.maxHeight
-            val windowInfo = rememberWindowInfo(screenHeight = boxHeight, screenWidth = boxWidth)
+                val boxWidth = this.maxWidth
+                val boxHeight = this.maxHeight
+                val windowInfo = rememberWindowInfo(screenHeight = boxHeight, screenWidth = boxWidth)
 
-            Children(
-                stack = childStack,
-                animation = stackAnimation(slide())
-            ) { child ->
+                Children(
+                    stack = childStack,
+                    animation = stackAnimation(slide())
+                ) { child ->
 
-                when (val instance = child.instance) {
-                    is Child.HomeScreen -> HomeScreen(
-                        component = instance.component,
-                        windowInfo = windowInfo
-                    )
+                    when (val instance = child.instance) {
+                        is Child.HomeScreen -> HomeScreen(
+                            component = instance.component,
+                            windowInfo = windowInfo
+                        )
 
-                    is Child.ThemesScreen -> ThemesScreen(
-                        component = instance.component,
-                        windowInfo = windowInfo
-                    )
+                        is Child.ThemesScreen -> ThemesScreen(
+                            component = instance.component,
+                            windowInfo = windowInfo
+                        )
 
-                    is Child.CreateScreen -> CreateRoomScreen(
-                        component = instance.component,
-                        windowInfo = windowInfo
-                    )
+                        is Child.CreateScreen -> CreateRoomScreen(
+                            component = instance.component,
+                            windowInfo = windowInfo
+                        )
 
-                    is Child.HostScreen -> HostScreen(
-                        component = instance.component,
-                        windowInfo = windowInfo
-                    )
+                        is Child.HostScreen -> HostScreen(
+                            component = instance.component,
+                            windowInfo = windowInfo
+                        )
 
-                    is Child.JoinScreen -> JoinScreen(
-                        component = instance.component,
-                        windowInfo = windowInfo
-                    )
+                        is Child.JoinScreen -> JoinScreen(
+                            component = instance.component,
+                            windowInfo = windowInfo
+                        )
 
-                    is Child.PlayScreen -> PlayScreen(
-                        component = instance.component,
-                        windowInfo = windowInfo
-                    )
+                        is Child.PlayScreen -> PlayScreen(
+                            component = instance.component,
+                            windowInfo = windowInfo
+                        )
 
-                    is Child.ProfileScreen -> ProfileScreen(
-                        component = instance.component,
-                        windowInfo = windowInfo
-                    )
+                        is Child.ProfileScreen -> ProfileScreen(
+                            component = instance.component,
+                            windowInfo = windowInfo
+                        )
 
-                    is Child.SignInScreen -> SignInScreen(
-                        component = instance.component,
-                        windowInfo = windowInfo
-                    )
+                        is Child.SignInScreen -> SignInScreen(
+                            component = instance.component,
+                            windowInfo = windowInfo
+                        )
+                    }
                 }
             }
         }

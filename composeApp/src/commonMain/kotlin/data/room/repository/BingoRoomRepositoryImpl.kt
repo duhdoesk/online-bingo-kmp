@@ -2,6 +2,7 @@ package data.room.repository
 
 import data.room.model.BingoRoomDTO
 import dev.gitlive.firebase.Firebase
+import dev.gitlive.firebase.firestore.FirebaseFirestore
 import dev.gitlive.firebase.firestore.firestore
 import domain.room.model.BingoRoom
 import domain.room.model.BingoType
@@ -9,9 +10,10 @@ import domain.room.repository.BingoRoomRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
-class BingoBingoRoomRepositoryImpl : BingoRoomRepository {
+class BingoRoomRepositoryImpl(
+    private val firestore: FirebaseFirestore
+) : BingoRoomRepository {
 
-    private val firestore = Firebase.firestore
     private val collection = firestore.collection("rooms")
 
     override fun getRooms(): Flow<List<BingoRoom>> =

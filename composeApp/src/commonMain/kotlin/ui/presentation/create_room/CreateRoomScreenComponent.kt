@@ -1,10 +1,10 @@
 package ui.presentation.create_room
 
 import com.arkivanov.decompose.ComponentContext
-import data.room.repository.BingoBingoRoomRepositoryImpl
-import data.theme.repository.BingoThemeRepositoryImpl
 import domain.room.model.BingoType
+import domain.room.repository.BingoRoomRepository
 import domain.theme.model.BingoTheme
+import domain.theme.repository.BingoThemeRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.asStateFlow
@@ -12,6 +12,8 @@ import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import org.koin.core.component.KoinComponent
+import org.koin.core.component.inject
 import ui.navigation.Configuration
 import ui.presentation.create_room.state.CreateScreenUiState
 import util.componentCoroutineScope
@@ -19,15 +21,17 @@ import util.componentCoroutineScope
 class CreateRoomScreenComponent(
     componentContext: ComponentContext,
     private val onPopBack: () -> Unit,
-    private val onCreateRoom: (configuration: Configuration) -> Unit
-) : ComponentContext by componentContext {
+    private val onCreateRoom: (configuration: Configuration) -> Unit,
+) : ComponentContext by componentContext, KoinComponent {
 
     val bingoThemesList = MutableStateFlow(emptyList<BingoTheme>())
+    private val themeRepository by inject<BingoThemeRepository>()
+    private val roomRepository by inject<BingoRoomRepository>()
 
     init {
         componentContext.componentCoroutineScope().launch {
             bingoThemesList.update {
-                BingoThemeRepositoryImpl().getAllThemes()
+                themeRepository.getAllThemes()
             }
         }
     }
@@ -108,7 +112,7 @@ class CreateRoomScreenComponent(
     fun createRoom() {
         componentCoroutineScope().launch {
             uiState.value.run {
-                BingoBingoRoomRepositoryImpl()
+                roomRepository
                     .createRoom(
                         hostId = "", // refactor later
                         name = name,
