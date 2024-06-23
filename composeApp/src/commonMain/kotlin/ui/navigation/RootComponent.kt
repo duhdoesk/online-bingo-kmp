@@ -6,7 +6,11 @@ import com.arkivanov.decompose.router.stack.StackNavigation
 import com.arkivanov.decompose.router.stack.childStack
 import com.arkivanov.decompose.router.stack.pop
 import com.arkivanov.decompose.router.stack.pushNew
+import com.arkivanov.decompose.router.stack.replaceAll
 import com.arkivanov.decompose.router.stack.replaceCurrent
+import domain.user.model.User
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.update
 import ui.presentation.create_room.CreateRoomScreenComponent
 import ui.presentation.home.HomeScreenComponent
 import ui.presentation.host.HostScreenComponent
@@ -20,15 +24,29 @@ class RootComponent(
     componentContext: ComponentContext
 ) : ComponentContext by componentContext {
 
+    private val user = MutableStateFlow<User?>(null)
+    private val initialConfig =
+        if (user.value == null) Configuration.SignInScreen else Configuration.HomeScreen
+
     private val navigation = StackNavigation<Configuration>()
 
     val childStack = childStack(
         source = navigation,
         serializer = Configuration.serializer(),
-        initialConfiguration = Configuration.SignInScreen,
+        initialConfiguration = initialConfig,
         handleBackButton = true,
         childFactory = ::createChild
     )
+
+    private fun signIn(signedUser: User) {
+        user.update { signedUser }
+        navigation.replaceCurrent(Configuration.HomeScreen)
+    }
+
+    private fun signOut() {
+        user.update { null }
+        navigation.replaceAll(Configuration.SignInScreen)
+    }
 
     @OptIn(ExperimentalDecomposeApi::class)
     private fun createChild(
@@ -57,7 +75,8 @@ class RootComponent(
                     componentContext = context,
                     onPopBack = { navigation.pop() },
                     onCreateRoom = { receivedConfig ->
-                        navigation.replaceCurrent(configuration = receivedConfig) }
+                        navigation.replaceCurrent(configuration = receivedConfig)
+                    }
                 )
             )
 
@@ -74,7 +93,8 @@ class RootComponent(
                     componentContext = context,
                     onPopBack = { navigation.pop() },
                     onJoinRoom = { receivedConfig ->
-                        navigation.replaceCurrent(configuration = receivedConfig) }
+                        navigation.replaceCurrent(configuration = receivedConfig)
+                    }
                 )
             )
 
@@ -89,14 +109,15 @@ class RootComponent(
             Configuration.ProfileScreen -> Child.ProfileScreen(
                 ProfileScreenComponent(
                     componentContext = context,
-                    onPopBack = { navigation.pop() }
+                    onPopBack = { navigation.pop() },
+                    onSignOut = { signOut() }
                 )
             )
 
             Configuration.SignInScreen -> Child.SignInScreen(
                 SignInScreenComponent(
                     componentContext = context,
-                    onSignIn = { navigation.replaceCurrent(Configuration.HomeScreen) }
+                    onSignIn = { signedUser -> signIn(signedUser) }
                 )
             )
         }
