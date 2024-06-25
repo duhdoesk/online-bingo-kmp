@@ -8,7 +8,7 @@ class ProfileScreenComponent(
     private val onSignOut: () -> Unit
 ): ComponentContext by componentContext {
 
-    fun popBack() = onPopBack
+    fun popBack() = onPopBack()
 
-    fun signOut() = onSignOut
+    fun signOut() = onSignOut()
 }

@@ -6,7 +6,8 @@ import com.mmk.kmpauth.google.GoogleAuthProvider
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
-import webClientID
+
+val webClientID = "746232526782-mnq2lnm9fp2sunpopk0cfp7pu6v9trcu.apps.googleusercontent.com"
 
 class AuthProvider {
 
