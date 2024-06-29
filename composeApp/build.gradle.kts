@@ -54,12 +54,16 @@ kotlin {
             implementation(libs.compose.ui.tooling.preview)
             implementation(libs.androidx.activity.compose)
 
+//            Ktor
             implementation(libs.ktor.client.okhttp)
+
+//            Firebase
             implementation(project.dependencies.platform("com.google.firebase:firebase-bom:30.0.1"))
-//
-            implementation(project.dependencies.platform("io.insert-koin:koin-bom:3.5.3"))
-            implementation("io.insert-koin:koin-core")
-            implementation("io.insert-koin:koin-android")
+
+//            Koin
+            implementation(project.dependencies.platform(libs.koin.bom))
+            implementation(libs.koin.core)
+            implementation(libs.koin.android)
         }
         commonMain.dependencies {
             implementation(compose.runtime)
@@ -81,9 +85,9 @@ kotlin {
             implementation(libs.coil.network.ktor)
 
 //            Koin
-            implementation(project.dependencies.platform("io.insert-koin:koin-bom:3.5.3"))
-            implementation("io.insert-koin:koin-core")
-            implementation("io.insert-koin:koin-compose")
+            implementation(project.dependencies.platform(libs.koin.bom))
+            implementation(libs.koin.core)
+            implementation(libs.koin.compose)
 
 //            Firebase
             implementation(libs.gitlive.firebase.firestore)

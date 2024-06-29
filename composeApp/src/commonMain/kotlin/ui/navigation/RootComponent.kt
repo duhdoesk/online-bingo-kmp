@@ -25,15 +25,13 @@ class RootComponent(
 ) : ComponentContext by componentContext {
 
     private val user = MutableStateFlow<User?>(null)
-    private val initialConfig =
-        if (user.value == null) Configuration.SignInScreen else Configuration.HomeScreen
 
     private val navigation = StackNavigation<Configuration>()
 
     val childStack = childStack(
         source = navigation,
         serializer = Configuration.serializer(),
-        initialConfiguration = initialConfig,
+        initialConfiguration = Configuration.SignInScreen,
         handleBackButton = true,
         childFactory = ::createChild
     )
