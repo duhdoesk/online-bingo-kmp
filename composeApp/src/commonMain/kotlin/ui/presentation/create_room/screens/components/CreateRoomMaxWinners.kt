@@ -8,6 +8,8 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Favorite
+import androidx.compose.material.icons.filled.Star
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -25,15 +27,8 @@ import androidx.compose.ui.unit.dp
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.vectorResource
 import themedbingo.composeapp.generated.resources.Res
-import themedbingo.composeapp.generated.resources.baseline_123_24
-import themedbingo.composeapp.generated.resources.baseline_abc_24
 import themedbingo.composeapp.generated.resources.baseline_add_24
-import themedbingo.composeapp.generated.resources.baseline_add_circle_24
-import themedbingo.composeapp.generated.resources.baseline_add_circle_outline_24
 import themedbingo.composeapp.generated.resources.baseline_remove_24
-import themedbingo.composeapp.generated.resources.baseline_remove_circle_24
-import themedbingo.composeapp.generated.resources.baseline_remove_circle_outline_24
-import ui.presentation.create_room.event.CreateScreenEvent
 import ui.presentation.create_room.state.CreateScreenUiState
 import ui.presentation.util.getRandomLightColor
 
@@ -59,7 +54,7 @@ fun CreateRoomMaxWinners(
                     .fillMaxSize()
             ) {
                 Icon(
-                    imageVector = vectorResource(resource = Res.drawable.baseline_123_24),
+                    imageVector = Icons.Default.Star,
                     tint = Color.Black,
                     contentDescription = "1, 2, 3",
                     modifier = Modifier
