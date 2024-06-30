@@ -1,4 +1,4 @@
-import org.jetbrains.compose.desktop.application.dsl.TargetFormat
+//import org.jetbrains.compose.desktop.application.dsl.TargetFormat
 
 plugins {
     alias(libs.plugins.kotlinMultiplatform)
@@ -34,7 +34,7 @@ kotlin {
         }
     }
 
-    jvm("desktop")
+//    jvm("desktop")
 
     listOf(
         iosX64(),
@@ -48,7 +48,7 @@ kotlin {
     }
 
     sourceSets {
-        val desktopMain by getting
+//        val desktopMain by getting
 
         androidMain.dependencies {
             implementation(libs.compose.ui.tooling.preview)
@@ -100,9 +100,9 @@ kotlin {
             implementation(libs.kmpauth.uihelper) //UiHelper SignIn buttons (AppleSignIn, GoogleSignInButton)
 
         }
-        desktopMain.dependencies {
-            implementation(compose.desktop.currentOs)
-        }
+//        desktopMain.dependencies {
+//            implementation(compose.desktop.currentOs)
+//        }
         iosMain.dependencies {
             implementation(libs.ktor.client.darwin)
         }
@@ -145,20 +145,20 @@ android {
     }
 }
 
-compose.desktop {
-    application {
-        mainClass = "MainKt"
+//compose.desktop {
+//    application {
+//        mainClass = "MainKt"
+//
+//        nativeDistributions {
+//            targetFormats(TargetFormat.Dmg, TargetFormat.Msi, TargetFormat.Deb)
+//            packageName = "com.duscaranari.themedbingocardsgenerator"
+//            packageVersion = "1.0.0"
+//        }
+//    }
+//}
 
-        nativeDistributions {
-            targetFormats(TargetFormat.Dmg, TargetFormat.Msi, TargetFormat.Deb)
-            packageName = "com.duscaranari.themedbingocardsgenerator"
-            packageVersion = "1.0.0"
-        }
-    }
-}
-
-compose.experimental {
-    web.application {}
-}
-
+//compose.experimental {
+//    web.application {}
+//}
+//
 task("testClasses")
