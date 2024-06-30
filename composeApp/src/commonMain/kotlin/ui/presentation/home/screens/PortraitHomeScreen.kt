@@ -20,6 +20,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.material3.Button
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -87,7 +88,7 @@ fun PortraitHomeScreen(
             Text(stringResource(resource = Res.string.join_room))
         }
 
-        Divider(
+        HorizontalDivider(
             modifier = Modifier
                 .padding(vertical = 24.dp)
                 .width(120.dp)

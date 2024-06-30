@@ -44,6 +44,7 @@ kotlin {
         iosTarget.binaries.framework {
             baseName = "ComposeApp"
             isStatic = true
+            binaryOption("bundleId", "com.duscaranari.themedbingocardsgenerator")
         }
     }
 
@@ -91,14 +92,9 @@ kotlin {
 
 //            Firebase
             implementation(libs.gitlive.firebase.firestore)
+            implementation(libs.gitlive.firebase.auth)
             implementation(libs.dev.firebase.common)
             implementation(libs.jetbrains.kotlinx.serialization.json)
-
-//            KMP Auth
-            implementation(libs.kmpauth.google) //Google One Tap Sign-In
-            implementation(libs.kmpauth.firebase) //Integrated Authentications with Firebase
-            implementation(libs.kmpauth.uihelper) //UiHelper SignIn buttons (AppleSignIn, GoogleSignInButton)
-
         }
 //        desktopMain.dependencies {
 //            implementation(compose.desktop.currentOs)
