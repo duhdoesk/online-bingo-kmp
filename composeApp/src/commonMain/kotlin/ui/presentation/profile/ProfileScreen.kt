@@ -20,6 +20,11 @@ fun ProfileScreen(component: ProfileScreenComponent, windowInfo: WindowInfo) {
         verticalArrangement = Arrangement.Center,
         modifier = Modifier.fillMaxSize()
     ) {
+        Text(component.user.id)
+        Text(component.user.name)
+
+        Spacer(Modifier.height(16.dp))
+
         Button(onClick = { component.signOut() }) {
             Text("Sign Out")
         }

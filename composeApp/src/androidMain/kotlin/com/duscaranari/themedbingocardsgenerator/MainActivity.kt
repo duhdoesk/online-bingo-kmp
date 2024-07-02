@@ -9,7 +9,6 @@ import com.arkivanov.decompose.retainedComponent
 import ui.navigation.RootComponent
 
 class MainActivity : ComponentActivity() {
-    @OptIn(ExperimentalDecomposeApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val rootComponent = retainedComponent { RootComponent(it) }

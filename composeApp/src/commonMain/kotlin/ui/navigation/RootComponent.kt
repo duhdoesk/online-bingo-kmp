@@ -1,16 +1,16 @@
 package ui.navigation
 
 import com.arkivanov.decompose.ComponentContext
-import com.arkivanov.decompose.ExperimentalDecomposeApi
 import com.arkivanov.decompose.router.stack.StackNavigation
 import com.arkivanov.decompose.router.stack.childStack
 import com.arkivanov.decompose.router.stack.pop
 import com.arkivanov.decompose.router.stack.pushNew
 import com.arkivanov.decompose.router.stack.replaceAll
 import com.arkivanov.decompose.router.stack.replaceCurrent
+import domain.auth.AuthService
 import domain.user.model.User
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.update
+import org.koin.core.component.KoinComponent
+import org.koin.core.component.inject
 import ui.presentation.create_room.CreateRoomScreenComponent
 import ui.presentation.home.HomeScreenComponent
 import ui.presentation.host.HostScreenComponent
@@ -21,10 +21,13 @@ import ui.presentation.sign_in.SignInScreenComponent
 import ui.presentation.themes.ThemesScreenComponent
 
 class RootComponent(
-    componentContext: ComponentContext
-) : ComponentContext by componentContext {
+    componentContext: ComponentContext,
+) : ComponentContext by componentContext, KoinComponent {
 
-    private val user = MutableStateFlow<User?>(null)
+    private val authService by inject<AuthService>()
+
+    private val user: User?
+        get() = authService.currentUser
 
     private val navigation = StackNavigation<Configuration>()
 
@@ -36,17 +39,14 @@ class RootComponent(
         childFactory = ::createChild
     )
 
-    private fun signIn(signedUser: User) {
-        user.update { signedUser }
+    private fun signIn() {
         navigation.replaceCurrent(Configuration.HomeScreen)
     }
 
     private fun signOut() {
-        user.update { null }
         navigation.replaceAll(Configuration.SignInScreen)
     }
 
-    @OptIn(ExperimentalDecomposeApi::class)
     private fun createChild(
         configuration: Configuration,
         context: ComponentContext
@@ -107,6 +107,7 @@ class RootComponent(
             Configuration.ProfileScreen -> Child.ProfileScreen(
                 ProfileScreenComponent(
                     componentContext = context,
+                    user = user!!,
                     onPopBack = { navigation.pop() },
                     onSignOut = { signOut() }
                 )
@@ -115,7 +116,8 @@ class RootComponent(
             Configuration.SignInScreen -> Child.SignInScreen(
                 SignInScreenComponent(
                     componentContext = context,
-                    onSignIn = { signedUser -> signIn(signedUser) }
+                    onSignIn = { signIn() },
+                    user = user,
                 )
             )
         }

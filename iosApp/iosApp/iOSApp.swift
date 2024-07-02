@@ -2,6 +2,7 @@ import SwiftUI
 import Firebase
 import ComposeApp
 import GoogleSignIn
+import FirebaseCore
 
 @main
 struct iOSApp: App {

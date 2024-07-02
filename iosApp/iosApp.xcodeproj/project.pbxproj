@@ -12,6 +12,8 @@
 		2152FB042600AC8F00CF470E /* iOSApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2152FB032600AC8F00CF470E /* iOSApp.swift */; };
 		520E8A6B2C30902D000C9159 /* GoogleSignIn in Frameworks */ = {isa = PBXBuildFile; productRef = 520E8A6A2C30902D000C9159 /* GoogleSignIn */; };
 		520E8A6D2C30902D000C9159 /* GoogleSignInSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 520E8A6C2C30902D000C9159 /* GoogleSignInSwift */; };
+		522373D02C321D4600F7A583 /* FirebaseAuth in Frameworks */ = {isa = PBXBuildFile; productRef = 522373CF2C321D4600F7A583 /* FirebaseAuth */; };
+		522373D22C321D4600F7A583 /* FirebaseAuthCombine-Community in Frameworks */ = {isa = PBXBuildFile; productRef = 522373D12C321D4600F7A583 /* FirebaseAuthCombine-Community */; };
 		5230D7C02BFA5A0000593B8F /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 5230D7BF2BFA5A0000593B8F /* GoogleService-Info.plist */; };
 		5230D7C32BFA5AAD00593B8F /* FirebaseFirestore in Frameworks */ = {isa = PBXBuildFile; productRef = 5230D7C22BFA5AAD00593B8F /* FirebaseFirestore */; };
 		7555FF83242A565900829871 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7555FF82242A565900829871 /* ContentView.swift */; };
@@ -36,6 +38,8 @@
 				520E8A6D2C30902D000C9159 /* GoogleSignInSwift in Frameworks */,
 				5230D7C32BFA5AAD00593B8F /* FirebaseFirestore in Frameworks */,
 				520E8A6B2C30902D000C9159 /* GoogleSignIn in Frameworks */,
+				522373D02C321D4600F7A583 /* FirebaseAuth in Frameworks */,
+				522373D22C321D4600F7A583 /* FirebaseAuthCombine-Community in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -117,6 +121,8 @@
 				5230D7C22BFA5AAD00593B8F /* FirebaseFirestore */,
 				520E8A6A2C30902D000C9159 /* GoogleSignIn */,
 				520E8A6C2C30902D000C9159 /* GoogleSignInSwift */,
+				522373CF2C321D4600F7A583 /* FirebaseAuth */,
+				522373D12C321D4600F7A583 /* FirebaseAuthCombine-Community */,
 			);
 			productName = iosApp;
 			productReference = 7555FF7B242A565900829871 /* Themed Bingo.app */;
@@ -438,6 +444,16 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 520E8A692C30902C000C9159 /* XCRemoteSwiftPackageReference "GoogleSignIn-iOS" */;
 			productName = GoogleSignInSwift;
+		};
+		522373CF2C321D4600F7A583 /* FirebaseAuth */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 5230D7C12BFA5AAC00593B8F /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseAuth;
+		};
+		522373D12C321D4600F7A583 /* FirebaseAuthCombine-Community */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 5230D7C12BFA5AAC00593B8F /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = "FirebaseAuthCombine-Community";
 		};
 		5230D7C22BFA5AAD00593B8F /* FirebaseFirestore */ = {
 			isa = XCSwiftPackageProductDependency;
