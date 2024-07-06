@@ -33,9 +33,8 @@ import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.stringResource
 import themedbingo.composeapp.generated.resources.Res
 import themedbingo.composeapp.generated.resources.create_room_title
-import themedbingo.composeapp.generated.resources.create_session_button
 import ui.presentation.create_room.event.CreateScreenEvent
-import ui.presentation.create_room.screens.components.CreateRoomHeader
+import ui.presentation.common.CreateRoomHeader
 import ui.presentation.create_room.screens.components.CreateRoomMaxWinners
 import ui.presentation.create_room.screens.components.CreateRoomName
 import ui.presentation.create_room.screens.components.SessionPasswordComponent

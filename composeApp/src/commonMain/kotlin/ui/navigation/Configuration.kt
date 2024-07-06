@@ -20,4 +20,6 @@ sealed class Configuration {
     data object ProfileScreen: Configuration()
     @Serializable
     data object SignInScreen: Configuration()
+    @Serializable
+    data object SignUpScreen: Configuration()
 }

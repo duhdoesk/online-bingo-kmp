@@ -1,4 +1,4 @@
-package ui.presentation.create_room.screens.components
+package ui.presentation.common
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column

@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="UTF-8" ?>
 <resources>
 
     <!--    Home Screen -->
@@ -21,7 +22,29 @@
 
 
     <!--    Rotate Screen -->
-    <string name="rotate_your_device">Please, rotate your device.</string>
+    <string name="rotate_your_device">Please, rotate your device</string>
     <string name="screen_rotation">Screen Rotation</string>
+
+
+    <!--    Sign in Screen-->
+    <string name="sign_in">Sign in</string>
+    <string name="email">E-mail</string>
+    <string name="password">Password</string>
+    <string name="forgot_my_password">Forgot my password</string>
+    <string name="or">Or</string>
+    <string name="sign_up">Sign up</string>
+    <string name="dismiss_button">Dismiss</string>
+    <string name="ok_button">Ok</string>
+    <string name="sign_in_error">Sign in error</string>
+    <string name="success">Success</string>
+    <string name="password_reset_success">We sent you an e-mail containing a link to reset your password.</string>
+
+
+    <!--    Auth Errors -->
+    <string name="auth_unmapped_error">We can't do that at the moment. Please, try again later.</string>
+    <string name="auth_email_already_exists">The provided email is already in use by an existing user. Each user must have a unique email.</string>
+    <string name="auth_invalid_credential">Wrong e-mail or password. Try again or ask for a password reset.</string>
+    <string name="auth_user_not_found">User not found.</string>
+    <string name="auth_too_many_requests">Too many requests. Please, try again in a few minutes.</string>
 
 </resources>

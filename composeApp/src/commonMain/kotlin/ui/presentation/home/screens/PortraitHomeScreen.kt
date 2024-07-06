@@ -14,7 +14,6 @@ import androidx.compose.material.icons.filled.Create
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.Divider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
@@ -32,7 +31,7 @@ import themedbingo.composeapp.generated.resources.join_room
 import themedbingo.composeapp.generated.resources.new_room
 import themedbingo.composeapp.generated.resources.profile
 import ui.navigation.Configuration
-import ui.presentation.home.screens.components.HomeScreenHeader
+import ui.presentation.common.HomeScreenHeader
 import ui.presentation.home.event.HomeScreenEvent
 
 @OptIn(ExperimentalResourceApi::class)

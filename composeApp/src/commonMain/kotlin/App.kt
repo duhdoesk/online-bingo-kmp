@@ -1,5 +1,6 @@
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.imePadding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -21,6 +22,7 @@ import ui.presentation.join_room.JoinScreen
 import ui.presentation.play.PlayScreen
 import ui.presentation.profile.ProfileScreen
 import ui.presentation.sign_in.SignInScreen
+import ui.presentation.sign_up.SignUpScreen
 import ui.presentation.themes.ThemesScreen
 import ui.presentation.util.getAsyncImageLoader
 import ui.presentation.util.rememberWindowInfo
@@ -39,7 +41,8 @@ fun App(rootComponent: RootComponent) {
             }
 
             BoxWithConstraints(
-                modifier = Modifier.fillMaxSize(),
+                modifier = Modifier
+                    .fillMaxSize(),
                 propagateMinConstraints = true
             ) {
 
@@ -89,6 +92,11 @@ fun App(rootComponent: RootComponent) {
                         )
 
                         is Child.SignInScreen -> SignInScreen(
+                            component = instance.component,
+                            windowInfo = windowInfo
+                        )
+
+                        is Child.SignUpScreen -> SignUpScreen(
                             component = instance.component,
                             windowInfo = windowInfo
                         )

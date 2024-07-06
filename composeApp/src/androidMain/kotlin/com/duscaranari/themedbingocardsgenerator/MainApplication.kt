@@ -9,10 +9,6 @@ class MainApplication : Application() {
     override fun onCreate() {
         super.onCreate()
         Firebase.initialize(this)
-//        startKoin{
-//            androidContext(this@MainApplication)
-//            modules(dataModule())
-//        }
         initKoin()
     }
 }

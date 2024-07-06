@@ -18,6 +18,7 @@ import ui.presentation.join_room.JoinScreenComponent
 import ui.presentation.play.PlayScreenComponent
 import ui.presentation.profile.ProfileScreenComponent
 import ui.presentation.sign_in.SignInScreenComponent
+import ui.presentation.sign_up.SignUpScreenComponent
 import ui.presentation.themes.ThemesScreenComponent
 
 class RootComponent(
@@ -117,7 +118,16 @@ class RootComponent(
                 SignInScreenComponent(
                     componentContext = context,
                     onSignIn = { signIn() },
+                    onSignUp = { navigation.pushNew(configuration = Configuration.SignUpScreen) },
                     user = user,
+                )
+            )
+
+            Configuration.SignUpScreen -> Child.SignUpScreen(
+                SignUpScreenComponent(
+                    componentContext = context,
+                    onSignUp = { signIn() },
+                    onPopBack = { navigation.pop() }
                 )
             )
         }
