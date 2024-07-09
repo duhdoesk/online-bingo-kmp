@@ -1,6 +1,12 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <resources>
 
+    <!--    Buttons -->
+    <string name="back_button">Back</string>
+    <string name="sign_in_button">Sign In</string>
+    <string name="sign_up_button">Sign Up</string>
+
+
     <!--    Home Screen -->
     <string name="hot_water_software">Hot Water Software</string>
     <string name="mobile_apps_development">Mobile Apps Development</string>
@@ -26,18 +32,21 @@
     <string name="screen_rotation">Screen Rotation</string>
 
 
-    <!--    Sign in Screen-->
+    <!--    Sign In / Up Screens -->
     <string name="sign_in">Sign in</string>
+    <string name="sign_up">Sign up</string>
     <string name="email">E-mail</string>
     <string name="password">Password</string>
+    <string name="repeat_password">Repeat the password</string>
     <string name="forgot_my_password">Forgot my password</string>
     <string name="or">Or</string>
-    <string name="sign_up">Sign up</string>
     <string name="dismiss_button">Dismiss</string>
     <string name="ok_button">Ok</string>
-    <string name="sign_in_error">Sign in error</string>
+    <string name="auth_error">Authentication Error</string>
     <string name="success">Success</string>
-    <string name="password_reset_success">We sent you an e-mail containing a link to reset your password.</string>
+    <string name="password_reset_success">We sent you an e-mail containing a link to reset your password</string>
+    <string name="email_info_text">Enter a valid email address that you have access to</string>
+    <string name="password_info_text">Your password must contain at least eight characters, including at least one uppercase letter, one lowercase letter and one number</string>
 
 
     <!--    Auth Errors -->
@@ -46,5 +55,6 @@
     <string name="auth_invalid_credential">Wrong e-mail or password. Try again or ask for a password reset.</string>
     <string name="auth_user_not_found">User not found.</string>
     <string name="auth_too_many_requests">Too many requests. Please, try again in a few minutes.</string>
+    <string name="auth_empty_string">Enter your e-mail and try again.</string>
 
 </resources>

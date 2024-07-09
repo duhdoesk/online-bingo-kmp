@@ -19,7 +19,6 @@ import themedbingo.composeapp.generated.resources.password_reset_success
 import ui.presentation.sign_in.state.SignInScreenUIState
 import ui.presentation.util.dialog.dialog_state.mutableDialogStateOf
 import ui.presentation.util.isEmailValid
-import ui.presentation.util.isPasswordValid
 import util.componentCoroutineScope
 
 class SignInScreenComponent(
@@ -86,7 +85,7 @@ class SignInScreenComponent(
                     println(e.message)
 
                     signInErrorDialogState.showDialog(getAuthErrorDescription(e.message.orEmpty()))
-                    clearUiState()
+                    clearPassword()
                 }
             }
         }
@@ -114,13 +113,12 @@ class SignInScreenComponent(
             }
         }
 
-        clearUiState()
+        clearPassword()
     }
 
-    private fun clearUiState() {
+    private fun clearPassword() {
         _uiState.update { state ->
             state.copy(
-                email = "",
                 password = ""
             )
         }

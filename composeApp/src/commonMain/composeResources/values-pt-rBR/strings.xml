@@ -1,6 +1,12 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <resources>
 
+    <!--    Buttons -->
+    <string name="back_button">Voltar</string>
+    <string name="sign_in_button">Entrar</string>
+    <string name="sign_up_button">Cadastrar</string>
+
+
     <!--    Home Screen -->
     <string name="hot_water_software">Hot Water Software</string>
     <string name="mobile_apps_development">Mobile Apps Development</string>
@@ -26,18 +32,21 @@
     <string name="screen_rotation">Gire seu dispositivo</string>
 
 
-    <!--    Sign in Screen-->
+    <!--    Sign In / Up Screens -->
     <string name="sign_in">Entrar</string>
+    <string name="sign_up">Cadastrar</string>
     <string name="email">E-mail</string>
     <string name="password">Senha</string>
+    <string name="repeat_password">Repita a senha</string>
     <string name="forgot_my_password">Esqueci minha senha</string>
     <string name="or">Ou</string>
-    <string name="sign_up">Cadastrar-se</string>
     <string name="dismiss_button">Cancelar</string>
     <string name="ok_button">Ok</string>
-    <string name="sign_in_error">Erro de login</string>
+    <string name="auth_error">Erro de Autenticação</string>
     <string name="success">Sucesso</string>
-    <string name="password_reset_success">Nós te enviamos um e-mail contendo um link para redefinição de senha.</string>
+    <string name="password_reset_success">Nós te enviamos um e-mail contendo um link para redefinição de senha</string>
+    <string name="email_info_text">Insira um endereço de e-mail válido e ao qual você tenha acesso</string>
+    <string name="password_info_text">Sua senha deve conter ao menos oito caracteres, incluindo ao menos uma letra maiúscula, uma letra minúscula e um número</string>
 
 
     <!--    Auth Errors -->
@@ -46,5 +55,6 @@
     <string name="auth_invalid_credential">E-mail ou senha incorretos. Tente novamente, ou solicite um reset de senha.</string>
     <string name="auth_user_not_found">Usuário não encontrado.</string>
     <string name="auth_too_many_requests">Servidor sobrecarregado. Por favor, tente novamente em alguns instantes.</string>
+    <string name="auth_empty_string">Insira seu e-mail e tente novamente.</string>
 
 </resources>

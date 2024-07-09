@@ -21,9 +21,8 @@ import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.StringResource
 import org.jetbrains.compose.resources.stringResource
 import themedbingo.composeapp.generated.resources.Res
+import themedbingo.composeapp.generated.resources.auth_error
 import themedbingo.composeapp.generated.resources.ok_button
-import themedbingo.composeapp.generated.resources.sign_in
-import themedbingo.composeapp.generated.resources.sign_in_error
 
 @OptIn(ExperimentalResourceApi::class)
 @Composable
@@ -39,7 +38,6 @@ fun AuthErrorDialog(
                 containerColor = MaterialTheme.colorScheme.surface,
                 contentColor = MaterialTheme.colorScheme.onSurface
             ),
-            modifier = Modifier.padding(horizontal = 16.dp)
         ) {
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally,
@@ -48,7 +46,7 @@ fun AuthErrorDialog(
                     .fillMaxWidth()
             ) {
                 Text(
-                    text = stringResource(Res.string.sign_in_error),
+                    text = stringResource(Res.string.auth_error),
                     style = MaterialTheme.typography.titleLarge,
                     modifier = Modifier.fillMaxWidth()
                 )

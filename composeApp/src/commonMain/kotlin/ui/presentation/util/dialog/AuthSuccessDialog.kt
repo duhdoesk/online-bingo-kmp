@@ -22,7 +22,6 @@ import org.jetbrains.compose.resources.StringResource
 import org.jetbrains.compose.resources.stringResource
 import themedbingo.composeapp.generated.resources.Res
 import themedbingo.composeapp.generated.resources.ok_button
-import themedbingo.composeapp.generated.resources.sign_in_error
 import themedbingo.composeapp.generated.resources.success
 
 @OptIn(ExperimentalResourceApi::class)
