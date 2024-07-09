@@ -5,6 +5,7 @@
     <string name="back_button">Voltar</string>
     <string name="sign_in_button">Entrar</string>
     <string name="sign_up_button">Cadastrar</string>
+    <string name="send_button">Enviar</string>
 
 
     <!--    Home Screen -->
@@ -46,6 +47,7 @@
     <string name="success">Sucesso</string>
     <string name="password_reset_success">Nós te enviamos um e-mail contendo um link para redefinição de senha</string>
     <string name="email_info_text">Insira um endereço de e-mail válido e ao qual você tenha acesso</string>
+    <string name="password_reset_info_text">Insira um endereço de e-mail válido e ao qual você tenha acesso. Nós te enviaremos um e-mail com um link para redefinição de senha.</string>
     <string name="password_info_text">Sua senha deve conter ao menos oito caracteres, incluindo ao menos uma letra maiúscula, uma letra minúscula e um número</string>
 
 

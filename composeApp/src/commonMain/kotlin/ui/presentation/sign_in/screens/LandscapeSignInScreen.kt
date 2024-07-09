@@ -14,7 +14,6 @@ fun LandscapeSignInScreen(
     uiState: SignInScreenUIState,
     isFormValid: Boolean,
     signInErrorDialogState: MutableDialogState<StringResource?>,
-    passwordResetSuccessDialogState: MutableDialogState<StringResource?>,
     event: (event: SignInScreenEvent) -> Unit,
 ) {
     RotateScreen()

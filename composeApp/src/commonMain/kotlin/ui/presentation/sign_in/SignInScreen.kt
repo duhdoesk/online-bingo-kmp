@@ -3,11 +3,9 @@ package ui.presentation.sign_in
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import org.jetbrains.compose.resources.ExperimentalResourceApi
-import org.jetbrains.compose.resources.StringResource
 import ui.presentation.sign_in.event.SignInScreenEvent
 import ui.presentation.sign_in.screens.SignInScreenOrientation
 import ui.presentation.util.WindowInfo
-import ui.presentation.util.dialog.dialog_state.MutableDialogState
 
 @OptIn(ExperimentalResourceApi::class)
 @Composable
@@ -29,19 +27,15 @@ fun SignInScreen(
     val signInErrorDialogState = component
         .signInErrorDialogState
 
-    val passwordResetSuccessDialogState = component
-        .passwordResetSuccessDialogState
-
     SignInScreenOrientation(
         windowInfo = windowInfo,
         uiState = uiState,
         isFormValid = isFormValid,
         signInErrorDialogState = signInErrorDialogState,
-        passwordResetSuccessDialogState = passwordResetSuccessDialogState,
         event = { event ->
             when (event) {
                 is SignInScreenEvent.SendPasswordResetEmail ->
-                    component.sendPasswordResetEmail()
+                    component.resetPassword()
 
                 is SignInScreenEvent.SignIn ->
                     component.signIn()

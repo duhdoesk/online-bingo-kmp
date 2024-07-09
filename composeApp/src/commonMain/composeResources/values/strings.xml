@@ -5,6 +5,7 @@
     <string name="back_button">Back</string>
     <string name="sign_in_button">Sign In</string>
     <string name="sign_up_button">Sign Up</string>
+    <string name="send_button">Send</string>
 
 
     <!--    Home Screen -->
@@ -45,6 +46,7 @@
     <string name="auth_error">Authentication Error</string>
     <string name="success">Success</string>
     <string name="password_reset_success">We sent you an e-mail containing a link to reset your password</string>
+    <string name="password_reset_info_text">Enter a valid email address that you have access to. We will send you an e-mail containing a link to password reset.</string>
     <string name="email_info_text">Enter a valid email address that you have access to</string>
     <string name="password_info_text">Your password must contain at least eight characters, including at least one uppercase letter, one lowercase letter and one number</string>
 

@@ -58,7 +58,6 @@ fun PortraitSignInScreen(
     uiState: SignInScreenUIState,
     isFormValid: Boolean,
     signInErrorDialogState: MutableDialogState<StringResource?>,
-    passwordResetSuccessDialogState: MutableDialogState<StringResource?>,
     event: (event: SignInScreenEvent) -> Unit,
 ) {
     val keyboardController = LocalSoftwareKeyboardController.current
@@ -189,15 +188,6 @@ fun PortraitSignInScreen(
                 AuthErrorDialog(
                     stringRes = stringResource,
                     onDismiss = { signInErrorDialogState.hideDialog() }
-                )
-            }
-        }
-
-        if (passwordResetSuccessDialogState.isVisible.value) {
-            passwordResetSuccessDialogState.dialogData.value?.let { stringResource ->
-                AuthSuccessDialog(
-                    stringRes = stringResource,
-                    onDismiss = { passwordResetSuccessDialogState.hideDialog() }
                 )
             }
         }

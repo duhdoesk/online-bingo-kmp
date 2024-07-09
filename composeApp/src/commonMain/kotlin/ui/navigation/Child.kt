@@ -1,6 +1,7 @@
 package ui.navigation
 
 import ui.presentation.create_room.CreateRoomScreenComponent
+import ui.presentation.forgot_password.ForgotPasswordScreenComponent
 import ui.presentation.home.HomeScreenComponent
 import ui.presentation.host.HostScreenComponent
 import ui.presentation.join_room.JoinScreenComponent
@@ -20,4 +21,5 @@ sealed class Child {
     data class ProfileScreen(val component: ProfileScreenComponent): Child()
     data class SignInScreen(val component: SignInScreenComponent): Child()
     data class SignUpScreen(val component: SignUpScreenComponent): Child()
+    data class ForgotPasswordScreen(val component: ForgotPasswordScreenComponent): Child()
 }

@@ -12,6 +12,7 @@ import domain.user.model.User
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 import ui.presentation.create_room.CreateRoomScreenComponent
+import ui.presentation.forgot_password.ForgotPasswordScreenComponent
 import ui.presentation.home.HomeScreenComponent
 import ui.presentation.host.HostScreenComponent
 import ui.presentation.join_room.JoinScreenComponent
@@ -119,6 +120,7 @@ class RootComponent(
                     componentContext = context,
                     onSignIn = { signIn() },
                     onSignUp = { navigation.pushNew(configuration = Configuration.SignUpScreen) },
+                    onPasswordReset = { navigation.pushNew(configuration = Configuration.ForgotPasswordScreen) },
                     user = user,
                 )
             )
@@ -128,6 +130,13 @@ class RootComponent(
                     componentContext = context,
                     onSignUp = { signIn() },
                     onPopBack = { navigation.pop() }
+                )
+            )
+
+            Configuration.ForgotPasswordScreen -> Child.ForgotPasswordScreen(
+                ForgotPasswordScreenComponent(
+                    componentContext = context,
+                    onPopBack = { navigation.pop() },
                 )
             )
         }

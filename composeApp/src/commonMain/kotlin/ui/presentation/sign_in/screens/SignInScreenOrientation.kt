@@ -15,7 +15,6 @@ fun SignInScreenOrientation(
     uiState: SignInScreenUIState,
     isFormValid: Boolean,
     signInErrorDialogState: MutableDialogState<StringResource?>,
-    passwordResetSuccessDialogState: MutableDialogState<StringResource?>,
     event: (event: SignInScreenEvent) -> Unit,
 ) {
     when (windowInfo.screenOrientation) {
@@ -24,7 +23,6 @@ fun SignInScreenOrientation(
                 uiState = uiState,
                 isFormValid = isFormValid,
                 signInErrorDialogState = signInErrorDialogState,
-                passwordResetSuccessDialogState = passwordResetSuccessDialogState,
             ) { landscapeEvent ->
                 event(landscapeEvent)
             }
@@ -34,7 +32,6 @@ fun SignInScreenOrientation(
                 uiState = uiState,
                 isFormValid = isFormValid,
                 signInErrorDialogState = signInErrorDialogState,
-                passwordResetSuccessDialogState = passwordResetSuccessDialogState,
             ) { portraitEvent ->
                 event(portraitEvent)
             }

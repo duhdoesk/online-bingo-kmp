@@ -16,6 +16,7 @@ import org.koin.compose.KoinContext
 import ui.navigation.Child
 import ui.navigation.RootComponent
 import ui.presentation.create_room.CreateRoomScreen
+import ui.presentation.forgot_password.ForgotPasswordScreen
 import ui.presentation.home.HomeScreen
 import ui.presentation.host.HostScreen
 import ui.presentation.join_room.JoinScreen
@@ -97,6 +98,11 @@ fun App(rootComponent: RootComponent) {
                         )
 
                         is Child.SignUpScreen -> SignUpScreen(
+                            component = instance.component,
+                            windowInfo = windowInfo
+                        )
+
+                        is Child.ForgotPasswordScreen -> ForgotPasswordScreen(
                             component = instance.component,
                             windowInfo = windowInfo
                         )
