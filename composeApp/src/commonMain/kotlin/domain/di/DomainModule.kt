@@ -7,6 +7,7 @@ import data.room.repository.BingoRoomRepositoryImpl
 import data.theme.repository.BingoThemeRepositoryImpl
 import data.user.repository.UserRepositoryImpl
 import domain.auth.AuthService
+import domain.auth.use_case.CreateUserUseCase
 import domain.card.repository.CardRepository
 import domain.character.repository.CharacterRepository
 import domain.room.repository.BingoRoomRepository
@@ -21,4 +22,5 @@ val domainModule = module {
     single<BingoThemeRepository> { BingoThemeRepositoryImpl(get()) }
     single<UserRepository> { UserRepositoryImpl(get()) }
     single<AuthService> { AuthServiceImpl(get()) }
+    single<CreateUserUseCase> { CreateUserUseCase(get(), get()) }
 }

@@ -1,9 +1,9 @@
 package ui.presentation.sign_in
 
 import com.arkivanov.decompose.ComponentContext
+import dev.gitlive.firebase.auth.FirebaseUser
 import domain.auth.AuthService
 import domain.auth.getAuthErrorDescription
-import domain.user.model.User
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.onEach
@@ -21,7 +21,7 @@ import util.componentCoroutineScope
 
 class SignInScreenComponent(
     componentContext: ComponentContext,
-    user: User?,
+    firebaseUser: FirebaseUser?,
     private val onSignIn: () -> Unit,
     private val onSignUp: () -> Unit,
     private val onPasswordReset: () -> Unit,
@@ -52,7 +52,7 @@ class SignInScreenComponent(
     val signInErrorDialogState = mutableDialogStateOf<StringResource?>(null)
 
     init {
-        if (user != null) onSignIn()
+        if (firebaseUser != null) onSignIn()
     }
 
     fun updateEmail(email: String) {

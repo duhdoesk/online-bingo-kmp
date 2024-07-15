@@ -7,8 +7,8 @@ import com.arkivanov.decompose.router.stack.pop
 import com.arkivanov.decompose.router.stack.pushNew
 import com.arkivanov.decompose.router.stack.replaceAll
 import com.arkivanov.decompose.router.stack.replaceCurrent
+import dev.gitlive.firebase.auth.FirebaseUser
 import domain.auth.AuthService
-import domain.user.model.User
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 import ui.presentation.create_room.CreateRoomScreenComponent
@@ -28,7 +28,7 @@ class RootComponent(
 
     private val authService by inject<AuthService>()
 
-    private val user: User?
+    private val firebaseUser: FirebaseUser?
         get() = authService.currentUser
 
     private val navigation = StackNavigation<Configuration>()
@@ -109,7 +109,7 @@ class RootComponent(
             Configuration.ProfileScreen -> Child.ProfileScreen(
                 ProfileScreenComponent(
                     componentContext = context,
-                    user = user!!,
+                    firebaseUser = firebaseUser!!,
                     onPopBack = { navigation.pop() },
                     onSignOut = { signOut() }
                 )
@@ -121,7 +121,7 @@ class RootComponent(
                     onSignIn = { signIn() },
                     onSignUp = { navigation.pushNew(configuration = Configuration.SignUpScreen) },
                     onPasswordReset = { navigation.pushNew(configuration = Configuration.ForgotPasswordScreen) },
-                    user = user,
+                    firebaseUser = firebaseUser,
                 )
             )
 

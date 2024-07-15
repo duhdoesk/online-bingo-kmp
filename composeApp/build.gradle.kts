@@ -95,6 +95,9 @@ kotlin {
             implementation(libs.gitlive.firebase.auth)
             implementation(libs.dev.firebase.common)
             implementation(libs.jetbrains.kotlinx.serialization.json)
+
+//            DateTime
+            implementation(libs.kotlinx.datetime)
         }
 //        desktopMain.dependencies {
 //            implementation(compose.desktop.currentOs)

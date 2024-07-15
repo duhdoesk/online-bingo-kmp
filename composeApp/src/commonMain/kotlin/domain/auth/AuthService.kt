@@ -1,11 +1,11 @@
 package domain.auth
 
 import dev.gitlive.firebase.auth.AuthResult
-import domain.user.model.User
+import dev.gitlive.firebase.auth.FirebaseUser
 
 interface AuthService {
 
-    val currentUser: User?
+    val currentUser: FirebaseUser?
 
     suspend fun authenticate(email: String, password: String): AuthResult
     suspend fun createUser(email: String, password: String): AuthResult

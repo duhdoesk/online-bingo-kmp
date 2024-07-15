@@ -1,8 +1,8 @@
 package ui.presentation.sign_up
 
 import com.arkivanov.decompose.ComponentContext
-import domain.auth.AuthService
 import domain.auth.getAuthErrorDescription
+import domain.auth.use_case.CreateUserUseCase
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.onEach
@@ -25,7 +25,8 @@ class SignUpScreenComponent(
     private val onPopBack: () -> Unit,
 ) : ComponentContext by componentContext, KoinComponent {
 
-    private val authService by inject<AuthService>()
+    //    private val authService by inject<AuthService>()
+    private val createUserUseCase by inject<CreateUserUseCase>()
 
     private val _uiState = MutableStateFlow(SignUpScreenUIState())
     val uiState = _uiState
@@ -72,22 +73,40 @@ class SignUpScreenComponent(
         }
     }
 
+//    @OptIn(ExperimentalResourceApi::class)
+//    fun signUp() {
+//        uiState.value.run {
+//            componentCoroutineScope().launch {
+//                try {
+//                    authService
+//                        .createUser(email, password1)
+//                        .user?.let { onSignUp() }
+//
+//                } catch (e: Exception) {
+//                    println(e.cause)
+//                    println(e.message)
+//
+//                    signUpErrorDialogState.showDialog(getAuthErrorDescription(e.message.orEmpty()))
+//                    clearPassword()
+//                }
+//            }
+//        }
+//    }
+
     @OptIn(ExperimentalResourceApi::class)
     fun signUp() {
         uiState.value.run {
             componentCoroutineScope().launch {
-                try {
-                    authService
-                        .createUser(email, password1)
-                        .user?.let { onSignUp() }
-
-                } catch (e: Exception) {
-                    println(e.cause)
-                    println(e.message)
-
-                    signUpErrorDialogState.showDialog(getAuthErrorDescription(e.message.orEmpty()))
-                    clearPassword()
-                }
+                createUserUseCase.invoke(
+                    email = email,
+                    password = password1
+                )
+                    .onSuccess { onSignUp() }
+                    .onFailure { exception ->
+                        signUpErrorDialogState
+                            .showDialog(getAuthErrorDescription(exception.message.orEmpty()))
+                        clearPassword()
+                    }
             }
         }
     }

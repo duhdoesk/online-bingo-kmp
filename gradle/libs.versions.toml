@@ -16,6 +16,7 @@ gitliveFirebase = "1.13.0"
 junit = "4.13.2"
 koin = "3.5.3"
 kotlin = "1.9.23"
+kotlinx-datetime = "0.6.0"
 decompose = "3.0.0"
 coil3 = "3.0.0-alpha06"
 kotlinxSerializationJsonVersion = "1.6.2"
@@ -49,6 +50,7 @@ koin-compose = { module = "io.insert-koin:koin-compose" }
 koin-core = { module = "io.insert-koin:koin-core" }
 kotlin-test = { module = "org.jetbrains.kotlin:kotlin-test", version.ref = "kotlin" }
 kotlin-test-junit = { module = "org.jetbrains.kotlin:kotlin-test-junit", version.ref = "kotlin" }
+kotlinx-datetime = { module = "org.jetbrains.kotlinx:kotlinx-datetime", version.ref = "kotlinx-datetime" }
 ktor-client-core = { group = "io.ktor", name = "ktor-client-core", version.ref = "ktor" }
 ktor-client-darwin = { module = "io.ktor:ktor-client-darwin", version.ref = "ktor" }
 ktor-client-okhttp = { module = "io.ktor:ktor-client-okhttp", version.ref = "ktor" }

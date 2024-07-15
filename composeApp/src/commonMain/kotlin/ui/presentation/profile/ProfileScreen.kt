@@ -8,9 +8,20 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.intl.Locale
 import androidx.compose.ui.unit.dp
+import dev.gitlive.firebase.firestore.toMilliseconds
+import kotlinx.datetime.Instant
+import kotlinx.datetime.LocalDateTime
+import kotlinx.datetime.TimeZone
+import kotlinx.datetime.format
+import kotlinx.datetime.format.MonthNames
+import kotlinx.datetime.format.Padding
+import kotlinx.datetime.format.char
+import kotlinx.datetime.toLocalDateTime
 import ui.presentation.util.WindowInfo
 
 @Composable
@@ -20,8 +31,57 @@ fun ProfileScreen(component: ProfileScreenComponent, windowInfo: WindowInfo) {
         verticalArrangement = Arrangement.Center,
         modifier = Modifier.fillMaxSize()
     ) {
-        Text(component.user.id)
-        Text(component.user.name)
+        Text(component.firebaseUser.uid)
+        Text(component.firebaseUser.displayName ?: "")
+
+        Spacer(Modifier.height(16.dp))
+
+        val user = component
+            .user
+            .collectAsState()
+            .value
+
+        user?.run {
+            val ptFormat = LocalDateTime.Format {
+                dayOfMonth(padding = Padding.SPACE)
+                chars(" de ")
+                monthName(
+                    names = MonthNames(
+                        "janeiro",
+                        "fevereiro",
+                        "março",
+                        "abril",
+                        "maio",
+                        "junho",
+                        "julho",
+                        "agosto",
+                        "setembro",
+                        "outubro",
+                        "novembro",
+                        "dezembro",
+                    )
+                )
+                chars(" de ")
+                year()
+                chars(", ")
+                hour(padding = Padding.ZERO)
+                char(':')
+                minute(padding = Padding.ZERO)
+                char(':')
+                second(padding = Padding.ZERO)
+            }
+
+            val locale = Locale.current.language
+            println(locale)
+
+            Text(name)
+            Text(nameLastUpdated.toString())
+
+            val instant = Instant.fromEpochMilliseconds(nameLastUpdated.toMilliseconds().toLong())
+            val dateTime = instant.toLocalDateTime(TimeZone.UTC)
+
+            Text(dateTime.format(if (locale == "pt") ptFormat else LocalDateTime.Formats.ISO))
+        }
 
         Spacer(Modifier.height(16.dp))
 
