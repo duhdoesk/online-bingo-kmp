@@ -4,6 +4,7 @@ import com.arkivanov.decompose.ComponentContext
 import dev.gitlive.firebase.auth.FirebaseUser
 import domain.auth.AuthService
 import domain.auth.getAuthErrorDescription
+import domain.auth.use_case.AuthenticateUserUseCase
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.onEach
@@ -28,6 +29,7 @@ class SignInScreenComponent(
 ) : ComponentContext by componentContext, KoinComponent {
 
     private val authService by inject<AuthService>()
+    private val authenticateUserUseCase by inject<AuthenticateUserUseCase>()
 
     private val _uiState = MutableStateFlow(SignInScreenUIState())
     val uiState = _uiState
@@ -71,18 +73,15 @@ class SignInScreenComponent(
     fun signIn() {
         uiState.value.run {
             componentCoroutineScope().launch {
-                try {
-                    authService
-                        .authenticate(email, password)
-                        .user?.let { onSignIn() }
-
-                } catch (e: Exception) {
-                    println(e.cause)
-                    println(e.message)
-
-                    signInErrorDialogState.showDialog(getAuthErrorDescription(e.message.orEmpty()))
-                    clearPassword()
-                }
+                authenticateUserUseCase.invoke(
+                    email = email,
+                    password = password
+                )
+                    .onSuccess { onSignIn() }
+                    .onFailure { exception ->
+                        signInErrorDialogState.showDialog(getAuthErrorDescription(exception.message.orEmpty()))
+                        clearPassword()
+                    }
             }
         }
     }
