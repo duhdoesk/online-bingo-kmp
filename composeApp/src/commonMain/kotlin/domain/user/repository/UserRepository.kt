@@ -17,4 +17,5 @@ interface UserRepository {
     suspend fun updateUserName(id: String, name: String)
     suspend fun updateUserEmail(id: String, email: String)
     suspend fun updateUserPictureUri(id: String, pictureUri: String)
+    suspend fun updateVictoryMessage(id: String, victoryMessage: String)
 }

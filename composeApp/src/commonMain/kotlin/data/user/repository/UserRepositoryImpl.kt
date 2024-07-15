@@ -4,9 +4,9 @@ import data.user.model.UserDTO
 import dev.gitlive.firebase.firestore.FirebaseFirestore
 import domain.user.model.User
 import domain.user.repository.UserRepository
+import domain.util.datetime.getCurrentDateTime
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
-import kotlinx.datetime.Clock
 
 class UserRepositoryImpl(
     firestore: FirebaseFirestore
@@ -28,6 +28,7 @@ class UserRepositoryImpl(
                     pictureUriLastUpdated = documentSnapshot.get("pictureUriLastUpdated"),
                     lastWinTimestamp = documentSnapshot.get("lastWinTimestamp"),
                     victoryMessage = documentSnapshot.get("victoryMessage"),
+                    victoryMessageLastUpdated = documentSnapshot.get("victoryMessageLastUpdated"),
                 )
             }
             .toModel()
@@ -67,6 +68,7 @@ class UserRepositoryImpl(
                             pictureUriLastUpdated = documentSnapshot.get("pictureUriLastUpdated"),
                             lastWinTimestamp = documentSnapshot.get("lastWinTimestamp"),
                             victoryMessage = documentSnapshot.get("victoryMessage"),
+                            victoryMessageLastUpdated = documentSnapshot.get("victoryMessageLastUpdated"),
                         )
                             .toModel()
                     }
@@ -87,11 +89,14 @@ class UserRepositoryImpl(
     }
 
     override suspend fun updateUserName(id: String, name: String) {
-        val datetime = Clock.System.now().toEpochMilliseconds()
-
         collection
             .document(id)
-            .update(data = hashMapOf("name" to name, "nameLastUpdated" to datetime))
+            .update(
+                data = hashMapOf(
+                    "name" to name,
+                    "nameLastUpdated" to getCurrentDateTime()
+                )
+            )
     }
 
     override suspend fun updateUserEmail(id: String, email: String) {
@@ -103,6 +108,22 @@ class UserRepositoryImpl(
     override suspend fun updateUserPictureUri(id: String, pictureUri: String) {
         collection
             .document(id)
-            .update(data = hashMapOf("pictureUrl" to pictureUri))
+            .update(
+                data = hashMapOf(
+                    "pictureUri" to pictureUri,
+                    "pictureUriLastUpdated" to getCurrentDateTime()
+                )
+            )
+    }
+
+    override suspend fun updateVictoryMessage(id: String, victoryMessage: String) {
+        collection
+            .document(id)
+            .update(
+                data = hashMapOf(
+                    "victoryMessage" to victoryMessage,
+                    "victoryMessageLastUpdated" to getCurrentDateTime()
+                )
+            )
     }
 }

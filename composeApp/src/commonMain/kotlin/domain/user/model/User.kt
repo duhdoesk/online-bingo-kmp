@@ -11,7 +11,8 @@ class User(
     val pictureUri: String,
     val pictureUriLastUpdated: Timestamp,
     val lastWinTimestamp: Timestamp,
-    val victoryMessage: String
+    val victoryMessage: String,
+    val victoryMessageLastUpdated: Timestamp
 ) {
     fun toDTO(): UserDTO =
         UserDTO(
@@ -22,7 +23,8 @@ class User(
             pictureUri = pictureUri,
             pictureUriLastUpdated = pictureUriLastUpdated,
             lastWinTimestamp = lastWinTimestamp,
-            victoryMessage = victoryMessage
+            victoryMessage = victoryMessage,
+            victoryMessageLastUpdated = victoryMessageLastUpdated,
         )
 
 }
