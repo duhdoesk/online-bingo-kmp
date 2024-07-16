@@ -18,3 +18,13 @@ fun String.isPasswordValid(): Boolean {
 
     return passwordRegex.toRegex().matches(this)
 }
+
+fun Int.ordinal(): String {
+    return if (this % 100 in 11..13) "${this}th"
+    else when (this % 10) {
+        1 -> "${this}st"
+        2 -> "${this}nd"
+        3 -> "${this}rd"
+        else -> "${this}th"
+    }
+}

@@ -14,6 +14,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.intl.Locale
 import androidx.compose.ui.unit.dp
 import dev.gitlive.firebase.firestore.toMilliseconds
+import domain.util.datetime.formatDateTime
 import kotlinx.datetime.Instant
 import kotlinx.datetime.LocalDateTime
 import kotlinx.datetime.TimeZone
@@ -42,45 +43,12 @@ fun ProfileScreen(component: ProfileScreenComponent, windowInfo: WindowInfo) {
             .value
 
         user?.run {
-            val ptFormat = LocalDateTime.Format {
-                dayOfMonth(padding = Padding.SPACE)
-                chars(" de ")
-                monthName(
-                    names = MonthNames(
-                        "janeiro",
-                        "fevereiro",
-                        "março",
-                        "abril",
-                        "maio",
-                        "junho",
-                        "julho",
-                        "agosto",
-                        "setembro",
-                        "outubro",
-                        "novembro",
-                        "dezembro",
-                    )
-                )
-                chars(" de ")
-                year()
-                chars(", ")
-                hour(padding = Padding.ZERO)
-                char(':')
-                minute(padding = Padding.ZERO)
-                char(':')
-                second(padding = Padding.ZERO)
-            }
-
-            val locale = Locale.current.language
-            println(locale)
-
             Text(name)
-            Text(nameLastUpdated.toString())
 
             val instant = Instant.fromEpochMilliseconds(nameLastUpdated.toMilliseconds().toLong())
-            val dateTime = instant.toLocalDateTime(TimeZone.UTC)
+            val dateTime = instant.toLocalDateTime(TimeZone.currentSystemDefault())
 
-            Text(dateTime.format(if (locale == "pt") ptFormat else LocalDateTime.Formats.ISO))
+            Text(dateTime.format(formatDateTime()))
         }
 
         Spacer(Modifier.height(16.dp))
