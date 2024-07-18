@@ -111,7 +111,11 @@ class RootComponent(
                     componentContext = context,
                     firebaseUser = firebaseUser!!,
                     onPopBack = { navigation.pop() },
-                    onSignOut = { signOut() }
+                    onSignOut = { signOut() },
+                    onUpdatePicture = {
+                        //todo(): navigate to update picture screen (not done yet)
+                    },
+
                 )
             )
 

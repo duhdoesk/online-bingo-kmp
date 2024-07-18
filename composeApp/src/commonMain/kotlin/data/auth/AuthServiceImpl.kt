@@ -24,8 +24,27 @@ class AuthServiceImpl(
         auth.sendPasswordResetEmail(email = email)
     }
 
-    override suspend fun signOut() {
-        if (auth.currentUser?.isAnonymous == true) auth.currentUser?.delete()
-        auth.signOut()
+    override suspend fun signOut(): Result<Unit> {
+        try {
+            if (auth.currentUser?.isAnonymous == true) auth.currentUser?.delete()
+            auth.signOut()
+
+            return Result.success(Unit)
+        } catch (e: Exception) {
+            return Result.failure(e)
+        }
+    }
+
+    override suspend fun deleteAccount(): Result<Unit> {
+        try {
+            auth.currentUser?.delete()
+            return Result.success(Unit)
+        } catch (e: Exception) {
+            return Result.failure(e)
+        }
+    }
+
+    override suspend fun updatePassword(newPassword: String) {
+        auth.currentUser?.updatePassword(newPassword)
     }
 }

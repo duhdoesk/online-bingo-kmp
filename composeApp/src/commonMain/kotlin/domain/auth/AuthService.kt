@@ -10,5 +10,7 @@ interface AuthService {
     suspend fun authenticate(email: String, password: String): AuthResult
     suspend fun createUser(email: String, password: String): AuthResult
     suspend fun sendPasswordResetEmail(email: String)
-    suspend fun signOut()
+    suspend fun signOut(): Result<Unit>
+    suspend fun deleteAccount(): Result<Unit>
+    suspend fun updatePassword(newPassword: String)
 }

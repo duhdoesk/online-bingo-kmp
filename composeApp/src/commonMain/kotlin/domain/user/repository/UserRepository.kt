@@ -14,8 +14,8 @@ interface UserRepository {
     fun getListOfUsers(ids: List<String>): Flow<List<User>>
 
     suspend fun setUser(id: String, user: User)
-    suspend fun updateUserName(id: String, name: String)
-    suspend fun updateUserEmail(id: String, email: String)
-    suspend fun updateUserPictureUri(id: String, pictureUri: String)
-    suspend fun updateVictoryMessage(id: String, victoryMessage: String)
+    suspend fun updateUserName(id: String, name: String): Result<Unit>
+    suspend fun updateUserEmail(id: String, email: String): Result<Unit>
+    suspend fun updateUserPictureUri(id: String, pictureUri: String): Result<Unit>
+    suspend fun updateVictoryMessage(id: String, victoryMessage: String): Result<Unit>
 }

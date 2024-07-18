@@ -88,42 +88,62 @@ class UserRepositoryImpl(
             )
     }
 
-    override suspend fun updateUserName(id: String, name: String) {
-        collection
-            .document(id)
-            .update(
-                data = hashMapOf(
-                    "name" to name,
-                    "nameLastUpdated" to getCurrentDateTime()
+    override suspend fun updateUserName(id: String, name: String): Result<Unit> {
+        try {
+            collection
+                .document(id)
+                .update(
+                    data = hashMapOf(
+                        "name" to name,
+                        "nameLastUpdated" to getCurrentDateTime()
+                    )
                 )
-            )
+            return Result.success(Unit)
+        } catch (e: Exception) {
+            return Result.failure(e)
+        }
     }
 
-    override suspend fun updateUserEmail(id: String, email: String) {
-        collection
-            .document(id)
-            .update(data = hashMapOf("email" to email))
+    override suspend fun updateUserEmail(id: String, email: String): Result<Unit> {
+        try {
+            collection
+                .document(id)
+                .update(data = hashMapOf("email" to email))
+            return Result.success(Unit)
+        } catch (e: Exception) {
+            return Result.failure(e)
+        }
     }
 
-    override suspend fun updateUserPictureUri(id: String, pictureUri: String) {
-        collection
-            .document(id)
-            .update(
-                data = hashMapOf(
-                    "pictureUri" to pictureUri,
-                    "pictureUriLastUpdated" to getCurrentDateTime()
+    override suspend fun updateUserPictureUri(id: String, pictureUri: String): Result<Unit> {
+        try {
+            collection
+                .document(id)
+                .update(
+                    data = hashMapOf(
+                        "pictureUri" to pictureUri,
+                        "pictureUriLastUpdated" to getCurrentDateTime()
+                    )
                 )
-            )
+            return Result.success(Unit)
+        } catch (e: Exception) {
+            return Result.failure(e)
+        }
     }
 
-    override suspend fun updateVictoryMessage(id: String, victoryMessage: String) {
-        collection
-            .document(id)
-            .update(
-                data = hashMapOf(
-                    "victoryMessage" to victoryMessage,
-                    "victoryMessageLastUpdated" to getCurrentDateTime()
+    override suspend fun updateVictoryMessage(id: String, victoryMessage: String): Result<Unit> {
+        try {
+            collection
+                .document(id)
+                .update(
+                    data = hashMapOf(
+                        "victoryMessage" to victoryMessage,
+                        "victoryMessageLastUpdated" to getCurrentDateTime()
+                    )
                 )
-            )
+            return Result.success(Unit)
+        } catch (e: Exception) {
+            return Result.failure(e)
+        }
     }
 }
