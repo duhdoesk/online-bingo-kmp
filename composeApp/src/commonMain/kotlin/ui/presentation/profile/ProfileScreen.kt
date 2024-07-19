@@ -8,9 +8,15 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import org.jetbrains.compose.resources.ExperimentalResourceApi
+import themedbingo.composeapp.generated.resources.Res
+import themedbingo.composeapp.generated.resources.sign_out_dialog_body
+import themedbingo.composeapp.generated.resources.sign_out_dialog_title
+import themedbingo.composeapp.generated.resources.success
 import ui.presentation.profile.event.ProfileScreenEvent
 import ui.presentation.profile.screens.ProfileScreenOrientation
+import ui.presentation.util.GenericActionDialog
 import ui.presentation.util.WindowInfo
+import ui.presentation.util.dialog.GenericSuccessDialog
 
 @OptIn(ExperimentalResourceApi::class)
 @Composable
@@ -21,11 +27,12 @@ fun ProfileScreen(component: ProfileScreenComponent, windowInfo: WindowInfo) {
         .collectAsState()
         .value
 
-    val successDialog = component.successDialog
-    val errorDialog = component.errorDialog
-    val updateNameDialog = component.updateNameDialog
-    val updateVictoryMessageDialog = component.updateVictoryMessageDialog
-    val updatePasswordDialog = component.updatePasswordDialog
+    val successDialog = component.successDialogState
+    val errorDialog = component.errorDialogState
+    val updateNameDialog = component.updateNameDialogState
+    val updateVictoryMessageDialog = component.updateVictoryMessageDialogState
+    val updatePasswordDialog = component.updatePasswordDialogState
+    val signOutDialog = component.signOutDialogState
 
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -45,7 +52,7 @@ fun ProfileScreen(component: ProfileScreenComponent, windowInfo: WindowInfo) {
                         component.popBack()
 
                     ProfileScreenEvent.SignOut ->
-                        component.signOut()
+                        component.signOutDialogState.showDialog(null)
 
                     is ProfileScreenEvent.UpdateName ->
                         component.updateName(profileScreenEvent.name)
@@ -97,7 +104,10 @@ fun ProfileScreen(component: ProfileScreenComponent, windowInfo: WindowInfo) {
     }
 
     if (successDialog.isVisible.value) {
-        //todo(): show dialog
+        GenericSuccessDialog(
+            onDismiss = { successDialog.hideDialog() },
+            stringRes = successDialog.dialogData.value ?: Res.string.success
+        )
     }
 
     if (errorDialog.isVisible.value) {
@@ -116,4 +126,15 @@ fun ProfileScreen(component: ProfileScreenComponent, windowInfo: WindowInfo) {
         //todo(): show dialog
     }
 
+    if (signOutDialog.isVisible.value) {
+        GenericActionDialog(
+            onDismiss = { signOutDialog.hideDialog() },
+            onConfirm = {
+                signOutDialog.hideDialog()
+                component.signOut()
+            },
+            title = Res.string.sign_out_dialog_title,
+            body = Res.string.sign_out_dialog_body,
+        )
+    }
 }

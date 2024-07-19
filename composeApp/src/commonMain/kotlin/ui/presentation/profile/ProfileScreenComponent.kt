@@ -17,7 +17,8 @@ import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.StringResource
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
-import ui.presentation.profile.state.ProfileScreenUIState
+import themedbingo.composeapp.generated.resources.Res
+import themedbingo.composeapp.generated.resources.sign_out_error
 import ui.presentation.util.dialog.dialog_state.mutableDialogStateOf
 import util.componentCoroutineScope
 
@@ -40,14 +41,15 @@ class ProfileScreenComponent(
     val user = _user.asStateFlow()
 
     @OptIn(ExperimentalResourceApi::class)
-    val successDialog = mutableDialogStateOf<StringResource?>(null)
+    val successDialogState = mutableDialogStateOf<StringResource?>(null)
 
     @OptIn(ExperimentalResourceApi::class)
-    val errorDialog = mutableDialogStateOf<StringResource?>(null)
+    val errorDialogState = mutableDialogStateOf<StringResource?>(null)
 
-    val updateNameDialog = mutableDialogStateOf(null)
-    val updateVictoryMessageDialog = mutableDialogStateOf(null)
-    val updatePasswordDialog = mutableDialogStateOf(null)
+    val updateNameDialogState = mutableDialogStateOf(null)
+    val updateVictoryMessageDialogState = mutableDialogStateOf(null)
+    val updatePasswordDialogState = mutableDialogStateOf(null)
+    val signOutDialogState = mutableDialogStateOf(null)
 
     init {
         getUserById()
@@ -57,15 +59,12 @@ class ProfileScreenComponent(
         onPopBack()
     }
 
+    @OptIn(ExperimentalResourceApi::class)
     fun signOut() =
         componentCoroutineScope().launch {
             signOutUseCase.invoke()
-                .onSuccess {
-                    onSignOut()
-                }
-                .onFailure {
-                    //todo(): display dialog showing the error message
-                }
+                .onSuccess { onSignOut() }
+                .onFailure { errorDialogState.showDialog(Res.string.sign_out_error) }
         }
 
     fun deleteAccount() {

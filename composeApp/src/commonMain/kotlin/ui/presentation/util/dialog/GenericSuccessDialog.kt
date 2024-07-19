@@ -21,13 +21,13 @@ import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.StringResource
 import org.jetbrains.compose.resources.stringResource
 import themedbingo.composeapp.generated.resources.Res
-import themedbingo.composeapp.generated.resources.auth_error
 import themedbingo.composeapp.generated.resources.ok_button
+import themedbingo.composeapp.generated.resources.success
 
 @OptIn(ExperimentalResourceApi::class)
 @Composable
-fun GenericErrorDialog(
-    stringResource: StringResource,
+fun GenericSuccessDialog(
+    stringRes: StringResource,
     onDismiss: () -> Unit,
 ) {
     Dialog(
@@ -38,6 +38,7 @@ fun GenericErrorDialog(
                 containerColor = MaterialTheme.colorScheme.surface,
                 contentColor = MaterialTheme.colorScheme.onSurface
             ),
+            modifier = Modifier.padding(horizontal = 16.dp)
         ) {
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally,
@@ -46,7 +47,7 @@ fun GenericErrorDialog(
                     .fillMaxWidth()
             ) {
                 Text(
-                    text = stringResource(Res.string.auth_error), //todo(): change to error_label
+                    text = stringResource(Res.string.success),
                     style = MaterialTheme.typography.titleLarge,
                     modifier = Modifier.fillMaxWidth()
                 )
@@ -54,7 +55,7 @@ fun GenericErrorDialog(
                 Spacer(Modifier.height(8.dp))
 
                 Text(
-                    text = stringResource(stringResource),
+                    text = stringResource(stringRes),
                     modifier = Modifier.fillMaxWidth()
                 )
 

@@ -8,6 +8,11 @@
     <string name="send_button">Send</string>
 
 
+    <!--    Common Labels -->
+    <string name="error">Error</string>
+    <string name="success">Success</string>
+
+
     <!--    Home Screen -->
     <string name="hot_water_software">Hot Water Software</string>
     <string name="mobile_apps_development">Mobile Apps Development</string>
@@ -44,11 +49,15 @@
     <string name="dismiss_button">Dismiss</string>
     <string name="ok_button">Ok</string>
     <string name="auth_error">Authentication Error</string>
-    <string name="success">Success</string>
     <string name="password_reset_success">We sent you an e-mail containing a link to reset your password</string>
     <string name="password_reset_info_text">Enter a valid email address that you have access to. We will send you an e-mail containing a link to password reset.</string>
     <string name="email_info_text">Enter a valid email address that you have access to</string>
     <string name="password_info_text">Your password must contain at least eight characters, including at least one uppercase letter, one lowercase letter and one number</string>
+
+
+    <!--    Profile Screen -->
+    <string name="sign_out_dialog_title">Sign Out</string>
+    <string name="sign_out_dialog_body">Do you really want to sign out?</string>
 
 
     <!--    Auth Errors -->
@@ -58,5 +67,6 @@
     <string name="auth_user_not_found">User not found.</string>
     <string name="auth_too_many_requests">Too many requests. Please, try again in a few minutes.</string>
     <string name="auth_empty_string">Enter your e-mail and try again.</string>
+    <string name="sign_out_error">We could not sign you out at this moment. Please, check your internet connection or try again later.</string>
 
 </resources>

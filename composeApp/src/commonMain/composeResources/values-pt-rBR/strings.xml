@@ -8,6 +8,11 @@
     <string name="send_button">Enviar</string>
 
 
+    <!--    Common Labels -->
+    <string name="error">Erro</string>
+    <string name="success">Sucesso</string>
+
+
     <!--    Home Screen -->
     <string name="hot_water_software">Hot Water Software</string>
     <string name="mobile_apps_development">Mobile Apps Development</string>
@@ -51,6 +56,11 @@
     <string name="password_info_text">Sua senha deve conter ao menos oito caracteres, incluindo ao menos uma letra maiúscula, uma letra minúscula e um número</string>
 
 
+    <!--    Profile Screen -->
+    <string name="sign_out_dialog_title">Sair</string>
+    <string name="sign_out_dialog_body">Você realmente deseja sair da sua conta?</string>
+
+
     <!--    Auth Errors -->
     <string name="auth_unmapped_error">Não conseguimos completar a operação. Por favor, tente novamente mais tarde.</string>
     <string name="auth_email_already_exists">Este endereço de e-mail já está em uso.</string>
@@ -58,5 +68,6 @@
     <string name="auth_user_not_found">Usuário não encontrado.</string>
     <string name="auth_too_many_requests">Servidor sobrecarregado. Por favor, tente novamente em alguns instantes.</string>
     <string name="auth_empty_string">Insira seu e-mail e tente novamente.</string>
+    <string name="sign_out_error">Não foi possível concluir o processo de saída. Verifique sua conexão ou tente novamente em alguns instantes.</string>
 
 </resources>
