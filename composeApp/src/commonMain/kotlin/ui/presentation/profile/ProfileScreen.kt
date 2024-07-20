@@ -14,7 +14,7 @@ import themedbingo.composeapp.generated.resources.sign_out_dialog_title
 import themedbingo.composeapp.generated.resources.success
 import ui.presentation.profile.event.ProfileScreenEvent
 import ui.presentation.profile.screens.ProfileScreenOrientation
-import ui.presentation.util.GenericActionDialog
+import ui.presentation.util.dialog.GenericActionDialog
 import ui.presentation.util.WindowInfo
 import ui.presentation.util.dialog.GenericSuccessDialog
 

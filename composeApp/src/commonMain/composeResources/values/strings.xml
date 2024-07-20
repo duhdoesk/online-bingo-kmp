@@ -6,11 +6,14 @@
     <string name="sign_in_button">Sign In</string>
     <string name="sign_up_button">Sign Up</string>
     <string name="send_button">Send</string>
+    <string name="confirm_button">Confirm</string>
+    <string name="cancel_button">Cancel</string>
 
 
     <!--    Common Labels -->
     <string name="error">Error</string>
     <string name="success">Success</string>
+    <string name="action">Action</string>
 
 
     <!--    Home Screen -->
