@@ -80,4 +80,11 @@
     <string name="update_nickname_body">Change your nickname in the following text field. It must have at least 3 characters.</string>
     <string name="nickname">Nickname</string>
 
+
+    <!--    Update Victory Message Dialog -->
+    <string name="update_victory_advice">You wont be able to change your victory message again for the next 3 days</string>
+    <string name="update_victory_title">Change victory message</string>
+    <string name="update_victory_body">Change your victory message in the following text field. It must have at least 3 characters.</string>
+    <string name="victory_message">Victory Message</string>
+
 </resources>

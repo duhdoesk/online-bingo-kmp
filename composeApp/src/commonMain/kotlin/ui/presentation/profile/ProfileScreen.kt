@@ -19,6 +19,7 @@ import ui.presentation.util.WindowInfo
 import ui.presentation.util.dialog.GenericErrorDialog
 import ui.presentation.util.dialog.GenericSuccessDialog
 import ui.presentation.util.dialog.UpdateNameDialog
+import ui.presentation.util.dialog.UpdateVictoryMessageDialog
 
 @OptIn(ExperimentalResourceApi::class)
 @Composable
@@ -123,12 +124,16 @@ fun ProfileScreen(component: ProfileScreenComponent, windowInfo: WindowInfo) {
         UpdateNameDialog(
             onDismiss = { updateNameDialog.hideDialog() },
             onConfirm = { component.updateName(it) },
-            currentName = user?.name ?: ""
+            currentName = user?.name ?: "",
         )
     }
 
     if (updateVictoryMessageDialog.isVisible.value) {
-        //todo(): show dialog
+        UpdateVictoryMessageDialog(
+            onDismiss = { updateVictoryMessageDialog.hideDialog() },
+            onConfirm = { component.updateVictoryMessage(it) },
+            currentVictoryMessage = user?.victoryMessage ?: "",
+        )
     }
 
     if (updatePasswordDialog.isVisible.value) {
