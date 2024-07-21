@@ -62,13 +62,11 @@ fun ProfileScreen(component: ProfileScreenComponent, windowInfo: WindowInfo) {
                     ProfileScreenEvent.UpdateName ->
                         updateNameDialog.showDialog(user?.name ?: "")
 
-                    ProfileScreenEvent.UpdatePassword -> {
-                        //todo(): redirect to update password screen
-                    }
+                    ProfileScreenEvent.UpdatePassword ->
+                        component.updatePassword()
 
-                    ProfileScreenEvent.UpdatePicture -> {
-                        //todo(): redirect to update picture screen
-                    }
+                    ProfileScreenEvent.UpdatePicture ->
+                        component.updatePicture()
 
                     ProfileScreenEvent.UpdateVictoryMessage ->
                         updateVictoryMessageDialog.showDialog(user?.victoryMessage ?: "")

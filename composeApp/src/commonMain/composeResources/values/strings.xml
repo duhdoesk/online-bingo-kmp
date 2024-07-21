@@ -75,20 +75,27 @@
 
 
     <!--    Update Nickname Dialog -->
-    <string name="update_nickname_advice">You wont be able to change your name again for the next 3 days</string>
-    <string name="update_nickname_title">Change nickname</string>
-    <string name="update_nickname_body">Change your nickname in the following text field. It must have at least 3 characters.</string>
+    <string name="update_nickname_advice">You wont be able to change your Nickname again for the next 3 days</string>
+    <string name="update_nickname_title">Change Nickname</string>
+    <string name="update_nickname_body">Change your Nickname in the following text field. It must have at least 3 characters.</string>
     <string name="nickname">Nickname</string>
+    <string name="update_nickname_success">Your Nickname have been successfully updated.</string>
+    <string name="update_nickname_failure">We could not update your Nickname at the moment. Please, try again in a few moments.</string>
 
 
     <!--    Update Victory Message Dialog -->
-    <string name="update_victory_advice">You wont be able to change your victory message again for the next 3 days</string>
-    <string name="update_victory_title">Change victory message</string>
-    <string name="update_victory_body">Change your victory message in the following text field. It must have at least 3 characters.</string>
+    <string name="update_victory_advice">You wont be able to change your Victory Message again for the next 3 days</string>
+    <string name="update_victory_title">Change Victory Message</string>
+    <string name="update_victory_body">Change your Victory Message in the following text field. It must have at least 3 characters.</string>
     <string name="victory_message">Victory Message</string>
+    <string name="update_victory_success">Your Victory Message have been successfully updated.</string>
+    <string name="update_victory_failure">We could not update your Victory Message at the moment. Please, try again in a few moments.</string>
+
 
     <!--    Delete Account Dialog -->
     <string name="delete_account_title">Delete account</string>
     <string name="delete_account_body">Are you sure you want to delete your account? This action is permanent and cannot be undone.</string>
+    <string name="delete_account_success">Your account has been permanently deleted. We are redirecting you to the sign in screen.</string>
+
 
 </resources>

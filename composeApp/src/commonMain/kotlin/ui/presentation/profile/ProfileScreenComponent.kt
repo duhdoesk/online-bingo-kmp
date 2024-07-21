@@ -2,6 +2,7 @@ package ui.presentation.profile
 
 import com.arkivanov.decompose.ComponentContext
 import dev.gitlive.firebase.auth.FirebaseUser
+import domain.auth.getAuthErrorDescription
 import domain.auth.use_case.DeleteAccountUseCase
 import domain.auth.use_case.SignOutUseCase
 import domain.auth.use_case.UpdatePasswordUseCase
@@ -18,7 +19,12 @@ import org.jetbrains.compose.resources.StringResource
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 import themedbingo.composeapp.generated.resources.Res
+import themedbingo.composeapp.generated.resources.delete_account_success
 import themedbingo.composeapp.generated.resources.sign_out_error
+import themedbingo.composeapp.generated.resources.update_nickname_failure
+import themedbingo.composeapp.generated.resources.update_nickname_success
+import themedbingo.composeapp.generated.resources.update_victory_failure
+import themedbingo.composeapp.generated.resources.update_victory_success
 import ui.presentation.util.dialog.dialog_state.mutableDialogStateOf
 import util.componentCoroutineScope
 
@@ -28,6 +34,7 @@ class ProfileScreenComponent(
     private val onPopBack: () -> Unit,
     private val onSignOut: () -> Unit,
     private val onUpdatePicture: () -> Unit,
+    private val onUpdatePassword: () -> Unit,
 ) : ComponentContext by componentContext, KoinComponent {
 
     private val signOutUseCase by inject<SignOutUseCase>()
@@ -67,14 +74,17 @@ class ProfileScreenComponent(
                 .onFailure { errorDialogState.showDialog(Res.string.sign_out_error) }
         }
 
+    @OptIn(ExperimentalResourceApi::class)
     fun deleteAccount() {
         componentCoroutineScope().launch {
             deleteAccountUseCase.invoke()
                 .onSuccess {
-                    //todo(): display dialog showing success message and then go to sign in screen
+                    successDialogState.showDialog(Res.string.delete_account_success)
+                    onSignOut()
                 }
-                .onFailure {
-                    //todo(): display dialog showing the error message
+                .onFailure { exception ->
+                    val body = getAuthErrorDescription(exception.message ?: "")
+                    errorDialogState.showDialog(body)
                 }
         }
     }
@@ -83,49 +93,31 @@ class ProfileScreenComponent(
         onUpdatePicture()
     }
 
-    fun updatePassword(newPassword: String, currentPassword: String) {
-        componentCoroutineScope().launch {
-            updatePasswordUseCase
-                .invoke(
-                    newPassword = newPassword,
-                    currentPassword = currentPassword
-                )
-                .onSuccess {
-                    //todo(): display dialog showing the success message
-                }
-                .onFailure {
-                    //todo(): display dialog showing the error message
-                }
-        }
+    fun updatePassword() {
+        onUpdatePassword()
     }
 
+    @OptIn(ExperimentalResourceApi::class)
     fun updateName(newName: String) {
         componentCoroutineScope().launch {
             updateNameUseCase.invoke(
                 userId = firebaseUser.uid,
                 newName = newName
             )
-                .onSuccess {
-                    //todo(): display dialog showing the success message
-                }
-                .onFailure {
-                    //todo(): display dialog showing the error message
-                }
+                .onSuccess { successDialogState.showDialog(Res.string.update_nickname_success) }
+                .onFailure { errorDialogState.showDialog(Res.string.update_nickname_failure) }
         }
     }
 
+    @OptIn(ExperimentalResourceApi::class)
     fun updateVictoryMessage(newVictoryMessage: String) {
         componentCoroutineScope().launch {
             updateVictoryMessageUseCase.invoke(
                 userId = firebaseUser.uid,
                 newVictoryMessage = newVictoryMessage
             )
-                .onSuccess {
-                    //todo(): display dialog showing the success message
-                }
-                .onFailure {
-                    //todo(): display dialog showing the error message
-                }
+                .onSuccess { successDialogState.showDialog(Res.string.update_victory_success) }
+                .onFailure { errorDialogState.showDialog(Res.string.update_victory_failure) }
         }
     }
 

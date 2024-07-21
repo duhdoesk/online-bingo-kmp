@@ -76,10 +76,12 @@
 
 
     <!--    Update Nickname Dialog -->
-    <string name="update_nickname_advice">Você não poderá alterar seu apelido novamente pelos próximos três dias</string>
-    <string name="update_nickname_title">Alterar seu apelido</string>
-    <string name="update_nickname_body">Altere seu apelido na caixa de texto abaixo. Ele deve conter, ao menos, 3 caracteres.</string>
+    <string name="update_nickname_advice">Você não poderá alterar seu Apelido novamente pelos próximos três dias</string>
+    <string name="update_nickname_title">Alterar seu Apelido</string>
+    <string name="update_nickname_body">Altere seu Apelido na caixa de texto abaixo. Ele deve conter, ao menos, 3 caracteres.</string>
     <string name="nickname">Apelido</string>
+    <string name="update_nickname_success">Seu Apelido foi atualizado com sucesso.</string>
+    <string name="update_nickname_failure">Não conseguimos atualizar seu Apelido neste momento. Por favor, tente novamente em alguns instantes.</string>
 
 
     <!--    Update Victory Message Dialog -->
@@ -87,10 +89,14 @@
     <string name="update_victory_title">Alterar seu grito de vitória</string>
     <string name="update_victory_body">Altere seu grito de vitória na caixa de texto abaixo. Ele deve conter, ao menos, 3 caracteres.</string>
     <string name="victory_message">Grito de Vitória</string>
+    <string name="update_victory_success">Seu Grito de Vitória foi atualizado com sucesso.</string>
+    <string name="update_victory_failure">Não conseguimos atualizar seu Grito de Vitória neste momento. Por favor, tente novamente em alguns instantes.</string>
 
 
     <!--    Delete Account Dialog -->
-    <string name="delete_account_title">Deletar conta</string>
-    <string name="delete_account_body">Tem certeza de que deseja deletar sua conta? Esta ação é permanente e não poderá ser desfeita.</string>
+    <string name="delete_account_title">Apagar conta</string>
+    <string name="delete_account_body">Tem certeza de que deseja apagar sua conta? Esta ação é permanente e não poderá ser desfeita.</string>
+    <string name="delete_account_success">Sua conta foi permanentemente apagada. Vamos redirecionar você à tela de login.</string>
+
 
 </resources>
