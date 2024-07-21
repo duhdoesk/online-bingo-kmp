@@ -12,5 +12,20 @@ fun ProfileScreenOrientation(
     user: User?,
     event: (event: ProfileScreenEvent) -> Unit,
 ) {
+    when (windowInfo.screenOrientation) {
+        WindowInfo.DeviceOrientation.Landscape ->
+            LandscapeProfileScreen(
+                windowInfo = windowInfo,
+                user = user,
+                event = { landscapeEvent -> event(landscapeEvent) },
+            )
+
+        WindowInfo.DeviceOrientation.Portrait ->
+            PortraitProfileScreen(
+                windowInfo = windowInfo,
+                user = user,
+                event = { landscapeEvent -> event(landscapeEvent) },
+            )
+    }
 
 }
