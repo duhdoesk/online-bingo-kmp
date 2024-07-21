@@ -10,10 +10,11 @@
     <string name="cancel_button">Cancel</string>
 
 
-    <!--    Common Labels -->
+    <!--    Generic Labels -->
     <string name="error">Error</string>
     <string name="success">Success</string>
     <string name="action">Action</string>
+    <string name="unmapped_error">We can't do that at the moment. Please, try again later.</string>
 
 
     <!--    Home Screen -->

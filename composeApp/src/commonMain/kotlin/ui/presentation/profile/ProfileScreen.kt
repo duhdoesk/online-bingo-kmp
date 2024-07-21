@@ -16,6 +16,7 @@ import ui.presentation.profile.event.ProfileScreenEvent
 import ui.presentation.profile.screens.ProfileScreenOrientation
 import ui.presentation.util.dialog.GenericActionDialog
 import ui.presentation.util.WindowInfo
+import ui.presentation.util.dialog.GenericErrorDialog
 import ui.presentation.util.dialog.GenericSuccessDialog
 
 @OptIn(ExperimentalResourceApi::class)
@@ -111,7 +112,10 @@ fun ProfileScreen(component: ProfileScreenComponent, windowInfo: WindowInfo) {
     }
 
     if (errorDialog.isVisible.value) {
-        //todo(): show dialog
+        GenericErrorDialog(
+            onDismiss = { errorDialog.hideDialog() },
+            body = errorDialog.dialogData.value,
+        )
     }
 
     if (updateNameDialog.isVisible.value) {

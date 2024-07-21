@@ -21,14 +21,16 @@ import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.StringResource
 import org.jetbrains.compose.resources.stringResource
 import themedbingo.composeapp.generated.resources.Res
-import themedbingo.composeapp.generated.resources.auth_error
+import themedbingo.composeapp.generated.resources.error
 import themedbingo.composeapp.generated.resources.ok_button
+import themedbingo.composeapp.generated.resources.unmapped_error
 
 @OptIn(ExperimentalResourceApi::class)
 @Composable
 fun GenericErrorDialog(
-    stringResource: StringResource,
     onDismiss: () -> Unit,
+    title: StringResource = Res.string.error,
+    body: StringResource?,
 ) {
     Dialog(
         onDismissRequest = { onDismiss() }
@@ -46,7 +48,7 @@ fun GenericErrorDialog(
                     .fillMaxWidth()
             ) {
                 Text(
-                    text = stringResource(Res.string.auth_error), //todo(): change to error_label
+                    text = stringResource(title),
                     style = MaterialTheme.typography.titleLarge,
                     modifier = Modifier.fillMaxWidth()
                 )
@@ -54,7 +56,7 @@ fun GenericErrorDialog(
                 Spacer(Modifier.height(8.dp))
 
                 Text(
-                    text = stringResource(stringResource),
+                    text = stringResource(body ?: Res.string.unmapped_error),
                     modifier = Modifier.fillMaxWidth()
                 )
 
