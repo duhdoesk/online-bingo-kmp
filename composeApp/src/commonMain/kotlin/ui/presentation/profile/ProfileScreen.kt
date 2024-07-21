@@ -51,28 +51,27 @@ fun ProfileScreen(component: ProfileScreenComponent, windowInfo: WindowInfo) {
             event = { profileScreenEvent ->
                 when (profileScreenEvent) {
                     ProfileScreenEvent.DeleteAccount ->
-                        component.deleteAccount()
+                        deleteAccountDialog.showDialog(null)
 
                     ProfileScreenEvent.PopBack ->
                         component.popBack()
 
                     ProfileScreenEvent.SignOut ->
-                        component.signOutDialogState.showDialog(null)
+                        signOutDialog.showDialog(null)
 
-                    is ProfileScreenEvent.UpdateName ->
-                        component.updateName(profileScreenEvent.name)
+                    ProfileScreenEvent.UpdateName ->
+                        updateNameDialog.showDialog(user?.name ?: "")
 
-                    is ProfileScreenEvent.UpdatePassword ->
-                        component.updatePassword(
-                            newPassword = profileScreenEvent.newPassword,
-                            currentPassword = profileScreenEvent.currentPassword
-                        )
+                    ProfileScreenEvent.UpdatePassword -> {
+                        //todo(): redirect to update password screen
+                    }
 
-                    ProfileScreenEvent.UpdatePicture ->
-                        component.updatePicture()
+                    ProfileScreenEvent.UpdatePicture -> {
+                        //todo(): redirect to update picture screen
+                    }
 
-                    is ProfileScreenEvent.UpdateVictoryMessage ->
-                        component.updateVictoryMessage(profileScreenEvent.victoryMessage)
+                    ProfileScreenEvent.UpdateVictoryMessage ->
+                        updateVictoryMessageDialog.showDialog(user?.victoryMessage ?: "")
                 }
             }
         )
@@ -126,7 +125,7 @@ fun ProfileScreen(component: ProfileScreenComponent, windowInfo: WindowInfo) {
         UpdateNameDialog(
             onDismiss = { updateNameDialog.hideDialog() },
             onConfirm = { component.updateName(it) },
-            currentName = user?.name ?: "",
+            currentName = updateNameDialog.dialogData.value,
         )
     }
 
@@ -134,7 +133,7 @@ fun ProfileScreen(component: ProfileScreenComponent, windowInfo: WindowInfo) {
         UpdateVictoryMessageDialog(
             onDismiss = { updateVictoryMessageDialog.hideDialog() },
             onConfirm = { component.updateVictoryMessage(it) },
-            currentVictoryMessage = user?.victoryMessage ?: "",
+            currentVictoryMessage = updateVictoryMessageDialog.dialogData.value,
         )
     }
 

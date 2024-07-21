@@ -46,8 +46,8 @@ class ProfileScreenComponent(
     @OptIn(ExperimentalResourceApi::class)
     val errorDialogState = mutableDialogStateOf<StringResource?>(null)
 
-    val updateNameDialogState = mutableDialogStateOf(null)
-    val updateVictoryMessageDialogState = mutableDialogStateOf(null)
+    val updateNameDialogState = mutableDialogStateOf("")
+    val updateVictoryMessageDialogState = mutableDialogStateOf("")
     val signOutDialogState = mutableDialogStateOf(null)
     val deleteAccountDialogState = mutableDialogStateOf(null)
 
