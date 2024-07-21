@@ -115,7 +115,9 @@ class RootComponent(
                     onUpdatePicture = {
                         //todo(): navigate to update picture screen (not done yet)
                     },
-
+                    onUpdatePassword = {
+                        //todo(): navigate to update password screen (not done yet)
+                    }
                 )
             )
 

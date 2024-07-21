@@ -40,7 +40,6 @@ class ProfileScreenComponent(
     private val signOutUseCase by inject<SignOutUseCase>()
     private val getUserByIdUseCase by inject<GetUserByIdUseCase>()
     private val deleteAccountUseCase by inject<DeleteAccountUseCase>()
-    private val updatePasswordUseCase by inject<UpdatePasswordUseCase>()
     private val updateNameUseCase by inject<UpdateNameUseCase>()
     private val updateVictoryMessageUseCase by inject<UpdateVictoryMessageUseCase>()
 
