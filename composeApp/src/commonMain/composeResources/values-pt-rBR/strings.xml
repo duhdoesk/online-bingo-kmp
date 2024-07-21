@@ -74,4 +74,11 @@
     <string name="auth_empty_string">Insira seu e-mail e tente novamente.</string>
     <string name="sign_out_error">Não foi possível concluir o processo de saída. Verifique sua conexão ou tente novamente em alguns instantes.</string>
 
+
+    <!--    Update Nickname Dialog -->
+    <string name="update_nickname_advice">Você não poderá alterar seu apelido novamente pelos próximos três dias</string>
+    <string name="update_nickname_title">Alterar seu apelido</string>
+    <string name="update_nickname_body">Altere seu apelido na caixa de texto abaixo. Ele deve conter, ao menos, 3 caracteres.</string>
+    <string name="nickname">Apelido</string>
+
 </resources>

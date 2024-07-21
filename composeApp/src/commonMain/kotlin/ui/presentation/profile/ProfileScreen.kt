@@ -18,6 +18,7 @@ import ui.presentation.util.dialog.GenericActionDialog
 import ui.presentation.util.WindowInfo
 import ui.presentation.util.dialog.GenericErrorDialog
 import ui.presentation.util.dialog.GenericSuccessDialog
+import ui.presentation.util.dialog.UpdateNameDialog
 
 @OptIn(ExperimentalResourceApi::class)
 @Composable
@@ -119,7 +120,11 @@ fun ProfileScreen(component: ProfileScreenComponent, windowInfo: WindowInfo) {
     }
 
     if (updateNameDialog.isVisible.value) {
-        //todo(): show dialog
+        UpdateNameDialog(
+            onDismiss = { updateNameDialog.hideDialog() },
+            onConfirm = { component.updateName(it) },
+            currentName = user?.name ?: ""
+        )
     }
 
     if (updateVictoryMessageDialog.isVisible.value) {
