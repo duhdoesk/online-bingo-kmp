@@ -87,4 +87,8 @@
     <string name="update_victory_body">Change your victory message in the following text field. It must have at least 3 characters.</string>
     <string name="victory_message">Victory Message</string>
 
+    <!--    Delete Account Dialog -->
+    <string name="delete_account_title">Delete account</string>
+    <string name="delete_account_body">Are you sure you want to delete your account? This action is permanent and cannot be undone.</string>
+
 </resources>

@@ -48,8 +48,8 @@ class ProfileScreenComponent(
 
     val updateNameDialogState = mutableDialogStateOf(null)
     val updateVictoryMessageDialogState = mutableDialogStateOf(null)
-    val updatePasswordDialogState = mutableDialogStateOf(null)
     val signOutDialogState = mutableDialogStateOf(null)
+    val deleteAccountDialogState = mutableDialogStateOf(null)
 
     init {
         getUserById()

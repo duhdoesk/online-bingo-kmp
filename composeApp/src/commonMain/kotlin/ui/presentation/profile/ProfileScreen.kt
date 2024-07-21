@@ -9,6 +9,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import themedbingo.composeapp.generated.resources.Res
+import themedbingo.composeapp.generated.resources.delete_account_body
+import themedbingo.composeapp.generated.resources.delete_account_title
 import themedbingo.composeapp.generated.resources.sign_out_dialog_body
 import themedbingo.composeapp.generated.resources.sign_out_dialog_title
 import themedbingo.composeapp.generated.resources.success
@@ -34,8 +36,8 @@ fun ProfileScreen(component: ProfileScreenComponent, windowInfo: WindowInfo) {
     val errorDialog = component.errorDialogState
     val updateNameDialog = component.updateNameDialogState
     val updateVictoryMessageDialog = component.updateVictoryMessageDialogState
-    val updatePasswordDialog = component.updatePasswordDialogState
     val signOutDialog = component.signOutDialogState
+    val deleteAccountDialog = component.deleteAccountDialogState
 
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -136,10 +138,6 @@ fun ProfileScreen(component: ProfileScreenComponent, windowInfo: WindowInfo) {
         )
     }
 
-    if (updatePasswordDialog.isVisible.value) {
-        //todo(): show dialog
-    }
-
     if (signOutDialog.isVisible.value) {
         GenericActionDialog(
             onDismiss = { signOutDialog.hideDialog() },
@@ -151,4 +149,17 @@ fun ProfileScreen(component: ProfileScreenComponent, windowInfo: WindowInfo) {
             body = Res.string.sign_out_dialog_body,
         )
     }
+
+    if (deleteAccountDialog.isVisible.value) {
+        GenericActionDialog(
+            onDismiss = { deleteAccountDialog.hideDialog() },
+            onConfirm = {
+                deleteAccountDialog.hideDialog()
+                component.deleteAccount()
+            },
+            title = Res.string.delete_account_title,
+            body = Res.string.delete_account_body,
+        )
+    }
+
 }

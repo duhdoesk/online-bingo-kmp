@@ -7,6 +7,8 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
@@ -34,10 +36,9 @@ fun GenericActionDialog(
     onConfirm: () -> Unit,
     title: StringResource = Res.string.action,
     body: StringResource,
+    permanentAction: Boolean = false
 ) {
-    Dialog(
-        onDismissRequest = { onDismiss() }
-    ) {
+    Dialog(onDismissRequest = { onDismiss() }) {
         Card(
             colors = CardDefaults.cardColors(
                 containerColor = MaterialTheme.colorScheme.surface,
@@ -46,9 +47,7 @@ fun GenericActionDialog(
         ) {
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally,
-                modifier = Modifier
-                    .padding(16.dp)
-                    .fillMaxWidth()
+                modifier = Modifier.padding(16.dp).fillMaxWidth()
             ) {
                 Text(
                     text = stringResource(title),
@@ -59,8 +58,7 @@ fun GenericActionDialog(
                 Spacer(Modifier.height(8.dp))
 
                 Text(
-                    text = stringResource(body),
-                    modifier = Modifier.fillMaxWidth()
+                    text = stringResource(body), modifier = Modifier.fillMaxWidth()
                 )
 
                 Spacer(Modifier.height(16.dp))
@@ -69,14 +67,22 @@ fun GenericActionDialog(
                     horizontalArrangement = Arrangement.SpaceBetween,
                     modifier = Modifier.fillMaxWidth()
                 ) {
-                    TextButton(
-                        onClick = { onDismiss() }
-                    ) {
+                    TextButton(onClick = { onDismiss() }) {
                         Text(stringResource(Res.string.cancel_button))
                     }
 
+                    val confirmButtonColors = when (permanentAction) {
+                        true ->
+                            ButtonDefaults.buttonColors()
+                                .copy(contentColor = MaterialTheme.colorScheme.error)
+
+                        false ->
+                            ButtonDefaults.buttonColors()
+                    }
+
                     TextButton(
-                        onClick = { onConfirm() }
+                        onClick = { onConfirm() },
+                        colors = confirmButtonColors
                     ) {
                         Text(stringResource(Res.string.confirm_button))
                     }
