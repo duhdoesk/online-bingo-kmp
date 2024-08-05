@@ -37,7 +37,7 @@ import org.jetbrains.compose.resources.stringResource
 import themedbingo.composeapp.generated.resources.Res
 import themedbingo.composeapp.generated.resources.confirm_button
 import themedbingo.composeapp.generated.resources.user_avatar
-import ui.presentation.common.BottomButtonRow
+import ui.presentation.common.components.BottomButtonRow
 
 @Composable
 fun EditProfilePictureScreen(
