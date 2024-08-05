@@ -29,6 +29,9 @@ import kotlinx.datetime.toLocalDateTime
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.StringResource
 import org.jetbrains.compose.resources.stringResource
+import themedbingo.composeapp.generated.resources.Res
+import themedbingo.composeapp.generated.resources.can_change_in
+import themedbingo.composeapp.generated.resources.edit_button
 
 @OptIn(ExperimentalResourceApi::class)
 @Composable
@@ -83,7 +86,7 @@ fun ProfileScreenStringDataSection(
             content = {
                 Icon(
                     imageVector = Icons.Default.Edit,
-                    contentDescription = "Edit Button", //todo(): extract string resource
+                    contentDescription = stringResource(Res.string.edit_button),
                 )
             }
         )
@@ -98,7 +101,7 @@ fun ProfileScreenStringDataSection(
 
     if (!editable) {
         Text(
-            text = "Poderá mudar em ${dateTime.format(formatDateTime())}", //todo(): extract string resource
+            text = "${stringResource(Res.string.can_change_in)} ${dateTime.format(formatDateTime())}",
             modifier = Modifier
                 .padding(start = 16.dp, top = 4.dp)
                 .fillMaxWidth(),

@@ -69,6 +69,7 @@
     <string name="delete_account">Apagar Conta</string>
     <string name="change_password">Alterar Senha</string>
     <string name="user_avatar">Avatar do Usuário</string>
+    <string name="can_change_in">Poderá mudar em</string>
 
 
     <!--    Auth Errors -->

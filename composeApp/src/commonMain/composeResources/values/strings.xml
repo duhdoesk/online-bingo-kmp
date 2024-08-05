@@ -68,6 +68,7 @@
     <string name="delete_account">Delete Account</string>
     <string name="change_password">Change Password</string>
     <string name="user_avatar">User Avatar</string>
+    <string name="can_change_in">Can change in</string>
 
 
     <!--    Auth Errors -->
