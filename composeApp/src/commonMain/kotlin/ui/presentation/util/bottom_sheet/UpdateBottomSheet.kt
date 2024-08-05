@@ -1,50 +1,59 @@
-package ui.presentation.util.dialog
+package ui.presentation.util.bottom_sheet
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.ime
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
+import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.window.Dialog
 import org.jetbrains.compose.resources.ExperimentalResourceApi
+import org.jetbrains.compose.resources.StringResource
 import org.jetbrains.compose.resources.stringResource
 import themedbingo.composeapp.generated.resources.Res
 import themedbingo.composeapp.generated.resources.cancel_button
 import themedbingo.composeapp.generated.resources.confirm_button
-import themedbingo.composeapp.generated.resources.update_victory_advice
-import themedbingo.composeapp.generated.resources.update_victory_body
-import themedbingo.composeapp.generated.resources.update_victory_title
-import themedbingo.composeapp.generated.resources.victory_message
 
-@OptIn(ExperimentalResourceApi::class)
+@OptIn(ExperimentalResourceApi::class, ExperimentalMaterial3Api::class)
 @Composable
-fun UpdateVictoryMessageDialog(
+fun UpdateBottomSheet(
     onDismiss: () -> Unit,
-    onConfirm: (updatedNickname: String) -> Unit,
-    currentVictoryMessage: String,
+    onConfirm: (newData: String) -> Unit,
+    currentData: String,
+    title: StringResource,
+    body: StringResource,
+    label: StringResource,
 ) {
-    val updatedVictoryMessage = mutableStateOf(currentVictoryMessage)
+    val updatedData = mutableStateOf(currentData)
     val keyboardController = LocalSoftwareKeyboardController.current
+    val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
 
-    Dialog(
-        onDismissRequest = { onDismiss() }
+    ModalBottomSheet(
+        onDismissRequest = { onDismiss() },
+        sheetState = sheetState,
+        windowInsets = WindowInsets.ime,
     ) {
         Card(
             colors = CardDefaults.cardColors(
@@ -59,37 +68,41 @@ fun UpdateVictoryMessageDialog(
                     .fillMaxWidth()
             ) {
                 Text(
-                    text = stringResource(Res.string.update_victory_title),
+                    text = stringResource(title),
                     style = MaterialTheme.typography.titleLarge,
-                    modifier = Modifier.fillMaxWidth()
+                    fontWeight = FontWeight.Bold,
+                    modifier = Modifier.fillMaxWidth(),
                 )
 
                 Spacer(Modifier.height(8.dp))
 
                 Text(
-                    text = stringResource(Res.string.update_victory_body),
+                    text = stringResource(body),
                     modifier = Modifier.fillMaxWidth()
                 )
 
-                Spacer(Modifier.height(16.dp))
+                Spacer(Modifier.height(24.dp))
 
                 OutlinedTextField(
-                    value = updatedVictoryMessage.value,
+                    value = updatedData.value,
                     onValueChange = { input ->
-                        updatedVictoryMessage.value = input.trim()
+                        updatedData.value = input.trim()
                     },
-                    label = { Text(stringResource(Res.string.victory_message)) },
-                    keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
-                    keyboardActions = KeyboardActions(onDone = { keyboardController?.hide() }),
+                    label = { Text(stringResource(label)) },
+                    keyboardOptions = KeyboardOptions(
+                        imeAction = if (updatedData.value.length > 2) ImeAction.Done else ImeAction.None,
+                    ),
+                    keyboardActions = KeyboardActions(
+                        onDone = {
+                            keyboardController?.hide()
+                            onConfirm(updatedData.value)
+                        }
+                    ),
                     modifier = Modifier.fillMaxWidth(),
                 )
 
-                Text(
-                    text = stringResource(Res.string.update_victory_advice),
-                    modifier = Modifier.padding(top = 4.dp)
-                )
 
-                Spacer(Modifier.height(16.dp))
+                Spacer(Modifier.height(48.dp))
 
                 Row(
                     horizontalArrangement = Arrangement.SpaceBetween,
@@ -101,9 +114,9 @@ fun UpdateVictoryMessageDialog(
                         Text(stringResource(Res.string.cancel_button))
                     }
 
-                    TextButton(
-                        onClick = { onConfirm(updatedVictoryMessage.value) },
-                        enabled = (updatedVictoryMessage.value.length > 4)
+                    Button(
+                        onClick = { onConfirm(updatedData.value) },
+                        enabled = (updatedData.value.length > 2)
                     ) {
                         Text(stringResource(Res.string.confirm_button))
                     }

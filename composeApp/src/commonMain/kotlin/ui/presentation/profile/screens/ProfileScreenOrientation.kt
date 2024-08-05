@@ -9,21 +9,21 @@ import ui.presentation.util.WindowInfo
 @Composable
 fun ProfileScreenOrientation(
     windowInfo: WindowInfo,
-    user: User?,
+    uiState: ProfileScreenUIState.Success,
     event: (event: ProfileScreenEvent) -> Unit,
 ) {
     when (windowInfo.screenOrientation) {
         WindowInfo.DeviceOrientation.Landscape ->
             LandscapeProfileScreen(
                 windowInfo = windowInfo,
-                user = user,
+                uiState = uiState,
                 event = { landscapeEvent -> event(landscapeEvent) },
             )
 
         WindowInfo.DeviceOrientation.Portrait ->
             PortraitProfileScreen(
                 windowInfo = windowInfo,
-                user = user,
+                uiState = uiState,
                 event = { landscapeEvent -> event(landscapeEvent) },
             )
     }

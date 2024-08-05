@@ -17,7 +17,7 @@ fun formatDateTime(): DateTimeFormat<LocalDateTime> {
     return when (locale) {
         "pt" -> {
             LocalDateTime.Format {
-                dayOfMonth(padding = Padding.SPACE)
+                dayOfMonth(padding = Padding.ZERO)
                 chars(" de ")
                 monthName(
                     names = MonthNames(

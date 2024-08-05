@@ -2,9 +2,9 @@ package data.user.repository
 
 import data.user.model.UserDTO
 import dev.gitlive.firebase.firestore.FirebaseFirestore
+import dev.gitlive.firebase.firestore.Timestamp
 import domain.user.model.User
 import domain.user.repository.UserRepository
-import domain.util.datetime.getCurrentDateTime
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
@@ -14,24 +14,30 @@ class UserRepositoryImpl(
 
     private val collection = firestore.collection("users")
 
-    override suspend fun getUserById(id: String): User {
-        return collection
+    override suspend fun getUserById(id: String): Result<User> {
+        collection
             .document(id)
             .get()
             .let { documentSnapshot ->
-                UserDTO(
-                    id = documentSnapshot.id,
-                    name = documentSnapshot.get("name"),
-                    pictureUri = documentSnapshot.get("pictureUri"),
-                    email = documentSnapshot.get("email"),
-                    nameLastUpdated = documentSnapshot.get("nameLastUpdated"),
-                    pictureUriLastUpdated = documentSnapshot.get("pictureUriLastUpdated"),
-                    lastWinTimestamp = documentSnapshot.get("lastWinTimestamp"),
-                    victoryMessage = documentSnapshot.get("victoryMessage"),
-                    victoryMessageLastUpdated = documentSnapshot.get("victoryMessageLastUpdated"),
-                )
+                if (documentSnapshot.exists) {
+                    val user = UserDTO(
+                        id = documentSnapshot.id,
+                        name = documentSnapshot.get("name"),
+                        pictureUri = documentSnapshot.get("pictureUri"),
+                        email = documentSnapshot.get("email"),
+                        nameLastUpdated = documentSnapshot.get("nameLastUpdated"),
+                        pictureUriLastUpdated = documentSnapshot.get("pictureUriLastUpdated"),
+                        lastWinTimestamp = documentSnapshot.get("lastWinTimestamp"),
+                        victoryMessage = documentSnapshot.get("victoryMessage"),
+                        victoryMessageLastUpdated = documentSnapshot.get("victoryMessageLastUpdated"),
+                    )
+                        .toModel()
+
+                    return Result.success(user)
+                } else {
+                    return Result.failure(NoSuchElementException())
+                }
             }
-            .toModel()
     }
 
     override suspend fun createUser(
@@ -95,7 +101,7 @@ class UserRepositoryImpl(
                 .update(
                     data = hashMapOf(
                         "name" to name,
-                        "nameLastUpdated" to getCurrentDateTime()
+                        "nameLastUpdated" to Timestamp.now()
                     )
                 )
             return Result.success(Unit)
@@ -122,7 +128,7 @@ class UserRepositoryImpl(
                 .update(
                     data = hashMapOf(
                         "pictureUri" to pictureUri,
-                        "pictureUriLastUpdated" to getCurrentDateTime()
+                        "pictureUriLastUpdated" to Timestamp.now()
                     )
                 )
             return Result.success(Unit)
@@ -138,7 +144,7 @@ class UserRepositoryImpl(
                 .update(
                     data = hashMapOf(
                         "victoryMessage" to victoryMessage,
-                        "victoryMessageLastUpdated" to getCurrentDateTime()
+                        "victoryMessageLastUpdated" to Timestamp.now()
                     )
                 )
             return Result.success(Unit)

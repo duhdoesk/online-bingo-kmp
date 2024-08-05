@@ -5,7 +5,6 @@ import dev.gitlive.firebase.auth.FirebaseUser
 import domain.auth.getAuthErrorDescription
 import domain.auth.use_case.DeleteAccountUseCase
 import domain.auth.use_case.SignOutUseCase
-import domain.auth.use_case.UpdatePasswordUseCase
 import domain.user.model.User
 import domain.user.use_case.GetUserByIdUseCase
 import domain.user.use_case.UpdateNameUseCase
@@ -22,9 +21,8 @@ import themedbingo.composeapp.generated.resources.Res
 import themedbingo.composeapp.generated.resources.delete_account_success
 import themedbingo.composeapp.generated.resources.sign_out_error
 import themedbingo.composeapp.generated.resources.update_nickname_failure
-import themedbingo.composeapp.generated.resources.update_nickname_success
 import themedbingo.composeapp.generated.resources.update_victory_failure
-import themedbingo.composeapp.generated.resources.update_victory_success
+import ui.presentation.profile.state.ProfileScreenUIState
 import ui.presentation.util.dialog.dialog_state.mutableDialogStateOf
 import util.componentCoroutineScope
 
@@ -43,8 +41,8 @@ class ProfileScreenComponent(
     private val updateNameUseCase by inject<UpdateNameUseCase>()
     private val updateVictoryMessageUseCase by inject<UpdateVictoryMessageUseCase>()
 
-    private val _user = MutableStateFlow<User?>(null)
-    val user = _user.asStateFlow()
+    private val _profileScreenUiState = MutableStateFlow<ProfileScreenUIState>(ProfileScreenUIState.Loading)
+    val profileScreenUiState = _profileScreenUiState.asStateFlow()
 
     @OptIn(ExperimentalResourceApi::class)
     val successDialogState = mutableDialogStateOf<StringResource?>(null)
@@ -58,7 +56,7 @@ class ProfileScreenComponent(
     val deleteAccountDialogState = mutableDialogStateOf(null)
 
     init {
-        getUserById()
+        fetchUserData()
     }
 
     fun popBack() {
@@ -103,7 +101,7 @@ class ProfileScreenComponent(
                 userId = firebaseUser.uid,
                 newName = newName
             )
-                .onSuccess { successDialogState.showDialog(Res.string.update_nickname_success) }
+                .onSuccess { fetchUserData() }
                 .onFailure { errorDialogState.showDialog(Res.string.update_nickname_failure) }
         }
     }
@@ -115,14 +113,18 @@ class ProfileScreenComponent(
                 userId = firebaseUser.uid,
                 newVictoryMessage = newVictoryMessage
             )
-                .onSuccess { successDialogState.showDialog(Res.string.update_victory_success) }
+                .onSuccess { fetchUserData() }
                 .onFailure { errorDialogState.showDialog(Res.string.update_victory_failure) }
         }
     }
 
-    private fun getUserById() {
+    private fun fetchUserData() {
         componentCoroutineScope().launch {
-            _user.update { getUserByIdUseCase.invoke(firebaseUser.uid) }
+            getUserByIdUseCase.invoke(firebaseUser.uid)
+                .onSuccess { user ->
+                    _profileScreenUiState.update { ProfileScreenUIState.Success(user) }
+                }
+                .onFailure { _profileScreenUiState.update { ProfileScreenUIState.Error } }
         }
     }
 }

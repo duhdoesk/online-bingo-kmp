@@ -15,21 +15,25 @@ class AuthenticateUserUseCase(
                 .user
 
             firebaseUser?.let { fu ->
-                val user = userRepository.getUserById(fu.uid)
-                val noName = (user.name == "Bingo Friend")
-                val noEmail = (user.email == "")
+                userRepository.getUserById(fu.uid)
+                    .onFailure { return Result.failure(NoSuchElementException()) }
+                    .onSuccess { user ->
+                        val noName = (user.name == "Bingo Friend")
+                        val noEmail = (user.email == "")
 
-                if (noName && noEmail) {
-                    userRepository
-                        .createUser(
-                            id = fu.uid,
-                            email = fu.email ?: "",
-                            name = fu.displayName ?: ""
-                        )
-                }
+                        if (noName && noEmail) {
+                            userRepository
+                                .createUser(
+                                    id = fu.uid,
+                                    email = fu.email ?: "",
+                                    name = fu.displayName ?: ""
+                                )
+                        }
+                    }
             }
 
             return Result.success(Unit)
+
         } catch(e: Exception) {
             println(e.cause)
             println(e.message)

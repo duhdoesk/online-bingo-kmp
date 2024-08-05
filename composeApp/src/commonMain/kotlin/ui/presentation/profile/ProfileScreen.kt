@@ -11,33 +11,41 @@ import org.jetbrains.compose.resources.ExperimentalResourceApi
 import themedbingo.composeapp.generated.resources.Res
 import themedbingo.composeapp.generated.resources.delete_account_body
 import themedbingo.composeapp.generated.resources.delete_account_title
+import themedbingo.composeapp.generated.resources.nickname
 import themedbingo.composeapp.generated.resources.sign_out_dialog_body
 import themedbingo.composeapp.generated.resources.sign_out_dialog_title
 import themedbingo.composeapp.generated.resources.success
+import themedbingo.composeapp.generated.resources.update_nickname_body
+import themedbingo.composeapp.generated.resources.update_nickname_title
+import themedbingo.composeapp.generated.resources.update_victory_body
+import themedbingo.composeapp.generated.resources.update_victory_title
+import themedbingo.composeapp.generated.resources.victory_message
 import ui.presentation.profile.event.ProfileScreenEvent
 import ui.presentation.profile.screens.ProfileScreenOrientation
-import ui.presentation.util.dialog.GenericActionDialog
+import ui.presentation.profile.state.ProfileScreenUIState
+import ui.presentation.util.ErrorScreen
+import ui.presentation.util.LoadingScreen
 import ui.presentation.util.WindowInfo
+import ui.presentation.util.bottom_sheet.UpdateBottomSheet
+import ui.presentation.util.dialog.GenericActionDialog
 import ui.presentation.util.dialog.GenericErrorDialog
 import ui.presentation.util.dialog.GenericSuccessDialog
-import ui.presentation.util.dialog.UpdateNameDialog
-import ui.presentation.util.dialog.UpdateVictoryMessageDialog
 
 @OptIn(ExperimentalResourceApi::class)
 @Composable
 fun ProfileScreen(component: ProfileScreenComponent, windowInfo: WindowInfo) {
 
-    val user = component
-        .user
+    val uiState = component
+        .profileScreenUiState
         .collectAsState()
         .value
 
-    val successDialog = component.successDialogState
-    val errorDialog = component.errorDialogState
-    val updateNameDialog = component.updateNameDialogState
-    val updateVictoryMessageDialog = component.updateVictoryMessageDialogState
-    val signOutDialog = component.signOutDialogState
-    val deleteAccountDialog = component.deleteAccountDialogState
+    val successState = component.successDialogState
+    val errorState = component.errorDialogState
+    val updateNameState = component.updateNameDialogState
+    val updateVictoryMessageState = component.updateVictoryMessageDialogState
+    val signOutState = component.signOutDialogState
+    val deleteAccountState = component.deleteAccountDialogState
 
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -45,101 +53,91 @@ fun ProfileScreen(component: ProfileScreenComponent, windowInfo: WindowInfo) {
         modifier = Modifier.fillMaxSize()
     ) {
 
-        ProfileScreenOrientation(
-            windowInfo = windowInfo,
-            user = user,
-            event = { profileScreenEvent ->
-                when (profileScreenEvent) {
-                    ProfileScreenEvent.DeleteAccount ->
-                        deleteAccountDialog.showDialog(null)
+        when (uiState) {
+            ProfileScreenUIState.Error ->
+                ErrorScreen{ component.popBack() }
 
-                    ProfileScreenEvent.PopBack ->
-                        component.popBack()
+            ProfileScreenUIState.Loading ->
+                LoadingScreen()
 
-                    ProfileScreenEvent.SignOut ->
-                        signOutDialog.showDialog(null)
+            is ProfileScreenUIState.Success ->
+                ProfileScreenOrientation(
+                    windowInfo = windowInfo,
+                    uiState = uiState,
+                ) { profileScreenEvent ->
+                    when (profileScreenEvent) {
+                        ProfileScreenEvent.DeleteAccount ->
+                            deleteAccountState.showDialog(null)
 
-                    ProfileScreenEvent.UpdateName ->
-                        updateNameDialog.showDialog(user?.name ?: "")
+                        ProfileScreenEvent.PopBack ->
+                            component.popBack()
 
-                    ProfileScreenEvent.UpdatePassword ->
-                        component.updatePassword()
+                        ProfileScreenEvent.SignOut ->
+                            signOutState.showDialog(null)
 
-                    ProfileScreenEvent.UpdatePicture ->
-                        component.updatePicture()
+                        ProfileScreenEvent.UpdateName ->
+                            updateNameState.showDialog(uiState.user.name)
 
-                    ProfileScreenEvent.UpdateVictoryMessage ->
-                        updateVictoryMessageDialog.showDialog(user?.victoryMessage ?: "")
+                        ProfileScreenEvent.UpdatePassword ->
+                            component.updatePassword()
+
+                        ProfileScreenEvent.UpdatePicture ->
+                            component.updatePicture()
+
+                        ProfileScreenEvent.UpdateVictoryMessage ->
+                            updateVictoryMessageState.showDialog(uiState.user.victoryMessage)
+                    }
                 }
-            }
-        )
-//        Text(component.firebaseUser.uid)
-//        Text(component.firebaseUser.displayName ?: "")
-//
-//        Spacer(Modifier.height(16.dp))
-//
-//        val user = component
-//            .user
-//            .collectAsState()
-//            .value
-//
-//        user?.run {
-//            Text(name)
-//
-//            val instant = Instant.fromEpochMilliseconds(nameLastUpdated.toMilliseconds().toLong())
-//            val dateTime = instant.toLocalDateTime(TimeZone.currentSystemDefault())
-//
-//            Text(dateTime.format(formatDateTime()))
-//        }
-
-//        Spacer(Modifier.height(16.dp))
-//
-//        Button(onClick = { component.signOut() }) {
-//            Text("Sign Out")
-//        }
-//
-//        Spacer(Modifier.height(16.dp))
-//
-//        Button(onClick = { component.popBack() }) {
-//            Text("Back")
-//        }
+        }
     }
 
-    if (successDialog.isVisible.value) {
+    if (successState.isVisible.value) {
         GenericSuccessDialog(
-            onDismiss = { successDialog.hideDialog() },
-            stringRes = successDialog.dialogData.value ?: Res.string.success
+            onDismiss = { successState.hideDialog() },
+            stringRes = successState.dialogData.value ?: Res.string.success
         )
     }
 
-    if (errorDialog.isVisible.value) {
+    if (errorState.isVisible.value) {
         GenericErrorDialog(
-            onDismiss = { errorDialog.hideDialog() },
-            body = errorDialog.dialogData.value,
+            onDismiss = { errorState.hideDialog() },
+            body = errorState.dialogData.value,
         )
     }
 
-    if (updateNameDialog.isVisible.value) {
-        UpdateNameDialog(
-            onDismiss = { updateNameDialog.hideDialog() },
-            onConfirm = { component.updateName(it) },
-            currentName = updateNameDialog.dialogData.value,
-        )
-    }
-
-    if (updateVictoryMessageDialog.isVisible.value) {
-        UpdateVictoryMessageDialog(
-            onDismiss = { updateVictoryMessageDialog.hideDialog() },
-            onConfirm = { component.updateVictoryMessage(it) },
-            currentVictoryMessage = updateVictoryMessageDialog.dialogData.value,
-        )
-    }
-
-    if (signOutDialog.isVisible.value) {
-        GenericActionDialog(
-            onDismiss = { signOutDialog.hideDialog() },
+    if (updateNameState.isVisible.value) {
+        UpdateBottomSheet(
+            onDismiss = { updateNameState.hideDialog() },
             onConfirm = {
-                signOutDialog.hideDialog()
+                updateNameState.hideDialog()
+                component.updateName(it)
+            },
+            currentData = updateNameState.dialogData.value,
+            title = Res.string.update_nickname_title,
+            body = Res.string.update_nickname_body,
+            label = Res.string.nickname,
+        )
+    }
+
+    if (updateVictoryMessageState.isVisible.value) {
+        UpdateBottomSheet(
+            onDismiss = { updateVictoryMessageState.hideDialog() },
+            onConfirm = {
+                updateVictoryMessageState.hideDialog()
+                component.updateVictoryMessage(it)
+            },
+            currentData = updateVictoryMessageState.dialogData.value,
+            title = Res.string.update_victory_title,
+            body = Res.string.update_victory_body,
+            label = Res.string.victory_message,
+        )
+    }
+
+    if (signOutState.isVisible.value) {
+        GenericActionDialog(
+            onDismiss = { signOutState.hideDialog() },
+            onConfirm = {
+                signOutState.hideDialog()
                 component.signOut()
             },
             title = Res.string.sign_out_dialog_title,
@@ -147,16 +145,15 @@ fun ProfileScreen(component: ProfileScreenComponent, windowInfo: WindowInfo) {
         )
     }
 
-    if (deleteAccountDialog.isVisible.value) {
+    if (deleteAccountState.isVisible.value) {
         GenericActionDialog(
-            onDismiss = { deleteAccountDialog.hideDialog() },
+            onDismiss = { deleteAccountState.hideDialog() },
             onConfirm = {
-                deleteAccountDialog.hideDialog()
+                deleteAccountState.hideDialog()
                 component.deleteAccount()
             },
             title = Res.string.delete_account_title,
             body = Res.string.delete_account_body,
         )
     }
-
 }

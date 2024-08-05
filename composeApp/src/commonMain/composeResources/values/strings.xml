@@ -8,6 +8,8 @@
     <string name="send_button">Send</string>
     <string name="confirm_button">Confirm</string>
     <string name="cancel_button">Cancel</string>
+    <string name="edit_button">Edit</string>
+    <string name="exit_button">Exit</string>
 
 
     <!--    Generic Labels -->
@@ -62,6 +64,10 @@
     <!--    Profile Screen -->
     <string name="sign_out_dialog_title">Sign Out</string>
     <string name="sign_out_dialog_body">Do you really want to sign out?</string>
+    <string name="account">Account</string>
+    <string name="delete_account">Delete Account</string>
+    <string name="change_password">Change Password</string>
+    <string name="user_avatar">User Avatar</string>
 
 
     <!--    Auth Errors -->
@@ -77,7 +83,7 @@
     <!--    Update Nickname Dialog -->
     <string name="update_nickname_advice">You wont be able to change your Nickname again for the next 3 days</string>
     <string name="update_nickname_title">Change Nickname</string>
-    <string name="update_nickname_body">Change your Nickname in the following text field. It must have at least 3 characters.</string>
+    <string name="update_nickname_body">Your Nickname must have at least 3 characters. You wont be able to change your Nickname again for the next 3 days.</string>
     <string name="nickname">Nickname</string>
     <string name="update_nickname_success">Your Nickname have been successfully updated.</string>
     <string name="update_nickname_failure">We could not update your Nickname at the moment. Please, try again in a few moments.</string>
@@ -86,7 +92,7 @@
     <!--    Update Victory Message Dialog -->
     <string name="update_victory_advice">You wont be able to change your Victory Message again for the next 3 days</string>
     <string name="update_victory_title">Change Victory Message</string>
-    <string name="update_victory_body">Change your Victory Message in the following text field. It must have at least 3 characters.</string>
+    <string name="update_victory_body">Your Victory Message must have at least 3 characters. You wont be able to change your Victory Message again for the next 3 days.</string>
     <string name="victory_message">Victory Message</string>
     <string name="update_victory_success">Your Victory Message have been successfully updated.</string>
     <string name="update_victory_failure">We could not update your Victory Message at the moment. Please, try again in a few moments.</string>

@@ -8,6 +8,8 @@
     <string name="send_button">Enviar</string>
     <string name="confirm_button">Confirmar</string>
     <string name="cancel_button">Cancelar</string>
+    <string name="edit_button">Editar</string>
+    <string name="exit_button">Sair</string>
 
 
     <!--    Generic Labels -->
@@ -63,6 +65,10 @@
     <!--    Profile Screen -->
     <string name="sign_out_dialog_title">Sair</string>
     <string name="sign_out_dialog_body">Você realmente deseja sair da sua conta?</string>
+    <string name="account">Account</string>
+    <string name="delete_account">Apagar Conta</string>
+    <string name="change_password">Alterar Senha</string>
+    <string name="user_avatar">Avatar do Usuário</string>
 
 
     <!--    Auth Errors -->
@@ -78,16 +84,16 @@
     <!--    Update Nickname Dialog -->
     <string name="update_nickname_advice">Você não poderá alterar seu Apelido novamente pelos próximos três dias</string>
     <string name="update_nickname_title">Alterar seu Apelido</string>
-    <string name="update_nickname_body">Altere seu Apelido na caixa de texto abaixo. Ele deve conter, ao menos, 3 caracteres.</string>
+    <string name="update_nickname_body">Seu Apelido deve conter, ao menos, 3 caracteres. Você não poderá alterar seu Apelido novamente pelos próximos três dias.</string>
     <string name="nickname">Apelido</string>
     <string name="update_nickname_success">Seu Apelido foi atualizado com sucesso.</string>
     <string name="update_nickname_failure">Não conseguimos atualizar seu Apelido neste momento. Por favor, tente novamente em alguns instantes.</string>
 
 
     <!--    Update Victory Message Dialog -->
-    <string name="update_victory_advice">Você não poderá alterar seu grito de vitória novamente pelos próximos três dias</string>
-    <string name="update_victory_title">Alterar seu grito de vitória</string>
-    <string name="update_victory_body">Altere seu grito de vitória na caixa de texto abaixo. Ele deve conter, ao menos, 3 caracteres.</string>
+    <string name="update_victory_advice">Você não poderá alterar seu Grito de Vitória novamente pelos próximos três dias</string>
+    <string name="update_victory_title">Alterar seu Grito de Vitória</string>
+    <string name="update_victory_body">Seu Grito de Vitória deve conter, ao menos, 3 caracteres. Você não poderá alterar seu Grito de Vitória novamente pelos próximos três dias.</string>
     <string name="victory_message">Grito de Vitória</string>
     <string name="update_victory_success">Seu Grito de Vitória foi atualizado com sucesso.</string>
     <string name="update_victory_failure">Não conseguimos atualizar seu Grito de Vitória neste momento. Por favor, tente novamente em alguns instantes.</string>
