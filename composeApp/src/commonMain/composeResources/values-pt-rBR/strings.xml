@@ -17,6 +17,7 @@
     <string name="success">Sucesso</string>
     <string name="action">Ação</string>
     <string name="unmapped_error">Não conseguimos completar a operação. Por favor, tente novamente mais tarde.</string>
+    <string name="oops">Oops!</string>
 
 
     <!--    Home Screen -->
@@ -70,6 +71,7 @@
     <string name="change_password">Alterar Senha</string>
     <string name="user_avatar">Avatar do Usuário</string>
     <string name="can_change_in">Poderá mudar em</string>
+    <string name="user_data_not_found">Não conseguimos encontrar os dados do usuário. Por favor, tente novamente mais tarde.</string>
 
 
     <!--    Auth Errors -->

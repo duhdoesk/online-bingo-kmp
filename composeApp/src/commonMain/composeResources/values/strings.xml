@@ -10,6 +10,7 @@
     <string name="cancel_button">Cancel</string>
     <string name="edit_button">Edit</string>
     <string name="exit_button">Exit</string>
+    <string name="retry_button">Retry</string>
 
 
     <!--    Generic Labels -->
@@ -17,6 +18,7 @@
     <string name="success">Success</string>
     <string name="action">Action</string>
     <string name="unmapped_error">We can't do that at the moment. Please, try again later.</string>
+    <string name="oops">Oops!</string>
 
 
     <!--    Home Screen -->
@@ -69,6 +71,7 @@
     <string name="change_password">Change Password</string>
     <string name="user_avatar">User Avatar</string>
     <string name="can_change_in">Can change in</string>
+    <string name="user_data_not_found">We were not able to find the user info. Please, try again later.</string>
 
 
     <!--    Auth Errors -->

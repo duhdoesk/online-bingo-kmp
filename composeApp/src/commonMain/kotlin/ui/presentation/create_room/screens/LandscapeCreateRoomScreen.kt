@@ -11,7 +11,7 @@ import androidx.compose.ui.unit.dp
 import domain.theme.model.BingoTheme
 import ui.presentation.create_room.event.CreateScreenEvent
 import ui.presentation.create_room.state.CreateScreenUiState
-import ui.presentation.util.RotateScreen
+import ui.presentation.common.RotateScreen
 import ui.presentation.util.WindowInfo
 
 @Composable

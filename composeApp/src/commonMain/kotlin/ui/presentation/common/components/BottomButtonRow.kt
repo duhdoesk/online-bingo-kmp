@@ -1,4 +1,4 @@
-package ui.presentation.common
+package ui.presentation.common.components
 
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer

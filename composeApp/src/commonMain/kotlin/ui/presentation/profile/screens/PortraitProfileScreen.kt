@@ -27,7 +27,6 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
-import domain.user.model.User
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.stringResource
 import themedbingo.composeapp.generated.resources.Res
@@ -37,7 +36,7 @@ import themedbingo.composeapp.generated.resources.exit_button
 import themedbingo.composeapp.generated.resources.nickname
 import themedbingo.composeapp.generated.resources.user_avatar
 import themedbingo.composeapp.generated.resources.victory_message
-import ui.presentation.common.BottomButtonRow
+import ui.presentation.common.components.BottomButtonRow
 import ui.presentation.profile.event.ProfileScreenEvent
 import ui.presentation.profile.screens.component.ProfileScreenListDataSection
 import ui.presentation.profile.screens.component.ProfileScreenStringDataSection

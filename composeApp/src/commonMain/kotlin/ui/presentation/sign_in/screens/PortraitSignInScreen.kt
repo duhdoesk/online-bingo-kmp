@@ -45,11 +45,10 @@ import themedbingo.composeapp.generated.resources.or
 import themedbingo.composeapp.generated.resources.password
 import themedbingo.composeapp.generated.resources.sign_in
 import themedbingo.composeapp.generated.resources.sign_up
-import ui.presentation.common.CreateRoomHeader
+import ui.presentation.common.components.CreateRoomHeader
 import ui.presentation.sign_in.event.SignInScreenEvent
 import ui.presentation.sign_in.state.SignInScreenUIState
 import ui.presentation.util.dialog.AuthErrorDialog
-import ui.presentation.util.dialog.AuthSuccessDialog
 import ui.presentation.util.dialog.dialog_state.MutableDialogState
 
 @OptIn(ExperimentalResourceApi::class)

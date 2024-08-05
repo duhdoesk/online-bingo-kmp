@@ -1,4 +1,4 @@
-package ui.presentation.common
+package ui.presentation.common.components
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column

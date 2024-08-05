@@ -28,7 +28,6 @@ import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
-import domain.auth.getAuthErrorDescription
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.StringResource
 import org.jetbrains.compose.resources.stringResource
@@ -41,8 +40,8 @@ import themedbingo.composeapp.generated.resources.password_info_text
 import themedbingo.composeapp.generated.resources.repeat_password
 import themedbingo.composeapp.generated.resources.sign_up
 import themedbingo.composeapp.generated.resources.sign_up_button
-import ui.presentation.common.BottomButtonRow
-import ui.presentation.common.CreateRoomHeader
+import ui.presentation.common.components.BottomButtonRow
+import ui.presentation.common.components.CreateRoomHeader
 import ui.presentation.sign_up.event.SignUpScreenEvent
 import ui.presentation.sign_up.state.SignUpScreenUIState
 import ui.presentation.util.dialog.AuthErrorDialog

@@ -33,15 +33,12 @@ import org.jetbrains.compose.resources.stringResource
 import themedbingo.composeapp.generated.resources.Res
 import themedbingo.composeapp.generated.resources.auth_unmapped_error
 import themedbingo.composeapp.generated.resources.email
-import themedbingo.composeapp.generated.resources.email_info_text
 import themedbingo.composeapp.generated.resources.forgot_my_password
-import themedbingo.composeapp.generated.resources.password_info_text
 import themedbingo.composeapp.generated.resources.password_reset_info_text
 import themedbingo.composeapp.generated.resources.password_reset_success
 import themedbingo.composeapp.generated.resources.send_button
-import themedbingo.composeapp.generated.resources.sign_up_button
-import ui.presentation.common.BottomButtonRow
-import ui.presentation.common.CreateRoomHeader
+import ui.presentation.common.components.BottomButtonRow
+import ui.presentation.common.components.CreateRoomHeader
 import ui.presentation.forgot_password.event.ForgotPasswordEvent
 import ui.presentation.forgot_password.state.ForgotPasswordUIState
 import ui.presentation.util.dialog.AuthErrorDialog

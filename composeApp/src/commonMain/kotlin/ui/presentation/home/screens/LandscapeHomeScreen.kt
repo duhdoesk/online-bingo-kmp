@@ -32,7 +32,7 @@ import themedbingo.composeapp.generated.resources.new_room
 import themedbingo.composeapp.generated.resources.profile
 import ui.navigation.Configuration
 import ui.presentation.home.event.HomeScreenEvent
-import ui.presentation.common.HomeScreenHeader
+import ui.presentation.common.components.HomeScreenHeader
 
 @OptIn(ExperimentalResourceApi::class)
 @Composable

@@ -9,6 +9,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import themedbingo.composeapp.generated.resources.Res
+import themedbingo.composeapp.generated.resources.auth_user_not_found
 import themedbingo.composeapp.generated.resources.delete_account_body
 import themedbingo.composeapp.generated.resources.delete_account_title
 import themedbingo.composeapp.generated.resources.nickname
@@ -19,12 +20,13 @@ import themedbingo.composeapp.generated.resources.update_nickname_body
 import themedbingo.composeapp.generated.resources.update_nickname_title
 import themedbingo.composeapp.generated.resources.update_victory_body
 import themedbingo.composeapp.generated.resources.update_victory_title
+import themedbingo.composeapp.generated.resources.user_data_not_found
 import themedbingo.composeapp.generated.resources.victory_message
 import ui.presentation.profile.event.ProfileScreenEvent
 import ui.presentation.profile.screens.ProfileScreenOrientation
 import ui.presentation.profile.state.ProfileScreenUIState
-import ui.presentation.util.ErrorScreen
-import ui.presentation.util.LoadingScreen
+import ui.presentation.common.ErrorScreen
+import ui.presentation.common.LoadingScreen
 import ui.presentation.util.WindowInfo
 import ui.presentation.util.bottom_sheet.UpdateBottomSheet
 import ui.presentation.util.dialog.GenericActionDialog
@@ -55,7 +57,11 @@ fun ProfileScreen(component: ProfileScreenComponent, windowInfo: WindowInfo) {
 
         when (uiState) {
             ProfileScreenUIState.Error ->
-                ErrorScreen{ component.popBack() }
+                ErrorScreen(
+                    message = Res.string.user_data_not_found,
+                    retry = { component.fetchUserData() },
+                    popBack = { component.popBack() },
+                )
 
             ProfileScreenUIState.Loading ->
                 LoadingScreen()

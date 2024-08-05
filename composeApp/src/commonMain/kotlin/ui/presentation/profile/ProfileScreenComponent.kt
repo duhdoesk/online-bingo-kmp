@@ -118,7 +118,7 @@ class ProfileScreenComponent(
         }
     }
 
-    private fun fetchUserData() {
+    fun fetchUserData() {
         componentCoroutineScope().launch {
             getUserByIdUseCase.invoke(firebaseUser.uid)
                 .onSuccess { user ->
