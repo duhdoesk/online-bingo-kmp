@@ -55,6 +55,8 @@ class ProfileScreenComponent(
     val signOutDialogState = mutableDialogStateOf(null)
     val deleteAccountDialogState = mutableDialogStateOf(null)
 
+    private val coroutineScope = componentCoroutineScope()
+
     init {
         fetchUserData()
     }
@@ -65,7 +67,7 @@ class ProfileScreenComponent(
 
     @OptIn(ExperimentalResourceApi::class)
     fun signOut() =
-        componentCoroutineScope().launch {
+        coroutineScope.launch {
             signOutUseCase.invoke()
                 .onSuccess { onSignOut() }
                 .onFailure { errorDialogState.showDialog(Res.string.sign_out_error) }
@@ -73,7 +75,7 @@ class ProfileScreenComponent(
 
     @OptIn(ExperimentalResourceApi::class)
     fun deleteAccount() {
-        componentCoroutineScope().launch {
+        coroutineScope.launch {
             deleteAccountUseCase.invoke()
                 .onSuccess {
                     successDialogState.showDialog(Res.string.delete_account_success)
@@ -96,7 +98,7 @@ class ProfileScreenComponent(
 
     @OptIn(ExperimentalResourceApi::class)
     fun updateName(newName: String) {
-        componentCoroutineScope().launch {
+        coroutineScope.launch {
             updateNameUseCase.invoke(
                 userId = firebaseUser.uid,
                 newName = newName
@@ -108,7 +110,7 @@ class ProfileScreenComponent(
 
     @OptIn(ExperimentalResourceApi::class)
     fun updateVictoryMessage(newVictoryMessage: String) {
-        componentCoroutineScope().launch {
+        coroutineScope.launch {
             updateVictoryMessageUseCase.invoke(
                 userId = firebaseUser.uid,
                 newVictoryMessage = newVictoryMessage
@@ -118,7 +120,7 @@ class ProfileScreenComponent(
         }
     }
 
-    fun fetchUserData() {
+    private fun fetchUserData() {
         componentCoroutineScope().launch {
             getUserByIdUseCase.invoke(firebaseUser.uid)
                 .onSuccess { user ->

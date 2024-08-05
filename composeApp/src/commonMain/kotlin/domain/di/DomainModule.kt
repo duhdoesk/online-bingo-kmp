@@ -16,9 +16,13 @@ import domain.card.repository.CardRepository
 import domain.character.repository.CharacterRepository
 import domain.room.repository.BingoRoomRepository
 import domain.theme.repository.BingoThemeRepository
+import domain.theme.use_case.GetAllThemes
+import domain.theme.use_case.GetCharactersByThemeId
 import domain.user.repository.UserRepository
+import domain.user.use_case.GetProfilePicturesUseCase
 import domain.user.use_case.GetUserByIdUseCase
 import domain.user.use_case.UpdateNameUseCase
+import domain.user.use_case.UpdateUserPictureUseCase
 import domain.user.use_case.UpdateVictoryMessageUseCase
 import org.koin.dsl.module
 
@@ -35,12 +39,16 @@ val domainModule = module {
 
 //    Theme
     single<BingoThemeRepository> { BingoThemeRepositoryImpl(get()) }
+    single<GetAllThemes> { GetAllThemes(get()) }
+    single<GetCharactersByThemeId> { GetCharactersByThemeId(get()) }
 
 //    User
     single<UserRepository> { UserRepositoryImpl(get()) }
     single<GetUserByIdUseCase> { GetUserByIdUseCase(get()) }
     single<UpdateNameUseCase> { UpdateNameUseCase(get()) }
     single<UpdateVictoryMessageUseCase> { UpdateVictoryMessageUseCase(get()) }
+    single<UpdateUserPictureUseCase> { UpdateUserPictureUseCase(get()) }
+    single<GetProfilePicturesUseCase> { GetProfilePicturesUseCase(get(), get()) }
 
 //    Auth
     single<AuthService> { AuthServiceImpl(get()) }

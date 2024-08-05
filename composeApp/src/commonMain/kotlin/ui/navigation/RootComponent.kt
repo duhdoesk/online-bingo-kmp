@@ -18,6 +18,7 @@ import ui.presentation.host.HostScreenComponent
 import ui.presentation.join_room.JoinScreenComponent
 import ui.presentation.play.PlayScreenComponent
 import ui.presentation.profile.ProfileScreenComponent
+import ui.presentation.profile.picture.EditProfilePictureScreenComponent
 import ui.presentation.sign_in.SignInScreenComponent
 import ui.presentation.sign_up.SignUpScreenComponent
 import ui.presentation.themes.ThemesScreenComponent
@@ -113,7 +114,7 @@ class RootComponent(
                     onPopBack = { navigation.pop() },
                     onSignOut = { signOut() },
                     onUpdatePicture = {
-                        //todo(): navigate to update picture screen (not done yet)
+                        navigation.pushNew(configuration = Configuration.EditProfilePictureScreen)
                     },
                     onUpdatePassword = {
                         //todo(): navigate to update password screen (not done yet)
@@ -143,6 +144,15 @@ class RootComponent(
                 ForgotPasswordScreenComponent(
                     componentContext = context,
                     onPopBack = { navigation.pop() },
+                )
+            )
+
+            Configuration.EditProfilePictureScreen -> Child.EditProfilePictureScreen(
+                EditProfilePictureScreenComponent(
+                    componentContext = context,
+                    firebaseUser = firebaseUser,
+                    onCancel = { navigation.pop() },
+                    onPictureSaved = { navigation.pop() }
                 )
             )
         }

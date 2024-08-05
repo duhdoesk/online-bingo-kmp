@@ -5,6 +5,7 @@ import domain.room.model.BingoType
 import domain.room.repository.BingoRoomRepository
 import domain.theme.model.BingoTheme
 import domain.theme.repository.BingoThemeRepository
+import domain.theme.use_case.GetAllThemes
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.asStateFlow
@@ -24,17 +25,15 @@ class CreateRoomScreenComponent(
     private val onCreateRoom: (configuration: Configuration) -> Unit,
 ) : ComponentContext by componentContext, KoinComponent {
 
-    val bingoThemesList = MutableStateFlow(emptyList<BingoTheme>())
-    private val themeRepository by inject<BingoThemeRepository>()
+    private val getAllThemes by inject<GetAllThemes>()
     private val roomRepository by inject<BingoRoomRepository>()
 
-    init {
-        componentContext.componentCoroutineScope().launch {
-            bingoThemesList.update {
-                themeRepository.getAllThemes()
-            }
-        }
-    }
+    val bingoThemesList = getAllThemes()
+        .stateIn(
+            componentContext.componentCoroutineScope(),
+            SharingStarted.WhileSubscribed(),
+            emptyList()
+        )
 
     private val _uiState = MutableStateFlow(CreateScreenUiState())
     val uiState = _uiState

@@ -22,6 +22,7 @@ import ui.presentation.host.HostScreen
 import ui.presentation.join_room.JoinScreen
 import ui.presentation.play.PlayScreen
 import ui.presentation.profile.ProfileScreen
+import ui.presentation.profile.picture.EditProfilePictureScreen
 import ui.presentation.sign_in.SignInScreen
 import ui.presentation.sign_up.SignUpScreen
 import ui.presentation.themes.ThemesScreen
@@ -105,6 +106,11 @@ fun App(rootComponent: RootComponent) {
                         is Child.ForgotPasswordScreen -> ForgotPasswordScreen(
                             component = instance.component,
                             windowInfo = windowInfo
+                        )
+
+                        is Child.EditProfilePictureScreen -> EditProfilePictureScreen(
+                            component = instance.component,
+//                            windowInfo = windowInfo
                         )
                     }
                 }

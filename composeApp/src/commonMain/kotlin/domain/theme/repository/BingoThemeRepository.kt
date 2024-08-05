@@ -1,9 +1,11 @@
 package domain.theme.repository
 
-import kotlinx.coroutines.flow.Flow
+import domain.character.model.Character
 import domain.theme.model.BingoTheme
+import kotlinx.coroutines.flow.Flow
 
 interface BingoThemeRepository {
     suspend fun getThemeById(id: String): BingoTheme
-    suspend fun getAllThemes(): List<BingoTheme>
+    fun getAllThemes(): Flow<List<BingoTheme>>
+    fun getCharacters(themeId: String): Flow<List<Character>>
 }

@@ -2,6 +2,7 @@ package ui.presentation.create_room
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import domain.util.api_response.ApiResponse
 import kotlinx.coroutines.flow.stateIn
 import ui.presentation.create_room.event.CreateScreenEvent
@@ -17,19 +18,15 @@ fun CreateRoomScreen(
     windowInfo: WindowInfo
 ) {
 
-    val themes = component
+    val themes by component
         .bingoThemesList
         .collectAsState()
-        .value
 
-    val uiState = component
+    val uiState by component
         .uiState
         .collectAsState()
-        .value
 
-    val isFormOk = component
-        .isFormOk
-        .value
+    val isFormOk by component.isFormOk.collectAsState()
 
     CreateRoomScreenOrientation(
         windowInfo = windowInfo,
