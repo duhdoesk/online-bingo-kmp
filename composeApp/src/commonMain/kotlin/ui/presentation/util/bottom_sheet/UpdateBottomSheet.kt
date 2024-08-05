@@ -1,8 +1,6 @@
 package ui.presentation.util.bottom_sheet
 
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -11,19 +9,18 @@ import androidx.compose.foundation.layout.ime
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material3.Button
-import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.SheetState
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.ui.Alignment
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.text.font.FontWeight
@@ -35,6 +32,7 @@ import org.jetbrains.compose.resources.stringResource
 import themedbingo.composeapp.generated.resources.Res
 import themedbingo.composeapp.generated.resources.cancel_button
 import themedbingo.composeapp.generated.resources.confirm_button
+import ui.presentation.common.components.BottomButtonRow
 
 @OptIn(ExperimentalResourceApi::class, ExperimentalMaterial3Api::class)
 @Composable
@@ -46,82 +44,123 @@ fun UpdateBottomSheet(
     body: StringResource,
     label: StringResource,
 ) {
-    val updatedData = mutableStateOf(currentData)
     val keyboardController = LocalSoftwareKeyboardController.current
     val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
 
+    var data by remember {
+        mutableStateOf(currentData)
+    }
+
+    val isValid by remember(data) {
+        mutableStateOf(data.length > 2)
+    }
+
+    UpdateBottomSheetContent(
+        sheetState = sheetState,
+        title = title,
+        body = body,
+        label = label,
+        value = data,
+        isValueValid = isValid,
+        onValueUpdate = { newData ->
+            data = newData.trim()
+        },
+        onConfirm = {
+            keyboardController?.hide()
+            onConfirm(data)
+        },
+        onCancel = {
+            keyboardController?.hide()
+            onDismiss()
+        }
+    )
+}
+
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalResourceApi::class)
+@Composable
+private fun UpdateBottomSheetContent(
+    sheetState: SheetState,
+    title: StringResource,
+    body: StringResource,
+    label: StringResource,
+    value: String,
+    isValueValid: Boolean,
+    onValueUpdate: (value: String) -> Unit,
+    onConfirm: () -> Unit,
+    onCancel: () -> Unit,
+    modifier: Modifier = Modifier
+) {
     ModalBottomSheet(
-        onDismissRequest = { onDismiss() },
+        modifier = modifier,
+        onDismissRequest = { onCancel() },
         sheetState = sheetState,
         windowInsets = WindowInsets.ime,
     ) {
-        Card(
-            colors = CardDefaults.cardColors(
-                containerColor = MaterialTheme.colorScheme.surface,
-                contentColor = MaterialTheme.colorScheme.onSurface
-            ),
+        Column(
+            modifier = Modifier
+                .padding(horizontal = 16.dp)
         ) {
-            Column(
-                horizontalAlignment = Alignment.CenterHorizontally,
-                modifier = Modifier
-                    .padding(16.dp)
-                    .fillMaxWidth()
-            ) {
-                Text(
-                    text = stringResource(title),
-                    style = MaterialTheme.typography.titleLarge,
-                    fontWeight = FontWeight.Bold,
-                    modifier = Modifier.fillMaxWidth(),
-                )
+            Text(
+                text = stringResource(title),
+                style = MaterialTheme.typography.titleLarge,
+                fontWeight = FontWeight.Bold,
+                modifier = Modifier.fillMaxWidth(),
+            )
 
-                Spacer(Modifier.height(8.dp))
+            Spacer(Modifier.height(8.dp))
 
-                Text(
-                    text = stringResource(body),
-                    modifier = Modifier.fillMaxWidth()
-                )
+            Text(
+                text = stringResource(body),
+                modifier = Modifier.fillMaxWidth()
+            )
 
-                Spacer(Modifier.height(24.dp))
+            Spacer(Modifier.height(24.dp))
 
-                OutlinedTextField(
-                    value = updatedData.value,
-                    onValueChange = { input ->
-                        updatedData.value = input.trim()
-                    },
-                    label = { Text(stringResource(label)) },
-                    keyboardOptions = KeyboardOptions(
-                        imeAction = if (updatedData.value.length > 2) ImeAction.Done else ImeAction.None,
-                    ),
-                    keyboardActions = KeyboardActions(
-                        onDone = {
-                            keyboardController?.hide()
-                            onConfirm(updatedData.value)
-                        }
-                    ),
-                    modifier = Modifier.fillMaxWidth(),
-                )
+            UpdateBottomSheetTextField(
+                value = value,
+                label = label,
+                onValueUpdate = onValueUpdate,
+                onConfirm = onConfirm,
+                isValid = isValueValid
+            )
 
+            Spacer(Modifier.height(48.dp))
 
-                Spacer(Modifier.height(48.dp))
-
-                Row(
-                    horizontalArrangement = Arrangement.SpaceBetween,
-                    modifier = Modifier.fillMaxWidth()
-                ) {
-                    TextButton(
-                        onClick = { onDismiss() }
-                    ) {
-                        Text(stringResource(Res.string.cancel_button))
-                    }
-
-                    Button(
-                        onClick = { onConfirm(updatedData.value) },
-                        enabled = (updatedData.value.length > 2)
-                    ) {
-                        Text(stringResource(Res.string.confirm_button))
-                    }
-                }
-            }
+            BottomButtonRow(
+                leftEnabled = true,
+                rightEnabled = isValueValid,
+                leftText = Res.string.cancel_button,
+                rightText = Res.string.confirm_button,
+                leftClicked = onCancel,
+                rightClicked = onConfirm,
+                modifier = Modifier.fillMaxWidth()
+            )
         }
     }
+}
+
+@OptIn(ExperimentalResourceApi::class)
+@Composable
+fun UpdateBottomSheetTextField(
+    value: String,
+    label: StringResource,
+    isValid: Boolean,
+    onValueUpdate: (value: String) -> Unit,
+    onConfirm: () -> Unit,
+    modifier: Modifier = Modifier
+) {
+    OutlinedTextField(
+        value = value,
+        onValueChange = onValueUpdate,
+        label = { Text(stringResource(label)) },
+        keyboardOptions = KeyboardOptions(
+            imeAction = ImeAction.Done
+        ),
+        keyboardActions = KeyboardActions(
+            onDone = {
+                if (isValid) onConfirm()
+            }
+        ),
+        modifier = modifier.fillMaxWidth(),
+    )
 }

@@ -9,7 +9,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import themedbingo.composeapp.generated.resources.Res
-import themedbingo.composeapp.generated.resources.auth_user_not_found
 import themedbingo.composeapp.generated.resources.delete_account_body
 import themedbingo.composeapp.generated.resources.delete_account_title
 import themedbingo.composeapp.generated.resources.nickname
