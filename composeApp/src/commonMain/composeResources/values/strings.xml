@@ -46,12 +46,15 @@
     <string name="screen_rotation">Screen Rotation</string>
 
 
-    <!--    Sign In / Up Screens -->
+    <!--    Sign In / Up Screens / Change Password -->
     <string name="sign_in">Sign in</string>
     <string name="sign_up">Sign up</string>
+    <string name="change_password">Change Password</string>
     <string name="email">E-mail</string>
     <string name="password">Password</string>
-    <string name="repeat_password">Repeat the password</string>
+    <string name="repeat_password">Repeat Password</string>
+    <string name="current_password">Current Password</string>
+    <string name="new_password">New Password</string>
     <string name="forgot_my_password">Forgot my password</string>
     <string name="or">Or</string>
     <string name="dismiss_button">Dismiss</string>
