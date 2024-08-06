@@ -3,6 +3,8 @@ package ui.presentation.profile
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
@@ -14,18 +16,17 @@ import themedbingo.composeapp.generated.resources.delete_account_title
 import themedbingo.composeapp.generated.resources.nickname
 import themedbingo.composeapp.generated.resources.sign_out_dialog_body
 import themedbingo.composeapp.generated.resources.sign_out_dialog_title
-import themedbingo.composeapp.generated.resources.success
 import themedbingo.composeapp.generated.resources.update_nickname_body
 import themedbingo.composeapp.generated.resources.update_nickname_title
 import themedbingo.composeapp.generated.resources.update_victory_body
 import themedbingo.composeapp.generated.resources.update_victory_title
 import themedbingo.composeapp.generated.resources.user_data_not_found
 import themedbingo.composeapp.generated.resources.victory_message
+import ui.presentation.common.ErrorScreen
+import ui.presentation.common.LoadingScreen
 import ui.presentation.profile.event.ProfileScreenEvent
 import ui.presentation.profile.screens.ProfileScreenOrientation
 import ui.presentation.profile.state.ProfileScreenUIState
-import ui.presentation.common.ErrorScreen
-import ui.presentation.common.LoadingScreen
 import ui.presentation.util.WindowInfo
 import ui.presentation.util.bottom_sheet.UpdateBottomSheet
 import ui.presentation.util.dialog.GenericActionDialog
@@ -48,52 +49,57 @@ fun ProfileScreen(component: ProfileScreenComponent, windowInfo: WindowInfo) {
     val signOutState = component.signOutDialogState
     val deleteAccountState = component.deleteAccountDialogState
 
-    Column(
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center,
-        modifier = Modifier.fillMaxSize()
-    ) {
+    Scaffold { innerPadding ->
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center,
+            modifier = Modifier
+                .padding(innerPadding)
+                .fillMaxSize()
+        ) {
 
-        when (uiState) {
-            ProfileScreenUIState.Error ->
-                ErrorScreen(
-                    message = Res.string.user_data_not_found,
-                    retry = { },
-                    popBack = { component.popBack() },
-                )
+            when (uiState) {
+                ProfileScreenUIState.Error ->
+                    ErrorScreen(
+                        message = Res.string.user_data_not_found,
+                        retry = { },
+                        popBack = { component.popBack() },
+                    )
 
-            ProfileScreenUIState.Loading ->
-                LoadingScreen()
+                ProfileScreenUIState.Loading ->
+                    LoadingScreen()
 
-            is ProfileScreenUIState.Success ->
-                ProfileScreenOrientation(
-                    windowInfo = windowInfo,
-                    uiState = uiState,
-                ) { profileScreenEvent ->
-                    when (profileScreenEvent) {
-                        ProfileScreenEvent.DeleteAccount ->
-                            deleteAccountState.showDialog(null)
+                is ProfileScreenUIState.Success ->
+                    ProfileScreenOrientation(
+                        windowInfo = windowInfo,
+                        uiState = uiState,
+                    ) { profileScreenEvent ->
+                        when (profileScreenEvent) {
+                            ProfileScreenEvent.DeleteAccount ->
+                                deleteAccountState.showDialog(null)
 
-                        ProfileScreenEvent.PopBack ->
-                            component.popBack()
+                            ProfileScreenEvent.PopBack ->
+                                component.popBack()
 
-                        ProfileScreenEvent.SignOut ->
-                            signOutState.showDialog(null)
+                            ProfileScreenEvent.SignOut ->
+                                signOutState.showDialog(null)
 
-                        ProfileScreenEvent.UpdateName ->
-                            updateNameState.showDialog(uiState.user.name)
+                            ProfileScreenEvent.UpdateName ->
+                                updateNameState.showDialog(uiState.user.name)
 
-                        ProfileScreenEvent.UpdatePassword ->
-                            component.updatePassword()
+                            ProfileScreenEvent.UpdatePassword ->
+                                component.updatePassword()
 
-                        ProfileScreenEvent.UpdatePicture ->
-                            component.updatePicture()
+                            ProfileScreenEvent.UpdatePicture ->
+                                component.updatePicture()
 
-                        ProfileScreenEvent.UpdateVictoryMessage ->
-                            updateVictoryMessageState.showDialog(uiState.user.victoryMessage)
+                            ProfileScreenEvent.UpdateVictoryMessage ->
+                                updateVictoryMessageState.showDialog(uiState.user.victoryMessage)
+                        }
                     }
-                }
+            }
         }
+
     }
 
     if (successState.isVisible.value) {

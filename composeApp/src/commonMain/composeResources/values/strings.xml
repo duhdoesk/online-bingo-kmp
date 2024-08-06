@@ -11,6 +11,7 @@
     <string name="edit_button">Edit</string>
     <string name="exit_button">Exit</string>
     <string name="retry_button">Retry</string>
+    <string name="create_button">Create</string>
 
 
     <!--    Generic Labels -->

@@ -197,7 +197,7 @@ fun PortraitChangePasswordScreen(
                 rightClicked = { event(ChangePasswordScreenUIEvent.ConfirmPasswordChange) },
                 rightText = Res.string.confirm_button,
                 modifier = Modifier
-                    .padding(vertical = 16.dp, horizontal = 24.dp)
+                    .padding(vertical = 8.dp, horizontal = 16.dp)
                     .fillMaxWidth()
             )
         }

@@ -137,7 +137,7 @@ fun PortraitProfileScreen(
                 leftText = Res.string.back_button,
                 rightText = Res.string.exit_button,
                 modifier = Modifier
-                    .padding(vertical = 16.dp, horizontal = 24.dp)
+                    .padding(horizontal = 16.dp, vertical = 8.dp)
                     .fillMaxWidth(),
             )
         }

@@ -10,6 +10,7 @@
     <string name="cancel_button">Cancelar</string>
     <string name="edit_button">Editar</string>
     <string name="exit_button">Sair</string>
+    <string name="create_button">Criar</string>
 
 
     <!--    Generic Labels -->

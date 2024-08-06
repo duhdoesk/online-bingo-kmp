@@ -141,18 +141,20 @@ private fun EditProfilePictureLoadedState(
             avatarUrl = currentPictureUrl,
             name = userName,
         )
+
         EditProfilePicturePictures(
             pictures = pictures,
             selectedPictureUrl = selectedPictureUrl,
             onItemClick = onItemClick,
-            modifier = Modifier.padding(top = 8.dp).weight(1f)
+            modifier = Modifier.weight(1f)
         )
+
         BottomButtonRow(
             rightEnabled = selectedPictureUrl != null,
             rightText = Res.string.confirm_button,
             leftClicked = onCancel,
             rightClicked = onConfirm,
-            modifier = Modifier.padding(16.dp)
+            modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)
         )
     }
 }
@@ -217,10 +219,9 @@ private fun EditProfilePicturePictures(
     onItemClick: (pictureUrl: String) -> Unit,
     modifier: Modifier = Modifier
 ) {
-    Spacer(Modifier.height(16.dp))
-
     LazyColumn(
-        modifier = modifier
+        modifier = modifier,
+        contentPadding = PaddingValues(top = 16.dp)
     ) {
         items(pictures.categories) { category ->
             EditProfilePicturePictureCategory(

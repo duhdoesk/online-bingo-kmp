@@ -32,7 +32,9 @@ import domain.theme.model.BingoTheme
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.stringResource
 import themedbingo.composeapp.generated.resources.Res
+import themedbingo.composeapp.generated.resources.create_button
 import themedbingo.composeapp.generated.resources.create_room_title
+import ui.presentation.common.components.BottomButtonRow
 import ui.presentation.create_room.event.CreateScreenEvent
 import ui.presentation.common.components.CreateRoomHeader
 import ui.presentation.create_room.screens.components.CreateRoomMaxWinners
@@ -53,7 +55,6 @@ fun PortraitCreateRoomScreen(
         modifier = Modifier
             .fillMaxSize()
             .imePadding()
-            .padding(16.dp)
     ) {
         Column(
             verticalArrangement = Arrangement.Center,
@@ -65,6 +66,7 @@ fun PortraitCreateRoomScreen(
         ) {
 
             val rowModifier = Modifier
+                .padding(horizontal = 16.dp)
                 .fillMaxWidth()
 
             val leadingIconModifier = Modifier
@@ -79,7 +81,9 @@ fun PortraitCreateRoomScreen(
                 text = stringResource(Res.string.create_room_title),
                 style = MaterialTheme.typography.titleLarge,
                 fontWeight = FontWeight.Bold,
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier
+                    .padding(horizontal = 16.dp)
+                    .fillMaxWidth()
             )
 
             Spacer(Modifier.height(12.dp))
@@ -131,40 +135,11 @@ fun PortraitCreateRoomScreen(
             )
         }
 
-        Column(modifier = Modifier.padding(top = 12.dp)) {
-            Row(
-                modifier = Modifier.fillMaxWidth()
-            ) {
-                TextButton(
-                    onClick = { event(CreateScreenEvent.PopBack) }
-                ) {
-                    Icon(
-                        Icons.AutoMirrored.Filled.KeyboardArrowLeft,
-                        contentDescription = "Back"
-                    )
-                    Text(
-                        text = "Back",
-                        modifier = Modifier.padding(horizontal = 6.dp)
-                    )
-                }
-
-                Spacer(Modifier.weight(1f))
-
-                Button(
-                    onClick = { event(CreateScreenEvent.CreateRoom) },
-                    enabled = isFormOk
-                ) {
-                    Text(
-                        text = "Create",
-                        modifier = Modifier
-                            .padding(horizontal = 6.dp)
-                    )
-                    Icon(
-                        Icons.AutoMirrored.Filled.KeyboardArrowRight,
-                        contentDescription = "Create"
-                    )
-                }
-            }
-        }
+        BottomButtonRow(
+            leftClicked = { event(CreateScreenEvent.PopBack) },
+            rightClicked = { event(CreateScreenEvent.CreateRoom) },
+            rightText = Res.string.create_button,
+            modifier = Modifier.padding(vertical = 8.dp, horizontal = 16.dp),
+        )
     }
 }
