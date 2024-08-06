@@ -58,7 +58,7 @@ fun ProfileScreen(component: ProfileScreenComponent, windowInfo: WindowInfo) {
             ProfileScreenUIState.Error ->
                 ErrorScreen(
                     message = Res.string.user_data_not_found,
-                    retry = { component.fetchUserData() },
+                    retry = { },
                     popBack = { component.popBack() },
                 )
 

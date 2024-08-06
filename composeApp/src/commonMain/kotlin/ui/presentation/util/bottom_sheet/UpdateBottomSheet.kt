@@ -63,7 +63,7 @@ fun UpdateBottomSheet(
         value = data,
         isValueValid = isValid,
         onValueUpdate = { newData ->
-            data = newData.trim()
+            data = newData
         },
         onConfirm = {
             keyboardController?.hide()
@@ -133,7 +133,9 @@ private fun UpdateBottomSheetContent(
                 rightText = Res.string.confirm_button,
                 leftClicked = onCancel,
                 rightClicked = onConfirm,
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier
+                    .padding(bottom = 16.dp)
+                    .fillMaxWidth()
             )
         }
     }
