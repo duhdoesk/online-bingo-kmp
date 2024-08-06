@@ -45,12 +45,15 @@
     <string name="screen_rotation">Gire seu dispositivo</string>
 
 
-    <!--    Sign In / Up Screens -->
+    <!--    Sign In / Up Screens / Change Password -->
     <string name="sign_in">Entrar</string>
     <string name="sign_up">Cadastrar</string>
+    <string name="change_password">Change Password</string>
     <string name="email">E-mail</string>
     <string name="password">Senha</string>
     <string name="repeat_password">Repita a senha</string>
+    <string name="current_password">Senha Atual</string>
+    <string name="new_password">Nova Senha</string>
     <string name="forgot_my_password">Esqueci minha senha</string>
     <string name="or">Ou</string>
     <string name="dismiss_button">Cancelar</string>
@@ -66,7 +69,7 @@
     <!--    Profile Screen -->
     <string name="sign_out_dialog_title">Sair</string>
     <string name="sign_out_dialog_body">Você realmente deseja sair da sua conta?</string>
-    <string name="account">Account</string>
+    <string name="account">Conta</string>
     <string name="delete_account">Apagar Conta</string>
     <string name="change_password">Alterar Senha</string>
     <string name="user_avatar">Avatar do Usuário</string>

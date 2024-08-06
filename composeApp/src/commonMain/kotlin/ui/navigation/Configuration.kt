@@ -26,4 +26,6 @@ sealed class Configuration {
     data object ForgotPasswordScreen: Configuration()
     @Serializable
     data object EditProfilePictureScreen: Configuration()
+    @Serializable
+    data object ChangePasswordScreen: Configuration()
 }

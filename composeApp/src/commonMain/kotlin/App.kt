@@ -1,6 +1,5 @@
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.imePadding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -15,6 +14,7 @@ import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.koin.compose.KoinContext
 import ui.navigation.Child
 import ui.navigation.RootComponent
+import ui.presentation.change_password.ChangePasswordScreen
 import ui.presentation.create_room.CreateRoomScreen
 import ui.presentation.forgot_password.ForgotPasswordScreen
 import ui.presentation.home.HomeScreen
@@ -111,6 +111,11 @@ fun App(rootComponent: RootComponent) {
                         is Child.EditProfilePictureScreen -> EditProfilePictureScreen(
                             component = instance.component,
 //                            windowInfo = windowInfo
+                        )
+
+                        is Child.ChangePasswordScreen -> ChangePasswordScreen(
+                            component = instance.component,
+                            windowInfo = windowInfo
                         )
                     }
                 }

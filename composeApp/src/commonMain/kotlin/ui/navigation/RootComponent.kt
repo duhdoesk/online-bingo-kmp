@@ -11,6 +11,7 @@ import dev.gitlive.firebase.auth.FirebaseUser
 import domain.auth.AuthService
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
+import ui.presentation.change_password.ChangePasswordScreenComponent
 import ui.presentation.create_room.CreateRoomScreenComponent
 import ui.presentation.forgot_password.ForgotPasswordScreenComponent
 import ui.presentation.home.HomeScreenComponent
@@ -114,7 +115,7 @@ class RootComponent(
                     onPopBack = { navigation.pop() },
                     onSignOut = { signOut() },
                     onUpdatePicture = {
-                        navigation.pushNew(configuration = Configuration.EditProfilePictureScreen)
+                        //todo(): navigate to update picture screen (not done yet)
                     },
                     onUpdatePassword = {
                         //todo(): navigate to update password screen (not done yet)
@@ -153,6 +154,13 @@ class RootComponent(
                     firebaseUser = firebaseUser,
                     onCancel = { navigation.pop() },
                     onPictureSaved = { navigation.pop() }
+                )
+            )
+
+            Configuration.ChangePasswordScreen -> Child.ChangePasswordScreen(
+                ChangePasswordScreenComponent(
+                    componentContext = context,
+                    onPopBack = { navigation.pop() },
                 )
             )
         }
