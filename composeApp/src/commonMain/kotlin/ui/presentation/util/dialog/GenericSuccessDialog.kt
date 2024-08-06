@@ -27,7 +27,7 @@ import themedbingo.composeapp.generated.resources.success
 @OptIn(ExperimentalResourceApi::class)
 @Composable
 fun GenericSuccessDialog(
-    stringRes: StringResource,
+    body: StringResource?,
     onDismiss: () -> Unit,
 ) {
     Dialog(
@@ -55,7 +55,7 @@ fun GenericSuccessDialog(
                 Spacer(Modifier.height(8.dp))
 
                 Text(
-                    text = stringResource(stringRes),
+                    text = stringResource(body ?: Res.string.success),
                     modifier = Modifier.fillMaxWidth()
                 )
 

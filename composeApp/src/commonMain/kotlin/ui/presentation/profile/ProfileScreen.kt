@@ -99,7 +99,7 @@ fun ProfileScreen(component: ProfileScreenComponent, windowInfo: WindowInfo) {
     if (successState.isVisible.value) {
         GenericSuccessDialog(
             onDismiss = { successState.hideDialog() },
-            stringRes = successState.dialogData.value ?: Res.string.success
+            body = successState.dialogData.value,
         )
     }
 

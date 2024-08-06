@@ -6,6 +6,7 @@ import themedbingo.composeapp.generated.resources.Res
 import themedbingo.composeapp.generated.resources.auth_email_already_exists
 import themedbingo.composeapp.generated.resources.auth_empty_string
 import themedbingo.composeapp.generated.resources.auth_invalid_credential
+import themedbingo.composeapp.generated.resources.auth_invalid_password
 import themedbingo.composeapp.generated.resources.auth_too_many_requests
 import themedbingo.composeapp.generated.resources.auth_unmapped_error
 import themedbingo.composeapp.generated.resources.auth_user_not_found
@@ -18,7 +19,7 @@ fun getAuthErrorDescription(errorMessage: String): StringResource {
             Res.string.auth_user_not_found
 
         else if (contains("The password is invalid or the user does not have a password"))
-            Res.string.auth_invalid_credential
+            Res.string.auth_invalid_password
 
         else if (contains("The email address is already in use by another account"))
             Res.string.auth_email_already_exists

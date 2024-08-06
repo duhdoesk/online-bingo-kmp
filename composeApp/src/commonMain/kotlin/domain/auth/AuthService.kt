@@ -1,5 +1,6 @@
 package domain.auth
 
+import dev.gitlive.firebase.auth.AuthCredential
 import dev.gitlive.firebase.auth.AuthResult
 import dev.gitlive.firebase.auth.FirebaseUser
 
@@ -12,5 +13,6 @@ interface AuthService {
     suspend fun sendPasswordResetEmail(email: String)
     suspend fun signOut(): Result<Unit>
     suspend fun deleteAccount(): Result<Unit>
-    suspend fun updatePassword(newPassword: String)
+    suspend fun updatePassword(newPassword: String): Result<Unit>
+    suspend fun reAuthenticateUser(credential: AuthCredential): Result<Unit>
 }

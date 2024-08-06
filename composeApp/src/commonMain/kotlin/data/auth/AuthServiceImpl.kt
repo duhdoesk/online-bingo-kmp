@@ -1,6 +1,8 @@
 package data.auth
 
+import dev.gitlive.firebase.auth.AuthCredential
 import dev.gitlive.firebase.auth.AuthResult
+import dev.gitlive.firebase.auth.EmailAuthProvider
 import dev.gitlive.firebase.auth.FirebaseAuth
 import dev.gitlive.firebase.auth.FirebaseUser
 import domain.auth.AuthService
@@ -44,7 +46,21 @@ class AuthServiceImpl(
         }
     }
 
-    override suspend fun updatePassword(newPassword: String) {
-        auth.currentUser?.updatePassword(newPassword)
+    override suspend fun updatePassword(newPassword: String): Result<Unit> {
+        try {
+            auth.currentUser?.updatePassword(newPassword)
+            return Result.success(Unit)
+        } catch (e: Exception) {
+            return Result.failure(e)
+        }
+    }
+
+    override suspend fun reAuthenticateUser(credential: AuthCredential): Result<Unit> {
+        try {
+            auth.currentUser?.reauthenticate(credential = credential)
+            return Result.success(Unit)
+        } catch (e: Exception) {
+            return Result.failure(e)
+        }
     }
 }

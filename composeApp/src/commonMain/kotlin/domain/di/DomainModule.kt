@@ -11,7 +11,7 @@ import domain.auth.use_case.AuthenticateUserUseCase
 import domain.auth.use_case.CreateUserUseCase
 import domain.auth.use_case.DeleteAccountUseCase
 import domain.auth.use_case.SignOutUseCase
-import domain.auth.use_case.UpdatePasswordUseCase
+import domain.auth.use_case.ChangePasswordWithReAuthenticationUseCase
 import domain.card.repository.CardRepository
 import domain.character.repository.CharacterRepository
 import domain.room.repository.BingoRoomRepository
@@ -58,5 +58,5 @@ val domainModule = module {
     single<CreateUserUseCase> { CreateUserUseCase(get(), get()) }
     single<DeleteAccountUseCase> { DeleteAccountUseCase(get()) }
     single<SignOutUseCase> { SignOutUseCase(get()) }
-    single<UpdatePasswordUseCase> { UpdatePasswordUseCase(get()) }
+    single<ChangePasswordWithReAuthenticationUseCase> { ChangePasswordWithReAuthenticationUseCase(get()) }
 }

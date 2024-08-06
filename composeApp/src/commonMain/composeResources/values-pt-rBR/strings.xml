@@ -64,6 +64,7 @@
     <string name="email_info_text">Insira um endereço de e-mail válido e ao qual você tenha acesso</string>
     <string name="password_reset_info_text">Insira um endereço de e-mail válido e ao qual você tenha acesso. Nós te enviaremos um e-mail com um link para redefinição de senha.</string>
     <string name="password_info_text">Sua senha deve conter ao menos oito caracteres, incluindo ao menos uma letra maiúscula, uma letra minúscula e um número</string>
+    <string name="password_change_success">Sua senha foi alterada com sucesso</string>
 
 
     <!--    Profile Screen -->
@@ -81,6 +82,7 @@
     <string name="auth_unmapped_error">Não conseguimos completar a operação. Por favor, tente novamente mais tarde.</string>
     <string name="auth_email_already_exists">Este endereço de e-mail já está em uso.</string>
     <string name="auth_invalid_credential">E-mail ou senha incorretos. Tente novamente, ou solicite um reset de senha.</string>
+    <string name="auth_invalid_password">Senha inválida. Tente novamente, ou solicite um reset de senha.</string>
     <string name="auth_user_not_found">Usuário não encontrado.</string>
     <string name="auth_too_many_requests">Servidor sobrecarregado. Por favor, tente novamente em alguns instantes.</string>
     <string name="auth_empty_string">Insira seu e-mail e tente novamente.</string>

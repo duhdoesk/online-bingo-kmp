@@ -64,6 +64,7 @@
     <string name="password_reset_info_text">Enter a valid email address that you have access to. We will send you an e-mail containing a link to password reset.</string>
     <string name="email_info_text">Enter a valid email address that you have access to</string>
     <string name="password_info_text">Your password must contain at least eight characters, including at least one uppercase letter, one lowercase letter and one number</string>
+    <string name="password_change_success">Your password has been successfully changed</string>
 
 
     <!--    Profile Screen -->
@@ -80,7 +81,8 @@
     <!--    Auth Errors -->
     <string name="auth_unmapped_error">We can't do that at the moment. Please, try again later.</string>
     <string name="auth_email_already_exists">The provided email is already in use by an existing user. Each user must have a unique email.</string>
-    <string name="auth_invalid_credential">Wrong e-mail or password. Try again or ask for a password reset.</string>
+    <string name="auth_invalid_credential">Wrong e-mail or password. Try again, or ask for a password reset.</string>
+    <string name="auth_invalid_password">Invalid password. Try again, or ask for a password reset.</string>
     <string name="auth_user_not_found">User not found.</string>
     <string name="auth_too_many_requests">Too many requests. Please, try again in a few minutes.</string>
     <string name="auth_empty_string">Enter your e-mail and try again.</string>

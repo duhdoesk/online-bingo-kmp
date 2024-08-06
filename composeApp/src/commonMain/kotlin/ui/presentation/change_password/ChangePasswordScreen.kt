@@ -5,7 +5,6 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import themedbingo.composeapp.generated.resources.Res
-import themedbingo.composeapp.generated.resources.error
 import themedbingo.composeapp.generated.resources.success
 import ui.presentation.change_password.event.ChangePasswordScreenUIEvent
 import ui.presentation.change_password.screens.PortraitChangePasswordScreen
@@ -57,15 +56,18 @@ fun ChangePasswordScreen(
 
     if (component.successDialog.isVisible.value) {
         GenericSuccessDialog(
-            stringRes = Res.string.success, //todo(): change
-            onDismiss = { component.successDialog.hideDialog() },
+            onDismiss = {
+                component.successDialog.hideDialog()
+                component.popBack()
+            },
+            body = component.successDialog.dialogData.value,
         )
     }
 
     if (component.errorDialog.isVisible.value) {
         GenericErrorDialog(
             onDismiss = { component.errorDialog.hideDialog() },
-            body = null, //todo(): change
+            body = component.errorDialog.dialogData.value,
         )
     }
 }
