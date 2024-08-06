@@ -19,6 +19,7 @@ import domain.theme.repository.BingoThemeRepository
 import domain.theme.use_case.GetAllThemes
 import domain.theme.use_case.GetCharactersByThemeId
 import domain.user.repository.UserRepository
+import domain.user.use_case.FlowUserUseCase
 import domain.user.use_case.GetProfilePicturesUseCase
 import domain.user.use_case.GetUserByIdUseCase
 import domain.user.use_case.UpdateNameUseCase
@@ -45,6 +46,7 @@ val domainModule = module {
 //    User
     single<UserRepository> { UserRepositoryImpl(get()) }
     single<GetUserByIdUseCase> { GetUserByIdUseCase(get()) }
+    single<FlowUserUseCase> { FlowUserUseCase(get()) }
     single<UpdateNameUseCase> { UpdateNameUseCase(get()) }
     single<UpdateVictoryMessageUseCase> { UpdateVictoryMessageUseCase(get()) }
     single<UpdateUserPictureUseCase> { UpdateUserPictureUseCase(get()) }

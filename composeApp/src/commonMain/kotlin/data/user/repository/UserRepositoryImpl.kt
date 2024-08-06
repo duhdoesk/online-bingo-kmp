@@ -1,6 +1,7 @@
 package data.user.repository
 
 import data.user.model.UserDTO
+import dev.gitlive.firebase.firestore.DocumentSnapshot
 import dev.gitlive.firebase.firestore.FirebaseFirestore
 import dev.gitlive.firebase.firestore.Timestamp
 import domain.user.model.User
@@ -13,6 +14,25 @@ class UserRepositoryImpl(
 ) : UserRepository {
 
     private val collection = firestore.collection("users")
+
+    override fun flowUser(id: String): Flow<User> {
+        return collection
+            .document(id)
+            .snapshots
+            .map { documentSnapshot ->
+                UserDTO(
+                    id = documentSnapshot.id,
+                    name = documentSnapshot.get("name"),
+                    pictureUri = documentSnapshot.get("pictureUri"),
+                    email = documentSnapshot.get("email"),
+                    nameLastUpdated = documentSnapshot.get("nameLastUpdated"),
+                    pictureUriLastUpdated = documentSnapshot.get("pictureUriLastUpdated"),
+                    lastWinTimestamp = documentSnapshot.get("lastWinTimestamp"),
+                    victoryMessage = documentSnapshot.get("victoryMessage"),
+                    victoryMessageLastUpdated = documentSnapshot.get("victoryMessageLastUpdated"),
+                ).toModel()
+            }
+    }
 
     override suspend fun getUserById(id: String): Result<User> {
         collection

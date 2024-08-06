@@ -1,19 +1,16 @@
 package ui.presentation.profile
 
 import com.arkivanov.decompose.ComponentContext
-import com.arkivanov.essenty.lifecycle.doOnCreate
-import com.arkivanov.essenty.lifecycle.doOnResume
 import dev.gitlive.firebase.auth.FirebaseUser
 import domain.auth.getAuthErrorDescription
 import domain.auth.use_case.DeleteAccountUseCase
 import domain.auth.use_case.SignOutUseCase
-import domain.user.model.User
-import domain.user.use_case.GetUserByIdUseCase
+import domain.user.use_case.FlowUserUseCase
 import domain.user.use_case.UpdateNameUseCase
 import domain.user.use_case.UpdateVictoryMessageUseCase
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.StringResource
@@ -37,32 +34,40 @@ class ProfileScreenComponent(
     private val onUpdatePassword: () -> Unit,
 ) : ComponentContext by componentContext, KoinComponent {
 
+    private val coroutineScope = componentCoroutineScope()
+
     private val signOutUseCase by inject<SignOutUseCase>()
-    private val getUserByIdUseCase by inject<GetUserByIdUseCase>()
     private val deleteAccountUseCase by inject<DeleteAccountUseCase>()
     private val updateNameUseCase by inject<UpdateNameUseCase>()
     private val updateVictoryMessageUseCase by inject<UpdateVictoryMessageUseCase>()
 
-    private val _profileScreenUiState = MutableStateFlow<ProfileScreenUIState>(ProfileScreenUIState.Loading)
-    val profileScreenUiState = _profileScreenUiState.asStateFlow()
+    private val flowUserUseCase by inject<FlowUserUseCase>()
+
+    private val _userFlow = flowUserUseCase.invoke(firebaseUser.uid)
+
+    private val _profileScreenUiState = combine(_userFlow) {
+        user ->
+        if (user.isEmpty()) ProfileScreenUIState.Error
+        else ProfileScreenUIState.Success(user.first())
+    }
+
+    val profileScreenUiState = _profileScreenUiState
+        .stateIn(
+            coroutineScope,
+            SharingStarted.WhileSubscribed(),
+            ProfileScreenUIState.Loading
+        )
 
     @OptIn(ExperimentalResourceApi::class)
     val successDialogState = mutableDialogStateOf<StringResource?>(null)
 
     @OptIn(ExperimentalResourceApi::class)
     val errorDialogState = mutableDialogStateOf<StringResource?>(null)
-
     val updateNameDialogState = mutableDialogStateOf("")
     val updateVictoryMessageDialogState = mutableDialogStateOf("")
     val signOutDialogState = mutableDialogStateOf(null)
+
     val deleteAccountDialogState = mutableDialogStateOf(null)
-
-    private val coroutineScope = componentCoroutineScope()
-
-    init {
-        fetchUserData()
-        lifecycle.doOnResume { fetchUserData() }
-    }
 
     fun popBack() {
         onPopBack()
@@ -106,7 +111,6 @@ class ProfileScreenComponent(
                 userId = firebaseUser.uid,
                 newName = newName
             )
-                .onSuccess { fetchUserData() }
                 .onFailure { errorDialogState.showDialog(Res.string.update_nickname_failure) }
         }
     }
@@ -118,18 +122,7 @@ class ProfileScreenComponent(
                 userId = firebaseUser.uid,
                 newVictoryMessage = newVictoryMessage
             )
-                .onSuccess { fetchUserData() }
                 .onFailure { errorDialogState.showDialog(Res.string.update_victory_failure) }
-        }
-    }
-
-    fun fetchUserData() {
-        componentCoroutineScope().launch {
-            getUserByIdUseCase.invoke(firebaseUser.uid)
-                .onSuccess { user ->
-                    _profileScreenUiState.update { ProfileScreenUIState.Success(user) }
-                }
-                .onFailure { _profileScreenUiState.update { ProfileScreenUIState.Error } }
         }
     }
 }
