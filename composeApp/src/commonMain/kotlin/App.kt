@@ -110,7 +110,7 @@ fun App(rootComponent: RootComponent) {
 
                         is Child.EditProfilePictureScreen -> EditProfilePictureScreen(
                             component = instance.component,
-//                            windowInfo = windowInfo
+                            windowInfo = windowInfo
                         )
 
                         is Child.ChangePasswordScreen -> ChangePasswordScreen(
