@@ -115,10 +115,10 @@ class RootComponent(
                     onPopBack = { navigation.pop() },
                     onSignOut = { signOut() },
                     onUpdatePicture = {
-                        //todo(): navigate to update picture screen (not done yet)
+                        navigation.pushNew(configuration = Configuration.EditProfilePictureScreen)
                     },
                     onUpdatePassword = {
-                        //todo(): navigate to update password screen (not done yet)
+                        navigation.pushNew(configuration = Configuration.ChangePasswordScreen)
                     }
                 )
             )

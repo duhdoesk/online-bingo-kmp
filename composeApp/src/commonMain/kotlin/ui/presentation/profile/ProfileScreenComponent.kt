@@ -1,6 +1,8 @@
 package ui.presentation.profile
 
 import com.arkivanov.decompose.ComponentContext
+import com.arkivanov.essenty.lifecycle.doOnCreate
+import com.arkivanov.essenty.lifecycle.doOnResume
 import dev.gitlive.firebase.auth.FirebaseUser
 import domain.auth.getAuthErrorDescription
 import domain.auth.use_case.DeleteAccountUseCase
@@ -59,6 +61,7 @@ class ProfileScreenComponent(
 
     init {
         fetchUserData()
+        lifecycle.doOnResume { fetchUserData() }
     }
 
     fun popBack() {
