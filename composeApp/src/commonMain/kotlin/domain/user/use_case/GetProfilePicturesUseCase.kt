@@ -8,7 +8,7 @@ import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.flatMapConcat
 import kotlinx.coroutines.flow.map
 
-private val THEME_IDS = setOf("1", "2", "3")
+private val THEME_IDS = setOf("1", "2", "5", "6", "8")
 
 class GetProfilePicturesUseCase(
     private val getAllThemes: GetAllThemes,
