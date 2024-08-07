@@ -71,6 +71,8 @@ class UserRepositoryImpl(
                 data = hashMapOf(
                     "name" to name,
                     "email" to email,
+                    "pictureUri" to "https://i.imgur.com/DujcYDE.jpg",
+                    "victoryMessage" to "O Bingo Temático é demais!"
                 )
             )
     }
