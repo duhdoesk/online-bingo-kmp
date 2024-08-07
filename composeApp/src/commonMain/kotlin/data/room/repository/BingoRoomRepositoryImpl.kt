@@ -1,9 +1,8 @@
 package data.room.repository
 
 import data.room.model.BingoRoomDTO
-import dev.gitlive.firebase.Firebase
+import dev.gitlive.firebase.firestore.FieldValue
 import dev.gitlive.firebase.firestore.FirebaseFirestore
-import dev.gitlive.firebase.firestore.firestore
 import domain.room.model.BingoRoom
 import domain.room.model.BingoType
 import domain.room.repository.BingoRoomRepository
@@ -30,7 +29,8 @@ class BingoRoomRepositoryImpl(
                         maxWinners = documentSnapshot.get("maxWinners"),
                         locked = documentSnapshot.get("locked"),
                         password = documentSnapshot.get("password"),
-                        drawnCharactersIds = documentSnapshot.get("drawnCharactersIds") ?: emptyList(),
+                        drawnCharactersIds = documentSnapshot.get("drawnCharactersIds")
+                            ?: emptyList(),
                         state = documentSnapshot.get("state"),
                         winners = documentSnapshot.get("winners") ?: emptyList(),
                         players = documentSnapshot.get("players") ?: emptyList()
@@ -39,7 +39,7 @@ class BingoRoomRepositoryImpl(
                 }
             }
 
-    override fun getRoomById(id: String): Flow<BingoRoom> =
+    override fun flowRoomById(id: String): Flow<BingoRoom> =
         collection
             .document(id)
             .snapshots
@@ -62,6 +62,39 @@ class BingoRoomRepositoryImpl(
             .map { dto ->
                 dto.toModel()
             }
+
+    override suspend fun getRoomById(id: String): Result<BingoRoom> {
+        collection
+            .document(id)
+            .get()
+            .let { documentSnapshot ->
+                if (documentSnapshot.exists) {
+                    try {
+                        val room = BingoRoomDTO(
+                            id = documentSnapshot.id,
+                            hostId = documentSnapshot.get("hostId"),
+                            type = documentSnapshot.get("type"),
+                            name = documentSnapshot.get("name"),
+                            themeId = documentSnapshot.get("themeId"),
+                            maxWinners = documentSnapshot.get("maxWinners"),
+                            locked = documentSnapshot.get("locked"),
+                            password = documentSnapshot.get("password"),
+                            drawnCharactersIds = documentSnapshot.get("drawnCharactersIds"),
+                            state = documentSnapshot.get("state"),
+                            winners = documentSnapshot.get("winners"),
+                            players = documentSnapshot.get("players") ?: emptyList()
+                        ).toModel()
+
+                        return Result.success(room)
+                    } catch (e: Exception) {
+                        return Result.failure(e)
+                    }
+
+                } else {
+                    return Result.failure(NoSuchElementException())
+                }
+            }
+    }
 
     override suspend fun createRoom(
         hostId: String,
@@ -89,4 +122,15 @@ class BingoRoomRepositoryImpl(
                 )
             )
             .snapshots
+
+    override suspend fun joinRoom(roomId: String, userId: String): Result<Unit> {
+        try {
+            collection.document(roomId)
+                .update(data = hashMapOf("players" to FieldValue.arrayUnion(userId)))
+
+            return Result.success(Unit)
+        } catch (e: Exception) {
+            return Result.failure(e)
+        }
+    }
 }

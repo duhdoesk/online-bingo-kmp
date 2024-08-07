@@ -7,7 +7,11 @@ import kotlinx.coroutines.flow.Flow
 
 interface BingoRoomRepository {
     fun getRooms(): Flow<List<BingoRoom>>
-    fun getRoomById(id: String): Flow<BingoRoom>
+
+    fun flowRoomById(id: String): Flow<BingoRoom>
+
+    suspend fun getRoomById(id: String): Result<BingoRoom>
+
     suspend fun createRoom(
         hostId: String,
         name: String,
@@ -17,4 +21,6 @@ interface BingoRoomRepository {
         type: BingoType,
         themeId: String?
     ): Flow<DocumentSnapshot>
+
+    suspend fun joinRoom(roomId: String, userId: String): Result<Unit>
 }

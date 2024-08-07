@@ -96,7 +96,8 @@ class RootComponent(
                     onPopBack = { navigation.pop() },
                     onJoinRoom = { receivedConfig ->
                         navigation.replaceCurrent(configuration = receivedConfig)
-                    }
+                    },
+                    onCreateRoom = { navigation.replaceCurrent(Configuration.CreateScreen)}
                 )
             )
 

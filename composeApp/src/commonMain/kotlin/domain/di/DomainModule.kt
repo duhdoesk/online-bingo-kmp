@@ -15,6 +15,8 @@ import domain.auth.use_case.ChangePasswordWithReAuthenticationUseCase
 import domain.card.repository.CardRepository
 import domain.character.repository.CharacterRepository
 import domain.room.repository.BingoRoomRepository
+import domain.room.use_case.GetRoomsUseCase
+import domain.room.use_case.JoinRoomUseCase
 import domain.theme.repository.BingoThemeRepository
 import domain.theme.use_case.GetAllThemes
 import domain.theme.use_case.GetCharactersByThemeId
@@ -37,6 +39,8 @@ val domainModule = module {
 
 //    Room
     single<BingoRoomRepository> { BingoRoomRepositoryImpl(get()) }
+    factory<GetRoomsUseCase> { GetRoomsUseCase(get()) }
+    factory<JoinRoomUseCase> { JoinRoomUseCase(get()) }
 
 //    Theme
     single<BingoThemeRepository> { BingoThemeRepositoryImpl(get()) }

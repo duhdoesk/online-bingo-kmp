@@ -16,6 +16,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.flow.forEach
+import ui.presentation.join_room.event.JoinRoomUIEvent
 import ui.presentation.util.WindowInfo
 
 @Composable
@@ -45,7 +46,7 @@ fun JoinScreen(
             roomsList.forEach { room ->
                 item {
                     Card(
-                        onClick = { component.joinRoom(room.id) },
+                        onClick = { component.uiEvent(JoinRoomUIEvent.JoinRoom(room.id)) },
                     ) {
                         Text(
                             text = room.name,
@@ -57,7 +58,7 @@ fun JoinScreen(
         }
 
         Button(
-            onClick = { component.popBack() }
+            onClick = { component.uiEvent(JoinRoomUIEvent.PopBack) }
         ) {
             Text("Back")
         }
