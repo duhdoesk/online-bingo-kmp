@@ -1,9 +1,7 @@
 package ui.presentation.join_room.screens
 
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -21,7 +19,6 @@ import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
-import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -33,10 +30,8 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import domain.theme.model.BingoTheme
 import org.jetbrains.compose.resources.ExperimentalResourceApi
-import org.jetbrains.compose.resources.vectorResource
 import themedbingo.composeapp.generated.resources.Res
 import themedbingo.composeapp.generated.resources.create_button
-import themedbingo.composeapp.generated.resources.user_avatar
 import ui.presentation.common.components.BottomButtonRow
 import ui.presentation.join_room.event.JoinRoomUIEvent
 import ui.presentation.join_room.screens.component.RoomCard
@@ -92,7 +87,7 @@ fun PortraitJoinScreen(
                     Spacer(Modifier.height(16.dp))
 
                     LazyColumn {
-                        items(uiState.rooms) { room ->
+                        items(uiState.notStartedRooms) { room ->
                             RoomCard(
                                 room = room,
                                 theme = BingoTheme(

@@ -2,14 +2,13 @@ package ui.presentation.join_room
 
 import com.arkivanov.decompose.ComponentContext
 import dev.gitlive.firebase.auth.FirebaseUser
-import domain.room.use_case.GetRoomsUseCase
+import domain.room.use_case.GetNotStartedRoomsUseCase
+import domain.room.use_case.GetRunningRoomsUseCase
 import domain.room.use_case.JoinRoomUseCase
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.combine
-import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import org.koin.core.component.KoinComponent
@@ -30,7 +29,8 @@ class JoinScreenComponent(
 
     private val coroutineScope = componentCoroutineScope()
 
-    private val getRoomsUseCase by inject<GetRoomsUseCase>()
+    private val getNotStartedRoomsUseCase by inject<GetNotStartedRoomsUseCase>()
+    private val getRunningRoomsUseCase by inject<GetRunningRoomsUseCase>()
     private val joinRoomUseCase by inject<JoinRoomUseCase>()
 
     private val _uiState = MutableStateFlow(JoinRoomUIState.INITIAL)
@@ -55,14 +55,16 @@ class JoinScreenComponent(
 
     private fun uiLoaded() {
         coroutineScope.launch {
-            val rooms = getRoomsUseCase().collect { rooms ->
-                _uiState.update {
-                    JoinRoomUIState(
-                        loading = false,
-                        rooms = rooms
-                    )
-                }
-            }
+            combine(
+                getNotStartedRoomsUseCase(),
+                getRunningRoomsUseCase(),
+            ) { notStarted, running ->
+                JoinRoomUIState(
+                    loading = false,
+                    notStartedRooms = notStarted,
+                    runningRooms = running
+                )
+            }.collect { state -> _uiState.update { state } }
         }
     }
 

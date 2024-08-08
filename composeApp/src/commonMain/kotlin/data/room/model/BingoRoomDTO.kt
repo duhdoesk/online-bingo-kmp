@@ -2,6 +2,7 @@ package data.room.model
 
 import data.card.model.CardDTO
 import data.user.model.UserDTO
+import dev.gitlive.firebase.firestore.DocumentSnapshot
 import domain.card.model.Card
 import domain.room.model.BingoRoom
 import domain.room.model.BingoType
@@ -70,3 +71,20 @@ fun bingoRoomDTOFromModel(room: BingoRoom): BingoRoomDTO =
             players = players
         )
     }
+
+fun bingoRoomDTOFromDocumentSnapshot(documentSnapshot: DocumentSnapshot): BingoRoomDTO =
+    BingoRoomDTO(
+        id = documentSnapshot.id,
+        hostId = documentSnapshot.get("hostId"),
+        type = documentSnapshot.get("type"),
+        name = documentSnapshot.get("name"),
+        themeId = documentSnapshot.get("themeId"),
+        maxWinners = documentSnapshot.get("maxWinners"),
+        locked = documentSnapshot.get("locked"),
+        password = documentSnapshot.get("password"),
+        drawnCharactersIds = documentSnapshot.get("drawnCharactersIds")
+            ?: emptyList(),
+        state = documentSnapshot.get("state"),
+        winners = documentSnapshot.get("winners") ?: emptyList(),
+        players = documentSnapshot.get("players") ?: emptyList()
+    )

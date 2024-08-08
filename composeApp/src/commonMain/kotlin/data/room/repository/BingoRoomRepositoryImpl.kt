@@ -1,10 +1,12 @@
 package data.room.repository
 
 import data.room.model.BingoRoomDTO
+import data.room.model.bingoRoomDTOFromDocumentSnapshot
 import dev.gitlive.firebase.firestore.FieldValue
 import dev.gitlive.firebase.firestore.FirebaseFirestore
 import domain.room.model.BingoRoom
 import domain.room.model.BingoType
+import domain.room.model.RoomState
 import domain.room.repository.BingoRoomRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
@@ -20,22 +22,27 @@ class BingoRoomRepositoryImpl(
             .snapshots
             .map { querySnapshot ->
                 querySnapshot.documents.map { documentSnapshot ->
-                    BingoRoomDTO(
-                        id = documentSnapshot.id,
-                        hostId = documentSnapshot.get("hostId"),
-                        type = documentSnapshot.get("type"),
-                        name = documentSnapshot.get("name"),
-                        themeId = documentSnapshot.get("themeId"),
-                        maxWinners = documentSnapshot.get("maxWinners"),
-                        locked = documentSnapshot.get("locked"),
-                        password = documentSnapshot.get("password"),
-                        drawnCharactersIds = documentSnapshot.get("drawnCharactersIds")
-                            ?: emptyList(),
-                        state = documentSnapshot.get("state"),
-                        winners = documentSnapshot.get("winners") ?: emptyList(),
-                        players = documentSnapshot.get("players") ?: emptyList()
-                    )
-                        .toModel()
+                    bingoRoomDTOFromDocumentSnapshot(documentSnapshot).toModel()
+                }
+            }
+
+    override fun getNotStartedRooms(): Flow<List<BingoRoom>> =
+        collection
+            .where { "state" equalTo RoomState.NOT_STARTED.name }
+            .snapshots
+            .map { querySnapshot ->
+                querySnapshot.documents.map { documentSnapshot ->
+                    bingoRoomDTOFromDocumentSnapshot(documentSnapshot).toModel()
+                }
+            }
+
+    override fun getRunningRooms(): Flow<List<BingoRoom>> =
+        collection
+            .where { "state" equalTo RoomState.RUNNING.name }
+            .snapshots
+            .map { querySnapshot ->
+                querySnapshot.documents.map { documentSnapshot ->
+                    bingoRoomDTOFromDocumentSnapshot(documentSnapshot).toModel()
                 }
             }
 
@@ -44,23 +51,7 @@ class BingoRoomRepositoryImpl(
             .document(id)
             .snapshots
             .map { documentSnapshot ->
-                BingoRoomDTO(
-                    id = documentSnapshot.id,
-                    hostId = documentSnapshot.get("hostId"),
-                    type = documentSnapshot.get("type"),
-                    name = documentSnapshot.get("name"),
-                    themeId = documentSnapshot.get("themeId"),
-                    maxWinners = documentSnapshot.get("maxWinners"),
-                    locked = documentSnapshot.get("locked"),
-                    password = documentSnapshot.get("password"),
-                    drawnCharactersIds = documentSnapshot.get("drawnCharactersIds"),
-                    state = documentSnapshot.get("state"),
-                    winners = documentSnapshot.get("winners"),
-                    players = documentSnapshot.get("players") ?: emptyList()
-                )
-            }
-            .map { dto ->
-                dto.toModel()
+                bingoRoomDTOFromDocumentSnapshot(documentSnapshot).toModel()
             }
 
     override suspend fun getRoomById(id: String): Result<BingoRoom> {
@@ -70,21 +61,7 @@ class BingoRoomRepositoryImpl(
             .let { documentSnapshot ->
                 if (documentSnapshot.exists) {
                     try {
-                        val room = BingoRoomDTO(
-                            id = documentSnapshot.id,
-                            hostId = documentSnapshot.get("hostId"),
-                            type = documentSnapshot.get("type"),
-                            name = documentSnapshot.get("name"),
-                            themeId = documentSnapshot.get("themeId"),
-                            maxWinners = documentSnapshot.get("maxWinners"),
-                            locked = documentSnapshot.get("locked"),
-                            password = documentSnapshot.get("password"),
-                            drawnCharactersIds = documentSnapshot.get("drawnCharactersIds"),
-                            state = documentSnapshot.get("state"),
-                            winners = documentSnapshot.get("winners"),
-                            players = documentSnapshot.get("players") ?: emptyList()
-                        ).toModel()
-
+                        val room = bingoRoomDTOFromDocumentSnapshot(documentSnapshot).toModel()
                         return Result.success(room)
                     } catch (e: Exception) {
                         return Result.failure(e)

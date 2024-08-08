@@ -8,6 +8,10 @@ import kotlinx.coroutines.flow.Flow
 interface BingoRoomRepository {
     fun getRooms(): Flow<List<BingoRoom>>
 
+    fun getNotStartedRooms(): Flow<List<BingoRoom>>
+
+    fun getRunningRooms(): Flow<List<BingoRoom>>
+
     fun flowRoomById(id: String): Flow<BingoRoom>
 
     suspend fun getRoomById(id: String): Result<BingoRoom>

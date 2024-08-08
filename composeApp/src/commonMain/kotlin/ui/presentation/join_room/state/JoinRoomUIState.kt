@@ -9,14 +9,20 @@ data class JoinRoomUIState(
     val loading: Boolean,
 
     /**
-     * Represents the available rooms the user can join
+     * Represents the available and not started rooms the user can join
      * */
-    val rooms: List<BingoRoom>,
+    val notStartedRooms: List<BingoRoom>,
+
+    /**
+     * Represents the available and already running rooms the user can join
+     * */
+    val runningRooms: List<BingoRoom>,
 ) {
     companion object {
         val INITIAL = JoinRoomUIState(
             loading = true,
-            rooms = emptyList(),
+            notStartedRooms = emptyList(),
+            runningRooms = emptyList()
         )
     }
 }
