@@ -1,19 +1,28 @@
 package ui.presentation.join_room
 
 import com.arkivanov.decompose.ComponentContext
+import dev.gitlive.firebase.auth.FirebaseUser
 import domain.room.use_case.GetRoomsUseCase
 import domain.room.use_case.JoinRoomUseCase
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 import ui.navigation.Configuration
 import ui.presentation.join_room.event.JoinRoomUIEvent
+import ui.presentation.join_room.state.JoinRoomUIState
+import ui.presentation.util.dialog.dialog_state.mutableDialogStateOf
 import util.componentCoroutineScope
 
 class JoinScreenComponent(
     componentContext: ComponentContext,
+    private val firebaseUser: FirebaseUser,
     private val onPopBack: () -> Unit,
     private val onJoinRoom: (configuration: Configuration) -> Unit,
     private val onCreateRoom: () -> Unit,
@@ -24,36 +33,55 @@ class JoinScreenComponent(
     private val getRoomsUseCase by inject<GetRoomsUseCase>()
     private val joinRoomUseCase by inject<JoinRoomUseCase>()
 
-    private val _roomsList = getRoomsUseCase.invoke()
-    val roomsList = _roomsList
-        .stateIn(
-            componentCoroutineScope(),
-            SharingStarted.WhileSubscribed(),
-            emptyList()
-        )
+    private val _uiState = MutableStateFlow(JoinRoomUIState.INITIAL)
+    val uiState: StateFlow<JoinRoomUIState> get() = _uiState.asStateFlow()
 
-    init {
-        coroutineScope.launch {
-            joinRoomUseCase.invoke(
-                roomId = "05Fq1gbeDkAA0SYU3Zjt",
-                userId = "teste",
-                roomPassword = "password"
-            )
-                .onSuccess { println("join success") }
-                .onFailure { exception -> println("join fail with error: ${exception.message}") }
-        }
-    }
+    val tapRoomDialogState = mutableDialogStateOf("")
+    val errorDialogState = mutableDialogStateOf(null)
 
     fun uiEvent(event: JoinRoomUIEvent) {
         when (event) {
             JoinRoomUIEvent.CreateRoom -> createRoom()
-            is JoinRoomUIEvent.JoinRoom -> joinRoom(event.roomId)
             JoinRoomUIEvent.PopBack -> popBack()
+            JoinRoomUIEvent.UiLoaded -> uiLoaded()
+
+            is JoinRoomUIEvent.TapRoom -> tapRoom(event.roomName)
+            is JoinRoomUIEvent.JoinRoom -> joinRoom(
+                roomId = event.roomId,
+                password = event.roomPassword,
+            )
         }
     }
 
-    private fun joinRoom(roomId: String) =
-        onJoinRoom(Configuration.PlayScreen(roomId))
+    private fun uiLoaded() {
+        coroutineScope.launch {
+            val rooms = getRoomsUseCase().collect { rooms ->
+                _uiState.update {
+                    JoinRoomUIState(
+                        loading = false,
+                        rooms = rooms
+                    )
+                }
+            }
+        }
+    }
+
+    private fun tapRoom(roomName: String) {
+        tapRoomDialogState.showDialog(roomName)
+    }
+
+    private fun joinRoom(roomId: String, password: String?) {
+        coroutineScope.launch {
+            joinRoomUseCase
+                .invoke(
+                    roomId = roomId,
+                    userId = firebaseUser.uid,
+                    roomPassword = password,
+                )
+                .onSuccess { onJoinRoom(Configuration.PlayScreen(roomId)) }
+                .onFailure { exception -> println("join fail with error: ${exception.message}") }
+        }
+    }
 
     private fun createRoom() =
         onCreateRoom()
