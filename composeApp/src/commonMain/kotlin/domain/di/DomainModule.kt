@@ -20,7 +20,7 @@ import domain.room.use_case.GetRoomsUseCase
 import domain.room.use_case.GetRunningRoomsUseCase
 import domain.room.use_case.JoinRoomUseCase
 import domain.theme.repository.BingoThemeRepository
-import domain.theme.use_case.GetAllThemes
+import domain.theme.use_case.GetAllThemesUseCase
 import domain.theme.use_case.GetCharactersByThemeId
 import domain.user.repository.UserRepository
 import domain.user.use_case.FlowUserUseCase
@@ -48,7 +48,7 @@ val domainModule = module {
 
 //    Theme
     single<BingoThemeRepository> { BingoThemeRepositoryImpl(get()) }
-    single<GetAllThemes> { GetAllThemes(get()) }
+    single<GetAllThemesUseCase> { GetAllThemesUseCase(get()) }
     single<GetCharactersByThemeId> { GetCharactersByThemeId(get()) }
 
 //    User

@@ -1,5 +1,6 @@
 package ui.presentation.join_room.screens
 
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -8,8 +9,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
@@ -30,20 +29,23 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import domain.theme.model.BingoTheme
 import org.jetbrains.compose.resources.ExperimentalResourceApi
+import org.jetbrains.compose.resources.stringResource
 import themedbingo.composeapp.generated.resources.Res
 import themedbingo.composeapp.generated.resources.create_button
+import themedbingo.composeapp.generated.resources.join_room
+import themedbingo.composeapp.generated.resources.search
 import ui.presentation.common.components.BottomButtonRow
 import ui.presentation.join_room.event.JoinRoomUIEvent
-import ui.presentation.join_room.screens.component.RoomCard
+import ui.presentation.join_room.screens.component.JoinScreenLazyColumn
 import ui.presentation.join_room.state.JoinRoomUIState
 
-@OptIn(ExperimentalResourceApi::class)
+@OptIn(ExperimentalResourceApi::class, ExperimentalFoundationApi::class)
 @Composable
 fun PortraitJoinScreen(
     uiState: JoinRoomUIState,
     uiEvent: (event: JoinRoomUIEvent) -> Unit,
+    themes: List<BingoTheme>,
 ) {
-
     val keyboardController = LocalSoftwareKeyboardController.current
 
     Scaffold { innerPadding ->
@@ -61,7 +63,7 @@ fun PortraitJoinScreen(
                         .weight(1f),
                 ) {
                     Text(
-                        text = "Join Room",
+                        text = stringResource(Res.string.join_room),
                         style = MaterialTheme.typography.headlineSmall,
                         fontWeight = FontWeight.Bold,
                         modifier = Modifier.padding(top = 16.dp, start = 16.dp)
@@ -71,11 +73,11 @@ fun PortraitJoinScreen(
                         value = "",
                         onValueChange = { },
                         modifier = Modifier.padding(horizontal = 16.dp).fillMaxWidth(),
-                        label = { Text("Search") },
+                        label = { Text(stringResource(Res.string.search)) },
                         trailingIcon = {
                             Icon(
                                 imageVector = Icons.Default.Search,
-                                contentDescription = "Search"
+                                contentDescription = stringResource(Res.string.search)
                             )
                         },
                         keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
@@ -86,19 +88,14 @@ fun PortraitJoinScreen(
 
                     Spacer(Modifier.height(16.dp))
 
-                    LazyColumn {
-                        items(uiState.notStartedRooms) { room ->
-                            RoomCard(
-                                room = room,
-                                theme = BingoTheme(
-                                    id = "0",
-                                    name = "Frutas",
-                                    pictureUri = "https://i.imgur.com/uBThWgI.jpg"
-                                ),
-                                modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)
-                                    .fillMaxWidth()
-                            )
-                        }
+                    if (uiState.notStartedRooms.isEmpty() && uiState.runningRooms.isEmpty()) {
+                        //todo(): screen when there is no room to be shown
+                    } else {
+                        JoinScreenLazyColumn(
+                            notStartedRooms = uiState.notStartedRooms,
+                            runningRooms = uiState.runningRooms,
+                            bingoThemes = themes,
+                        )
                     }
 
                     if (uiState.loading) {
@@ -117,7 +114,5 @@ fun PortraitJoinScreen(
                 )
             }
         }
-
     }
-
 }

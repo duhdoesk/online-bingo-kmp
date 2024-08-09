@@ -5,6 +5,7 @@ import dev.gitlive.firebase.auth.FirebaseUser
 import domain.room.use_case.GetNotStartedRoomsUseCase
 import domain.room.use_case.GetRunningRoomsUseCase
 import domain.room.use_case.JoinRoomUseCase
+import domain.theme.use_case.GetAllThemesUseCase
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -31,10 +32,14 @@ class JoinScreenComponent(
 
     private val getNotStartedRoomsUseCase by inject<GetNotStartedRoomsUseCase>()
     private val getRunningRoomsUseCase by inject<GetRunningRoomsUseCase>()
+    private val getAllThemesUseCase by inject<GetAllThemesUseCase>()
     private val joinRoomUseCase by inject<JoinRoomUseCase>()
 
     private val _uiState = MutableStateFlow(JoinRoomUIState.INITIAL)
     val uiState: StateFlow<JoinRoomUIState> get() = _uiState.asStateFlow()
+
+    private val _themes = getAllThemesUseCase()
+    val themes = _themes
 
     val tapRoomDialogState = mutableDialogStateOf("")
     val errorDialogState = mutableDialogStateOf(null)

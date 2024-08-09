@@ -20,6 +20,7 @@
     <string name="action">Action</string>
     <string name="unmapped_error">We can't do that at the moment. Please, try again later.</string>
     <string name="oops">Oops!</string>
+    <string name="search">Search</string>
 
 
     <!--    Home Screen -->
@@ -40,6 +41,11 @@
     <string name="max_winners">Max Winners</string>
     <string name="theme_picture">Theme Picture</string>
     <string name="key_icon">Key Icon</string>
+
+
+    <!--    Join Room Screen -->
+    <string name="not_started">Not Started</string>
+    <string name="in_progress">In Progress</string>
 
 
     <!--    Rotate Screen -->

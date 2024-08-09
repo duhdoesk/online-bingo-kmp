@@ -1,10 +1,7 @@
 package ui.presentation.join_room.screens.component
 
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -21,19 +18,15 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
 import domain.room.model.BingoRoom
 import domain.theme.model.BingoTheme
-import org.jetbrains.compose.resources.ExperimentalResourceApi
-import org.jetbrains.compose.resources.stringResource
 
-@OptIn(ExperimentalResourceApi::class)
 @Composable
 fun RoomCard(
     room: BingoRoom,
-    theme: BingoTheme,
+    theme: BingoTheme?,
     modifier: Modifier = Modifier
 ) {
     val bodyStyle = MaterialTheme.typography.bodyLarge
@@ -50,7 +43,7 @@ fun RoomCard(
                 verticalAlignment = Alignment.CenterVertically,
             ) {
                 AsyncImage(
-                    model = theme.pictureUri,
+                    model = theme?.pictureUri,
                     contentDescription = "Theme Picture",
                     modifier = Modifier
                         .padding(16.dp)
@@ -67,7 +60,7 @@ fun RoomCard(
                     )
 
                     Text(
-                        text = "Tema: ${theme.name}",
+                        text = "Tema: ${theme?.name}",
                         style = bodyStyle,
                     )
 

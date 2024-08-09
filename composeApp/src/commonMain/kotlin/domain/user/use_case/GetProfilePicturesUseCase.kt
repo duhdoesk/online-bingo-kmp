@@ -1,6 +1,6 @@
 package domain.user.use_case
 
-import domain.theme.use_case.GetAllThemes
+import domain.theme.use_case.GetAllThemesUseCase
 import domain.theme.use_case.GetCharactersByThemeId
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
@@ -11,12 +11,12 @@ import kotlinx.coroutines.flow.map
 private val THEME_IDS = setOf("1", "2", "5", "6", "8")
 
 class GetProfilePicturesUseCase(
-    private val getAllThemes: GetAllThemes,
+    private val getAllThemesUseCase: GetAllThemesUseCase,
     private val getCharactersByThemeId: GetCharactersByThemeId,
 ) {
     @OptIn(ExperimentalCoroutinesApi::class)
     operator fun invoke(): Flow<ProfilePictures> {
-        return getAllThemes().flatMapConcat { themes ->
+        return getAllThemesUseCase().flatMapConcat { themes ->
             val flows = themes
                 .filter { it.id in THEME_IDS }
                 .map { theme ->

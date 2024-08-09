@@ -3,9 +3,7 @@ package ui.presentation.create_room
 import com.arkivanov.decompose.ComponentContext
 import domain.room.model.BingoType
 import domain.room.repository.BingoRoomRepository
-import domain.theme.model.BingoTheme
-import domain.theme.repository.BingoThemeRepository
-import domain.theme.use_case.GetAllThemes
+import domain.theme.use_case.GetAllThemesUseCase
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.asStateFlow
@@ -25,10 +23,10 @@ class CreateRoomScreenComponent(
     private val onCreateRoom: (configuration: Configuration) -> Unit,
 ) : ComponentContext by componentContext, KoinComponent {
 
-    private val getAllThemes by inject<GetAllThemes>()
+    private val getAllThemesUseCase by inject<GetAllThemesUseCase>()
     private val roomRepository by inject<BingoRoomRepository>()
 
-    val bingoThemesList = getAllThemes()
+    val bingoThemesList = getAllThemesUseCase()
         .stateIn(
             componentContext.componentCoroutineScope(),
             SharingStarted.WhileSubscribed(),

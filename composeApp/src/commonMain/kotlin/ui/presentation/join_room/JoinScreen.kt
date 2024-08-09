@@ -19,6 +19,7 @@ fun JoinScreen(
 ) {
 
     val uiState by component.uiState.collectAsState()
+    val themes by component.themes.collectAsState(emptyList())
     val roomDialogState = component.tapRoomDialogState
     val errorDialogState = component.errorDialogState
 
@@ -31,7 +32,8 @@ fun JoinScreen(
         WindowInfo.DeviceOrientation.Portrait ->
             PortraitJoinScreen(
                 uiState = uiState,
-                uiEvent = { component.uiEvent(it) }
+                uiEvent = { component.uiEvent(it) },
+                themes = themes,
             )
     }
 

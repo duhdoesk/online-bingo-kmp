@@ -19,6 +19,7 @@
     <string name="action">Ação</string>
     <string name="unmapped_error">Não conseguimos completar a operação. Por favor, tente novamente mais tarde.</string>
     <string name="oops">Oops!</string>
+    <string name="search">Pesquisar</string>
 
 
     <!--    Home Screen -->
@@ -39,6 +40,11 @@
     <string name="max_winners">Max Winners</string>
     <string name="theme_picture">Theme Picture</string>
     <string name="key_icon">Key Icon</string>
+
+
+    <!--    Join Room Screen -->
+    <string name="not_started">Não Iniciados</string>
+    <string name="in_progress">Sorteando</string>
 
 
     <!--    Rotate Screen -->
