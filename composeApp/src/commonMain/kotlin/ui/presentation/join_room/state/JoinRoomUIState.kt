@@ -17,12 +17,18 @@ data class JoinRoomUIState(
      * Represents the available and already running rooms the user can join
      * */
     val runningRooms: List<BingoRoom>,
+
+    /**
+     * Represents the query being made by the user in the search box
+     * */
+    val query: String,
 ) {
     companion object {
         val INITIAL = JoinRoomUIState(
             loading = true,
             notStartedRooms = emptyList(),
-            runningRooms = emptyList()
+            runningRooms = emptyList(),
+            query = "",
         )
     }
 }

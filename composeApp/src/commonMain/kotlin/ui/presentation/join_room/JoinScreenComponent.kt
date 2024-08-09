@@ -35,6 +35,8 @@ class JoinScreenComponent(
     private val getAllThemesUseCase by inject<GetAllThemesUseCase>()
     private val joinRoomUseCase by inject<JoinRoomUseCase>()
 
+    private val _query = MutableStateFlow("")
+
     private val _uiState = MutableStateFlow(JoinRoomUIState.INITIAL)
     val uiState: StateFlow<JoinRoomUIState> get() = _uiState.asStateFlow()
 
@@ -51,10 +53,13 @@ class JoinScreenComponent(
             JoinRoomUIEvent.UiLoaded -> uiLoaded()
 
             is JoinRoomUIEvent.TapRoom -> tapRoom(event.roomName)
+
             is JoinRoomUIEvent.JoinRoom -> joinRoom(
                 roomId = event.roomId,
                 password = event.roomPassword,
             )
+
+            is JoinRoomUIEvent.QueryTyping -> updateQuery(event.query)
         }
     }
 
@@ -63,14 +68,35 @@ class JoinScreenComponent(
             combine(
                 getNotStartedRoomsUseCase(),
                 getRunningRoomsUseCase(),
-            ) { notStarted, running ->
-                JoinRoomUIState(
-                    loading = false,
-                    notStartedRooms = notStarted,
-                    runningRooms = running
-                )
+                _query,
+            ) { notStarted, running, query ->
+
+                if (query.isEmpty()) {
+                    JoinRoomUIState(
+                        loading = false,
+                        notStartedRooms = notStarted,
+                        runningRooms = running,
+                        query = query
+                    )
+                } else {
+                    val filteredNotStarted =
+                        notStarted.filter { it.name.lowercase().contains(query.lowercase()) }
+                    val filteredRunning =
+                        running.filter { it.name.lowercase().contains(query.lowercase()) }
+
+                    JoinRoomUIState(
+                        loading = false,
+                        notStartedRooms = filteredNotStarted,
+                        runningRooms = filteredRunning,
+                        query = query
+                    )
+                }
             }.collect { state -> _uiState.update { state } }
         }
+    }
+
+    private fun updateQuery(query: String) {
+        _query.update { query }
     }
 
     private fun tapRoom(roomName: String) {

@@ -6,4 +6,5 @@ sealed class JoinRoomUIEvent {
     data object UiLoaded: JoinRoomUIEvent()
     data class JoinRoom(val roomId: String, val roomPassword: String?): JoinRoomUIEvent()
     data class TapRoom(val roomName: String): JoinRoomUIEvent()
+    data class QueryTyping(val query: String): JoinRoomUIEvent()
 }

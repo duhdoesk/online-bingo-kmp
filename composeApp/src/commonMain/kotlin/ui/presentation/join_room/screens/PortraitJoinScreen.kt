@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -55,7 +56,11 @@ fun PortraitJoinScreen(
                 .padding(innerPadding)
                 .fillMaxSize()
         ) {
-            Column(modifier = Modifier.fillMaxSize()) {
+            Column(
+                modifier = Modifier
+                    .imePadding()
+                    .fillMaxSize()
+            ) {
 
                 Column(
                     modifier = Modifier
@@ -70,8 +75,8 @@ fun PortraitJoinScreen(
                     )
 
                     OutlinedTextField(
-                        value = "",
-                        onValueChange = { },
+                        value = uiState.query,
+                        onValueChange = { uiEvent(JoinRoomUIEvent.QueryTyping(it)) },
                         modifier = Modifier.padding(horizontal = 16.dp).fillMaxWidth(),
                         label = { Text(stringResource(Res.string.search)) },
                         trailingIcon = {
