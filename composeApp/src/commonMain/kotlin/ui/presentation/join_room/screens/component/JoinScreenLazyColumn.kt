@@ -14,6 +14,7 @@ import org.jetbrains.compose.resources.ExperimentalResourceApi
 import themedbingo.composeapp.generated.resources.Res
 import themedbingo.composeapp.generated.resources.in_progress
 import themedbingo.composeapp.generated.resources.not_started
+import ui.presentation.join_room.event.JoinRoomUIEvent
 
 @OptIn(ExperimentalResourceApi::class, ExperimentalFoundationApi::class)
 @Composable
@@ -21,6 +22,7 @@ fun JoinScreenLazyColumn(
     notStartedRooms: List<BingoRoom>,
     runningRooms: List<BingoRoom>,
     bingoThemes: List<BingoTheme>,
+    onTapRoom: (event: JoinRoomUIEvent) -> Unit,
 ) {
     LazyColumn {
         if (notStartedRooms.isNotEmpty()) {
@@ -36,7 +38,8 @@ fun JoinScreenLazyColumn(
                     room = room,
                     theme = bingoThemes.find { it.id == room.themeId },
                     modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)
-                        .fillMaxWidth()
+                        .fillMaxWidth(),
+                    onClick = { onTapRoom(it) }
                 )
             }
         }
@@ -54,7 +57,8 @@ fun JoinScreenLazyColumn(
                     room = room,
                     theme = bingoThemes.find { it.id == room.themeId },
                     modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)
-                        .fillMaxWidth()
+                        .fillMaxWidth(),
+                    onClick = { onTapRoom(it) }
                 )
             }
         }

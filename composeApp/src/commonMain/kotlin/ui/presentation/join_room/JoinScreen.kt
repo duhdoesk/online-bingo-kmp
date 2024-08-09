@@ -8,6 +8,7 @@ import org.jetbrains.compose.resources.ExperimentalResourceApi
 import ui.presentation.common.RotateScreen
 import ui.presentation.join_room.event.JoinRoomUIEvent
 import ui.presentation.join_room.screens.PortraitJoinScreen
+import ui.presentation.join_room.screens.component.JoinRoomBottomSheet
 import ui.presentation.util.WindowInfo
 import ui.presentation.util.dialog.GenericErrorDialog
 
@@ -38,13 +39,25 @@ fun JoinScreen(
     }
 
     if (roomDialogState.isVisible.value) {
-        //todo(): show custom dialog - to be created still
+        JoinRoomBottomSheet(
+            room = roomDialogState.dialogData.value!!,
+            onDismiss = { roomDialogState.hideDialog() },
+            onConfirm = { password ->
+                roomDialogState.hideDialog()
+                component.uiEvent(
+                    JoinRoomUIEvent.JoinRoom(
+                        roomId = roomDialogState.dialogData.value!!.id,
+                        roomPassword = password,
+                    )
+                )
+            },
+        )
     }
 
     if (errorDialogState.isVisible.value) {
         GenericErrorDialog(
             onDismiss = { errorDialogState.hideDialog() },
-            body = null
+            body = errorDialogState.dialogData.value
         )
     }
 }

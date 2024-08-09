@@ -25,9 +25,9 @@
     <!--    Home Screen -->
     <string name="hot_water_software">Hot Water Software</string>
     <string name="mobile_apps_development">Mobile Apps Development</string>
-    <string name="new_room">New Room</string>
-    <string name="join_room">Join Room</string>
-    <string name="profile">Profile</string>
+    <string name="new_room">Nova Sala</string>
+    <string name="join_room">Entrar na Sala</string>
+    <string name="profile">Perfil</string>
 
 
     <!--    Create Room Screen -->
@@ -45,6 +45,10 @@
     <!--    Join Room Screen -->
     <string name="not_started">Não Iniciados</string>
     <string name="in_progress">Sorteando</string>
+    <string name="join_unlocked_room_body">Você deseja entrar na sala</string>
+    <string name="join_locked_room_body">Insira a senha para entrar na sala</string>
+    <string name="join_room_invalid_password">Senha incorreta. Tente novamente, ou verifique se você está com a senha correta.</string>
+    <string name="join_room_empty_password">Você precisa inserir a senha para entrar em uma sala trancada.</string>
 
 
     <!--    Rotate Screen -->

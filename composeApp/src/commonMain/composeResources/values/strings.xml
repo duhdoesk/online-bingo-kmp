@@ -46,6 +46,10 @@
     <!--    Join Room Screen -->
     <string name="not_started">Not Started</string>
     <string name="in_progress">In Progress</string>
+    <string name="join_unlocked_room_body">Do you want to join the room</string>
+    <string name="join_locked_room_body">Insert the password to join the room</string>
+    <string name="join_room_invalid_password">Invalid Password. Try again or check if you got the right one.</string>
+    <string name="join_room_empty_password">You must insert a password to join a locked session.</string>
 
 
     <!--    Rotate Screen -->

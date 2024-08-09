@@ -104,6 +104,7 @@ fun PortraitJoinScreen(
                             notStartedRooms = uiState.notStartedRooms,
                             runningRooms = uiState.runningRooms,
                             bingoThemes = themes,
+                            onTapRoom = { uiEvent(it) }
                         )
                     }
 

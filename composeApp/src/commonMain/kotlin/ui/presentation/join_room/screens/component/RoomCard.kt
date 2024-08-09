@@ -1,5 +1,6 @@
 package ui.presentation.join_room.screens.component
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
@@ -22,12 +23,14 @@ import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
 import domain.room.model.BingoRoom
 import domain.theme.model.BingoTheme
+import ui.presentation.join_room.event.JoinRoomUIEvent
 
 @Composable
 fun RoomCard(
     room: BingoRoom,
     theme: BingoTheme?,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    onClick: (event: JoinRoomUIEvent) -> Unit,
 ) {
     val bodyStyle = MaterialTheme.typography.bodyLarge
 
@@ -38,6 +41,7 @@ fun RoomCard(
                 contentColor = MaterialTheme.colorScheme.onSurface,
             ),
             elevation = CardDefaults.cardElevation(4.dp),
+            modifier = Modifier.clickable { onClick(JoinRoomUIEvent.TapRoom(room)) }
         ) {
             Row(
                 verticalAlignment = Alignment.CenterVertically,

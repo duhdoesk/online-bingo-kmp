@@ -2,6 +2,7 @@ package ui.presentation.join_room
 
 import com.arkivanov.decompose.ComponentContext
 import dev.gitlive.firebase.auth.FirebaseUser
+import domain.room.model.BingoRoom
 import domain.room.use_case.GetNotStartedRoomsUseCase
 import domain.room.use_case.GetRunningRoomsUseCase
 import domain.room.use_case.JoinRoomUseCase
@@ -12,8 +13,15 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import org.jetbrains.compose.resources.ExperimentalResourceApi
+import org.jetbrains.compose.resources.StringResource
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
+import themedbingo.composeapp.generated.resources.Res
+import themedbingo.composeapp.generated.resources.auth_empty_string
+import themedbingo.composeapp.generated.resources.join_room_empty_password
+import themedbingo.composeapp.generated.resources.join_room_invalid_password
+import themedbingo.composeapp.generated.resources.unmapped_error
 import ui.navigation.Configuration
 import ui.presentation.join_room.event.JoinRoomUIEvent
 import ui.presentation.join_room.state.JoinRoomUIState
@@ -43,8 +51,10 @@ class JoinScreenComponent(
     private val _themes = getAllThemesUseCase()
     val themes = _themes
 
-    val tapRoomDialogState = mutableDialogStateOf("")
-    val errorDialogState = mutableDialogStateOf(null)
+    val tapRoomDialogState = mutableDialogStateOf<BingoRoom?>(null)
+
+    @OptIn(ExperimentalResourceApi::class)
+    val errorDialogState = mutableDialogStateOf<StringResource?>(null)
 
     fun uiEvent(event: JoinRoomUIEvent) {
         when (event) {
@@ -52,7 +62,7 @@ class JoinScreenComponent(
             JoinRoomUIEvent.PopBack -> popBack()
             JoinRoomUIEvent.UiLoaded -> uiLoaded()
 
-            is JoinRoomUIEvent.TapRoom -> tapRoom(event.roomName)
+            is JoinRoomUIEvent.TapRoom -> tapRoom(event.room)
 
             is JoinRoomUIEvent.JoinRoom -> joinRoom(
                 roomId = event.roomId,
@@ -99,10 +109,11 @@ class JoinScreenComponent(
         _query.update { query }
     }
 
-    private fun tapRoom(roomName: String) {
-        tapRoomDialogState.showDialog(roomName)
+    private fun tapRoom(room: BingoRoom) {
+        tapRoomDialogState.showDialog(room)
     }
 
+    @OptIn(ExperimentalResourceApi::class)
     private fun joinRoom(roomId: String, password: String?) {
         coroutineScope.launch {
             joinRoomUseCase
@@ -112,7 +123,15 @@ class JoinScreenComponent(
                     roomPassword = password,
                 )
                 .onSuccess { onJoinRoom(Configuration.PlayScreen(roomId)) }
-                .onFailure { exception -> println("join fail with error: ${exception.message}") }
+                .onFailure { exception ->
+
+                    if (exception.message == "Incorrect Password") {
+                        errorDialogState.showDialog(Res.string.join_room_invalid_password)
+                        return@launch
+                    }
+
+                    errorDialogState.showDialog(Res.string.unmapped_error)
+                }
         }
     }
 
