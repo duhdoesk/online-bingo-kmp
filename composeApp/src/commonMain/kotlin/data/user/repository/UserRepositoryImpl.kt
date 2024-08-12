@@ -90,7 +90,7 @@ class UserRepositoryImpl(
                         UserDTO(
                             id = documentSnapshot.id,
                             name = documentSnapshot.get("name"),
-                            pictureUri = documentSnapshot.get("pictureUrl"),
+                            pictureUri = documentSnapshot.get("pictureUri"),
                             email = documentSnapshot.get("email"),
                             nameLastUpdated = documentSnapshot.get("nameLastUpdated"),
                             pictureUriLastUpdated = documentSnapshot.get("pictureUriLastUpdated"),

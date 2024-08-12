@@ -7,6 +7,8 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.KeyboardArrowLeft
 import androidx.compose.material.icons.automirrored.filled.KeyboardArrowRight
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonColors
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -29,6 +31,7 @@ fun BottomButtonRow(
     rightClicked: () -> Unit,
     leftText: StringResource = Res.string.back_button,
     rightText: StringResource,
+    rightButtonColors: ButtonColors = ButtonDefaults.buttonColors(),
     modifier: Modifier = Modifier,
 ) {
     Row(
@@ -55,6 +58,7 @@ fun BottomButtonRow(
         Button(
             enabled = rightEnabled,
             onClick = { rightClicked() },
+            colors = rightButtonColors,
         ) {
             Text(
                 text = stringResource(rightText),

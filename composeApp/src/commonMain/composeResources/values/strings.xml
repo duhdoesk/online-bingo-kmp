@@ -13,6 +13,8 @@
     <string name="retry_button">Retry</string>
     <string name="create_button">Create</string>
     <string name="start_button">Start</string>
+    <string name="finish_button">Finish</string>
+    <string name="raffle_button">Raffle</string>
 
 
     <!--    Generic Labels -->
@@ -98,6 +100,11 @@
     <string name="classic_card">Classic</string>
     <string name="themed_card">Themed</string>
     <string name="theme_card">Theme</string>
+    <string name="character_picture">Character Picture</string>
+    <string name="player_picture">Player Picture</string>
+    <string name="go_to_first">Go to First</string>
+    <string name="raffled">Raffled</string>
+    <string name="winner">Winner</string>
 
 
     <!--    Auth Errors -->

@@ -58,7 +58,8 @@ fun PortraitNotStartedHostScreen(
             Column(modifier = Modifier.sizeIn(maxWidth = 600.dp, maxHeight = 1000.dp)) {
                 PlayersLazyRow(
                     players = uiState.players.reversed(),
-                    modifier = Modifier.fillMaxWidth()
+                    winners = uiState.winners,
+                    modifier = Modifier.fillMaxWidth(),
                 )
 
                 Column(

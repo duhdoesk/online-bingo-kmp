@@ -1,12 +1,14 @@
 package ui.presentation.host
 
 import com.arkivanov.decompose.ComponentContext
+import domain.character.model.Character
 import domain.room.model.RoomState
 import domain.room.use_case.FlowRoomByIdUseCase
 import domain.room.use_case.RaffleNextCharacterUseCase
 import domain.room.use_case.UpdateRoomStateUseCase
 import domain.theme.use_case.GetRoomCharactersUseCase
 import domain.theme.use_case.GetRoomThemeUseCase
+import domain.user.model.User
 import domain.user.use_case.GetRoomPlayersUseCase
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -61,18 +63,25 @@ class HostScreenComponent(
                 getRoomThemeUseCase(roomId),
                 canRaffleNextCharacter,
             ) { room, players, characters, theme, canRaffle ->
-                println(room)
-                println(players)
-                println(characters)
-                println(theme)
+
+                val raffledCharacters = mutableListOf<Character>()
+                room.drawnCharactersIds.forEach { characterId ->
+                    characters.find { it.id == characterId }?.run { raffledCharacters.add(this) }
+                }
+
+                val winnersList = mutableListOf<User>()
+                room.winners.forEach { winnerId ->
+                    players.find { it.id == winnerId }?.run { winnersList.add(this) }
+                }
+
                 HostScreenUIState(
                     loading = false,
                     players = players,
                     theme = theme,
                     themeCharacters = characters,
-                    raffledCharacters = characters.filter { it.id in room.drawnCharactersIds },
+                    raffledCharacters = raffledCharacters.reversed(),
                     maxWinners = room.maxWinners,
-                    winners = players.filter { it.id in room.winners },
+                    winners = winnersList,
                     roomName = room.name,
                     bingoType = room.type,
                     bingoState = room.state,
@@ -119,7 +128,7 @@ class HostScreenComponent(
                 .first()
 
             raffleNextCharacterUseCase(roomId = roomId, characterId = nextCharacter)
-                .onFailure {  } //todo(): show error dialog
+                .onFailure { } //todo(): show error dialog
 
             delay(1000)
             canRaffleNextCharacter.update { true }

@@ -12,6 +12,8 @@
     <string name="exit_button">Sair</string>
     <string name="create_button">Criar</string>
     <string name="start_button">Começar</string>
+    <string name="finish_button">Encerrar</string>
+    <string name="raffle_button">Sortear</string>
 
 
     <!--    Generic Labels -->
@@ -98,6 +100,11 @@
     <string name="classic_card">Clássico</string>
     <string name="themed_card">Temático</string>
     <string name="theme_card">Tema</string>
+    <string name="character_picture">Figura do Personagem</string>
+    <string name="player_picture">Figura do Jogador</string>
+    <string name="go_to_first">Voltar Para o Primeiro</string>
+    <string name="raffled">Sorteados</string>
+    <string name="winner">Vencedor</string>
 
 
     <!--    Auth Errors -->
