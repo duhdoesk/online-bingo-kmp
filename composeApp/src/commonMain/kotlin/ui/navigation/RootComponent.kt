@@ -75,6 +75,7 @@ class RootComponent(
             Configuration.CreateScreen -> Child.CreateScreen(
                 CreateRoomScreenComponent(
                     componentContext = context,
+                    firebaseUser = firebaseUser!!,
                     onPopBack = { navigation.pop() },
                     onCreateRoom = { receivedConfig ->
                         navigation.replaceCurrent(configuration = receivedConfig)
@@ -95,9 +96,8 @@ class RootComponent(
                     componentContext = context,
                     firebaseUser = firebaseUser!!,
                     onPopBack = { navigation.pop() },
-                    onJoinRoom = { receivedConfig ->
-                        navigation.replaceCurrent(configuration = receivedConfig)
-                    },
+                    onJoinRoom = { config -> navigation.replaceCurrent(configuration = config) },
+                    onJoinRoomAsHost = { config -> navigation.replaceCurrent(configuration = config) },
                     onCreateRoom = { navigation.replaceCurrent(Configuration.CreateScreen)}
                 )
             )

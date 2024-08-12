@@ -1,8 +1,9 @@
 package ui.presentation.create_room
 
 import com.arkivanov.decompose.ComponentContext
+import dev.gitlive.firebase.auth.FirebaseUser
 import domain.room.model.BingoType
-import domain.room.repository.BingoRoomRepository
+import domain.room.use_case.CreateRoomUseCase
 import domain.theme.use_case.GetAllThemesUseCase
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -19,12 +20,15 @@ import util.componentCoroutineScope
 
 class CreateRoomScreenComponent(
     componentContext: ComponentContext,
+    private val firebaseUser: FirebaseUser,
     private val onPopBack: () -> Unit,
     private val onCreateRoom: (configuration: Configuration) -> Unit,
 ) : ComponentContext by componentContext, KoinComponent {
 
+    private val coroutineScope = componentCoroutineScope()
+
     private val getAllThemesUseCase by inject<GetAllThemesUseCase>()
-    private val roomRepository by inject<BingoRoomRepository>()
+    private val createRoomUseCase by inject<CreateRoomUseCase>()
 
     val bingoThemesList = getAllThemesUseCase()
         .stateIn(
@@ -42,7 +46,7 @@ class CreateRoomScreenComponent(
             }
         }
         .stateIn(
-            componentContext.componentCoroutineScope(),
+            coroutineScope,
             SharingStarted.WhileSubscribed(),
             CreateScreenUiState()
         )
@@ -107,23 +111,19 @@ class CreateRoomScreenComponent(
     }
 
     fun createRoom() {
-        componentCoroutineScope().launch {
+        coroutineScope.launch {
             uiState.value.run {
-                roomRepository
-                    .createRoom(
-                        hostId = "", // refactor later
-                        name = name,
-                        locked = locked,
-                        password = password,
-                        maxWinners = maxWinners,
-                        type = BingoType.THEMED,
-                        themeId = themeId
-                    )
-                    .collect() { snapshot ->
-                        if (snapshot.exists) {
-                            onCreateRoom(Configuration.HostScreen(roomId = snapshot.id))
-                        }
-                    }
+                createRoomUseCase(
+                    hostId = firebaseUser.uid,
+                    name = name,
+                    locked = locked,
+                    password = password,
+                    maxWinners = maxWinners,
+                    type = BingoType.THEMED,
+                    themeId = themeId
+                )
+                    .onSuccess { roomId -> onCreateRoom(Configuration.HostScreen(roomId = roomId)) }
+                    .onFailure {  } //todo(): display error dialog
             }
         }
     }

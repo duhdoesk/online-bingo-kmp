@@ -3,6 +3,7 @@ package domain.room.repository
 import dev.gitlive.firebase.firestore.DocumentSnapshot
 import domain.room.model.BingoRoom
 import domain.room.model.BingoType
+import domain.room.model.RoomState
 import kotlinx.coroutines.flow.Flow
 
 interface BingoRoomRepository {
@@ -24,7 +25,11 @@ interface BingoRoomRepository {
         maxWinners: Int,
         type: BingoType,
         themeId: String?
-    ): Flow<DocumentSnapshot>
+    ): Result<String>
 
     suspend fun joinRoom(roomId: String, userId: String): Result<Unit>
+
+    suspend fun updateRoomState(roomId: String, state: String): Result<Unit>
+
+    suspend fun addRaffledCharacter(roomId: String, characterId: String) : Result<Unit>
 }

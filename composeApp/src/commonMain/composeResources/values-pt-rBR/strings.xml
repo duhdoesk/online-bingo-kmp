@@ -11,6 +11,7 @@
     <string name="edit_button">Editar</string>
     <string name="exit_button">Sair</string>
     <string name="create_button">Criar</string>
+    <string name="start_button">Começar</string>
 
 
     <!--    Generic Labels -->
@@ -87,6 +88,16 @@
     <string name="user_avatar">Avatar do Usuário</string>
     <string name="can_change_in">Poderá mudar em</string>
     <string name="user_data_not_found">Não conseguimos encontrar os dados do usuário. Por favor, tente novamente mais tarde.</string>
+
+
+    <!--    Host / Play Screen -->
+    <string name="players_card">Jogadores</string>
+    <string name="room_name_card">Nome da Sala</string>
+    <string name="max_winners_card">Máximo de Vencedores</string>
+    <string name="bingo_type_card">Tipo de Bingo</string>
+    <string name="classic_card">Clássico</string>
+    <string name="themed_card">Temático</string>
+    <string name="theme_card">Tema</string>
 
 
     <!--    Auth Errors -->

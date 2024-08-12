@@ -12,6 +12,7 @@
     <string name="exit_button">Exit</string>
     <string name="retry_button">Retry</string>
     <string name="create_button">Create</string>
+    <string name="start_button">Start</string>
 
 
     <!--    Generic Labels -->
@@ -87,6 +88,16 @@
     <string name="user_avatar">User Avatar</string>
     <string name="can_change_in">Can change in</string>
     <string name="user_data_not_found">We were not able to find the user info. Please, try again later.</string>
+
+
+    <!--    Host / Play Screen -->
+    <string name="players_card">Players</string>
+    <string name="room_name_card">Room Name</string>
+    <string name="max_winners_card">Max Winners</string>
+    <string name="bingo_type_card">Bingo Type</string>
+    <string name="classic_card">Classic</string>
+    <string name="themed_card">Themed</string>
+    <string name="theme_card">Theme</string>
 
 
     <!--    Auth Errors -->

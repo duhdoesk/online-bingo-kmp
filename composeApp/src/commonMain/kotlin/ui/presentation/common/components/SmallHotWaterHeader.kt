@@ -1,6 +1,7 @@
 package ui.presentation.common.components
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -30,7 +31,8 @@ fun CreateRoomHeader(modifier: Modifier = Modifier) {
 
     Row(
         verticalAlignment = Alignment.CenterVertically,
-        modifier = modifier
+        horizontalArrangement = Arrangement.Center,
+        modifier = modifier,
     ) {
 
         Image(

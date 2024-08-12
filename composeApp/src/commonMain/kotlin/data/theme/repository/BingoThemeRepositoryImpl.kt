@@ -7,6 +7,7 @@ import domain.theme.model.BingoTheme
 import domain.theme.repository.BingoThemeRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.map
 
 class BingoThemeRepositoryImpl(
     private val firestore: FirebaseFirestore
@@ -27,6 +28,19 @@ class BingoThemeRepositoryImpl(
                 )
             }
             .toModel()
+    }
+
+    override fun flowThemeById(id: String): Flow<BingoTheme> {
+        return collection
+            .document(id)
+            .snapshots
+            .map { documentSnapshot ->
+                BingoThemeDTO(
+                    id = documentSnapshot.id,
+                    name = documentSnapshot.get("name"),
+                    picture = documentSnapshot.get("picture")
+                ).toModel()
+            }
     }
 
     override fun getAllThemes(): Flow<List<BingoTheme>> {

@@ -1,6 +1,5 @@
 package data.room.repository
 
-import data.room.model.BingoRoomDTO
 import data.room.model.bingoRoomDTOFromDocumentSnapshot
 import dev.gitlive.firebase.firestore.FieldValue
 import dev.gitlive.firebase.firestore.FirebaseFirestore
@@ -59,16 +58,15 @@ class BingoRoomRepositoryImpl(
             .document(id)
             .get()
             .let { documentSnapshot ->
-                if (documentSnapshot.exists) {
-                    try {
-                        val room = bingoRoomDTOFromDocumentSnapshot(documentSnapshot).toModel()
-                        return Result.success(room)
-                    } catch (e: Exception) {
-                        return Result.failure(e)
-                    }
-
-                } else {
+                if (!documentSnapshot.exists) {
                     return Result.failure(NoSuchElementException())
+                }
+
+                try {
+                    val room = bingoRoomDTOFromDocumentSnapshot(documentSnapshot).toModel()
+                    return Result.success(room)
+                } catch (e: Exception) {
+                    return Result.failure(e)
                 }
             }
     }
@@ -81,30 +79,57 @@ class BingoRoomRepositoryImpl(
         maxWinners: Int,
         type: BingoType,
         themeId: String?
-    ) =
-        collection
-            .add(
-                data = hashMapOf(
-                    "hostId" to hostId,
-                    "name" to name,
-                    "locked" to locked,
-                    "password" to password,
-                    "maxWinners" to maxWinners,
-                    "type" to type.name,
-                    "themeId" to themeId,
-                    "state" to "NOT_STARTED",
-                    "winners" to emptyList<String>(),
-                    "players" to emptyList<String>(),
-                    "drawnCharactersIds" to emptyList<String>()
+    ): Result<String> {
+        try {
+            val documentReference = collection
+                .add(
+                    data = hashMapOf(
+                        "hostId" to hostId,
+                        "name" to name,
+                        "locked" to locked,
+                        "password" to password,
+                        "maxWinners" to maxWinners,
+                        "type" to type.name,
+                        "themeId" to themeId,
+                        "state" to "NOT_STARTED",
+                        "winners" to emptyList<String>(),
+                        "players" to emptyList<String>(),
+                        "drawnCharactersIds" to emptyList<String>()
+                    )
                 )
-            )
-            .snapshots
+            return Result.success(documentReference.id)
+        } catch (e: Exception) {
+            return Result.failure(e)
+        }
+    }
 
     override suspend fun joinRoom(roomId: String, userId: String): Result<Unit> {
         try {
             collection.document(roomId)
                 .update(data = hashMapOf("players" to FieldValue.arrayUnion(userId)))
 
+            return Result.success(Unit)
+        } catch (e: Exception) {
+            return Result.failure(e)
+        }
+    }
+
+    override suspend fun updateRoomState(roomId: String, state: String): Result<Unit> {
+        try {
+            collection
+                .document(roomId)
+                .update(data = hashMapOf("state" to state))
+            return Result.success(Unit)
+        } catch (e: Exception) {
+            return Result.failure(e)
+        }
+    }
+
+    override suspend fun addRaffledCharacter(roomId: String, characterId: String): Result<Unit> {
+        try {
+            collection
+                .document(roomId)
+                .update(data = hashMapOf("drawnCharactersIds" to FieldValue.arrayUnion(characterId)))
             return Result.success(Unit)
         } catch (e: Exception) {
             return Result.failure(e)

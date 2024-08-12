@@ -4,6 +4,7 @@ import com.arkivanov.decompose.ComponentContext
 import dev.gitlive.firebase.auth.FirebaseUser
 import domain.room.model.BingoRoom
 import domain.room.use_case.GetNotStartedRoomsUseCase
+import domain.room.use_case.GetRoomByIdUseCase
 import domain.room.use_case.GetRunningRoomsUseCase
 import domain.room.use_case.JoinRoomUseCase
 import domain.theme.use_case.GetAllThemesUseCase
@@ -18,8 +19,6 @@ import org.jetbrains.compose.resources.StringResource
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 import themedbingo.composeapp.generated.resources.Res
-import themedbingo.composeapp.generated.resources.auth_empty_string
-import themedbingo.composeapp.generated.resources.join_room_empty_password
 import themedbingo.composeapp.generated.resources.join_room_invalid_password
 import themedbingo.composeapp.generated.resources.unmapped_error
 import ui.navigation.Configuration
@@ -33,6 +32,7 @@ class JoinScreenComponent(
     private val firebaseUser: FirebaseUser,
     private val onPopBack: () -> Unit,
     private val onJoinRoom: (configuration: Configuration) -> Unit,
+    private val onJoinRoomAsHost: (configuration: Configuration) -> Unit,
     private val onCreateRoom: () -> Unit,
 ) : ComponentContext by componentContext, KoinComponent {
 
@@ -42,6 +42,7 @@ class JoinScreenComponent(
     private val getRunningRoomsUseCase by inject<GetRunningRoomsUseCase>()
     private val getAllThemesUseCase by inject<GetAllThemesUseCase>()
     private val joinRoomUseCase by inject<JoinRoomUseCase>()
+    private val getRoomByIdUseCase by inject<GetRoomByIdUseCase>()
 
     private val _query = MutableStateFlow("")
 
@@ -116,6 +117,15 @@ class JoinScreenComponent(
     @OptIn(ExperimentalResourceApi::class)
     private fun joinRoom(roomId: String, password: String?) {
         coroutineScope.launch {
+            getRoomByIdUseCase(roomId)
+                .onSuccess { room ->
+                    if (room.hostId == firebaseUser.uid) {
+                        onJoinRoomAsHost(Configuration.HostScreen(roomId))
+                        return@launch
+                    }
+                }
+                .onFailure { return@launch }
+
             joinRoomUseCase
                 .invoke(
                     roomId = roomId,

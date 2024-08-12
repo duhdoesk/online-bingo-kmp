@@ -6,6 +6,7 @@ import kotlinx.coroutines.flow.Flow
 
 interface BingoThemeRepository {
     suspend fun getThemeById(id: String): BingoTheme
+    fun flowThemeById(id: String): Flow<BingoTheme>
     fun getAllThemes(): Flow<List<BingoTheme>>
     fun getCharacters(themeId: String): Flow<List<Character>>
 }

@@ -1,13 +1,12 @@
 package ui.presentation.host
 
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material3.Button
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.Modifier
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import ui.presentation.common.RotateScreen
+import ui.presentation.host.event.HostScreenUIEvent
+import ui.presentation.host.screens.PortraitHostScreen
 import ui.presentation.util.WindowInfo
 
 @Composable
@@ -15,17 +14,18 @@ fun HostScreen(
     component: HostScreenComponent,
     windowInfo: WindowInfo
 ) {
-    Column(
-        verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally,
-        modifier = Modifier.fillMaxSize()
-    ) {
-        Text(component.roomId)
-        Button(
-            onClick = { component.popBack() }
-        ) {
-            Text("Back")
-        }
-    }
+    LaunchedEffect(Unit) { component.uiEvent(HostScreenUIEvent.UiLoaded) }
 
+    val uiState by component.uiState.collectAsState()
+
+    when (windowInfo.screenOrientation) {
+        WindowInfo.DeviceOrientation.Landscape ->
+            RotateScreen()
+
+        WindowInfo.DeviceOrientation.Portrait ->
+            PortraitHostScreen(
+                uiState = uiState,
+                uiEvent = { event -> component.uiEvent(event) }
+            )
+    }
 }
