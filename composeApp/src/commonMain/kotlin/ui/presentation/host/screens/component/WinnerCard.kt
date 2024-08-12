@@ -37,52 +37,48 @@ import themedbingo.composeapp.generated.resources.winner
 fun WinnerCard(
     surfaceColor: Color,
     winner: User,
+    place: Int,
     modifier: Modifier = Modifier
 ) {
     Card(modifier = modifier) {
         Surface(color = surfaceColor) {
-            Column(modifier = Modifier.padding(16.dp)) {
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                modifier = Modifier.fillMaxWidth(),
+            ) {
                 Text(
-                    text = stringResource(Res.string.winner).uppercase(),
-                    style = MaterialTheme.typography.titleMedium,
+                    text = place.toString(),
+                    style = MaterialTheme.typography.headlineLarge,
                     fontWeight = FontWeight.Bold,
-                    textAlign = TextAlign.Center,
-                    modifier = Modifier.fillMaxWidth()
+                    modifier = Modifier.padding(16.dp)
                 )
 
-                Spacer(Modifier.height(8.dp))
+                AsyncImage(
+                    model = winner.pictureUri,
+                    contentDescription = stringResource(Res.string.player_picture),
+                    contentScale = ContentScale.Crop,
+                    modifier = Modifier
+                        .padding(vertical = 16.dp)
+                        .size(80.dp)
+                        .clip(CircleShape)
+                )
 
-                Row(
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.Center,
-                    modifier = Modifier.fillMaxWidth(),
-                ) {
-                    AsyncImage(
-                        model = winner.pictureUri,
-                        contentDescription = stringResource(Res.string.player_picture),
-                        contentScale = ContentScale.Crop,
-                        modifier = Modifier
-                            .size(80.dp)
-                            .clip(CircleShape)
+                Spacer(Modifier.width(16.dp))
+
+                Column {
+                    Text(
+                        text = winner.name,
+                        style = MaterialTheme.typography.headlineSmall,
+                        fontWeight = FontWeight.SemiBold,
                     )
 
-                    Spacer(Modifier.width(16.dp))
-
-                    Column {
-                        Text(
-                            text = winner.name,
-                            style = MaterialTheme.typography.headlineSmall,
-                            fontWeight = FontWeight.SemiBold,
-                        )
-
-                        Text(
-                            text = winner.victoryMessage,
-                            style = MaterialTheme.typography.titleLarge,
-                            fontWeight = FontWeight.Normal,
-                            maxLines = 1,
-                            overflow = TextOverflow.Ellipsis,
-                        )
-                    }
+                    Text(
+                        text = winner.victoryMessage,
+                        style = MaterialTheme.typography.titleLarge,
+                        fontWeight = FontWeight.Normal,
+                        maxLines = 2,
+                        overflow = TextOverflow.Ellipsis,
+                    )
                 }
             }
         }

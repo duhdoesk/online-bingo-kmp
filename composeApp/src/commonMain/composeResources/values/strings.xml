@@ -105,6 +105,7 @@
     <string name="go_to_first">Go to First</string>
     <string name="raffled">Raffled</string>
     <string name="winner">Winner</string>
+    <string name="winners">Winners</string>
 
 
     <!--    Auth Errors -->

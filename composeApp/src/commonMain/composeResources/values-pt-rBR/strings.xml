@@ -105,6 +105,7 @@
     <string name="go_to_first">Voltar Para o Primeiro</string>
     <string name="raffled">Sorteados</string>
     <string name="winner">Vencedor</string>
+    <string name="winners">Vencedores</string>
 
 
     <!--    Auth Errors -->

@@ -20,10 +20,7 @@ fun PortraitHostScreen(
         RoomState.NOT_STARTED ->
             PortraitNotStartedHostScreen(uiState = uiState, uiEvent = { uiEvent(it) })
 
-        RoomState.RUNNING ->
-            PortraitRunningHostScreen(uiState = uiState, uiEvent = { uiEvent(it) })
-
-        RoomState.FINISHED ->
-            PortraitFinishedHostScreen(uiState = uiState, uiEvent = { uiEvent(it) })
+        else ->
+            PortraitStartedHostScreen(uiState = uiState, uiEvent = { uiEvent(it) })
     }
 }
