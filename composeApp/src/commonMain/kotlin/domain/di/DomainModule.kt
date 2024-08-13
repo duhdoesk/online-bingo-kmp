@@ -13,6 +13,8 @@ import domain.auth.use_case.DeleteAccountUseCase
 import domain.auth.use_case.SignOutUseCase
 import domain.auth.use_case.ChangePasswordWithReAuthenticationUseCase
 import domain.card.repository.CardRepository
+import domain.card.use_case.FlowCardByRoomAndUserIDUseCase
+import domain.card.use_case.SetCardByRoomAndUserIDUseCase
 import domain.character.repository.CharacterRepository
 import domain.room.repository.BingoRoomRepository
 import domain.room.use_case.CreateRoomUseCase
@@ -44,6 +46,8 @@ val domainModule = module {
 
 //    Card
     single<CardRepository> { CardRepositoryImpl(get()) }
+    factory<FlowCardByRoomAndUserIDUseCase> { FlowCardByRoomAndUserIDUseCase(get()) }
+    factory<SetCardByRoomAndUserIDUseCase> { SetCardByRoomAndUserIDUseCase(get()) }
 
 //    Character
     single<CharacterRepository> { CharacterRepositoryImpl(get()) }
