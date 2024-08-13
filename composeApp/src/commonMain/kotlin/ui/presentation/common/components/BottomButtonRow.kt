@@ -32,6 +32,7 @@ fun BottomButtonRow(
     leftText: StringResource = Res.string.back_button,
     rightText: StringResource,
     rightButtonColors: ButtonColors = ButtonDefaults.buttonColors(),
+    rightButtonHasIcon: Boolean = true,
     modifier: Modifier = Modifier,
 ) {
     Row(
@@ -60,15 +61,15 @@ fun BottomButtonRow(
             onClick = { rightClicked() },
             colors = rightButtonColors,
         ) {
-            Text(
-                text = stringResource(rightText),
-                modifier = Modifier.padding(horizontal = 6.dp)
-            )
+            Text(text = stringResource(rightText))
 
-            Icon(
-                Icons.AutoMirrored.Filled.KeyboardArrowRight,
-                contentDescription = stringResource(rightText)
-            )
+            if (rightButtonHasIcon) {
+                Icon(
+                    Icons.AutoMirrored.Filled.KeyboardArrowRight,
+                    contentDescription = stringResource(rightText),
+                    modifier = Modifier.padding(start = 6.dp),
+                )
+            }
         }
     }
 }

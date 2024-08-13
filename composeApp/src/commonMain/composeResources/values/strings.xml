@@ -15,6 +15,7 @@
     <string name="start_button">Start</string>
     <string name="finish_button">Finish</string>
     <string name="raffle_button">Raffle</string>
+    <string name="new_card_button">New Card</string>
 
 
     <!--    Generic Labels -->
@@ -24,6 +25,11 @@
     <string name="unmapped_error">We can't do that at the moment. Please, try again later.</string>
     <string name="oops">Oops!</string>
     <string name="search">Search</string>
+
+
+    <!--    Bingo Types -->
+    <string name="themed_bingo_type">Themed Bingo</string>
+    <string name="classic_bingo_type">Classic Bingo</string>
 
 
     <!--    Home Screen -->
@@ -110,6 +116,7 @@
     <string name="pop_back_dialog_body">Do you really want to leave the room? You may not be able to get back.</string>
     <string name="finish_dialog_title">Finish Bingo</string>
     <string name="finish_dialog_body">Do you really want to finish the bingo and close the room? This action is permanent and cannot be undone.</string>
+    <string name="room_info">Room Info</string>
 
 
     <!--    Auth Errors -->

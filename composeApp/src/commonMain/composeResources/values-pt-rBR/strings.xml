@@ -14,6 +14,7 @@
     <string name="start_button">Começar</string>
     <string name="finish_button">Encerrar</string>
     <string name="raffle_button">Sortear</string>
+    <string name="new_card_button">Nova Cartela</string>
 
 
     <!--    Generic Labels -->
@@ -23,6 +24,11 @@
     <string name="unmapped_error">Não conseguimos completar a operação. Por favor, tente novamente mais tarde.</string>
     <string name="oops">Oops!</string>
     <string name="search">Pesquisar</string>
+
+
+    <!--    Bingo Types -->
+    <string name="themed_bingo_type">Bingo Temático</string>
+    <string name="classic_bingo_type">Bingo Clássico</string>
 
 
     <!--    Home Screen -->
@@ -110,6 +116,7 @@
     <string name="pop_back_dialog_body">Você realmente deseja sair da sala? Você pode não conseguir retornar.</string>
     <string name="finish_dialog_title">Encerrar Bingo</string>
     <string name="finish_dialog_body">Você realmente deseja encerrar o bingo e fechar a sala? Esta ação é permanente e não pode ser desfeita.</string>
+    <string name="room_info">Dados da Sala</string>
 
 
     <!--    Auth Errors -->
