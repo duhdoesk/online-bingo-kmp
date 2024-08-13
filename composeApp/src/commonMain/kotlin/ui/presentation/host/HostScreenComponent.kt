@@ -14,12 +14,14 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 import ui.presentation.host.event.HostScreenUIEvent
 import ui.presentation.host.state.HostScreenUIState
+import ui.presentation.util.dialog.dialog_state.mutableDialogStateOf
 import util.componentCoroutineScope
 
 class HostScreenComponent(
@@ -42,14 +44,17 @@ class HostScreenComponent(
     private val _uiState = MutableStateFlow(HostScreenUIState.INITIAL)
     val uiState = _uiState.asStateFlow()
 
+    val finishRaffleDialogState = mutableDialogStateOf(null)
+    val popBackDialogState = mutableDialogStateOf(null)
+
     fun uiEvent(event: HostScreenUIEvent) {
         when (event) {
-            HostScreenUIEvent.FinishRaffle -> finishRaffle() //todo(): open confirmation dialog
+            HostScreenUIEvent.FinishRaffle -> finishRaffleDialogState.showDialog(null)
             HostScreenUIEvent.ConfirmFinishRaffle -> finishRaffle()
             HostScreenUIEvent.RaffleNextCharacter -> raffleNextCharacter()
             HostScreenUIEvent.StartRaffle -> startRaffle()
             HostScreenUIEvent.UiLoaded -> onUiLoaded()
-            HostScreenUIEvent.PopBack -> popBack() //todo(): open confirmation dialog
+            HostScreenUIEvent.PopBack -> popBackDialogState.showDialog(null)
             HostScreenUIEvent.ConfirmPopBack -> popBack()
         }
     }
@@ -74,6 +79,9 @@ class HostScreenComponent(
                     players.find { it.id == winnerId }?.run { winnersList.add(this) }
                 }
 
+                val canRaffleNext =
+                    if (room.drawnCharactersIds.size == characters.size) false else canRaffle
+
                 HostScreenUIState(
                     loading = false,
                     players = players,
@@ -85,7 +93,7 @@ class HostScreenComponent(
                     roomName = room.name,
                     bingoType = room.type,
                     bingoState = room.state,
-                    canRaffleNextCharacter = canRaffle,
+                    canRaffleNextCharacter = canRaffleNext,
                 )
             }
                 .collect { state ->
@@ -129,9 +137,10 @@ class HostScreenComponent(
 
             raffleNextCharacterUseCase(roomId = roomId, characterId = nextCharacter)
                 .onFailure { } //todo(): show error dialog
-
-            delay(1000)
-            canRaffleNextCharacter.update { true }
+                .onSuccess {
+                    delay(1000)
+                    canRaffleNextCharacter.update { true }
+                }
         }
     }
 

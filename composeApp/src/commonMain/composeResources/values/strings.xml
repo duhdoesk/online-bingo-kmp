@@ -106,6 +106,10 @@
     <string name="raffled">Raffled</string>
     <string name="winner">Winner</string>
     <string name="winners">Winners</string>
+    <string name="pop_back_dialog_title">Leave Room</string>
+    <string name="pop_back_dialog_body">Do you really want to leave the room? You may not be able to get back.</string>
+    <string name="finish_dialog_title">Finish Bingo</string>
+    <string name="finish_dialog_body">Do you really want to finish the bingo and close the room? This action is permanent and cannot be undone.</string>
 
 
     <!--    Auth Errors -->

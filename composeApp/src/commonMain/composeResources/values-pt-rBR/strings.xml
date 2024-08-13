@@ -106,6 +106,10 @@
     <string name="raffled">Sorteados</string>
     <string name="winner">Vencedor</string>
     <string name="winners">Vencedores</string>
+    <string name="pop_back_dialog_title">Sair da Sala</string>
+    <string name="pop_back_dialog_body">Você realmente deseja sair da sala? Você pode não conseguir retornar.</string>
+    <string name="finish_dialog_title">Encerrar Bingo</string>
+    <string name="finish_dialog_body">Você realmente deseja encerrar o bingo e fechar a sala? Esta ação é permanente e não pode ser desfeita.</string>
 
 
     <!--    Auth Errors -->
