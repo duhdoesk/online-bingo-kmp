@@ -2,8 +2,13 @@ package ui.presentation.room.play
 
 import com.arkivanov.decompose.ComponentContext
 import dev.gitlive.firebase.auth.FirebaseUser
+import domain.card.model.Card
+import domain.card.use_case.FlowCardByRoomAndUserIDUseCase
+import domain.card.use_case.SetCardByRoomAndUserIDUseCase
 import domain.character.model.Character
+import domain.room.model.BingoRoom
 import domain.room.use_case.FlowRoomByIdUseCase
+import domain.theme.model.BingoTheme
 import domain.theme.use_case.GetRoomCharactersUseCase
 import domain.theme.use_case.GetRoomThemeUseCase
 import domain.user.model.User
@@ -25,7 +30,7 @@ class PlayScreenComponent(
     private val firebaseUser: FirebaseUser,
     private val roomId: String,
     private val onPopBack: () -> Unit
-): ComponentContext by componentContext, KoinComponent {
+) : ComponentContext by componentContext, KoinComponent {
 
     /**
      * Single coroutine scope to handle each suspend operation
@@ -39,12 +44,13 @@ class PlayScreenComponent(
     private val getRoomPlayersUseCase by inject<GetRoomPlayersUseCase>()
     private val getRoomCharactersUseCase by inject<GetRoomCharactersUseCase>()
     private val getRoomThemeUseCase by inject<GetRoomThemeUseCase>()
+    private val flowCardByRoomAndUserIDUseCase by inject<FlowCardByRoomAndUserIDUseCase>()
     private val canCallBingo = MutableStateFlow(false)
 
     /**
      * Action Use Cases
      */
-    //todo()
+    private val setCardByRoomAndUserIDUseCase by inject<SetCardByRoomAndUserIDUseCase>()
 
     /**
      * UI State
@@ -73,6 +79,7 @@ class PlayScreenComponent(
     /**
      * Functions to handle each interaction
      */
+    @Suppress("UNCHECKED_CAST")
     private fun uiLoaded() {
         coroutineScope.launch {
             combine(
@@ -80,8 +87,16 @@ class PlayScreenComponent(
                 getRoomPlayersUseCase(roomId),
                 getRoomCharactersUseCase(roomId),
                 getRoomThemeUseCase(roomId),
+                flowCardByRoomAndUserIDUseCase(roomId, firebaseUser.uid),
                 canCallBingo,
-            ) { room, players, characters, theme, canCallBingo ->
+            ) { anies: Array<Any?> ->
+
+                val room = anies[0] as BingoRoom
+                val players = anies[1] as List<User>
+                val characters = anies[2] as List<Character>
+                val theme = anies[3] as BingoTheme
+                val card = anies[4] as Card?
+                val canCallBingo = anies[5] as Boolean
 
                 val raffledCharacters = mutableListOf<Character>()
                 room.drawnCharactersIds.forEach { characterId ->
@@ -96,10 +111,17 @@ class PlayScreenComponent(
                 val hasCalledBingo =
                     room.winners.contains(firebaseUser.uid)
 
+                val cardCharacters = mutableListOf<Character>()
+
+                card?.characters?.forEach { id ->
+                    characters.find { it.id == id }?.run { cardCharacters.add(this) }
+                }
+
                 PlayScreenUIState(
                     loading = false,
                     players = players,
                     theme = theme,
+                    characters = characters,
                     raffledCharacters = raffledCharacters.reversed(),
                     maxWinners = room.maxWinners,
                     winners = winnersList,
@@ -108,17 +130,27 @@ class PlayScreenComponent(
                     bingoState = room.state,
                     canCallBingo = canCallBingo,
                     calledBingo = hasCalledBingo,
-                    myCard = null, //todo(): fix
+                    myCard = cardCharacters,
                 )
             }
                 .collect { state ->
                     _uiState.update { state }
+                    if (state.myCard.isEmpty()) getNewCard()
                 }
         }
     }
 
     private fun getNewCard() {
-        //todo()
+        coroutineScope.launch {
+            val newCard = uiState.value.characters.shuffled().subList(0, 9).map { it.id }
+
+            setCardByRoomAndUserIDUseCase(
+                roomId = roomId,
+                userId = firebaseUser.uid,
+                charactersIDs = newCard,
+            )
+                .onFailure { exception -> println(exception) } //todo(): display error message
+        }
     }
 
     private fun callBingo() {

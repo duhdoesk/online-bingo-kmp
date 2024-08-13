@@ -24,6 +24,11 @@ data class PlayScreenUIState(
     val theme: BingoTheme?,
 
     /**
+     * Represents the list of characters in the selected theme
+     * */
+    val characters: List<Character>,
+
+    /**
      * Represents the already raffled characters
      * */
     val raffledCharacters: List<Character>,
@@ -66,13 +71,14 @@ data class PlayScreenUIState(
     /**
      * Represents the user's Bingo Card
      */
-    val myCard: Card?,
+    val myCard: List<Character>,
 ) {
     companion object {
         val INITIAL = PlayScreenUIState(
             loading = true,
             players = listOf(),
             theme = null,
+            characters = listOf(),
             raffledCharacters = listOf(),
             maxWinners = 0,
             winners = listOf(),
@@ -81,7 +87,7 @@ data class PlayScreenUIState(
             bingoState = RoomState.NOT_STARTED,
             canCallBingo = false,
             calledBingo = false,
-            myCard = null,
+            myCard = emptyList(),
         )
     }
 }

@@ -7,7 +7,28 @@ class SetCardByRoomAndUserIDUseCase(private val cardRepository: CardRepository) 
         roomId: String,
         userId: String,
         charactersIDs: List<String>,
-    ) : Result<Unit> {
-        return cardRepository.setCardByRoomAndUserID(roomId, userId, charactersIDs)
+    ): Result<Unit> {
+        return cardRepository
+            .getCardByRoomAndUserID(roomId, userId)
+            .fold(
+                onFailure = { exception ->
+                    Result.failure(exception)
+                },
+                onSuccess = { card ->
+                    if (card.characters == null) {
+                        cardRepository.addCardByRoomAndUserID(
+                            roomId,
+                            userId,
+                            charactersIDs
+                        )
+                    } else {
+                        cardRepository.updateCardByRoomAndUserID(
+                            roomId,
+                            userId,
+                            charactersIDs
+                        )
+                    }
+                }
+            )
     }
 }

@@ -13,7 +13,7 @@ class CardRepositoryImpl(
 
     private val rootCollection = firestore.collection("rooms")
 
-    override fun flowCardByRoomAndUserID(roomId: String, userId: String): Flow<Card> {
+    override fun flowCardByRoomAndUserID(roomId: String, userId: String): Flow<Card?> {
         return rootCollection
             .document(roomId)
             .collection("cards")
@@ -28,7 +28,45 @@ class CardRepositoryImpl(
             }
     }
 
-    override suspend fun setCardByRoomAndUserID(
+    override suspend fun getCardByRoomAndUserID(roomId: String, userId: String): Result<Card> {
+        try {
+            val card = rootCollection
+                .document(roomId)
+                .collection("cards")
+                .document(userId)
+                .get()
+                .let { documentSnapshot ->
+                    CardDTO(
+                        userId = documentSnapshot.id,
+                        characters = documentSnapshot.get("charactersIDs"),
+                    ).toModel()
+                }
+
+            return Result.success(card)
+        } catch (e: Exception) {
+            return Result.failure(e)
+        }
+    }
+
+    override suspend fun addCardByRoomAndUserID(
+        roomId: String,
+        userId: String,
+        charactersIDs: List<String>
+    ): Result<Unit> {
+        try {
+            rootCollection
+                .document(roomId)
+                .collection("cards")
+                .document(userId)
+                .set(data = hashMapOf("charactersIDs" to charactersIDs))
+
+            return Result.success(Unit)
+        } catch (e: Exception) {
+            return Result.failure(e)
+        }
+    }
+
+    override suspend fun updateCardByRoomAndUserID(
         roomId: String,
         userId: String,
         charactersIDs: List<String>

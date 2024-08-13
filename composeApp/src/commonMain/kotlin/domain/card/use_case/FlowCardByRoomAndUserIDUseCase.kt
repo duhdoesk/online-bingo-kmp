@@ -8,7 +8,7 @@ class FlowCardByRoomAndUserIDUseCase(private val cardRepository: CardRepository)
     operator fun invoke(
         roomId: String,
         userId: String,
-    ) : Flow<Card> {
+    ) : Flow<Card?> {
         return cardRepository.flowCardByRoomAndUserID(roomId, userId)
     }
 }
