@@ -135,4 +135,15 @@ class BingoRoomRepositoryImpl(
             return Result.failure(e)
         }
     }
+
+    override suspend fun addWinner(roomId: String, userId: String): Result<Unit> {
+        try {
+            collection
+                .document(roomId)
+                .update(data = hashMapOf("winners" to FieldValue.arrayUnion(userId)))
+            return Result.success(Unit)
+        } catch (e: Exception) {
+            return Result.failure(e)
+        }
+    }
 }

@@ -8,15 +8,16 @@ import data.theme.repository.BingoThemeRepositoryImpl
 import data.user.repository.UserRepositoryImpl
 import domain.auth.AuthService
 import domain.auth.use_case.AuthenticateUserUseCase
+import domain.auth.use_case.ChangePasswordWithReAuthenticationUseCase
 import domain.auth.use_case.CreateUserUseCase
 import domain.auth.use_case.DeleteAccountUseCase
 import domain.auth.use_case.SignOutUseCase
-import domain.auth.use_case.ChangePasswordWithReAuthenticationUseCase
 import domain.card.repository.CardRepository
 import domain.card.use_case.FlowCardByRoomAndUserIDUseCase
 import domain.card.use_case.SetCardByRoomAndUserIDUseCase
 import domain.character.repository.CharacterRepository
 import domain.room.repository.BingoRoomRepository
+import domain.room.use_case.CallBingoUseCase
 import domain.room.use_case.CreateRoomUseCase
 import domain.room.use_case.FlowRoomByIdUseCase
 import domain.room.use_case.GetNotStartedRoomsUseCase
@@ -34,8 +35,8 @@ import domain.theme.use_case.GetRoomCharactersUseCase
 import domain.theme.use_case.GetRoomThemeUseCase
 import domain.user.repository.UserRepository
 import domain.user.use_case.FlowUserUseCase
-import domain.user.use_case.GetRoomPlayersUseCase
 import domain.user.use_case.GetProfilePicturesUseCase
+import domain.user.use_case.GetRoomPlayersUseCase
 import domain.user.use_case.GetUserByIdUseCase
 import domain.user.use_case.UpdateNameUseCase
 import domain.user.use_case.UpdateUserPictureUseCase
@@ -63,6 +64,7 @@ val domainModule = module {
     factory<UpdateRoomStateUseCase> { UpdateRoomStateUseCase(get()) }
     factory<RaffleNextCharacterUseCase> { RaffleNextCharacterUseCase(get()) }
     factory<CreateRoomUseCase> { CreateRoomUseCase(get()) }
+    factory<CallBingoUseCase> { CallBingoUseCase(get()) }
 
 //    Theme
     single<BingoThemeRepository> { BingoThemeRepositoryImpl(get()) }

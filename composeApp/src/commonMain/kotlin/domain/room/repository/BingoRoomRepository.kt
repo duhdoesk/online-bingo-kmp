@@ -32,4 +32,6 @@ interface BingoRoomRepository {
     suspend fun updateRoomState(roomId: String, state: String): Result<Unit>
 
     suspend fun addRaffledCharacter(roomId: String, characterId: String) : Result<Unit>
+
+    suspend fun addWinner(roomId: String, userId: String): Result<Unit>
 }
