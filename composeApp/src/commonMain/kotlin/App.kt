@@ -18,9 +18,9 @@ import ui.presentation.change_password.ChangePasswordScreen
 import ui.presentation.create_room.CreateRoomScreen
 import ui.presentation.forgot_password.ForgotPasswordScreen
 import ui.presentation.home.HomeScreen
-import ui.presentation.host.HostScreen
+import ui.presentation.room.host.HostScreen
 import ui.presentation.join_room.JoinScreen
-import ui.presentation.play.PlayScreen
+import ui.presentation.room.play.PlayScreen
 import ui.presentation.profile.ProfileScreen
 import ui.presentation.profile.picture.EditProfilePictureScreen
 import ui.presentation.sign_in.SignInScreen

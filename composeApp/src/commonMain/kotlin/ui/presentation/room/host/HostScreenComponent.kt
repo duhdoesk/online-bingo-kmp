@@ -1,4 +1,4 @@
-package ui.presentation.host
+package ui.presentation.room.host
 
 import com.arkivanov.decompose.ComponentContext
 import domain.character.model.Character
@@ -14,13 +14,12 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.combine
-import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
-import ui.presentation.host.event.HostScreenUIEvent
-import ui.presentation.host.state.HostScreenUIState
+import ui.presentation.room.host.event.HostScreenUIEvent
+import ui.presentation.room.host.state.HostScreenUIState
 import ui.presentation.util.dialog.dialog_state.mutableDialogStateOf
 import util.componentCoroutineScope
 

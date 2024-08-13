@@ -1,4 +1,4 @@
-package ui.presentation.host.screens
+package ui.presentation.room.host.screens
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -23,7 +23,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import domain.room.model.BingoType
 import domain.room.model.RoomState
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.stringResource
@@ -31,11 +30,11 @@ import themedbingo.composeapp.generated.resources.Res
 import themedbingo.composeapp.generated.resources.back_button
 import themedbingo.composeapp.generated.resources.finish_button
 import ui.presentation.common.components.BottomButtonRow
-import ui.presentation.host.event.HostScreenUIEvent
-import ui.presentation.host.screens.component.FinishedHostScreenComposable
-import ui.presentation.host.screens.component.PlayersLazyRow
-import ui.presentation.host.screens.component.RunningHostScreenComposable
-import ui.presentation.host.state.HostScreenUIState
+import ui.presentation.room.host.event.HostScreenUIEvent
+import ui.presentation.room.host.screens.component.FinishedHostScreenComposable
+import ui.presentation.room.host.screens.component.PlayersLazyRow
+import ui.presentation.room.host.screens.component.RunningHostScreenComposable
+import ui.presentation.room.host.state.HostScreenUIState
 
 @OptIn(ExperimentalResourceApi::class)
 @Composable

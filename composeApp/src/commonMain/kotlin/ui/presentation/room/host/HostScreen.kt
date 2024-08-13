@@ -1,4 +1,4 @@
-package ui.presentation.host
+package ui.presentation.room.host
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -6,14 +6,13 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import themedbingo.composeapp.generated.resources.Res
-import themedbingo.composeapp.generated.resources.back_button
 import themedbingo.composeapp.generated.resources.finish_dialog_body
 import themedbingo.composeapp.generated.resources.finish_dialog_title
 import themedbingo.composeapp.generated.resources.pop_back_dialog_body
 import themedbingo.composeapp.generated.resources.pop_back_dialog_title
 import ui.presentation.common.RotateScreen
-import ui.presentation.host.event.HostScreenUIEvent
-import ui.presentation.host.screens.PortraitHostScreen
+import ui.presentation.room.host.event.HostScreenUIEvent
+import ui.presentation.room.host.screens.PortraitHostScreen
 import ui.presentation.util.WindowInfo
 import ui.presentation.util.dialog.GenericActionDialog
 

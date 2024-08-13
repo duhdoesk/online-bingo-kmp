@@ -1,4 +1,4 @@
-package ui.presentation.host.state
+package ui.presentation.room.host.state
 
 import domain.character.model.Character
 import domain.room.model.BingoType
@@ -58,7 +58,7 @@ data class HostScreenUIState(
     val bingoState: RoomState,
 
     /**
-     * Represents the bingo state
+     * Represents a check if the host can raffle the next character or not
      * */
     val canRaffleNextCharacter: Boolean,
 ) {

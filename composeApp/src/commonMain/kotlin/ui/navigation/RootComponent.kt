@@ -15,9 +15,9 @@ import ui.presentation.change_password.ChangePasswordScreenComponent
 import ui.presentation.create_room.CreateRoomScreenComponent
 import ui.presentation.forgot_password.ForgotPasswordScreenComponent
 import ui.presentation.home.HomeScreenComponent
-import ui.presentation.host.HostScreenComponent
+import ui.presentation.room.host.HostScreenComponent
 import ui.presentation.join_room.JoinScreenComponent
-import ui.presentation.play.PlayScreenComponent
+import ui.presentation.room.play.PlayScreenComponent
 import ui.presentation.profile.ProfileScreenComponent
 import ui.presentation.profile.picture.EditProfilePictureScreenComponent
 import ui.presentation.sign_in.SignInScreenComponent
@@ -106,7 +106,8 @@ class RootComponent(
                 PlayScreenComponent(
                     componentContext = context,
                     onPopBack = { navigation.pop() },
-                    roomId = configuration.roomId
+                    roomId = configuration.roomId,
+                    firebaseUser = firebaseUser!!,
                 )
             )
 

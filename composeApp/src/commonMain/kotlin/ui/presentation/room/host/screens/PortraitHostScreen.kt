@@ -1,10 +1,10 @@
-package ui.presentation.host.screens
+package ui.presentation.room.host.screens
 
 import androidx.compose.runtime.Composable
 import domain.room.model.RoomState
 import ui.presentation.common.LoadingScreen
-import ui.presentation.host.event.HostScreenUIEvent
-import ui.presentation.host.state.HostScreenUIState
+import ui.presentation.room.host.event.HostScreenUIEvent
+import ui.presentation.room.host.state.HostScreenUIState
 
 @Composable
 fun PortraitHostScreen(

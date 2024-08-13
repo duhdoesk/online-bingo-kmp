@@ -1,4 +1,4 @@
-package ui.presentation.host.screens.component
+package ui.presentation.room.host.screens.component
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -21,8 +21,8 @@ import org.jetbrains.compose.resources.stringResource
 import themedbingo.composeapp.generated.resources.Res
 import themedbingo.composeapp.generated.resources.raffle_button
 import themedbingo.composeapp.generated.resources.raffled
-import ui.presentation.host.event.HostScreenUIEvent
-import ui.presentation.host.state.HostScreenUIState
+import ui.presentation.room.host.event.HostScreenUIEvent
+import ui.presentation.room.host.state.HostScreenUIState
 
 @OptIn(ExperimentalResourceApi::class)
 @Composable

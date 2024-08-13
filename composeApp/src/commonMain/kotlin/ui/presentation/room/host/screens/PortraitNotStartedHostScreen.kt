@@ -1,4 +1,4 @@
-package ui.presentation.host.screens
+package ui.presentation.room.host.screens
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -33,10 +33,10 @@ import themedbingo.composeapp.generated.resources.theme_card
 import themedbingo.composeapp.generated.resources.themed_card
 import ui.presentation.common.components.BottomButtonRow
 import ui.presentation.common.components.CreateRoomHeader
-import ui.presentation.host.event.HostScreenUIEvent
-import ui.presentation.host.screens.component.PlayersLazyRow
-import ui.presentation.host.screens.component.RoomInfoCard
-import ui.presentation.host.state.HostScreenUIState
+import ui.presentation.room.host.event.HostScreenUIEvent
+import ui.presentation.room.host.screens.component.PlayersLazyRow
+import ui.presentation.room.host.screens.component.RoomInfoCard
+import ui.presentation.room.host.state.HostScreenUIState
 
 @OptIn(ExperimentalResourceApi::class)
 @Composable

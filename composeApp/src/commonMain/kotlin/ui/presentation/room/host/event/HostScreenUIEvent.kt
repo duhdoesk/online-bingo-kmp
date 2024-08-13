@@ -1,4 +1,4 @@
-package ui.presentation.host.event
+package ui.presentation.room.host.event
 
 sealed class HostScreenUIEvent {
     data object UiLoaded: HostScreenUIEvent()

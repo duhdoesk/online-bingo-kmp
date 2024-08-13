@@ -1,4 +1,4 @@
-package ui.presentation.host.screens.component
+package ui.presentation.room.host.screens.component
 
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween

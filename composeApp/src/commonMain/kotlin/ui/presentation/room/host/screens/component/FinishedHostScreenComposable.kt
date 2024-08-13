@@ -1,10 +1,7 @@
-package ui.presentation.host.screens.component
+package ui.presentation.room.host.screens.component
 
 import androidx.compose.foundation.ExperimentalFoundationApi
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
@@ -15,16 +12,12 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.stringResource
 import themedbingo.composeapp.generated.resources.Res
-import themedbingo.composeapp.generated.resources.winner
 import themedbingo.composeapp.generated.resources.winners
-import ui.presentation.host.event.HostScreenUIEvent
-import ui.presentation.host.state.HostScreenUIState
-import ui.presentation.join_room.screens.component.LazyColumnStickyHeader
+import ui.presentation.room.host.state.HostScreenUIState
 import ui.presentation.util.getRandomLightColor
 
 @OptIn(ExperimentalResourceApi::class, ExperimentalFoundationApi::class)
