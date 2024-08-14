@@ -42,7 +42,11 @@ fun FinishedRoomScreenComposable(
             }
         }
 
-        val finalWinners = uiState.winners.subList(0, uiState.maxWinners)
+        val finalWinners = if (uiState.winners.size >= uiState.maxWinners) {
+            uiState.winners.subList(0, uiState.maxWinners)
+        } else {
+            uiState.winners
+        }
 
         itemsIndexed(finalWinners) { index, winner ->
             WinnerCard(

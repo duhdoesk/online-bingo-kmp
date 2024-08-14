@@ -47,9 +47,8 @@ fun PlayersLazyRow(
         verticalAlignment = Alignment.CenterVertically,
         modifier = modifier
     ) {
-        val finalWinners = winners.subList(0, maxWinners)
 
-        itemsIndexed(finalWinners) { index, winner ->
+        itemsIndexed(winners) { index, winner ->
             LazyRowContent(
                 player = winner,
                 winner = true,
@@ -58,7 +57,7 @@ fun PlayersLazyRow(
             )
         }
 
-        val losers = players.filterNot { it in finalWinners }
+        val losers = players.filterNot { it in winners }
         items(losers) { loser ->
             LazyRowContent(loser, contentSize)
         }

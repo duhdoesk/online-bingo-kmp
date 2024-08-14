@@ -146,4 +146,15 @@ class HostScreenComponent(
     private fun popBack() {
         onPopBack()
     }
+
+    private fun canRaffleNext(
+        maxWinners: Int,
+        currentWinners: Int,
+        totalCharacters: Int,
+        currentlyRaffledCharacters: Int,
+    ): Boolean {
+        if (currentWinners >= maxWinners) return false
+        if (currentlyRaffledCharacters >= totalCharacters) return false
+        return true
+    }
 }
