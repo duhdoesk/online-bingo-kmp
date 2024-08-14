@@ -37,6 +37,7 @@ import themedbingo.composeapp.generated.resources.player_picture
 fun PlayersLazyRow(
     players: List<User>,
     winners: List<User>,
+    maxWinners: Int,
     contentSize: Dp = 70.dp,
     modifier: Modifier = Modifier,
 ) {
@@ -46,7 +47,9 @@ fun PlayersLazyRow(
         verticalAlignment = Alignment.CenterVertically,
         modifier = modifier
     ) {
-        itemsIndexed(winners) { index, winner ->
+        val finalWinners = winners.subList(0, maxWinners)
+
+        itemsIndexed(finalWinners) { index, winner ->
             LazyRowContent(
                 player = winner,
                 winner = true,
@@ -55,7 +58,7 @@ fun PlayersLazyRow(
             )
         }
 
-        val losers = players.filterNot { it in winners }
+        val losers = players.filterNot { it in finalWinners }
         items(losers) { loser ->
             LazyRowContent(loser, contentSize)
         }

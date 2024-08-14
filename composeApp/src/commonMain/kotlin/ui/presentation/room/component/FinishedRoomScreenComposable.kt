@@ -42,7 +42,9 @@ fun FinishedRoomScreenComposable(
             }
         }
 
-        itemsIndexed(uiState.winners) { index, winner ->
+        val finalWinners = uiState.winners.subList(0, uiState.maxWinners)
+
+        itemsIndexed(finalWinners) { index, winner ->
             WinnerCard(
                 surfaceColor = getRandomLightColor(),
                 winner = winner,
