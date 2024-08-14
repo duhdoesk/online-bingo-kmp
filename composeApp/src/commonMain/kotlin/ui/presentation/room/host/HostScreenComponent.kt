@@ -35,15 +35,13 @@ class HostScreenComponent(
     private val getRoomPlayersUseCase by inject<GetRoomPlayersUseCase>()
     private val getRoomCharactersUseCase by inject<GetRoomCharactersUseCase>()
     private val getRoomThemeUseCase by inject<GetRoomThemeUseCase>()
+    private val canRaffleNextCharacter = MutableStateFlow(true)
 
     private val updateRoomStateUseCase by inject<UpdateRoomStateUseCase>()
     private val raffleNextCharacterUseCase by inject<RaffleNextCharacterUseCase>()
 
     private val _uiState = MutableStateFlow(HostScreenUIState.INITIAL)
     val uiState = _uiState.asStateFlow()
-
-    private val _canRaffleNextCharacter = MutableStateFlow(true)
-    val canRaffleNextCharacter = _canRaffleNextCharacter.asStateFlow()
 
     val finishRaffleDialogState = mutableDialogStateOf(null)
     val popBackDialogState = mutableDialogStateOf(null)
@@ -67,7 +65,8 @@ class HostScreenComponent(
                 getRoomPlayersUseCase(roomId),
                 getRoomCharactersUseCase(roomId),
                 getRoomThemeUseCase(roomId),
-            ) { room, players, characters, theme ->
+                canRaffleNextCharacter,
+            ) { room, players, characters, theme, canRaffle ->
 
                 val raffledCharacters = mutableListOf<Character>()
                 room.drawnCharactersIds.forEach { characterId ->
@@ -78,6 +77,9 @@ class HostScreenComponent(
                 room.winners.forEach { winnerId ->
                     players.find { it.id == winnerId }?.run { winnersList.add(this) }
                 }
+
+                val canRaffleNext =
+                    if (room.drawnCharactersIds.size == characters.size) false else canRaffle
 
                 HostScreenUIState(
                     loading = false,
@@ -90,16 +92,11 @@ class HostScreenComponent(
                     roomName = room.name,
                     bingoType = room.type,
                     bingoState = room.state,
+                    canRaffleNextCharacter = canRaffleNext,
                 )
             }
                 .collect { state ->
                     _uiState.update { state }
-                    canRaffleNext(
-                        maxWinners = state.maxWinners,
-                        currentWinners = state.winners.size,
-                        totalCharacters = state.characters.size,
-                        currentlyRaffledCharacters = state.raffledCharacters.size,
-                    )
                 }
         }
     }
@@ -127,7 +124,7 @@ class HostScreenComponent(
 
     private fun raffleNextCharacter() {
         coroutineScope.launch {
-            _canRaffleNextCharacter.update { false }
+            canRaffleNextCharacter.update { false }
 
             val nextCharacter = uiState
                 .value
@@ -139,6 +136,10 @@ class HostScreenComponent(
 
             raffleNextCharacterUseCase(roomId = roomId, characterId = nextCharacter)
                 .onFailure { } //todo(): show error dialog
+                .onSuccess {
+                    delay(1000)
+                    canRaffleNextCharacter.update { true }
+                }
         }
     }
 
@@ -151,20 +152,9 @@ class HostScreenComponent(
         currentWinners: Int,
         totalCharacters: Int,
         currentlyRaffledCharacters: Int,
-    ) {
-        coroutineScope.launch {
-            if (currentWinners >= maxWinners) {
-                _canRaffleNextCharacter.update { false }
-                return@launch
-            }
-
-            if (currentlyRaffledCharacters >= totalCharacters) {
-                _canRaffleNextCharacter.update { false }
-                return@launch
-            }
-
-            delay(500)
-            _canRaffleNextCharacter.update { true }
-        }
+    ): Boolean {
+        if (currentWinners >= maxWinners) return false
+        if (currentlyRaffledCharacters >= totalCharacters) return false
+        return true
     }
 }

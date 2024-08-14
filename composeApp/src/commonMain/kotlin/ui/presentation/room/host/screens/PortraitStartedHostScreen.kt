@@ -44,7 +44,6 @@ import ui.presentation.room.host.state.HostScreenUIState
 @Composable
 fun PortraitStartedHostScreen(
     uiState: HostScreenUIState,
-    canRaffleNextCharacter: Boolean,
     uiEvent: (event: HostScreenUIEvent) -> Unit,
 ) {
     Scaffold(
@@ -82,7 +81,7 @@ fun PortraitStartedHostScreen(
                         Button(
                             onClick = { uiEvent(HostScreenUIEvent.RaffleNextCharacter) },
                             modifier = Modifier.width(200.dp),
-                            enabled = canRaffleNextCharacter,
+                            enabled = uiState.canRaffleNextCharacter,
                         ) {
                             Text(stringResource(Res.string.raffle_button))
                         }

@@ -25,7 +25,6 @@ fun HostScreen(
     LaunchedEffect(Unit) { component.uiEvent(HostScreenUIEvent.UiLoaded) }
 
     val uiState by component.uiState.collectAsState()
-    val canRaffleNextCharacter by component.canRaffleNextCharacter.collectAsState()
     val finishRaffleDialogState = component.finishRaffleDialogState
     val popBackDialogState = component.popBackDialogState
 
@@ -36,7 +35,6 @@ fun HostScreen(
         WindowInfo.DeviceOrientation.Portrait ->
             PortraitHostScreen(
                 uiState = uiState,
-                canRaffleNextCharacter = canRaffleNextCharacter,
                 uiEvent = { event -> component.uiEvent(event) }
             )
     }

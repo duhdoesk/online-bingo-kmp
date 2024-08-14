@@ -9,7 +9,6 @@ import ui.presentation.room.host.state.HostScreenUIState
 @Composable
 fun PortraitHostScreen(
     uiState: HostScreenUIState,
-    canRaffleNextCharacter: Boolean,
     uiEvent: (event: HostScreenUIEvent) -> Unit,
 ) {
     if (uiState.loading) {
@@ -22,9 +21,6 @@ fun PortraitHostScreen(
             PortraitNotStartedHostScreen(uiState = uiState, uiEvent = { uiEvent(it) })
 
         else ->
-            PortraitStartedHostScreen(
-                uiState = uiState,
-                canRaffleNextCharacter = canRaffleNextCharacter,
-                uiEvent = { uiEvent(it) })
+            PortraitStartedHostScreen(uiState = uiState, uiEvent = { uiEvent(it) })
     }
 }
