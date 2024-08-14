@@ -147,6 +147,7 @@ fun PortraitCreateRoomScreen(
                     leftClicked = { event(CreateScreenEvent.PopBack) },
                     rightClicked = { event(CreateScreenEvent.CreateRoom) },
                     rightText = Res.string.create_button,
+                    rightEnabled = isFormOk,
                     modifier = Modifier.padding(vertical = 8.dp, horizontal = 16.dp),
                 )
             }
