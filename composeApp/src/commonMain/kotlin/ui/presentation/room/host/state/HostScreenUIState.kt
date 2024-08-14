@@ -58,10 +58,10 @@ data class HostScreenUIState(
      * */
     override val bingoState: RoomState,
 
-    /**
-     * Represents a check if the host can raffle the next character or not
-     * */
-    val canRaffleNextCharacter: Boolean,
+//    /**
+//     * Represents a check if the host can raffle the next character or not
+//     * */
+//    val canRaffleNextCharacter: Boolean,
 ): RoomScreenUIState(
     loading,
     players,
@@ -86,7 +86,7 @@ data class HostScreenUIState(
             roomName = "",
             bingoType = BingoType.THEMED,
             bingoState = RoomState.NOT_STARTED,
-            canRaffleNextCharacter = true,
+//            canRaffleNextCharacter = true,
         )
     }
 }
