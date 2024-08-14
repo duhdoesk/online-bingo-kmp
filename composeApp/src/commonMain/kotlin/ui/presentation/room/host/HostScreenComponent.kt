@@ -85,7 +85,7 @@ class HostScreenComponent(
                     loading = false,
                     players = players,
                     theme = theme,
-                    themeCharacters = characters,
+                    characters = characters,
                     raffledCharacters = raffledCharacters.reversed(),
                     maxWinners = room.maxWinners,
                     winners = winnersList,
@@ -128,7 +128,7 @@ class HostScreenComponent(
 
             val nextCharacter = uiState
                 .value
-                .themeCharacters
+                .characters
                 .map { character -> character.id }
                 .filterNot { id -> id in uiState.value.raffledCharacters.map { character -> character.id } }
                 .shuffled()

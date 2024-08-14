@@ -15,6 +15,7 @@
     <string name="finish_button">Encerrar</string>
     <string name="raffle_button">Sortear</string>
     <string name="new_card_button">Nova Cartela</string>
+    <string name="call_bingo_button">Bingo!</string>
 
 
     <!--    Generic Labels -->

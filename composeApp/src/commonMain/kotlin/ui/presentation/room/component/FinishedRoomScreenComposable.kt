@@ -1,4 +1,4 @@
-package ui.presentation.room.host.screens.component
+package ui.presentation.room.component
 
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.PaddingValues
@@ -17,13 +17,14 @@ import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.stringResource
 import themedbingo.composeapp.generated.resources.Res
 import themedbingo.composeapp.generated.resources.winners
-import ui.presentation.room.host.state.HostScreenUIState
+import ui.presentation.room.RoomScreenUIState
+import ui.presentation.room.host.screens.component.WinnerCard
 import ui.presentation.util.getRandomLightColor
 
 @OptIn(ExperimentalResourceApi::class, ExperimentalFoundationApi::class)
 @Composable
-fun FinishedHostScreenComposable(
-    uiState: HostScreenUIState,
+fun FinishedRoomScreenComposable(
+    uiState: RoomScreenUIState,
     modifier: Modifier = Modifier,
 ) {
     LazyColumn(

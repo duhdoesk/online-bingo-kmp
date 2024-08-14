@@ -1,4 +1,4 @@
-package ui.presentation.room.host.screens.component
+package ui.presentation.room.component
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Canvas

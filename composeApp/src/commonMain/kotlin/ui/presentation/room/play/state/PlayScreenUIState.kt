@@ -1,62 +1,62 @@
 package ui.presentation.room.play.state
 
-import domain.card.model.Card
 import domain.character.model.Character
 import domain.room.model.BingoType
 import domain.room.model.RoomState
 import domain.theme.model.BingoTheme
 import domain.user.model.User
+import ui.presentation.room.RoomScreenUIState
 
 data class PlayScreenUIState(
     /**
      * Represents the screen loading state
      * */
-    val loading: Boolean,
+    override val loading: Boolean,
 
     /**
      * Represents the list of players that joined the room
      * */
-    val players: List<User>,
+    override val players: List<User>,
 
     /**
      * Represents the theme of the bingo
      * */
-    val theme: BingoTheme?,
+    override val theme: BingoTheme?,
 
     /**
      * Represents the list of characters in the selected theme
      * */
-    val characters: List<Character>,
+    override val characters: List<Character>,
 
     /**
      * Represents the already raffled characters
      * */
-    val raffledCharacters: List<Character>,
+    override val raffledCharacters: List<Character>,
 
     /**
      * Represents the max number of possible winners
      * */
-    val maxWinners: Int,
+    override val maxWinners: Int,
 
     /**
      * Represents the list of winners
      * */
-    val winners: List<User>,
+    override val winners: List<User>,
 
     /**
      * Represents the name of the room
      * */
-    val roomName: String,
+    override val roomName: String,
 
     /**
      * Represents the bingo type
      * */
-    val bingoType: BingoType,
+    override val bingoType: BingoType,
 
     /**
      * Represents the bingo state
      * */
-    val bingoState: RoomState,
+    override val bingoState: RoomState,
 
     /**
      * Represents a check if the user is eligible to call bingo or not
@@ -72,6 +72,17 @@ data class PlayScreenUIState(
      * Represents the user's Bingo Card
      */
     val myCard: List<Character>,
+) : RoomScreenUIState(
+    loading,
+    players,
+    theme,
+    characters,
+    raffledCharacters,
+    maxWinners,
+    winners,
+    roomName,
+    bingoType,
+    bingoState,
 ) {
     companion object {
         val INITIAL = PlayScreenUIState(

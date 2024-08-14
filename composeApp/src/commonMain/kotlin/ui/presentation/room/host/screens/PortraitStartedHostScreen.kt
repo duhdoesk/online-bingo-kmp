@@ -1,5 +1,6 @@
 package ui.presentation.room.host.screens
 
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.consumeWindowInsets
@@ -9,10 +10,12 @@ import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.sizeIn
 import androidx.compose.foundation.layout.systemBarsPadding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.KeyboardArrowLeft
+import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -29,11 +32,12 @@ import org.jetbrains.compose.resources.stringResource
 import themedbingo.composeapp.generated.resources.Res
 import themedbingo.composeapp.generated.resources.back_button
 import themedbingo.composeapp.generated.resources.finish_button
+import themedbingo.composeapp.generated.resources.raffle_button
 import ui.presentation.common.components.BottomButtonRow
 import ui.presentation.room.host.event.HostScreenUIEvent
-import ui.presentation.room.host.screens.component.FinishedHostScreenComposable
-import ui.presentation.room.host.screens.component.PlayersLazyRow
-import ui.presentation.room.host.screens.component.RunningHostScreenComposable
+import ui.presentation.room.component.FinishedRoomScreenComposable
+import ui.presentation.room.component.PlayersLazyRow
+import ui.presentation.room.component.RunningRoomScreenComposable
 import ui.presentation.room.host.state.HostScreenUIState
 
 @OptIn(ExperimentalResourceApi::class)
@@ -61,13 +65,27 @@ fun PortraitStartedHostScreen(
                 )
 
                 if (uiState.bingoState == RoomState.RUNNING) {
-                    RunningHostScreenComposable(
-                        uiState = uiState,
-                        uiEvent = { uiEvent(it) },
+                    Column(
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                        verticalArrangement = Arrangement.Center,
                         modifier = Modifier
                             .weight(1f)
                             .verticalScroll(rememberScrollState())
-                    )
+                    ) {
+                        RunningRoomScreenComposable(
+                            uiState = uiState,
+                            modifier = Modifier,
+                        )
+
+                        Button(
+                            onClick = { uiEvent(HostScreenUIEvent.RaffleNextCharacter) },
+                            modifier = Modifier.width(200.dp),
+                            enabled = uiState.canRaffleNextCharacter,
+                        ) {
+                            Text(stringResource(Res.string.raffle_button))
+                        }
+                    }
+
 
                     BottomButtonRow(
                         leftEnabled = true,
@@ -84,7 +102,7 @@ fun PortraitStartedHostScreen(
                             .fillMaxWidth()
                     )
                 } else {
-                    FinishedHostScreenComposable(
+                    FinishedRoomScreenComposable(
                         uiState = uiState,
                         modifier = Modifier
                             .weight(1f),

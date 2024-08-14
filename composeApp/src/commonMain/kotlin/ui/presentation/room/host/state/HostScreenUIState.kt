@@ -5,69 +5,81 @@ import domain.room.model.BingoType
 import domain.room.model.RoomState
 import domain.theme.model.BingoTheme
 import domain.user.model.User
+import ui.presentation.room.RoomScreenUIState
 
 data class HostScreenUIState(
     /**
      * Represents the screen loading state
      * */
-    val loading: Boolean,
+    override val loading: Boolean,
 
     /**
      * Represents the list of players that joined the room
      * */
-    val players: List<User>,
+    override val players: List<User>,
 
     /**
      * Represents the theme of the bingo
      * */
-    val theme: BingoTheme?,
+    override val theme: BingoTheme?,
 
     /**
      * Represents the full list of characters of the selected theme
      * */
-    val themeCharacters: List<Character>,
+    override val characters: List<Character>,
 
     /**
      * Represents the already raffled characters
      * */
-    val raffledCharacters: List<Character>,
+    override val raffledCharacters: List<Character>,
 
     /**
      * Represents the max number of possible winners
      * */
-    val maxWinners: Int,
+    override val maxWinners: Int,
 
     /**
      * Represents the list of winners
      * */
-    val winners: List<User>,
+    override val winners: List<User>,
 
     /**
      * Represents the name of the room
      * */
-    val roomName: String,
+    override val roomName: String,
 
     /**
      * Represents the bingo type
      * */
-    val bingoType: BingoType,
+    override val bingoType: BingoType,
 
     /**
      * Represents the bingo state
      * */
-    val bingoState: RoomState,
+    override val bingoState: RoomState,
 
     /**
      * Represents a check if the host can raffle the next character or not
      * */
     val canRaffleNextCharacter: Boolean,
+): RoomScreenUIState(
+    loading,
+    players,
+    theme,
+    characters,
+    raffledCharacters,
+    maxWinners,
+    winners,
+    roomName,
+    bingoType,
+    bingoState,
 ) {
     companion object {
         val INITIAL = HostScreenUIState(
             loading = true,
             players = listOf(),
             theme = null,
-            themeCharacters = listOf(),
+            characters = listOf(),
             raffledCharacters = listOf(),
             maxWinners = 0,
             winners = listOf(),

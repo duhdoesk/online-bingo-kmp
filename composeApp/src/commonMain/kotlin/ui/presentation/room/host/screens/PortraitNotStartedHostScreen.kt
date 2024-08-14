@@ -34,8 +34,8 @@ import themedbingo.composeapp.generated.resources.themed_card
 import ui.presentation.common.components.BottomButtonRow
 import ui.presentation.common.components.CreateRoomHeader
 import ui.presentation.room.host.event.HostScreenUIEvent
-import ui.presentation.room.host.screens.component.PlayersLazyRow
-import ui.presentation.room.host.screens.component.RoomInfoCard
+import ui.presentation.room.component.PlayersLazyRow
+import ui.presentation.room.component.RoomInfoCard
 import ui.presentation.room.host.state.HostScreenUIState
 
 @OptIn(ExperimentalResourceApi::class)

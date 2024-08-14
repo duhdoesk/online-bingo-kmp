@@ -24,7 +24,7 @@ import org.jetbrains.compose.resources.ExperimentalResourceApi
 import themedbingo.composeapp.generated.resources.Res
 import themedbingo.composeapp.generated.resources.new_card_button
 import ui.presentation.common.components.BottomButtonRow
-import ui.presentation.room.host.screens.component.PlayersLazyRow
+import ui.presentation.room.component.PlayersLazyRow
 import ui.presentation.room.play.event.PlayScreenUIEvent
 import ui.presentation.room.play.screens.component.HorizontalPagerIndicator
 import ui.presentation.room.play.screens.component.NotStartedPlayScreenHorizontalPager

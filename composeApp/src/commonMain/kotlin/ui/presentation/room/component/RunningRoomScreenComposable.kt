@@ -1,13 +1,9 @@
-package ui.presentation.room.host.screens.component
+package ui.presentation.room.component
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
-import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -19,16 +15,13 @@ import androidx.compose.ui.unit.dp
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.stringResource
 import themedbingo.composeapp.generated.resources.Res
-import themedbingo.composeapp.generated.resources.raffle_button
 import themedbingo.composeapp.generated.resources.raffled
-import ui.presentation.room.host.event.HostScreenUIEvent
-import ui.presentation.room.host.state.HostScreenUIState
+import ui.presentation.room.RoomScreenUIState
 
 @OptIn(ExperimentalResourceApi::class)
 @Composable
-fun RunningHostScreenComposable(
-    uiState: HostScreenUIState,
-    uiEvent: (uiEvent: HostScreenUIEvent) -> Unit,
+fun RunningRoomScreenComposable(
+    uiState: RoomScreenUIState,
     modifier: Modifier = Modifier,
 ) {
     Column(
@@ -37,7 +30,7 @@ fun RunningHostScreenComposable(
         modifier = modifier,
     ) {
         Text(
-            text = "${stringResource(Res.string.raffled)}: ${uiState.raffledCharacters.size} / ${uiState.themeCharacters.size}",
+            text = "${stringResource(Res.string.raffled)}: ${uiState.raffledCharacters.size} / ${uiState.characters.size}",
             style = MaterialTheme.typography.titleLarge,
             fontWeight = FontWeight.Normal,
             textAlign = TextAlign.Center,
@@ -48,15 +41,5 @@ fun RunningHostScreenComposable(
             characters = uiState.raffledCharacters,
             modifier = Modifier.fillMaxWidth(),
         )
-
-        Spacer(Modifier.height(16.dp))
-
-        Button(
-            onClick = { uiEvent(HostScreenUIEvent.RaffleNextCharacter) },
-            modifier = Modifier.width(200.dp),
-            enabled = uiState.canRaffleNextCharacter,
-        ) {
-            Text(stringResource(Res.string.raffle_button))
-        }
     }
 }
