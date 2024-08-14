@@ -59,6 +59,7 @@ fun PortraitStartedPlayScreen(
                 PlayersLazyRow(
                     players = uiState.players.reversed(),
                     winners = uiState.winners,
+                    maxWinners = uiState.maxWinners,
                     modifier = Modifier.fillMaxWidth(),
                 )
 
