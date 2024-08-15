@@ -38,6 +38,13 @@
     <string name="new_room">Nova Sala</string>
     <string name="join_room">Entrar na Sala</string>
     <string name="profile">Perfil</string>
+    <string name="classic_bingo">Bingo Clássico</string>
+    <string name="themed_bingo">Bingo Temático</string>
+    <string name="classic_bingo_desc">Jogue o bingo tradicional, com cartelas de 25 ou 15 números (tômbola).</string>
+    <string name="themed_bingo_desc">Jogue um bingo original e diferente, com diversos temas e cartelas de 9 personagens.</string>
+    <string name="hello">Olá</string>
+    <string name="choose_your_game">O que vamos jogar agora?</string>
+    <string name="home_screen">Início</string>
 
 
     <!--    Create Room Screen -->

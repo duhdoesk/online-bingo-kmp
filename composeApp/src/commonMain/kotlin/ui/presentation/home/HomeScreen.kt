@@ -1,6 +1,10 @@
 package ui.presentation.home
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import ui.presentation.common.RotateScreen
 import ui.presentation.home.event.HomeScreenEvent
 import ui.presentation.home.screens.LandscapeHomeScreen
 import ui.presentation.home.screens.PortraitHomeScreen
@@ -11,21 +15,15 @@ fun HomeScreen(
     component: HomeScreenComponent,
     windowInfo: WindowInfo
 ) {
+    LaunchedEffect(Unit) { component.uiEvent(HomeScreenEvent.UILoaded) }
+
+    val uiState by component.uiState.collectAsState()
+
     when (windowInfo.screenOrientation) {
         WindowInfo.DeviceOrientation.Landscape ->
-            LandscapeHomeScreen{ event ->
-                when (event) {
-                    is HomeScreenEvent.Navigate ->
-                        component.navigate(event.configuration)
-                }
-            }
+            RotateScreen()
 
         else ->
-            PortraitHomeScreen{ event ->
-                when (event) {
-                    is HomeScreenEvent.Navigate ->
-                        component.navigate(event.configuration)
-                }
-            }
+            PortraitHomeScreen(uiState) { event -> component.uiEvent(event) }
     }
 }

@@ -59,6 +59,7 @@ class RootComponent(
             Configuration.HomeScreen -> Child.HomeScreen(
                 HomeScreenComponent(
                     componentContext = context,
+                    firebaseUser = firebaseUser!!,
                     onNavigate = { receivedConfig ->
                         navigation.pushNew(configuration = receivedConfig)
                     }
