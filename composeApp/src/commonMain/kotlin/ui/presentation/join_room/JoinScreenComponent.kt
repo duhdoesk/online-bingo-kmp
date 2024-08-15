@@ -31,6 +31,7 @@ import util.componentCoroutineScope
 class JoinScreenComponent(
     componentContext: ComponentContext,
     private val firebaseUser: FirebaseUser,
+    private val bingoType: BingoType,
     private val onPopBack: () -> Unit,
     private val onJoinRoom: (configuration: Configuration) -> Unit,
     private val onJoinRoomAsHost: (configuration: Configuration) -> Unit,
@@ -78,8 +79,8 @@ class JoinScreenComponent(
     private fun uiLoaded() {
         coroutineScope.launch {
             combine(
-                getNotStartedRoomsUseCase(BingoType.THEMED),
-                getRunningRoomsUseCase(BingoType.THEMED),
+                getNotStartedRoomsUseCase(bingoType),
+                getRunningRoomsUseCase(bingoType),
                 _query,
             ) { notStarted, running, query ->
 

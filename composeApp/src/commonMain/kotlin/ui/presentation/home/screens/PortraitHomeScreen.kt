@@ -29,6 +29,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
+import domain.room.model.BingoType
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.stringResource
 import themedbingo.composeapp.generated.resources.Res
@@ -109,7 +110,7 @@ fun PortraitHomeScreen(
                         icon = Res.drawable.smiling_squirrel,
                         title = Res.string.themed_bingo,
                         body = Res.string.themed_bingo_desc,
-                        onClick = { event(HomeScreenEvent.Navigate(Configuration.JoinScreen)) },
+                        onClick = { event(HomeScreenEvent.Navigate(Configuration.JoinScreen(BingoType.THEMED))) },
                         modifier = Modifier.padding(horizontal = 16.dp),
                     )
 
@@ -120,7 +121,7 @@ fun PortraitHomeScreen(
                         icon = Res.drawable.bingo_balls,
                         title = Res.string.classic_bingo,
                         body = Res.string.classic_bingo_desc,
-                        onClick = { event(HomeScreenEvent.Navigate(Configuration.JoinScreen)) }, //todo(): refactor
+                        onClick = { event(HomeScreenEvent.Navigate(Configuration.JoinScreen(BingoType.CLASSIC))) }, //todo(): refactor
                         modifier = Modifier.padding(horizontal = 16.dp),
                     )
                 }

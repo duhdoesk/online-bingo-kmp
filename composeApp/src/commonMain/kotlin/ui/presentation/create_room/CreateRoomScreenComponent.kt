@@ -21,6 +21,7 @@ import util.componentCoroutineScope
 class CreateRoomScreenComponent(
     componentContext: ComponentContext,
     private val firebaseUser: FirebaseUser,
+    private val bingoType: BingoType,
     private val onPopBack: () -> Unit,
     private val onCreateRoom: (configuration: Configuration) -> Unit,
 ) : ComponentContext by componentContext, KoinComponent {
@@ -39,11 +40,21 @@ class CreateRoomScreenComponent(
 
     private val _uiState = MutableStateFlow(CreateScreenUiState())
     val uiState = _uiState
-        .onEach {
-            _isFormOk.update {
-                !((_uiState.value.name.length < 4 || _uiState.value.themeId == "") ||
-                        (_uiState.value.locked && _uiState.value.password.length < 4))
+        .onEach { state ->
+            if (state.name.length < 4) {
+                _isFormOk.update { false }
+                return@onEach
             }
+            if (bingoType == BingoType.THEMED && state.themeId == "") {
+                _isFormOk.update { false }
+                return@onEach
+            }
+            if (state.locked && state.password.length < 4) {
+                _isFormOk.update { false }
+                return@onEach
+            }
+
+            _isFormOk.update { true }
         }
         .stateIn(
             coroutineScope,
@@ -58,7 +69,7 @@ class CreateRoomScreenComponent(
         val errors = mutableListOf<String>()
 
         if (name.length in 1..3) {
-            errors.add("The name must be at least 4 characters.") // refactor later
+            errors.add("The name must be at least 4 characters.") //todo(): extract string res
         }
 
         _uiState.update {
@@ -83,7 +94,7 @@ class CreateRoomScreenComponent(
         val errors = mutableListOf<String>()
 
         if (password.length in 1..3) {
-            errors.add("The password must be at least 4 characters.") // refactor later
+            errors.add("The password must be at least 4 characters.") //todo(): extract string res
         }
 
         _uiState.update {
@@ -119,7 +130,7 @@ class CreateRoomScreenComponent(
                     locked = locked,
                     password = password,
                     maxWinners = maxWinners,
-                    type = BingoType.THEMED,
+                    type = bingoType,
                     themeId = themeId
                 )
                     .onSuccess { roomId -> onCreateRoom(Configuration.HostScreen(roomId = roomId)) }

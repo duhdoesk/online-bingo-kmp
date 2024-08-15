@@ -6,7 +6,6 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import ui.presentation.common.RotateScreen
 import ui.presentation.home.event.HomeScreenEvent
-import ui.presentation.home.screens.LandscapeHomeScreen
 import ui.presentation.home.screens.PortraitHomeScreen
 import ui.presentation.util.WindowInfo
 

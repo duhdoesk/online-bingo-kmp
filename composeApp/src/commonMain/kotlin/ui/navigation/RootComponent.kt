@@ -73,10 +73,11 @@ class RootComponent(
                 )
             )
 
-            Configuration.CreateScreen -> Child.CreateScreen(
+            is Configuration.CreateScreen -> Child.CreateScreen(
                 CreateRoomScreenComponent(
                     componentContext = context,
                     firebaseUser = firebaseUser!!,
+                    bingoType = configuration.bingoType,
                     onPopBack = { navigation.pop() },
                     onCreateRoom = { receivedConfig ->
                         navigation.replaceCurrent(configuration = receivedConfig)
@@ -92,14 +93,15 @@ class RootComponent(
                 )
             )
 
-            Configuration.JoinScreen -> Child.JoinScreen(
+            is Configuration.JoinScreen -> Child.JoinScreen(
                 JoinScreenComponent(
                     componentContext = context,
                     firebaseUser = firebaseUser!!,
+                    bingoType = configuration.bingoType,
                     onPopBack = { navigation.pop() },
                     onJoinRoom = { config -> navigation.replaceCurrent(configuration = config) },
                     onJoinRoomAsHost = { config -> navigation.replaceCurrent(configuration = config) },
-                    onCreateRoom = { navigation.replaceCurrent(Configuration.CreateScreen)}
+                    onCreateRoom = { navigation.replaceCurrent(Configuration.CreateScreen(configuration.bingoType))}
                 )
             )
 
