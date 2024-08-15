@@ -10,14 +10,13 @@ import domain.room.repository.BingoRoomRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
-class BingoRoomRepositoryImpl(
-    private val firestore: FirebaseFirestore
-) : BingoRoomRepository {
+class BingoRoomRepositoryImpl(firestore: FirebaseFirestore) : BingoRoomRepository {
 
     private val collection = firestore.collection("rooms")
 
-    override fun getRooms(): Flow<List<BingoRoom>> =
+    override fun getRooms(bingoType: BingoType): Flow<List<BingoRoom>> =
         collection
+            .where { "type" equalTo bingoType.name }
             .snapshots
             .map { querySnapshot ->
                 querySnapshot.documents.map { documentSnapshot ->
@@ -25,9 +24,10 @@ class BingoRoomRepositoryImpl(
                 }
             }
 
-    override fun getNotStartedRooms(): Flow<List<BingoRoom>> =
+    override fun getNotStartedRooms(bingoType: BingoType): Flow<List<BingoRoom>> =
         collection
             .where { "state" equalTo RoomState.NOT_STARTED.name }
+            .where { "type" equalTo bingoType.name }
             .snapshots
             .map { querySnapshot ->
                 querySnapshot.documents.map { documentSnapshot ->
@@ -35,9 +35,10 @@ class BingoRoomRepositoryImpl(
                 }
             }
 
-    override fun getRunningRooms(): Flow<List<BingoRoom>> =
+    override fun getRunningRooms(bingoType: BingoType): Flow<List<BingoRoom>> =
         collection
             .where { "state" equalTo RoomState.RUNNING.name }
+            .where { "type" equalTo bingoType.name }
             .snapshots
             .map { querySnapshot ->
                 querySnapshot.documents.map { documentSnapshot ->

@@ -3,6 +3,7 @@ package ui.presentation.join_room
 import com.arkivanov.decompose.ComponentContext
 import dev.gitlive.firebase.auth.FirebaseUser
 import domain.room.model.BingoRoom
+import domain.room.model.BingoType
 import domain.room.use_case.GetNotStartedRoomsUseCase
 import domain.room.use_case.GetRoomByIdUseCase
 import domain.room.use_case.GetRunningRoomsUseCase
@@ -77,8 +78,8 @@ class JoinScreenComponent(
     private fun uiLoaded() {
         coroutineScope.launch {
             combine(
-                getNotStartedRoomsUseCase(),
-                getRunningRoomsUseCase(),
+                getNotStartedRoomsUseCase(BingoType.THEMED),
+                getRunningRoomsUseCase(BingoType.THEMED),
                 _query,
             ) { notStarted, running, query ->
 

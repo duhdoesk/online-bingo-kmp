@@ -1,17 +1,15 @@
 package domain.room.repository
 
-import dev.gitlive.firebase.firestore.DocumentSnapshot
 import domain.room.model.BingoRoom
 import domain.room.model.BingoType
-import domain.room.model.RoomState
 import kotlinx.coroutines.flow.Flow
 
 interface BingoRoomRepository {
-    fun getRooms(): Flow<List<BingoRoom>>
+    fun getRooms(bingoType: BingoType): Flow<List<BingoRoom>>
 
-    fun getNotStartedRooms(): Flow<List<BingoRoom>>
+    fun getNotStartedRooms(bingoType: BingoType): Flow<List<BingoRoom>>
 
-    fun getRunningRooms(): Flow<List<BingoRoom>>
+    fun getRunningRooms(bingoType: BingoType): Flow<List<BingoRoom>>
 
     fun flowRoomById(id: String): Flow<BingoRoom>
 
