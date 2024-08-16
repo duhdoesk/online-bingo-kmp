@@ -15,11 +15,13 @@ import ui.presentation.change_password.ChangePasswordScreenComponent
 import ui.presentation.create_room.CreateRoomScreenComponent
 import ui.presentation.forgot_password.ForgotPasswordScreenComponent
 import ui.presentation.home.HomeScreenComponent
-import ui.presentation.room.host.HostScreenComponent
+import ui.presentation.room.themed.host.HostScreenComponent
 import ui.presentation.join_room.JoinScreenComponent
 import ui.presentation.room.play.PlayScreenComponent
 import ui.presentation.profile.ProfileScreenComponent
 import ui.presentation.profile.picture.EditProfilePictureScreenComponent
+import ui.presentation.room.classic.host.ClassicHostScreenComponent
+import ui.presentation.room.classic.play.ClassicPlayScreenComponent
 import ui.presentation.sign_in.SignInScreenComponent
 import ui.presentation.sign_up.SignUpScreenComponent
 import ui.presentation.themes.ThemesScreenComponent
@@ -100,7 +102,6 @@ class RootComponent(
                     bingoType = configuration.bingoType,
                     onPopBack = { navigation.pop() },
                     onJoinRoom = { config -> navigation.replaceCurrent(configuration = config) },
-                    onJoinRoomAsHost = { config -> navigation.replaceCurrent(configuration = config) },
                     onCreateRoom = { navigation.replaceCurrent(Configuration.CreateScreen(configuration.bingoType))}
                 )
             )
@@ -167,6 +168,18 @@ class RootComponent(
                 ChangePasswordScreenComponent(
                     componentContext = context,
                     onPopBack = { navigation.pop() },
+                )
+            )
+
+            is Configuration.ClassicHostScreen -> Child.ClassicHostScreen(
+                ClassicHostScreenComponent(
+                    componentContext = context,
+                )
+            )
+
+            is Configuration.ClassicPlayScreen -> Child.ClassicPlayScreen(
+                ClassicPlayScreenComponent(
+                    componentContext = context,
                 )
             )
         }

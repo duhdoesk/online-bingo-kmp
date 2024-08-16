@@ -34,7 +34,6 @@ class JoinScreenComponent(
     private val bingoType: BingoType,
     private val onPopBack: () -> Unit,
     private val onJoinRoom: (configuration: Configuration) -> Unit,
-    private val onJoinRoomAsHost: (configuration: Configuration) -> Unit,
     private val onCreateRoom: () -> Unit,
 ) : ComponentContext by componentContext, KoinComponent {
 
@@ -122,11 +121,14 @@ class JoinScreenComponent(
             getRoomByIdUseCase(roomId)
                 .onSuccess { room ->
                     if (room.hostId == firebaseUser.uid) {
-                        onJoinRoomAsHost(Configuration.HostScreen(roomId))
+                        when (bingoType) {
+                            BingoType.CLASSIC -> onJoinRoom(Configuration.ClassicHostScreen(roomId))
+                            BingoType.THEMED -> onJoinRoom(Configuration.HostScreen(roomId))
+                        }
                         return@launch
                     }
                 }
-                .onFailure { return@launch }
+                .onFailure { return@launch } //todo(): display error message
 
             joinRoomUseCase
                 .invoke(
@@ -134,14 +136,18 @@ class JoinScreenComponent(
                     userId = firebaseUser.uid,
                     roomPassword = password,
                 )
-                .onSuccess { onJoinRoom(Configuration.PlayScreen(roomId)) }
-                .onFailure { exception ->
+                .onSuccess {
+                    when (bingoType) {
+                        BingoType.CLASSIC -> onJoinRoom(Configuration.ClassicPlayScreen(roomId))
+                        BingoType.THEMED -> onJoinRoom(Configuration.PlayScreen(roomId))
+                    }
+                }
 
+                .onFailure { exception ->
                     if (exception.message == "Incorrect Password") {
                         errorDialogState.showDialog(Res.string.join_room_invalid_password)
                         return@launch
                     }
-
                     errorDialogState.showDialog(Res.string.unmapped_error)
                 }
         }

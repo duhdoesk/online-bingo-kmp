@@ -18,11 +18,13 @@ import ui.presentation.change_password.ChangePasswordScreen
 import ui.presentation.create_room.CreateRoomScreen
 import ui.presentation.forgot_password.ForgotPasswordScreen
 import ui.presentation.home.HomeScreen
-import ui.presentation.room.host.HostScreen
+import ui.presentation.room.themed.host.HostScreen
 import ui.presentation.join_room.JoinScreen
 import ui.presentation.room.play.PlayScreen
 import ui.presentation.profile.ProfileScreen
 import ui.presentation.profile.picture.EditProfilePictureScreen
+import ui.presentation.room.classic.host.ClassicHostScreen
+import ui.presentation.room.classic.play.ClassicPlayScreen
 import ui.presentation.sign_in.SignInScreen
 import ui.presentation.sign_up.SignUpScreen
 import ui.presentation.themes.ThemesScreen
@@ -116,6 +118,13 @@ fun App(rootComponent: RootComponent) {
                         is Child.ChangePasswordScreen -> ChangePasswordScreen(
                             component = instance.component,
                             windowInfo = windowInfo
+                        )
+
+                        is Child.ClassicHostScreen -> ClassicHostScreen(
+                            component = instance.component,
+                        )
+                        is Child.ClassicPlayScreen -> ClassicPlayScreen(
+                            component = instance.component,
                         )
                     }
                 }
