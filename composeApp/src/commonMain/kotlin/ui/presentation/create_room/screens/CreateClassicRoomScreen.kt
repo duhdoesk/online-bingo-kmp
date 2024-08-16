@@ -31,6 +31,7 @@ import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.stringResource
 import themedbingo.composeapp.generated.resources.Res
 import themedbingo.composeapp.generated.resources.create_button
+import themedbingo.composeapp.generated.resources.create_classic_room_title
 import themedbingo.composeapp.generated.resources.create_room_title
 import ui.presentation.common.components.BottomButtonRow
 import ui.presentation.common.components.CreateRoomHeader
@@ -83,7 +84,7 @@ fun CreateClassicRoomScreen(
                     Spacer(Modifier.height(60.dp))
 
                     Text(
-                        text = stringResource(Res.string.create_room_title),
+                        text = stringResource(Res.string.create_classic_room_title),
                         style = MaterialTheme.typography.titleLarge,
                         fontWeight = FontWeight.Bold,
                         modifier = Modifier

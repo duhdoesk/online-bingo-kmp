@@ -48,15 +48,16 @@
 
 
     <!--    Create Room Screen -->
-    <string name="create_room_title">Create Room</string>
-    <string name="create_session_button">Create</string>
-    <string name="name_textField">Name</string>
-    <string name="theme_textField">Theme</string>
-    <string name="password_textField">Password</string>
-    <string name="private_session_checkbox">Private Room</string>
-    <string name="max_winners">Max Winners</string>
-    <string name="theme_picture">Theme Picture</string>
-    <string name="key_icon">Key Icon</string>
+    <string name="create_room_title">Criar Sala Temática</string>
+    <string name="create_classic_room_title">Criar Sala Clássica</string>
+    <string name="create_session_button">Criar</string>
+    <string name="name_textField">Nome</string>
+    <string name="theme_textField">Tema</string>
+    <string name="password_textField">Senha</string>
+    <string name="private_session_checkbox">Sala Privada</string>
+    <string name="max_winners">Máximo de Vencedores</string>
+    <string name="theme_picture">Capa do Tema</string>
+    <string name="key_icon">Chave</string>
     <string name="name_length_error">O nome da sala deve conter ao menos 4 caracteres.</string>
     <string name="password_length_error">A senha da sala deve conter ao menos 4 caracteres.</string>
 

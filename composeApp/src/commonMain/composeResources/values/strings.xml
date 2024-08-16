@@ -49,7 +49,8 @@
 
 
     <!--    Create Room Screen -->
-    <string name="create_room_title">Create Room</string>
+    <string name="create_room_title">Create Themed Bingo Room</string>
+    <string name="create_classic_room_title">Create Classic Bingo Room</string>
     <string name="create_session_button">Create</string>
     <string name="name_textField">Name</string>
     <string name="theme_textField">Theme</string>
@@ -57,7 +58,7 @@
     <string name="private_session_checkbox">Private Room</string>
     <string name="max_winners">Max Winners</string>
     <string name="theme_picture">Theme Picture</string>
-    <string name="key_icon">Key Icon</string>
+    <string name="key_icon">Key</string>
     <string name="name_length_error">The name must be at least 4 characters.</string>
     <string name="password_length_error">The password must be at least 4 characters.</string>
 
