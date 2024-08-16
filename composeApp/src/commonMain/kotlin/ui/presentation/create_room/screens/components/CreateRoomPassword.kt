@@ -104,7 +104,7 @@ fun SessionPasswordComponent(
         ) {
             for (error in uiState.passwordErrors) {
                 Text(
-                    text = error,
+                    text = stringResource(error),
                     color = MaterialTheme.colorScheme.error
                 )
             }

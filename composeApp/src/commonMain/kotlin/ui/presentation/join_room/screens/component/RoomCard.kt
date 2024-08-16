@@ -1,5 +1,6 @@
 package ui.presentation.join_room.screens.component
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -23,12 +24,19 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
 import domain.room.model.BingoRoom
+import domain.room.model.BingoType
 import domain.theme.model.BingoTheme
+import org.jetbrains.compose.resources.ExperimentalResourceApi
+import org.jetbrains.compose.resources.painterResource
+import themedbingo.composeapp.generated.resources.Res
+import themedbingo.composeapp.generated.resources.bingo_balls
 import ui.presentation.join_room.event.JoinRoomUIEvent
 
+@OptIn(ExperimentalResourceApi::class)
 @Composable
 fun RoomCard(
     room: BingoRoom,
+    bingoType: BingoType,
     theme: BingoTheme?,
     modifier: Modifier = Modifier,
     onClick: (event: JoinRoomUIEvent) -> Unit,
@@ -47,15 +55,29 @@ fun RoomCard(
             Row(
                 verticalAlignment = Alignment.CenterVertically,
             ) {
-                AsyncImage(
-                    model = theme?.pictureUri,
-                    contentDescription = "Theme Picture",
-                    modifier = Modifier
-                        .padding(16.dp)
-                        .size(80.dp)
-                        .clip(RoundedCornerShape(16.dp)),
-                    contentScale = ContentScale.Crop,
-                )
+                when (bingoType) {
+                    BingoType.CLASSIC ->
+                        Image(
+                            painter = painterResource(Res.drawable.bingo_balls),
+                            contentDescription = null,
+                            modifier = Modifier
+                                .padding(16.dp)
+                                .size(80.dp)
+                                .clip(RoundedCornerShape(16.dp)),
+                            contentScale = ContentScale.Crop,
+                        )
+
+                    BingoType.THEMED ->
+                        AsyncImage(
+                            model = theme?.pictureUri,
+                            contentDescription = "Theme Picture",
+                            modifier = Modifier
+                                .padding(16.dp)
+                                .size(80.dp)
+                                .clip(RoundedCornerShape(16.dp)),
+                            contentScale = ContentScale.Crop,
+                        )
+                }
 
                 Column(modifier = Modifier.weight(1f)) {
                     Text(
@@ -66,10 +88,12 @@ fun RoomCard(
                         overflow = TextOverflow.Ellipsis,
                     )
 
-                    Text(
-                        text = "Tema: ${theme?.name}",
-                        style = bodyStyle,
-                    )
+                    if (theme != null) {
+                        Text(
+                            text = "Tema: ${theme.name}",
+                            style = bodyStyle,
+                        )
+                    }
 
                     Text(
                         text = "Jogadores: ${room.players.size}",

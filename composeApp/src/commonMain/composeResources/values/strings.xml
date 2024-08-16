@@ -58,6 +58,8 @@
     <string name="max_winners">Max Winners</string>
     <string name="theme_picture">Theme Picture</string>
     <string name="key_icon">Key Icon</string>
+    <string name="name_length_error">The name must be at least 4 characters.</string>
+    <string name="password_length_error">The password must be at least 4 characters.</string>
 
 
     <!--    Join Room Screen -->

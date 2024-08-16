@@ -1,8 +1,7 @@
 package ui.presentation.create_room.event
 
-import ui.navigation.Configuration
-
 sealed class CreateScreenEvent {
+    data object UILoaded: CreateScreenEvent()
     data object PopBack: CreateScreenEvent()
     data object CreateRoom: CreateScreenEvent()
     data object UpdateLocked: CreateScreenEvent()

@@ -9,6 +9,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import domain.room.model.BingoRoom
+import domain.room.model.BingoType
 import domain.theme.model.BingoTheme
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import themedbingo.composeapp.generated.resources.Res
@@ -39,7 +40,8 @@ fun JoinScreenLazyColumn(
                     theme = bingoThemes.find { it.id == room.themeId },
                     modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)
                         .fillMaxWidth(),
-                    onClick = { onTapRoom(it) }
+                    onClick = { onTapRoom(it) },
+                    bingoType = room.type,
                 )
             }
         }
@@ -58,7 +60,8 @@ fun JoinScreenLazyColumn(
                     theme = bingoThemes.find { it.id == room.themeId },
                     modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)
                         .fillMaxWidth(),
-                    onClick = { onTapRoom(it) }
+                    onClick = { onTapRoom(it) },
+                    bingoType = room.type,
                 )
             }
         }

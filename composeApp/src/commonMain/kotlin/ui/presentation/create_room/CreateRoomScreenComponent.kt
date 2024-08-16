@@ -12,33 +12,46 @@ import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import org.jetbrains.compose.resources.ExperimentalResourceApi
+import org.jetbrains.compose.resources.StringResource
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
+import themedbingo.composeapp.generated.resources.Res
+import themedbingo.composeapp.generated.resources.name_length_error
+import themedbingo.composeapp.generated.resources.password_length_error
 import ui.navigation.Configuration
+import ui.presentation.create_room.event.CreateScreenEvent
 import ui.presentation.create_room.state.CreateScreenUiState
 import util.componentCoroutineScope
 
+@OptIn(ExperimentalResourceApi::class)
 class CreateRoomScreenComponent(
     componentContext: ComponentContext,
-    private val firebaseUser: FirebaseUser,
     private val bingoType: BingoType,
+    private val firebaseUser: FirebaseUser,
     private val onPopBack: () -> Unit,
     private val onCreateRoom: (configuration: Configuration) -> Unit,
 ) : ComponentContext by componentContext, KoinComponent {
 
+    /**
+     * Single coroutineScope to handle each suspend operation
+     */
     private val coroutineScope = componentCoroutineScope()
 
+    /**
+     * Use Cases to build UI STATE
+     */
     private val getAllThemesUseCase by inject<GetAllThemesUseCase>()
+
+    /**
+     * Action Use Cases
+     */
     private val createRoomUseCase by inject<CreateRoomUseCase>()
 
-    val bingoThemesList = getAllThemesUseCase()
-        .stateIn(
-            componentContext.componentCoroutineScope(),
-            SharingStarted.WhileSubscribed(),
-            emptyList()
-        )
-
-    private val _uiState = MutableStateFlow(CreateScreenUiState())
+    /**
+     * Represents the UI STATE
+     */
+    private val _uiState = MutableStateFlow(CreateScreenUiState.INITIAL)
     val uiState = _uiState
         .onEach { state ->
             if (state.name.length < 4) {
@@ -59,17 +72,81 @@ class CreateRoomScreenComponent(
         .stateIn(
             coroutineScope,
             SharingStarted.WhileSubscribed(),
-            CreateScreenUiState()
+            CreateScreenUiState.INITIAL
         )
 
+    /**
+     * Holds a check if the user inputted all the info necessary to crete the room.
+     */
     private val _isFormOk = MutableStateFlow(false)
     val isFormOk = _isFormOk.asStateFlow()
 
-    fun updateName(name: String) {
-        val errors = mutableListOf<String>()
+    /**
+     * Delegate the responsibility for the handling of each UI Event
+     */
+    fun uiEvent(event: CreateScreenEvent) {
+        when (event) {
+            is CreateScreenEvent.CreateRoom -> createRoom()
+            is CreateScreenEvent.PopBack -> popBack()
+            is CreateScreenEvent.UILoaded -> uiLoaded()
+            is CreateScreenEvent.UpdateLocked -> updateLocked()
+            is CreateScreenEvent.UpdateMaxWinners -> updateMaxWinners(event.maxWinners)
+            is CreateScreenEvent.UpdateName -> updateName(event.name)
+            is CreateScreenEvent.UpdatePassword -> updatePassword(event.password)
+            is CreateScreenEvent.UpdateTheme -> updateTheme(event.themeId)
+        }
+    }
+
+    /**
+     * Functions to handle each of the UI Events
+     */
+    private fun uiLoaded() {
+        coroutineScope.launch {
+            when (bingoType) {
+                BingoType.CLASSIC -> {
+                    _uiState.update {
+                        CreateScreenUiState(
+                            loading = false,
+                            name = "",
+                            nameErrors = listOf(),
+                            locked = false,
+                            password = "",
+                            passwordErrors = listOf(),
+                            availableThemes = listOf(),
+                            themeId = "",
+                            maxWinners = 1,
+                            bingoType = bingoType
+                        )
+                    }
+                }
+
+                BingoType.THEMED -> {
+                    getAllThemesUseCase().collect { themes ->
+                        _uiState.update {
+                            CreateScreenUiState(
+                                loading = false,
+                                name = "",
+                                nameErrors = listOf(),
+                                locked = false,
+                                password = "",
+                                passwordErrors = listOf(),
+                                availableThemes = themes,
+                                themeId = "",
+                                maxWinners = 1,
+                                bingoType = bingoType
+                            )
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    private fun updateName(name: String) {
+        val errors = mutableListOf<StringResource>()
 
         if (name.length in 1..3) {
-            errors.add("The name must be at least 4 characters.") //todo(): extract string res
+            errors.add(Res.string.name_length_error)
         }
 
         _uiState.update {
@@ -80,7 +157,7 @@ class CreateRoomScreenComponent(
         }
     }
 
-    fun updateLocked() {
+    private fun updateLocked() {
         _uiState.update {
             uiState.value.copy(
                 locked = !it.locked,
@@ -90,11 +167,11 @@ class CreateRoomScreenComponent(
         }
     }
 
-    fun updatePassword(password: String) {
-        val errors = mutableListOf<String>()
+    private fun updatePassword(password: String) {
+        val errors = mutableListOf<StringResource>()
 
         if (password.length in 1..3) {
-            errors.add("The password must be at least 4 characters.") //todo(): extract string res
+            errors.add(Res.string.password_length_error)
         }
 
         _uiState.update {
@@ -105,7 +182,7 @@ class CreateRoomScreenComponent(
         }
     }
 
-    fun updateTheme(themeId: String) {
+    private fun updateTheme(themeId: String) {
         _uiState.update {
             uiState.value.copy(
                 themeId = themeId
@@ -113,7 +190,7 @@ class CreateRoomScreenComponent(
         }
     }
 
-    fun updateMaxWinners(maxWinners: Int) {
+    private fun updateMaxWinners(maxWinners: Int) {
         _uiState.update {
             uiState.value.copy(
                 maxWinners = maxWinners
@@ -121,7 +198,7 @@ class CreateRoomScreenComponent(
         }
     }
 
-    fun createRoom() {
+    private fun createRoom() {
         coroutineScope.launch {
             uiState.value.run {
                 createRoomUseCase(
@@ -131,15 +208,15 @@ class CreateRoomScreenComponent(
                     password = password,
                     maxWinners = maxWinners,
                     type = bingoType,
-                    themeId = themeId
+                    themeId = themeId,
                 )
                     .onSuccess { roomId -> onCreateRoom(Configuration.HostScreen(roomId = roomId)) }
-                    .onFailure {  } //todo(): display error dialog
+                    .onFailure { } //todo(): display error dialog
             }
         }
     }
 
-    fun popBack() {
+    private fun popBack() {
         onPopBack()
     }
 }

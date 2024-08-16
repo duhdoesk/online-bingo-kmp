@@ -57,6 +57,8 @@
     <string name="max_winners">Max Winners</string>
     <string name="theme_picture">Theme Picture</string>
     <string name="key_icon">Key Icon</string>
+    <string name="name_length_error">O nome da sala deve conter ao menos 4 caracteres.</string>
+    <string name="password_length_error">A senha da sala deve conter ao menos 4 caracteres.</string>
 
 
     <!--    Join Room Screen -->

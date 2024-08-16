@@ -44,20 +44,17 @@ class BingoThemeRepositoryImpl(
     }
 
     override fun getAllThemes(): Flow<List<BingoTheme>> {
-        return flow {
-            val themes = collection
-                .get()
-                .documents
-                .map { document ->
+        return collection
+            .snapshots
+            .map { querySnapshot ->
+                querySnapshot.documents.map { documentSnapshot ->
                     BingoThemeDTO(
-                        id = document.id,
-                        name = document.get("name"),
-                        picture = document.get("picture")
+                        id = documentSnapshot.id,
+                        name = documentSnapshot.get("name"),
+                        picture = documentSnapshot.get("picture")
                     ).toModel()
                 }
-
-            emit(themes)
-        }
+            }
     }
 
     override fun getCharacters(themeId: String): Flow<List<Character>> {

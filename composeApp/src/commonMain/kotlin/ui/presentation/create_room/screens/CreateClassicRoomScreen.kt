@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.sizeIn
 import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -26,7 +27,6 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import domain.theme.model.BingoTheme
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.stringResource
 import themedbingo.composeapp.generated.resources.Res
@@ -43,12 +43,11 @@ import ui.presentation.create_room.state.CreateScreenUiState
 
 @OptIn(ExperimentalResourceApi::class)
 @Composable
-fun PortraitCreateRoomScreen(
-    themes: List<BingoTheme>,
+fun CreateClassicRoomScreen(
     uiState: CreateScreenUiState,
+    event: (event: CreateScreenEvent) -> Unit,
     isFormOk: Boolean,
-    event: (event: CreateScreenEvent) -> Unit
-) {
+    modifier: Modifier = Modifier) {
     Scaffold(
         modifier = Modifier.imePadding(),
         contentWindowInsets = WindowInsets(0, 0, 0, 0),
@@ -61,7 +60,7 @@ fun PortraitCreateRoomScreen(
                 .systemBarsPadding()
                 .fillMaxSize()
         ) {
-            Column(modifier = Modifier.fillMaxSize()) {
+            Column(modifier = Modifier.sizeIn(maxWidth = 600.dp, maxHeight = 1000.dp)) {
                 Column(
                     verticalArrangement = Arrangement.Center,
                     horizontalAlignment = Alignment.CenterHorizontally,
@@ -101,19 +100,6 @@ fun PortraitCreateRoomScreen(
                         onUpdateName = { name ->
                             event(CreateScreenEvent.UpdateName(name))
                         })
-
-                    Spacer(Modifier.height(12.dp))
-
-                    CreateRoomThemePicker(
-                        modifier = rowModifier,
-                        uiState = uiState,
-                        themes = themes,
-                        leadingIconModifier = leadingIconModifier,
-                        contentScale = ContentScale.Crop,
-                        onUpdateThemeId = { themeId ->
-                            event(CreateScreenEvent.UpdateTheme(themeId))
-                        }
-                    )
 
                     Spacer(Modifier.height(12.dp))
 

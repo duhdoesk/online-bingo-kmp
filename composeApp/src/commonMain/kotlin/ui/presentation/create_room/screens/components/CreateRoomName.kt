@@ -86,7 +86,7 @@ fun CreateRoomName(
     ) {
         for (error in uiState.nameErrors) {
             Text(
-                text = error,
+                text = stringResource(error),
                 color = MaterialTheme.colorScheme.error
             )
         }

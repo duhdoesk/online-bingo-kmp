@@ -45,7 +45,6 @@ import ui.presentation.util.getRandomLightColor
 fun CreateRoomThemePicker(
     modifier: Modifier = Modifier,
     uiState: CreateScreenUiState,
-    themes: List<BingoTheme>,
     leadingIconModifier: Modifier,
     contentScale: ContentScale,
     onUpdateThemeId: (themeId: String) -> Unit
@@ -55,7 +54,7 @@ fun CreateRoomThemePicker(
         verticalAlignment = Alignment.Bottom
     ) {
         var expanded by remember { mutableStateOf(false) }
-        val selectedTheme = themes.find { it.id == uiState.themeId }
+        val selectedTheme = uiState.availableThemes.find { it.id == uiState.themeId }
         val color by remember { mutableStateOf(getRandomLightColor()) }
 
         if (selectedTheme != null) {
@@ -107,7 +106,7 @@ fun CreateRoomThemePicker(
                 expanded = expanded,
                 onDismissRequest = { expanded = false }
             ) {
-                themes.forEach { item ->
+                uiState.availableThemes.forEach { item ->
                     DropdownMenuItem(
                         text = { Text(text = item.name) },
                         leadingIcon = {
