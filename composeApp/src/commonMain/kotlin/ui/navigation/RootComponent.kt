@@ -17,7 +17,7 @@ import ui.presentation.forgot_password.ForgotPasswordScreenComponent
 import ui.presentation.home.HomeScreenComponent
 import ui.presentation.room.themed.host.HostScreenComponent
 import ui.presentation.join_room.JoinScreenComponent
-import ui.presentation.room.play.PlayScreenComponent
+import ui.presentation.room.themed.play.PlayScreenComponent
 import ui.presentation.profile.ProfileScreenComponent
 import ui.presentation.profile.picture.EditProfilePictureScreenComponent
 import ui.presentation.room.classic.host.ClassicHostScreenComponent
@@ -102,7 +102,13 @@ class RootComponent(
                     bingoType = configuration.bingoType,
                     onPopBack = { navigation.pop() },
                     onJoinRoom = { config -> navigation.replaceCurrent(configuration = config) },
-                    onCreateRoom = { navigation.replaceCurrent(Configuration.CreateScreen(configuration.bingoType))}
+                    onCreateRoom = {
+                        navigation.replaceCurrent(
+                            Configuration.CreateScreen(
+                                configuration.bingoType
+                            )
+                        )
+                    }
                 )
             )
 
@@ -182,6 +188,9 @@ class RootComponent(
             is Configuration.ClassicPlayScreen -> Child.ClassicPlayScreen(
                 ClassicPlayScreenComponent(
                     componentContext = context,
+                    firebaseUser = firebaseUser!!,
+                    roomId = configuration.roomId,
+                    onPopBack = { navigation.pop() },
                 )
             )
         }

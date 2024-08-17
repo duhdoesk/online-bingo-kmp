@@ -1,4 +1,4 @@
-package ui.presentation.room.play.screens
+package ui.presentation.room.themed.play.screens
 
 import androidx.compose.runtime.Composable
 import domain.room.model.RoomState

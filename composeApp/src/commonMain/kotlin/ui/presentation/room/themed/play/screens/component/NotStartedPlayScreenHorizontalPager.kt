@@ -1,4 +1,4 @@
-package ui.presentation.room.play.screens.component
+package ui.presentation.room.themed.play.screens.component
 
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.fillMaxWidth

@@ -1,4 +1,4 @@
-package ui.presentation.room.play
+package ui.presentation.room.themed.play
 
 import com.arkivanov.decompose.ComponentContext
 import dev.gitlive.firebase.auth.FirebaseUser

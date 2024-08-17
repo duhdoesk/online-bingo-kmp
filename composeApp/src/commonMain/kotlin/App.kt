@@ -20,7 +20,7 @@ import ui.presentation.forgot_password.ForgotPasswordScreen
 import ui.presentation.home.HomeScreen
 import ui.presentation.room.themed.host.HostScreen
 import ui.presentation.join_room.JoinScreen
-import ui.presentation.room.play.PlayScreen
+import ui.presentation.room.themed.play.PlayScreen
 import ui.presentation.profile.ProfileScreen
 import ui.presentation.profile.picture.EditProfilePictureScreen
 import ui.presentation.room.classic.host.ClassicHostScreen

@@ -1,4 +1,4 @@
-package ui.presentation.room.play
+package ui.presentation.room.themed.play
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -9,7 +9,7 @@ import themedbingo.composeapp.generated.resources.Res
 import themedbingo.composeapp.generated.resources.pop_back_dialog_body
 import themedbingo.composeapp.generated.resources.pop_back_dialog_title
 import ui.presentation.common.RotateScreen
-import ui.presentation.room.play.screens.PortraitPlayScreen
+import ui.presentation.room.themed.play.screens.PortraitPlayScreen
 import ui.presentation.room.themed.play.event.PlayScreenUIEvent
 import ui.presentation.util.WindowInfo
 import ui.presentation.util.dialog.GenericActionDialog

@@ -6,7 +6,7 @@ import ui.presentation.forgot_password.ForgotPasswordScreenComponent
 import ui.presentation.home.HomeScreenComponent
 import ui.presentation.room.themed.host.HostScreenComponent
 import ui.presentation.join_room.JoinScreenComponent
-import ui.presentation.room.play.PlayScreenComponent
+import ui.presentation.room.themed.play.PlayScreenComponent
 import ui.presentation.profile.ProfileScreenComponent
 import ui.presentation.profile.picture.EditProfilePictureScreenComponent
 import ui.presentation.room.classic.host.ClassicHostScreenComponent

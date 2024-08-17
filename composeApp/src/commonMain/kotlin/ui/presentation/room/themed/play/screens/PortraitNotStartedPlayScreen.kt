@@ -1,4 +1,4 @@
-package ui.presentation.room.play.screens
+package ui.presentation.room.themed.play.screens
 
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Arrangement
@@ -24,8 +24,8 @@ import org.jetbrains.compose.resources.ExperimentalResourceApi
 import themedbingo.composeapp.generated.resources.Res
 import themedbingo.composeapp.generated.resources.new_card_button
 import ui.presentation.common.components.BottomButtonRow
-import ui.presentation.room.play.screens.component.HorizontalPagerIndicator
-import ui.presentation.room.play.screens.component.NotStartedPlayScreenHorizontalPager
+import ui.presentation.room.themed.play.screens.component.HorizontalPagerIndicator
+import ui.presentation.room.themed.play.screens.component.NotStartedPlayScreenHorizontalPager
 import ui.presentation.room.common.PlayersLazyRow
 import ui.presentation.room.themed.play.event.PlayScreenUIEvent
 import ui.presentation.room.themed.play.state.PlayScreenUIState

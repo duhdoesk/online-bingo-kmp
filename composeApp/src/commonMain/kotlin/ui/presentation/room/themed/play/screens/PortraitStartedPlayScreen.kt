@@ -1,4 +1,4 @@
-package ui.presentation.room.play.screens
+package ui.presentation.room.themed.play.screens
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -31,7 +31,7 @@ import themedbingo.composeapp.generated.resources.Res
 import themedbingo.composeapp.generated.resources.back_button
 import themedbingo.composeapp.generated.resources.call_bingo_button
 import ui.presentation.common.components.BottomButtonRow
-import ui.presentation.room.play.screens.component.SelectedBingoCard
+import ui.presentation.room.themed.play.screens.component.SelectedBingoCard
 import ui.presentation.room.common.FinishedRoomScreenComposable
 import ui.presentation.room.common.PlayersLazyRow
 import ui.presentation.room.themed.component.RunningRoomScreenComposable
