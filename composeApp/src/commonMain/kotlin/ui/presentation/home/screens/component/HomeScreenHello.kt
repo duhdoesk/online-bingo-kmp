@@ -38,15 +38,8 @@ fun HomeScreenHello(
         horizontalArrangement = Arrangement.Center,
         modifier = modifier
     ) {
-        Image(
-            painter = painterResource(Res.drawable.hw_mascot_transparent_bg),
-            contentDescription = null,
-            modifier = Modifier
-                .padding(horizontal = 16.dp)
-                .size(120.dp),
-        )
+        Column(horizontalAlignment = Alignment.End) {
 
-        Column {
             Text(
                 text = buildAnnotatedString {
                     append("${stringResource(Res.string.hello)}, ")
@@ -55,6 +48,7 @@ fun HomeScreenHello(
                     }
                     append("!")
                 },
+                textAlign = TextAlign.End,
                 style = MaterialTheme.typography.titleLarge,
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis,
@@ -63,11 +57,19 @@ fun HomeScreenHello(
 
             Text(
                 text = stringResource(Res.string.choose_your_game).lowercase(),
-                textAlign = TextAlign.Start,
+                textAlign = TextAlign.End,
                 style = MaterialTheme.typography.titleMedium,
                 fontWeight = FontWeight.Normal,
                 modifier = Modifier.padding(horizontal = 16.dp),
             )
         }
+
+        Image(
+            painter = painterResource(Res.drawable.hw_mascot_transparent_bg),
+            contentDescription = null,
+            modifier = Modifier
+                .padding(horizontal = 16.dp)
+                .size(100.dp),
+        )
     }
 }
