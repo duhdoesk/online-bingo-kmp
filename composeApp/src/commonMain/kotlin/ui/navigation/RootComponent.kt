@@ -174,6 +174,8 @@ class RootComponent(
             is Configuration.ClassicHostScreen -> Child.ClassicHostScreen(
                 ClassicHostScreenComponent(
                     componentContext = context,
+                    roomId = configuration.roomId,
+                    onPopBack = { navigation.pop() }
                 )
             )
 

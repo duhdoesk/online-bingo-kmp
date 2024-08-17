@@ -32,8 +32,8 @@ import themedbingo.composeapp.generated.resources.back_button
 import themedbingo.composeapp.generated.resources.call_bingo_button
 import ui.presentation.common.components.BottomButtonRow
 import ui.presentation.room.play.screens.component.SelectedBingoCard
-import ui.presentation.room.themed.component.FinishedRoomScreenComposable
-import ui.presentation.room.themed.component.PlayersLazyRow
+import ui.presentation.room.common.FinishedRoomScreenComposable
+import ui.presentation.room.common.PlayersLazyRow
 import ui.presentation.room.themed.component.RunningRoomScreenComposable
 import ui.presentation.room.themed.play.event.PlayScreenUIEvent
 import ui.presentation.room.themed.play.state.PlayScreenUIState
@@ -100,7 +100,8 @@ fun PortraitStartedPlayScreen(
 
                 } else {
                     FinishedRoomScreenComposable(
-                        uiState = uiState,
+                        winners = uiState.winners,
+                        maxWinners = uiState.maxWinners,
                         modifier = Modifier
                             .weight(1f),
                     )

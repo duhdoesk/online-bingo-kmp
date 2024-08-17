@@ -137,7 +137,7 @@ class HostScreenComponent(
             raffleNextCharacterUseCase(roomId = roomId, characterId = nextCharacter)
                 .onFailure { } //todo(): show error dialog
                 .onSuccess {
-                    delay(1000)
+                    delay(500)
                     canRaffleNextCharacter.update { true }
                 }
         }

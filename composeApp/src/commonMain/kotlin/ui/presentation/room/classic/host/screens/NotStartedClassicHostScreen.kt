@@ -1,4 +1,4 @@
-package ui.presentation.room.themed.host.screens
+package ui.presentation.room.classic.host.screens
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -19,7 +19,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import domain.room.model.BingoType
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.stringResource
 import themedbingo.composeapp.generated.resources.Res
@@ -29,35 +28,31 @@ import themedbingo.composeapp.generated.resources.max_winners_card
 import themedbingo.composeapp.generated.resources.players_card
 import themedbingo.composeapp.generated.resources.room_name_card
 import themedbingo.composeapp.generated.resources.start_button
-import themedbingo.composeapp.generated.resources.theme_card
-import themedbingo.composeapp.generated.resources.themed_card
 import ui.presentation.common.components.BottomButtonRow
 import ui.presentation.common.components.CreateRoomHeader
-import ui.presentation.room.themed.host.event.HostScreenUIEvent
+import ui.presentation.room.classic.host.event.ClassicHostScreenUIEvent
+import ui.presentation.room.classic.host.state.ClassicHostScreenUIState
 import ui.presentation.room.common.PlayersLazyRow
 import ui.presentation.room.common.RoomInfoCard
-import ui.presentation.room.themed.host.state.HostScreenUIState
 
 @OptIn(ExperimentalResourceApi::class)
 @Composable
-fun PortraitNotStartedHostScreen(
-    uiState: HostScreenUIState,
-    uiEvent: (event: HostScreenUIEvent) -> Unit,
+fun NotStartedClassicHostScreen(
+    uiState: ClassicHostScreenUIState,
+    uiEvent: (event: ClassicHostScreenUIEvent) -> Unit,
 ) {
-    Scaffold(
-        modifier = Modifier.imePadding(),
-    ) { innerPadding ->
+    Scaffold(modifier = Modifier.imePadding()) { innerPadding ->
         Box(
             contentAlignment = Alignment.Center,
             modifier = Modifier
                 .padding(innerPadding)
                 .consumeWindowInsets(innerPadding)
                 .systemBarsPadding()
-                .fillMaxSize()
+                .fillMaxSize(),
         ) {
             Column(modifier = Modifier.sizeIn(maxWidth = 600.dp, maxHeight = 1000.dp)) {
                 PlayersLazyRow(
-                    players = uiState.players.reversed(),
+                    players = uiState.players,
                     winners = uiState.winners,
                     maxWinners = uiState.maxWinners,
                     modifier = Modifier.fillMaxWidth(),
@@ -68,9 +63,10 @@ fun PortraitNotStartedHostScreen(
                         alignment = Alignment.CenterVertically,
                         space = 16.dp,
                     ),
+                    horizontalAlignment = Alignment.CenterHorizontally,
                     modifier = Modifier
-                        .weight(1f)
-                        .verticalScroll(rememberScrollState()),
+                        .verticalScroll(rememberScrollState())
+                        .weight(1f),
                 ) {
                     val cardModifier = Modifier
                         .padding(horizontal = 16.dp)
@@ -86,24 +82,11 @@ fun PortraitNotStartedHostScreen(
                         modifier = cardModifier
                     )
 
-                    val bingoType = when (uiState.bingoType) {
-                        BingoType.CLASSIC -> Res.string.classic_card
-                        BingoType.THEMED -> Res.string.themed_card
-                    }
-
                     RoomInfoCard(
                         key = Res.string.bingo_type_card,
-                        value = stringResource(bingoType),
+                        value = stringResource(Res.string.classic_card),
                         modifier = cardModifier
                     )
-
-                    if (uiState.bingoType == BingoType.THEMED) {
-                        RoomInfoCard(
-                            key = Res.string.theme_card,
-                            value = uiState.theme!!.name,
-                            modifier = cardModifier
-                        )
-                    }
 
                     RoomInfoCard(
                         key = Res.string.players_card,
@@ -121,8 +104,8 @@ fun PortraitNotStartedHostScreen(
                 BottomButtonRow(
                     leftEnabled = true,
                     rightEnabled = true,
-                    leftClicked = { uiEvent(HostScreenUIEvent.PopBack) },
-                    rightClicked = { uiEvent(HostScreenUIEvent.StartRaffle) },
+                    leftClicked = { uiEvent(ClassicHostScreenUIEvent.PopBack) },
+                    rightClicked = { uiEvent(ClassicHostScreenUIEvent.StartRaffle) },
                     rightText = Res.string.start_button,
                     modifier = Modifier
                         .padding(horizontal = 16.dp, vertical = 8.dp)

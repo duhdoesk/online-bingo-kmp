@@ -210,7 +210,13 @@ class CreateRoomScreenComponent(
                     type = bingoType,
                     themeId = themeId,
                 )
-                    .onSuccess { roomId -> onCreateRoom(Configuration.HostScreen(roomId = roomId)) }
+                    .onSuccess { roomId ->
+                        val config = when (bingoType) {
+                            BingoType.CLASSIC -> Configuration.ClassicHostScreen(roomId)
+                            BingoType.THEMED -> Configuration.HostScreen(roomId)
+                        }
+                        onCreateRoom(config)
+                    }
                     .onFailure { } //todo(): display error dialog
             }
         }

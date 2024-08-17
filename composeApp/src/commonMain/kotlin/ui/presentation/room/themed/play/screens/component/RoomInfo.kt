@@ -20,7 +20,7 @@ import themedbingo.composeapp.generated.resources.room_info
 import themedbingo.composeapp.generated.resources.room_name_card
 import themedbingo.composeapp.generated.resources.theme_card
 import themedbingo.composeapp.generated.resources.themed_card
-import ui.presentation.room.themed.component.RoomInfoCard
+import ui.presentation.room.common.RoomInfoCard
 import ui.presentation.room.themed.play.state.PlayScreenUIState
 
 @OptIn(ExperimentalResourceApi::class)

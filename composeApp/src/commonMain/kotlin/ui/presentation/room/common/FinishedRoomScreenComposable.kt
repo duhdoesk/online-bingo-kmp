@@ -1,4 +1,4 @@
-package ui.presentation.room.themed.component
+package ui.presentation.room.common
 
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.PaddingValues
@@ -13,18 +13,19 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import domain.user.model.User
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.stringResource
 import themedbingo.composeapp.generated.resources.Res
 import themedbingo.composeapp.generated.resources.winners
-import ui.presentation.room.themed.RoomScreenUIState
 import ui.presentation.room.themed.host.screens.component.WinnerCard
 import ui.presentation.util.getRandomLightColor
 
 @OptIn(ExperimentalResourceApi::class, ExperimentalFoundationApi::class)
 @Composable
 fun FinishedRoomScreenComposable(
-    uiState: RoomScreenUIState,
+    winners: List<User>,
+    maxWinners: Int,
     modifier: Modifier = Modifier,
 ) {
     LazyColumn(
@@ -42,10 +43,10 @@ fun FinishedRoomScreenComposable(
             }
         }
 
-        val finalWinners = if (uiState.winners.size >= uiState.maxWinners) {
-            uiState.winners.subList(0, uiState.maxWinners)
+        val finalWinners = if (winners.size >= maxWinners) {
+            winners.subList(0, maxWinners)
         } else {
-            uiState.winners
+            winners
         }
 
         itemsIndexed(finalWinners) { index, winner ->

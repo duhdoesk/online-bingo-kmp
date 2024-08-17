@@ -26,7 +26,7 @@ import themedbingo.composeapp.generated.resources.new_card_button
 import ui.presentation.common.components.BottomButtonRow
 import ui.presentation.room.play.screens.component.HorizontalPagerIndicator
 import ui.presentation.room.play.screens.component.NotStartedPlayScreenHorizontalPager
-import ui.presentation.room.themed.component.PlayersLazyRow
+import ui.presentation.room.common.PlayersLazyRow
 import ui.presentation.room.themed.play.event.PlayScreenUIEvent
 import ui.presentation.room.themed.play.state.PlayScreenUIState
 
