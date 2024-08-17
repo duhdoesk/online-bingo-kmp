@@ -4,8 +4,6 @@ import com.arkivanov.decompose.ComponentContext
 import dev.gitlive.firebase.auth.FirebaseUser
 import domain.card.use_case.FlowCardByRoomAndUserIDUseCase
 import domain.card.use_case.SetCardByRoomAndUserIDUseCase
-import domain.character.model.Character
-import domain.room.model.RoomState
 import domain.room.use_case.CallBingoUseCase
 import domain.room.use_case.FlowRoomByIdUseCase
 import domain.user.model.User
