@@ -1,4 +1,4 @@
-package ui.presentation.room.themed.play.screens.component
+package ui.presentation.room.classic.play.screens.component
 
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -10,13 +10,14 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import domain.room.model.BingoType
+import ui.presentation.room.classic.play.state.ClassicPlayScreenUIState
 import ui.presentation.room.common.RoomInfo
-import ui.presentation.room.themed.play.state.PlayScreenUIState
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun NotStartedPlayScreenHorizontalPager(
-    uiState: PlayScreenUIState,
+fun NSClassicPlayScreenPager(
+    uiState: ClassicPlayScreenUIState,
     pagerState: PagerState,
     modifier: Modifier = Modifier,
 ) {
@@ -30,20 +31,20 @@ fun NotStartedPlayScreenHorizontalPager(
     ) { index ->
         when (index) {
             0 -> if (uiState.myCard.isNotEmpty()) {
-                CardSelector(
+                ClassicCardSelector(
                     card = uiState.myCard,
-                    bingoType = uiState.bingoType,
+                    bingoType = BingoType.CLASSIC,
                     modifier = Modifier
                         .padding(16.dp)
-                        .fillMaxWidth()
+                        .fillMaxWidth(),
                 )
             }
 
             else -> RoomInfo(
                 roomName = uiState.roomName,
-                theme = uiState.theme,
+                theme = null,
                 maxWinners = uiState.maxWinners,
-                bingoType = uiState.bingoType,
+                bingoType = BingoType.CLASSIC,
                 modifier = Modifier
                     .padding(16.dp)
                     .widthIn(max = 400.dp),

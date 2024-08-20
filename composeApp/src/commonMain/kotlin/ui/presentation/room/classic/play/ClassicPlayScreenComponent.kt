@@ -120,12 +120,18 @@ class ClassicPlayScreenComponent(
 
     private fun getNewCard() {
         coroutineScope.launch {
-            val newCard = uiState.value.numbers.shuffled().subList(0, 24).map { it.toString() }
+            val newCard = mutableListOf<Int>()
+
+            newCard.addAll((1..15).shuffled().subList(0, 5))
+            newCard.addAll((16..30).shuffled().subList(0, 5))
+            newCard.addAll((31..45).shuffled().subList(0, 4))
+            newCard.addAll((46..60).shuffled().subList(0, 5))
+            newCard.addAll((61..75).shuffled().subList(0, 5))
 
             setCardByRoomAndUserIDUseCase(
                 roomId = roomId,
                 userId = firebaseUser.uid,
-                charactersIDs = newCard,
+                charactersIDs = newCard.map { it.toString() },
             )
                 .onFailure { exception -> println(exception) } //todo(): display error message
         }

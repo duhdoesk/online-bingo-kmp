@@ -1,4 +1,4 @@
-package ui.presentation.room.themed.play.screens.component
+package ui.presentation.room.common
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -10,23 +10,23 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import domain.room.model.BingoType
+import domain.theme.model.BingoTheme
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.stringResource
 import themedbingo.composeapp.generated.resources.Res
 import themedbingo.composeapp.generated.resources.bingo_type_card
-import themedbingo.composeapp.generated.resources.classic_card
 import themedbingo.composeapp.generated.resources.max_winners_card
 import themedbingo.composeapp.generated.resources.room_info
 import themedbingo.composeapp.generated.resources.room_name_card
 import themedbingo.composeapp.generated.resources.theme_card
-import themedbingo.composeapp.generated.resources.themed_card
-import ui.presentation.room.common.RoomInfoCard
-import ui.presentation.room.themed.play.state.PlayScreenUIState
 
 @OptIn(ExperimentalResourceApi::class)
 @Composable
 fun RoomInfo(
-    uiState: PlayScreenUIState,
+    roomName: String,
+    theme: BingoTheme?,
+    maxWinners: Int,
+    bingoType: BingoType,
     modifier: Modifier = Modifier,
 ) {
     Column(
@@ -43,32 +43,27 @@ fun RoomInfo(
 
         RoomInfoCard(
             key = Res.string.room_name_card,
-            value = uiState.roomName,
+            value = roomName,
             modifier = cardModifier
         )
-
-        val bingoType = when (uiState.bingoType) {
-            BingoType.CLASSIC -> Res.string.classic_card
-            BingoType.THEMED -> Res.string.themed_card
-        }
 
         RoomInfoCard(
             key = Res.string.bingo_type_card,
-            value = stringResource(bingoType),
+            value = stringResource(bingoType.stringResource),
             modifier = cardModifier
         )
 
-        if (uiState.bingoType == BingoType.THEMED) {
+        if (bingoType == BingoType.THEMED) {
             RoomInfoCard(
                 key = Res.string.theme_card,
-                value = uiState.theme!!.name,
+                value = theme!!.name,
                 modifier = cardModifier
             )
         }
 
         RoomInfoCard(
             key = Res.string.max_winners_card,
-            value = uiState.maxWinners.toString(),
+            value = maxWinners.toString(),
             modifier = cardModifier
         )
     }
