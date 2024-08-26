@@ -27,8 +27,12 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
 import domain.theme.model.BingoTheme
+import org.jetbrains.compose.resources.ExperimentalResourceApi
+import org.jetbrains.compose.resources.stringResource
+import themedbingo.composeapp.generated.resources.Res
+import themedbingo.composeapp.generated.resources.select_theme
 
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalResourceApi::class)
 @Composable
 fun ThemePickerBottomSheet(
     themes: List<BingoTheme>,
@@ -42,7 +46,7 @@ fun ThemePickerBottomSheet(
     ) {
         Column {
             Text(
-                text = "Selecione um Tema", //todo(): extract string resource
+                text = stringResource(Res.string.select_theme),
                 style = MaterialTheme.typography.titleLarge,
                 fontWeight = FontWeight.Bold,
                 modifier = Modifier.padding(16.dp),

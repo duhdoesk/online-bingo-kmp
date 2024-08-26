@@ -63,6 +63,7 @@
     <string name="password_length_error">The password must be at least 4 characters.</string>
     <string name="name_body">You must define a name to your room with, at least, 4 characters. This name will be displayed in the app for the other players in the join room screen.</string>
     <string name="password_body">You must define a password to your room with, at least, 4 characters. Your friends will need this password to join your room.</string>
+    <string name="select_theme"> Select a Theme</string>
 
 
     <!--    Join Room Screen -->
