@@ -13,9 +13,9 @@ data class CreateScreenUiState @OptIn(ExperimentalResourceApi::class) constructo
     val password: String = "",
     val passwordErrors: List<StringResource> = emptyList(),
     val availableThemes: List<BingoTheme>,
-    val themeId: String = "",
     val maxWinners: Int = 1,
     val bingoType: BingoType,
+    val selectedTheme: BingoTheme?,
 ) {
     companion object {
         @OptIn(ExperimentalResourceApi::class)
@@ -27,9 +27,9 @@ data class CreateScreenUiState @OptIn(ExperimentalResourceApi::class) constructo
             password = "",
             passwordErrors = listOf(),
             availableThemes = listOf(),
-            themeId = "",
             maxWinners = 1,
             bingoType = BingoType.CLASSIC,
+            selectedTheme = null,
         )
     }
 }

@@ -1,16 +1,33 @@
 package ui.presentation.create_room
 
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import domain.room.model.BingoType
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
+import org.jetbrains.compose.resources.ExperimentalResourceApi
+import themedbingo.composeapp.generated.resources.Res
+import themedbingo.composeapp.generated.resources.name_body
+import themedbingo.composeapp.generated.resources.name_textField
+import themedbingo.composeapp.generated.resources.password_body
+import themedbingo.composeapp.generated.resources.password_textField
 import ui.presentation.common.RotateScreen
 import ui.presentation.create_room.event.CreateScreenEvent
 import ui.presentation.create_room.screens.CreateClassicRoomScreen
 import ui.presentation.create_room.screens.CreateThemedRoomScreen
 import ui.presentation.util.WindowInfo
+import ui.presentation.util.bottom_sheet.ThemePickerBottomSheet
+import ui.presentation.util.bottom_sheet.UpdateBottomSheet
 
+@OptIn(ExperimentalResourceApi::class, ExperimentalMaterial3Api::class)
 @Composable
 fun CreateRoomScreen(
     component: CreateRoomScreenComponent,
@@ -18,8 +35,18 @@ fun CreateRoomScreen(
 ) {
     LaunchedEffect(Unit) { component.uiEvent(CreateScreenEvent.UILoaded) }
 
+    val coroutineScope = rememberCoroutineScope()
     val uiState by component.uiState.collectAsState()
     val isFormOk by component.isFormOk.collectAsState()
+
+    val nameBottomSheetState = rememberModalBottomSheetState()
+    var showNameBottomSheet by remember { mutableStateOf(false) }
+
+    val passwordBottomSheetState = rememberModalBottomSheetState()
+    var showPasswordBottomSheet by remember { mutableStateOf(false) }
+
+    val themeBottomSheetState = rememberModalBottomSheetState()
+    var showThemeBottomSheet by remember { mutableStateOf(false) }
 
     when (windowInfo.screenOrientation) {
         WindowInfo.DeviceOrientation.Landscape ->
@@ -31,15 +58,75 @@ fun CreateRoomScreen(
                     CreateClassicRoomScreen(
                         uiState = uiState,
                         isFormOk = isFormOk,
-                        event = { component.uiEvent(it) }
+                        event = { component.uiEvent(it) },
+                        onEditName = { showNameBottomSheet = true },
+                        onEditPassword = { showPasswordBottomSheet = true },
                     )
 
                 BingoType.THEMED ->
                     CreateThemedRoomScreen(
                         uiState = uiState,
                         isFormOk = isFormOk,
-                        event = { component.uiEvent(it) }
+                        event = { component.uiEvent(it) },
+                        onEditTheme = { showThemeBottomSheet = true },
+                        onEditName = { showNameBottomSheet = true },
+                        onEditPassword = { showPasswordBottomSheet = true },
                     )
             }
+    }
+
+    if (showNameBottomSheet) {
+        UpdateBottomSheet(
+            sheetState = nameBottomSheetState,
+            onDismiss = { showNameBottomSheet = false },
+            onConfirm = {
+                coroutineScope.launch {
+                    delay(200)
+                    component.uiEvent(CreateScreenEvent.UpdateName(it))
+                    nameBottomSheetState.hide()
+                    showNameBottomSheet = false
+                }
+            },
+            currentData = uiState.name,
+            title = Res.string.name_textField,
+            body = Res.string.name_body,
+            label = Res.string.name_textField,
+        )
+    }
+
+    if (showPasswordBottomSheet) {
+        UpdateBottomSheet(
+            sheetState = passwordBottomSheetState,
+            onDismiss = { showPasswordBottomSheet = false },
+            onConfirm = {
+                coroutineScope.launch {
+                    delay(200)
+                    component.uiEvent(CreateScreenEvent.UpdatePassword(it))
+                    passwordBottomSheetState.hide()
+                    showPasswordBottomSheet = false
+                }
+            },
+            currentData = uiState.password,
+            title = Res.string.password_textField,
+            body = Res.string.password_body,
+            label = Res.string.password_textField,
+            needsTrim = true,
+        )
+    }
+
+    if (showThemeBottomSheet) {
+        ThemePickerBottomSheet(
+            themes = uiState.availableThemes,
+            sheetState = themeBottomSheetState,
+            onThemePick = {
+                coroutineScope.launch {
+                    delay(200)
+                    component.uiEvent(CreateScreenEvent.UpdateTheme(it))
+                    themeBottomSheetState.hide()
+                    showThemeBottomSheet = false
+                }
+            },
+            onDismiss = { showThemeBottomSheet = false },
+        )
     }
 }

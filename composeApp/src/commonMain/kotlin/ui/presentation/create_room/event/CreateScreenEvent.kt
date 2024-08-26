@@ -1,5 +1,7 @@
 package ui.presentation.create_room.event
 
+import domain.theme.model.BingoTheme
+
 sealed class CreateScreenEvent {
     data object UILoaded: CreateScreenEvent()
     data object PopBack: CreateScreenEvent()
@@ -8,5 +10,5 @@ sealed class CreateScreenEvent {
     data class UpdateName(val name: String): CreateScreenEvent()
     data class UpdatePassword(val password: String): CreateScreenEvent()
     data class UpdateMaxWinners(val maxWinners: Int): CreateScreenEvent()
-    data class UpdateTheme(val themeId: String): CreateScreenEvent()
+    data class UpdateTheme(val theme: BingoTheme): CreateScreenEvent()
 }

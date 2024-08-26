@@ -1,8 +1,14 @@
 import androidx.compose.foundation.layout.BoxWithConstraints
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.imePadding
+import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import coil3.annotation.ExperimentalCoilApi
 import coil3.compose.setSingletonImageLoaderFactory
@@ -12,22 +18,7 @@ import com.arkivanov.decompose.extensions.compose.stack.animation.stackAnimation
 import com.arkivanov.decompose.extensions.compose.subscribeAsState
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.koin.compose.KoinContext
-import ui.navigation.Child
 import ui.navigation.RootComponent
-import ui.presentation.change_password.ChangePasswordScreen
-import ui.presentation.create_room.CreateRoomScreen
-import ui.presentation.forgot_password.ForgotPasswordScreen
-import ui.presentation.home.HomeScreen
-import ui.presentation.room.themed.host.HostScreen
-import ui.presentation.join_room.JoinScreen
-import ui.presentation.room.themed.play.PlayScreen
-import ui.presentation.profile.ProfileScreen
-import ui.presentation.profile.picture.EditProfilePictureScreen
-import ui.presentation.room.classic.host.ClassicHostScreen
-import ui.presentation.room.classic.play.ClassicPlayScreen
-import ui.presentation.sign_in.SignInScreen
-import ui.presentation.sign_up.SignUpScreen
-import ui.presentation.themes.ThemesScreen
 import ui.presentation.util.getAsyncImageLoader
 import ui.presentation.util.rememberWindowInfo
 
@@ -44,87 +35,26 @@ fun App(rootComponent: RootComponent) {
                 getAsyncImageLoader(context)
             }
 
-            BoxWithConstraints(
-                modifier = Modifier
-                    .fillMaxSize(),
-                propagateMinConstraints = true
-            ) {
+            Scaffold(modifier = Modifier.imePadding()) {
 
-                val boxWidth = this.maxWidth
-                val boxHeight = this.maxHeight
-                val windowInfo = rememberWindowInfo(screenHeight = boxHeight, screenWidth = boxWidth)
+                BoxWithConstraints(
+                    contentAlignment = Alignment.Center,
+                    modifier = Modifier.fillMaxSize().systemBarsPadding(),
+                ) {
 
-                Children(
-                    stack = childStack,
-                    animation = stackAnimation(slide())
-                ) { child ->
+                    val windowInfo = rememberWindowInfo(
+                        screenHeight = this.maxHeight,
+                        screenWidth = this.maxWidth,
+                    )
 
-                    when (val instance = child.instance) {
-                        is Child.HomeScreen -> HomeScreen(
-                            component = instance.component,
-                            windowInfo = windowInfo
-                        )
+                    Children(
+                        stack = childStack,
+                        animation = stackAnimation(slide()),
+                    ) { child ->
 
-                        is Child.ThemesScreen -> ThemesScreen(
-                            component = instance.component,
-                            windowInfo = windowInfo
-                        )
-
-                        is Child.CreateScreen -> CreateRoomScreen(
-                            component = instance.component,
-                            windowInfo = windowInfo
-                        )
-
-                        is Child.HostScreen -> HostScreen(
-                            component = instance.component,
-                            windowInfo = windowInfo
-                        )
-
-                        is Child.JoinScreen -> JoinScreen(
-                            component = instance.component,
-                            windowInfo = windowInfo
-                        )
-
-                        is Child.PlayScreen -> PlayScreen(
-                            component = instance.component,
-                            windowInfo = windowInfo
-                        )
-
-                        is Child.ProfileScreen -> ProfileScreen(
-                            component = instance.component,
-                            windowInfo = windowInfo
-                        )
-
-                        is Child.SignInScreen -> SignInScreen(
-                            component = instance.component,
-                            windowInfo = windowInfo
-                        )
-
-                        is Child.SignUpScreen -> SignUpScreen(
-                            component = instance.component,
-                            windowInfo = windowInfo
-                        )
-
-                        is Child.ForgotPasswordScreen -> ForgotPasswordScreen(
-                            component = instance.component,
-                            windowInfo = windowInfo
-                        )
-
-                        is Child.EditProfilePictureScreen -> EditProfilePictureScreen(
-                            component = instance.component,
-                            windowInfo = windowInfo
-                        )
-
-                        is Child.ChangePasswordScreen -> ChangePasswordScreen(
-                            component = instance.component,
-                            windowInfo = windowInfo
-                        )
-
-                        is Child.ClassicHostScreen -> ClassicHostScreen(
-                            component = instance.component,
-                        )
-                        is Child.ClassicPlayScreen -> ClassicPlayScreen(
-                            component = instance.component,
+                        CreateScreen(
+                            instance = child.instance,
+                            windowInfo = windowInfo,
                         )
                     }
                 }

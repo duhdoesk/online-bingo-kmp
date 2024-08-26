@@ -54,7 +54,7 @@ fun CreateRoomThemePicker(
         verticalAlignment = Alignment.Bottom
     ) {
         var expanded by remember { mutableStateOf(false) }
-        val selectedTheme = uiState.availableThemes.find { it.id == uiState.themeId }
+        val selectedTheme = uiState.selectedTheme
         val color by remember { mutableStateOf(getRandomLightColor()) }
 
         if (selectedTheme != null) {

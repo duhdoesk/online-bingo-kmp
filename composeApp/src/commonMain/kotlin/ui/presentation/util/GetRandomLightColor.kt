@@ -5,8 +5,8 @@ import kotlin.random.Random
 
 fun getRandomLightColor() =
     Color(
-        blue = Random.nextInt(180, 256),
-        red = Random.nextInt(180, 256),
-        green = Random.nextInt(180, 256),
+        blue = Random.nextInt(200, 256),
+        red = Random.nextInt(200, 256),
+        green = Random.nextInt(200, 256),
         alpha = 255
     )

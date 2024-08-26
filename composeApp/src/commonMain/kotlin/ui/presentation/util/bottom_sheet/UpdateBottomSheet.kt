@@ -39,22 +39,23 @@ import ui.presentation.common.components.BottomButtonRow
 @OptIn(ExperimentalResourceApi::class, ExperimentalMaterial3Api::class)
 @Composable
 fun UpdateBottomSheet(
+    sheetState: SheetState = rememberModalBottomSheetState(),
     onDismiss: () -> Unit,
     onConfirm: (newData: String) -> Unit,
     currentData: String,
     title: StringResource,
     body: StringResource,
     label: StringResource,
+    needsTrim: Boolean = false,
 ) {
     val keyboardController = LocalSoftwareKeyboardController.current
-    val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
 
     var data by remember {
         mutableStateOf(currentData)
     }
 
     val isValid by remember(data) {
-        mutableStateOf(data.length > 2)
+        mutableStateOf(data.length > 3)
     }
 
     UpdateBottomSheetContent(
@@ -65,7 +66,7 @@ fun UpdateBottomSheet(
         value = data,
         isValueValid = isValid,
         onValueUpdate = { newData ->
-            data = newData
+            data = if (needsTrim) newData.trim() else newData
         },
         onConfirm = {
             keyboardController?.hide()

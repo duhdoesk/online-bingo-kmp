@@ -4,6 +4,7 @@ import com.arkivanov.decompose.ComponentContext
 import dev.gitlive.firebase.auth.FirebaseUser
 import domain.room.model.BingoType
 import domain.room.use_case.CreateRoomUseCase
+import domain.theme.model.BingoTheme
 import domain.theme.use_case.GetAllThemesUseCase
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -22,6 +23,7 @@ import themedbingo.composeapp.generated.resources.password_length_error
 import ui.navigation.Configuration
 import ui.presentation.create_room.event.CreateScreenEvent
 import ui.presentation.create_room.state.CreateScreenUiState
+import ui.presentation.util.dialog.dialog_state.mutableDialogStateOf
 import util.componentCoroutineScope
 
 @OptIn(ExperimentalResourceApi::class)
@@ -58,7 +60,7 @@ class CreateRoomScreenComponent(
                 _isFormOk.update { false }
                 return@onEach
             }
-            if (bingoType == BingoType.THEMED && state.themeId == "") {
+            if (bingoType == BingoType.THEMED && state.selectedTheme == null) {
                 _isFormOk.update { false }
                 return@onEach
             }
@@ -93,7 +95,7 @@ class CreateRoomScreenComponent(
             is CreateScreenEvent.UpdateMaxWinners -> updateMaxWinners(event.maxWinners)
             is CreateScreenEvent.UpdateName -> updateName(event.name)
             is CreateScreenEvent.UpdatePassword -> updatePassword(event.password)
-            is CreateScreenEvent.UpdateTheme -> updateTheme(event.themeId)
+            is CreateScreenEvent.UpdateTheme -> updateTheme(event.theme)
         }
     }
 
@@ -113,9 +115,9 @@ class CreateRoomScreenComponent(
                             password = "",
                             passwordErrors = listOf(),
                             availableThemes = listOf(),
-                            themeId = "",
                             maxWinners = 1,
-                            bingoType = bingoType
+                            bingoType = bingoType,
+                            selectedTheme = null,
                         )
                     }
                 }
@@ -131,9 +133,9 @@ class CreateRoomScreenComponent(
                                 password = "",
                                 passwordErrors = listOf(),
                                 availableThemes = themes,
-                                themeId = "",
                                 maxWinners = 1,
-                                bingoType = bingoType
+                                bingoType = bingoType,
+                                selectedTheme = themes.first(),
                             )
                         }
                     }
@@ -182,10 +184,10 @@ class CreateRoomScreenComponent(
         }
     }
 
-    private fun updateTheme(themeId: String) {
+    private fun updateTheme(theme: BingoTheme) {
         _uiState.update {
             uiState.value.copy(
-                themeId = themeId
+                selectedTheme = theme,
             )
         }
     }
@@ -208,7 +210,7 @@ class CreateRoomScreenComponent(
                     password = password,
                     maxWinners = maxWinners,
                     type = bingoType,
-                    themeId = themeId,
+                    themeId = selectedTheme?.id.orEmpty(),
                 )
                     .onSuccess { roomId ->
                         val config = when (bingoType) {

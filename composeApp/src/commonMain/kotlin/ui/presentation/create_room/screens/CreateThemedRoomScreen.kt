@@ -11,11 +11,9 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.sizeIn
 import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
@@ -23,8 +21,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import org.jetbrains.compose.resources.ExperimentalResourceApi
@@ -32,14 +28,14 @@ import org.jetbrains.compose.resources.stringResource
 import themedbingo.composeapp.generated.resources.Res
 import themedbingo.composeapp.generated.resources.create_button
 import themedbingo.composeapp.generated.resources.create_room_title
-import ui.presentation.common.LoadingScreen
+import themedbingo.composeapp.generated.resources.name_textField
+import themedbingo.composeapp.generated.resources.theme_textField
 import ui.presentation.common.components.BottomButtonRow
 import ui.presentation.common.components.CreateRoomHeader
 import ui.presentation.create_room.event.CreateScreenEvent
-import ui.presentation.create_room.screens.components.CreateRoomMaxWinners
-import ui.presentation.create_room.screens.components.CreateRoomName
-import ui.presentation.create_room.screens.components.CreateRoomThemePicker
-import ui.presentation.create_room.screens.components.SessionPasswordComponent
+import ui.presentation.create_room.screens.components.CreateRoomEditMaxWinners
+import ui.presentation.create_room.screens.components.CreateRoomEditPassword
+import ui.presentation.create_room.screens.components.CreateRoomEditStringCard
 import ui.presentation.create_room.state.CreateScreenUiState
 
 @OptIn(ExperimentalResourceApi::class)
@@ -47,6 +43,9 @@ import ui.presentation.create_room.state.CreateScreenUiState
 fun CreateThemedRoomScreen(
     uiState: CreateScreenUiState,
     isFormOk: Boolean,
+    onEditName: () -> Unit,
+    onEditPassword: () -> Unit,
+    onEditTheme: () -> Unit,
     event: (event: CreateScreenEvent) -> Unit
 ) {
     Scaffold(
@@ -71,14 +70,6 @@ fun CreateThemedRoomScreen(
                         .verticalScroll(rememberScrollState())
                 ) {
 
-                    val rowModifier = Modifier
-                        .padding(horizontal = 16.dp)
-                        .fillMaxWidth()
-
-                    val leadingIconModifier = Modifier
-                        .size(60.dp)
-                        .clip(RoundedCornerShape(8.dp))
-
                     CreateRoomHeader()
 
                     Spacer(Modifier.height(60.dp))
@@ -94,51 +85,39 @@ fun CreateThemedRoomScreen(
 
                     Spacer(Modifier.height(12.dp))
 
-                    CreateRoomName(
-                        modifier = rowModifier,
-                        uiState = uiState,
-                        leadingIconModifier = leadingIconModifier,
-                        onUpdateName = { name ->
-                            event(CreateScreenEvent.UpdateName(name))
-                        })
-
-                    Spacer(Modifier.height(12.dp))
-
-                    CreateRoomThemePicker(
-                        modifier = rowModifier,
-                        uiState = uiState,
-                        leadingIconModifier = leadingIconModifier,
-                        contentScale = ContentScale.Crop,
-                        onUpdateThemeId = { themeId ->
-                            event(CreateScreenEvent.UpdateTheme(themeId))
-                        }
+                    CreateRoomEditStringCard(
+                        label = Res.string.name_textField,
+                        currentInfo = uiState.name,
+                        onClick = { onEditName() },
+                        modifier = Modifier.padding(horizontal = 16.dp).fillMaxWidth(),
                     )
 
                     Spacer(Modifier.height(12.dp))
 
-                    CreateRoomMaxWinners(
-                        modifier = rowModifier,
-                        leadingIconModifier = leadingIconModifier,
-                        uiState = uiState,
-                        onUpdateMaxWinners = { maxWinners ->
-                            event(CreateScreenEvent.UpdateMaxWinners(maxWinners))
-                        }
+                    CreateRoomEditStringCard(
+                        label = Res.string.theme_textField,
+                        currentInfo = uiState.selectedTheme?.name.orEmpty(),
+                        picture = uiState.selectedTheme?.pictureUri,
+                        onClick = { onEditTheme() },
+                        modifier = Modifier.padding(horizontal = 16.dp).fillMaxWidth(),
                     )
 
                     Spacer(Modifier.height(12.dp))
 
-                    SessionPasswordComponent(
-                        modifier = rowModifier,
-                        uiState = uiState,
-                        leadingIconModifier = leadingIconModifier,
-                        onUpdateLockedState = { event(CreateScreenEvent.UpdateLocked) },
-                        onUpdatePassword = { password ->
-                            event(
-                                CreateScreenEvent.UpdatePassword(
-                                    password
-                                )
-                            )
-                        }
+                    CreateRoomEditMaxWinners(
+                        currentValue = uiState.maxWinners,
+                        onClick = { maxWinners -> event(CreateScreenEvent.UpdateMaxWinners(maxWinners)) },
+                        modifier = Modifier.padding(horizontal = 16.dp).fillMaxWidth(),
+                    )
+
+                    Spacer(Modifier.height(12.dp))
+
+                    CreateRoomEditPassword(
+                        currentPassword = uiState.password,
+                        isLocked = uiState.locked,
+                        updateLockedState = { event(CreateScreenEvent.UpdateLocked) },
+                        updateCurrentPassword = { onEditPassword() },
+                        modifier = Modifier.padding(horizontal = 16.dp).fillMaxWidth(),
                     )
                 }
 
