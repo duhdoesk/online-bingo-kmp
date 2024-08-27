@@ -71,15 +71,17 @@ fun StartedClassicPlayScreen(
                             .fillMaxWidth()
                     )
 
-                    Spacer(Modifier.height(48.dp))
+                    if (uiState.myCard.isNotEmpty()) {
+                        Spacer(Modifier.height(48.dp))
 
-                    CompactClassicCard(
-                        numbers = uiState.myCard,
-                        raffledNumbers = uiState.raffledNumbers,
-                        modifier = Modifier
-                            .padding(horizontal = 16.dp)
-                            .fillMaxWidth(),
-                    )
+                        CompactClassicCard(
+                            numbers = uiState.myCard,
+                            raffledNumbers = uiState.raffledNumbers,
+                            modifier = Modifier
+                                .padding(horizontal = 16.dp)
+                                .fillMaxWidth(),
+                        )
+                    }
                 }
 
                 BottomButtonRow(

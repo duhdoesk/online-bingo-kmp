@@ -76,14 +76,16 @@ fun PortraitStartedPlayScreen(
                             modifier = Modifier,
                         )
 
-                        Spacer(Modifier.height(32.dp))
+                        if (uiState.myCard.isNotEmpty()) {
+                            Spacer(Modifier.height(32.dp))
 
-                        SelectedBingoCard(
-                            bingoCard = uiState.myCard,
-                            raffledCharacters = uiState.raffledCharacters,
-                            modifier = Modifier
-                                .padding(16.dp).fillMaxWidth(),
-                        )
+                            SelectedBingoCard(
+                                bingoCard = uiState.myCard,
+                                raffledCharacters = uiState.raffledCharacters,
+                                modifier = Modifier
+                                    .padding(16.dp).fillMaxWidth(),
+                            )
+                        }
                     }
 
                     BottomButtonRow(
