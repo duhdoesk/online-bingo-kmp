@@ -129,7 +129,7 @@ fun PortraitSignInScreen(
                             event(SignInScreenEvent.SignIn)
                         },
                         modifier = Modifier.fillMaxWidth(),
-                        enabled = (isFormValid),
+                        enabled = true,
                     ) {
                         Text(stringResource(Res.string.sign_in))
                     }

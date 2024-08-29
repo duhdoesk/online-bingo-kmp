@@ -78,8 +78,10 @@ kotlin {
             implementation(libs.decompose)
             implementation(libs.decompose.extensions.compose)
 
-//            Coil
+//            Ktor
             implementation(libs.ktor.client.core)
+
+//            Coil
             implementation(libs.coil.compose.core)
             implementation(libs.coil.compose)
             implementation(libs.coil.mp)
@@ -96,8 +98,13 @@ kotlin {
             implementation(libs.dev.firebase.common)
             implementation(libs.jetbrains.kotlinx.serialization.json)
 
-//            DateTime
+//            DateTime  
             implementation(libs.kotlinx.datetime)
+
+//            Supabase
+            implementation(project.dependencies.platform(libs.supabase.bom.get()))
+            implementation(libs.supabase.auth.kt)
+            implementation(libs.supabase.gotrue.kt)
         }
 //        desktopMain.dependencies {
 //            implementation(compose.desktop.currentOs)

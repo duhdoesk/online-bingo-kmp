@@ -4,6 +4,7 @@ import com.arkivanov.decompose.ComponentContext
 import dev.gitlive.firebase.auth.FirebaseUser
 import domain.user.use_case.FlowUserUseCase
 import domain.user.use_case.GetUserByIdUseCase
+import io.github.jan.supabase.gotrue.user.UserInfo
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
@@ -17,7 +18,7 @@ import util.componentCoroutineScope
 
 class HomeScreenComponent(
     componentContext: ComponentContext,
-    private val firebaseUser: FirebaseUser,
+    private val supabaseUser: UserInfo,
     private val onNavigate: (configuration: Configuration) -> Unit
 ) : ComponentContext by componentContext, KoinComponent {
 
@@ -37,7 +38,7 @@ class HomeScreenComponent(
 
     private fun uiLoaded() {
         coroutineScope.launch {
-            getUserByIdUseCase(firebaseUser.uid).collect { user ->
+            getUserByIdUseCase(supabaseUser.id).collect { user ->
                 _uiState.update {
                     HomeScreenUIState(
                         loading = false,

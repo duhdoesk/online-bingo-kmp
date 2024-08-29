@@ -1,12 +1,14 @@
 package domain.di
 
 import data.auth.AuthServiceImpl
+import data.auth.supabase.SupabaseAuthServiceImpl
 import data.card.repository.CardRepositoryImpl
 import data.character.repository.CharacterRepositoryImpl
 import data.room.repository.BingoRoomRepositoryImpl
 import data.theme.repository.BingoThemeRepositoryImpl
 import data.user.repository.UserRepositoryImpl
 import domain.auth.AuthService
+import domain.auth.supabase.SupabaseAuthService
 import domain.auth.use_case.AuthenticateUserUseCase
 import domain.auth.use_case.ChangePasswordWithReAuthenticationUseCase
 import domain.auth.use_case.CreateUserUseCase
@@ -91,4 +93,7 @@ val domainModule = module {
     single<DeleteAccountUseCase> { DeleteAccountUseCase(get()) }
     single<SignOutUseCase> { SignOutUseCase(get()) }
     single<ChangePasswordWithReAuthenticationUseCase> { ChangePasswordWithReAuthenticationUseCase(get()) }
+
+//    Supabase Auth
+    single<SupabaseAuthService> { SupabaseAuthServiceImpl() }
 }

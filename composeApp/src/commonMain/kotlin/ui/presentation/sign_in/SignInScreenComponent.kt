@@ -4,7 +4,10 @@ import com.arkivanov.decompose.ComponentContext
 import dev.gitlive.firebase.auth.FirebaseUser
 import domain.auth.AuthService
 import domain.auth.getAuthErrorDescription
+import domain.auth.supabase.SupabaseAuthService
 import domain.auth.use_case.AuthenticateUserUseCase
+import io.github.jan.supabase.SupabaseClient
+import io.github.jan.supabase.gotrue.user.UserInfo
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.onEach
@@ -22,13 +25,17 @@ import util.componentCoroutineScope
 
 class SignInScreenComponent(
     componentContext: ComponentContext,
-    firebaseUser: FirebaseUser?,
+    supabaseUser: UserInfo?,
+    val supabaseClient: SupabaseClient,
     private val onSignIn: () -> Unit,
     private val onSignUp: () -> Unit,
     private val onPasswordReset: () -> Unit,
 ) : ComponentContext by componentContext, KoinComponent {
 
+    private val coroutineScope = componentCoroutineScope()
+
     private val authService by inject<AuthService>()
+    private val supabaseAuthService by inject<SupabaseAuthService>()
     private val authenticateUserUseCase by inject<AuthenticateUserUseCase>()
 
     private val _uiState = MutableStateFlow(SignInScreenUIState())
@@ -54,7 +61,7 @@ class SignInScreenComponent(
     val signInErrorDialogState = mutableDialogStateOf<StringResource?>(null)
 
     init {
-        if (firebaseUser != null) onSignIn()
+        if (supabaseUser != null) onSignIn()
     }
 
     fun updateEmail(email: String) {

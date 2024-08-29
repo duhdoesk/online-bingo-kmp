@@ -2,6 +2,9 @@ package ui.presentation.sign_in
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import io.github.jan.supabase.compose.auth.composable.NativeSignInResult
+import io.github.jan.supabase.compose.auth.composable.rememberSignInWithGoogle
+import io.github.jan.supabase.compose.auth.composeAuth
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import ui.presentation.sign_in.event.SignInScreenEvent
 import ui.presentation.sign_in.screens.SignInScreenOrientation
@@ -27,6 +30,19 @@ fun SignInScreen(
     val signInErrorDialogState = component
         .signInErrorDialogState
 
+    val supabaseClient = component.supabaseClient
+
+    val authState = supabaseClient.composeAuth.rememberSignInWithGoogle(
+        onResult = { result ->
+            when(result) { //handle errors
+                NativeSignInResult.ClosedByUser -> TODO()
+                is NativeSignInResult.Error -> TODO()
+                is NativeSignInResult.NetworkError -> TODO()
+                NativeSignInResult.Success -> { component.signIn() }
+            }
+        }
+    )
+
     SignInScreenOrientation(
         windowInfo = windowInfo,
         uiState = uiState,
@@ -38,7 +54,7 @@ fun SignInScreen(
                     component.resetPassword()
 
                 is SignInScreenEvent.SignIn ->
-                    component.signIn()
+                    authState.startFlow()
 
                 is SignInScreenEvent.SignUp ->
                     component.signUp()

@@ -9,6 +9,12 @@ import com.arkivanov.decompose.router.stack.replaceAll
 import com.arkivanov.decompose.router.stack.replaceCurrent
 import dev.gitlive.firebase.auth.FirebaseUser
 import domain.auth.AuthService
+import domain.auth.supabase.SupabaseAuthService
+import io.github.jan.supabase.gotrue.SessionSource
+import io.github.jan.supabase.gotrue.SessionStatus
+import io.github.jan.supabase.gotrue.user.UserInfo
+import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.stateIn
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 import ui.presentation.change_password.ChangePasswordScreenComponent
@@ -31,9 +37,15 @@ class RootComponent(
 ) : ComponentContext by componentContext, KoinComponent {
 
     private val authService by inject<AuthService>()
+    private val supabaseAuthService by inject<SupabaseAuthService>()
+
+    private val supabaseClient = supabaseAuthService.supabaseClient
 
     private val firebaseUser: FirebaseUser?
         get() = authService.currentUser
+
+    private val supabaseUser: UserInfo?
+        get() = supabaseAuthService.currentUser
 
     private val navigation = StackNavigation<Configuration>()
 
@@ -61,7 +73,8 @@ class RootComponent(
             Configuration.HomeScreen -> Child.HomeScreen(
                 HomeScreenComponent(
                     componentContext = context,
-                    firebaseUser = firebaseUser!!,
+//                    firebaseUser = firebaseUser!!,
+                    supabaseUser = supabaseUser!!,
                     onNavigate = { receivedConfig ->
                         navigation.pushNew(configuration = receivedConfig)
                     }
@@ -142,7 +155,8 @@ class RootComponent(
                     onSignIn = { signIn() },
                     onSignUp = { navigation.pushNew(configuration = Configuration.SignUpScreen) },
                     onPasswordReset = { navigation.pushNew(configuration = Configuration.ForgotPasswordScreen) },
-                    firebaseUser = firebaseUser,
+                    supabaseUser = supabaseUser,
+                    supabaseClient = supabaseClient,
                 )
             )
 

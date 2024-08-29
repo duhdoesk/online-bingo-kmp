@@ -20,8 +20,9 @@ kotlinx-datetime = "0.6.0"
 decompose = "3.0.0"
 coil3 = "3.0.0-alpha06"
 kotlinxSerializationJsonVersion = "1.6.2"
-ktor = "3.0.0-wasm2"
+ktor = "2.3.12"
 firebasePlugin = "4.4.1"
+supabase = "2.5.2"
 
 [libraries]
 androidx-activity-compose = { module = "androidx.activity:activity-compose", version.ref = "androidx-activityCompose" }
@@ -54,6 +55,9 @@ kotlinx-datetime = { module = "org.jetbrains.kotlinx:kotlinx-datetime", version.
 ktor-client-core = { group = "io.ktor", name = "ktor-client-core", version.ref = "ktor" }
 ktor-client-darwin = { module = "io.ktor:ktor-client-darwin", version.ref = "ktor" }
 ktor-client-okhttp = { module = "io.ktor:ktor-client-okhttp", version.ref = "ktor" }
+supabase-bom = { module = "io.github.jan-tennert.supabase:bom", version.ref = "supabase" }
+supabase-auth-kt = { module = "io.github.jan-tennert.supabase:compose-auth" }
+supabase-gotrue-kt = { module = "io.github.jan-tennert.supabase:gotrue-kt" }
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }
