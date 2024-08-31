@@ -10,24 +10,24 @@ import com.arkivanov.decompose.router.stack.replaceCurrent
 import dev.gitlive.firebase.auth.FirebaseUser
 import domain.auth.AuthService
 import domain.auth.supabase.SupabaseAuthService
-import io.github.jan.supabase.gotrue.SessionSource
+import domain.user.use_case.CreateUserUseCase
+import domain.user.use_case.GetUserByIdUseCase
 import io.github.jan.supabase.gotrue.SessionStatus
-import io.github.jan.supabase.gotrue.user.UserInfo
-import kotlinx.coroutines.flow.onEach
-import kotlinx.coroutines.flow.stateIn
+import io.github.jan.supabase.gotrue.auth
+import kotlinx.coroutines.flow.map
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 import ui.presentation.change_password.ChangePasswordScreenComponent
 import ui.presentation.create_room.CreateRoomScreenComponent
 import ui.presentation.forgot_password.ForgotPasswordScreenComponent
 import ui.presentation.home.HomeScreenComponent
-import ui.presentation.room.themed.host.HostScreenComponent
 import ui.presentation.join_room.JoinScreenComponent
-import ui.presentation.room.themed.play.PlayScreenComponent
 import ui.presentation.profile.ProfileScreenComponent
 import ui.presentation.profile.picture.EditProfilePictureScreenComponent
 import ui.presentation.room.classic.host.ClassicHostScreenComponent
 import ui.presentation.room.classic.play.ClassicPlayScreenComponent
+import ui.presentation.room.themed.host.HostScreenComponent
+import ui.presentation.room.themed.play.PlayScreenComponent
 import ui.presentation.sign_in.SignInScreenComponent
 import ui.presentation.sign_up.SignUpScreenComponent
 import ui.presentation.themes.ThemesScreenComponent
@@ -38,14 +38,28 @@ class RootComponent(
 
     private val authService by inject<AuthService>()
     private val supabaseAuthService by inject<SupabaseAuthService>()
+    private val getUserByIdUseCase by inject<GetUserByIdUseCase>()
+    private val createUserUseCase by inject<CreateUserUseCase>()
 
     private val supabaseClient = supabaseAuthService.supabaseClient
 
     private val firebaseUser: FirebaseUser?
         get() = authService.currentUser
 
-    private val supabaseUser: UserInfo?
-        get() = supabaseAuthService.currentUser
+    val user = supabaseClient.auth.sessionStatus.map { sessionStatus ->
+        when (sessionStatus) {
+            is SessionStatus.Authenticated -> {
+                if (sessionStatus.isNew) {
+                    createUserUseCase(
+                        id = sessionStatus.session.user?.id.orEmpty(),
+                        email = sessionStatus.session.user?.email.orEmpty(),
+                    )
+                }
+                getUserByIdUseCase(sessionStatus.session.user?.id.orEmpty()).getOrNull()
+            }
+            else -> null
+        }
+    }
 
     private val navigation = StackNavigation<Configuration>()
 
@@ -73,8 +87,7 @@ class RootComponent(
             Configuration.HomeScreen -> Child.HomeScreen(
                 HomeScreenComponent(
                     componentContext = context,
-//                    firebaseUser = firebaseUser!!,
-                    supabaseUser = supabaseUser!!,
+                    user = user,
                     onNavigate = { receivedConfig ->
                         navigation.pushNew(configuration = receivedConfig)
                     }
@@ -137,7 +150,7 @@ class RootComponent(
             Configuration.ProfileScreen -> Child.ProfileScreen(
                 ProfileScreenComponent(
                     componentContext = context,
-                    firebaseUser = firebaseUser!!,
+                    user = user,
                     onPopBack = { navigation.pop() },
                     onSignOut = { signOut() },
                     onUpdatePicture = {
@@ -153,9 +166,7 @@ class RootComponent(
                 SignInScreenComponent(
                     componentContext = context,
                     onSignIn = { signIn() },
-                    onSignUp = { navigation.pushNew(configuration = Configuration.SignUpScreen) },
-                    onPasswordReset = { navigation.pushNew(configuration = Configuration.ForgotPasswordScreen) },
-                    supabaseUser = supabaseUser,
+                    user = user,
                     supabaseClient = supabaseClient,
                 )
             )

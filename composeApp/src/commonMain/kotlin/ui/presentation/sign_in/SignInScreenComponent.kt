@@ -1,109 +1,75 @@
 package ui.presentation.sign_in
 
+import androidx.compose.runtime.mutableStateOf
 import com.arkivanov.decompose.ComponentContext
-import dev.gitlive.firebase.auth.FirebaseUser
-import domain.auth.AuthService
-import domain.auth.getAuthErrorDescription
-import domain.auth.supabase.SupabaseAuthService
-import domain.auth.use_case.AuthenticateUserUseCase
+import domain.user.model.User
 import io.github.jan.supabase.SupabaseClient
-import io.github.jan.supabase.gotrue.user.UserInfo
+import io.github.jan.supabase.compose.auth.composable.NativeSignInResult
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.onEach
-import kotlinx.coroutines.flow.stateIn
-import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
-import org.jetbrains.compose.resources.ExperimentalResourceApi
-import org.jetbrains.compose.resources.StringResource
 import org.koin.core.component.KoinComponent
-import org.koin.core.component.inject
+import ui.presentation.sign_in.event.SignInScreenEvent
 import ui.presentation.sign_in.state.SignInScreenUIState
-import ui.presentation.util.dialog.dialog_state.mutableDialogStateOf
-import ui.presentation.util.isEmailValid
 import util.componentCoroutineScope
 
 class SignInScreenComponent(
     componentContext: ComponentContext,
-    supabaseUser: UserInfo?,
+    private val user: Flow<User?>,
     val supabaseClient: SupabaseClient,
     private val onSignIn: () -> Unit,
-    private val onSignUp: () -> Unit,
-    private val onPasswordReset: () -> Unit,
 ) : ComponentContext by componentContext, KoinComponent {
 
+    /**
+     * Single Coroutine Scope to handle suspend operations
+     */
     private val coroutineScope = componentCoroutineScope()
 
-    private val authService by inject<AuthService>()
-    private val supabaseAuthService by inject<SupabaseAuthService>()
-    private val authenticateUserUseCase by inject<AuthenticateUserUseCase>()
-
+    /**
+     * UI State holder
+     */
     private val _uiState = MutableStateFlow(SignInScreenUIState())
-    val uiState = _uiState
-        .onEach { state ->
-            _isFormValid.update { state.email.isEmailValid() && state.password.length >= 8 }
-        }
-        .stateIn(
-            componentContext.componentCoroutineScope(),
-            SharingStarted.WhileSubscribed(),
-            SignInScreenUIState()
-        )
+    val uiState = _uiState.asStateFlow()
 
-    private val _isFormValid = MutableStateFlow(false)
-    val isFormValid = _isFormValid
-        .stateIn(
-            componentContext.componentCoroutineScope(),
-            SharingStarted.WhileSubscribed(),
-            false
-        )
+    /**
+     * Modal triggers
+     */
+    val showErrorModal = mutableStateOf(false)
+    val showNetworkErrorModal = mutableStateOf(false)
 
-    @OptIn(ExperimentalResourceApi::class)
-    val signInErrorDialogState = mutableDialogStateOf<StringResource?>(null)
-
-    init {
-        if (supabaseUser != null) onSignIn()
-    }
-
-    fun updateEmail(email: String) {
-        _uiState.update { state ->
-            state.copy(email = email.trim())
-        }
-    }
-
-    fun updatePassword(password: String) {
-        _uiState.update { state ->
-            state.copy(password = password.trim())
-        }
-    }
-
-    @OptIn(ExperimentalResourceApi::class)
-    fun signIn() {
-        uiState.value.run {
-            componentCoroutineScope().launch {
-                authenticateUserUseCase.invoke(
-                    email = email,
-                    password = password
-                )
-                    .onSuccess { onSignIn() }
-                    .onFailure { exception ->
-                        signInErrorDialogState.showDialog(getAuthErrorDescription(exception.message.orEmpty()))
-                        clearPassword()
-                    }
+    /**
+     * Function to delegate the handling of UI Events
+     */
+    fun uiEvent(event: SignInScreenEvent) {
+        when (event) {
+            SignInScreenEvent.UiLoaded -> uiLoaded()
+            is SignInScreenEvent.SignInWithGoogle -> signIn(event.result)
+            is SignInScreenEvent.SignInWithApple -> {
+                //todo(): apple login
             }
         }
     }
 
-    fun signUp() =
-        onSignUp()
+    /**
+     * Functions to handle each UI Event
+     */
+    private fun uiLoaded() {
+        coroutineScope.launch {
+            user.collect {
+                if (it != null) onSignIn()
+            }
+        }
+    }
 
-    fun resetPassword() =
-        onPasswordReset()
-
-    private fun clearPassword() {
-        _uiState.update { state ->
-            state.copy(
-                password = ""
-            )
+    private fun signIn(result: NativeSignInResult) {
+        componentCoroutineScope().launch {
+            when(result) {
+                NativeSignInResult.ClosedByUser -> showErrorModal.value = true
+                is NativeSignInResult.Error -> showErrorModal.value = true
+                is NativeSignInResult.NetworkError -> showNetworkErrorModal.value = true
+                NativeSignInResult.Success -> onSignIn()
+            }
         }
     }
 }

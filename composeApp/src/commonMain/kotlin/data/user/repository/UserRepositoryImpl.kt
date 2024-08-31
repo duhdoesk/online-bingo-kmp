@@ -64,17 +64,22 @@ class UserRepositoryImpl(
         id: String,
         email: String,
         name: String,
-    ) {
-        collection
-            .document(id)
-            .set(
-                data = hashMapOf(
-                    "name" to name,
-                    "email" to email,
-                    "pictureUri" to "https://i.imgur.com/DujcYDE.jpg",
-                    "victoryMessage" to "O Bingo Temático é demais!"
+    ): Result<Unit> {
+        try {
+            collection
+                .document(id)
+                .set(
+                    data = hashMapOf(
+                        "name" to name,
+                        "email" to email,
+                        "pictureUri" to "https://i.imgur.com/DujcYDE.jpg",
+                        "victoryMessage" to "O Bingo Temático é demais!"
+                    )
                 )
-            )
+            return Result.success(Unit)
+        } catch (e: Exception) {
+            return Result.failure(e)
+        }
     }
 
     override fun getListOfUsers(ids: List<String>): Flow<List<User>> {

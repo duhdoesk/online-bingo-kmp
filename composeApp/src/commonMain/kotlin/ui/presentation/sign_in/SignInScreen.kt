@@ -2,69 +2,49 @@ package ui.presentation.sign_in
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
-import io.github.jan.supabase.compose.auth.composable.NativeSignInResult
+import androidx.compose.runtime.getValue
 import io.github.jan.supabase.compose.auth.composable.rememberSignInWithGoogle
 import io.github.jan.supabase.compose.auth.composeAuth
 import org.jetbrains.compose.resources.ExperimentalResourceApi
+import themedbingo.composeapp.generated.resources.Res
+import themedbingo.composeapp.generated.resources.unmapped_error
 import ui.presentation.sign_in.event.SignInScreenEvent
-import ui.presentation.sign_in.screens.SignInScreenOrientation
+import ui.presentation.sign_in.screens.UniqueSignInScreen
 import ui.presentation.util.WindowInfo
+import ui.presentation.util.dialog.GenericErrorDialog
 
 @OptIn(ExperimentalResourceApi::class)
 @Composable
 fun SignInScreen(
     component: SignInScreenComponent,
-    windowInfo: WindowInfo
+    windowInfo: WindowInfo,
 ) {
-
-    val uiState = component
-        .uiState
-        .collectAsState()
-        .value
-
-    val isFormValid = component
-        .isFormValid
-        .collectAsState()
-        .value
-
-    val signInErrorDialogState = component
-        .signInErrorDialogState
+    val uiState by component.uiState.collectAsState()
+    val showErrorModal by component.showErrorModal
+    val showNetworkErrorModal by component.showNetworkErrorModal
 
     val supabaseClient = component.supabaseClient
-
     val authState = supabaseClient.composeAuth.rememberSignInWithGoogle(
-        onResult = { result ->
-            when(result) { //handle errors
-                NativeSignInResult.ClosedByUser -> TODO()
-                is NativeSignInResult.Error -> TODO()
-                is NativeSignInResult.NetworkError -> TODO()
-                NativeSignInResult.Success -> { component.signIn() }
-            }
-        }
+        onResult = { result -> component.uiEvent(SignInScreenEvent.SignInWithGoogle(result)) }
     )
 
-    SignInScreenOrientation(
-        windowInfo = windowInfo,
+    UniqueSignInScreen(
         uiState = uiState,
-        isFormValid = isFormValid,
-        signInErrorDialogState = signInErrorDialogState,
-        event = { event ->
-            when (event) {
-                is SignInScreenEvent.SendPasswordResetEmail ->
-                    component.resetPassword()
-
-                is SignInScreenEvent.SignIn ->
-                    authState.startFlow()
-
-                is SignInScreenEvent.SignUp ->
-                    component.signUp()
-
-                is SignInScreenEvent.UpdateEmail ->
-                    component.updateEmail(event.email)
-
-                is SignInScreenEvent.UpdatePassword ->
-                    component.updatePassword(event.password)
-            }
-        }
+        event = { component.uiEvent(it) },
+        onStartGoogleAuth = { authState.startFlow() },
     )
+
+    if (showErrorModal) {
+        GenericErrorDialog(
+            onDismiss = { component.showErrorModal.value = false },
+            body = Res.string.unmapped_error,
+        )
+    }
+
+    if (showNetworkErrorModal) {
+        GenericErrorDialog(
+            onDismiss = { component.showErrorModal.value = false },
+            body = Res.string.unmapped_error, //todo(): refactor to network error
+        )
+    }
 }

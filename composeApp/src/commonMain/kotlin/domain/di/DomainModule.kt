@@ -9,9 +9,9 @@ import data.theme.repository.BingoThemeRepositoryImpl
 import data.user.repository.UserRepositoryImpl
 import domain.auth.AuthService
 import domain.auth.supabase.SupabaseAuthService
+import domain.auth.supabase.use_case.SignInWithGoogleUseCase
 import domain.auth.use_case.AuthenticateUserUseCase
 import domain.auth.use_case.ChangePasswordWithReAuthenticationUseCase
-import domain.auth.use_case.CreateUserUseCase
 import domain.auth.use_case.DeleteAccountUseCase
 import domain.auth.use_case.SignOutUseCase
 import domain.card.repository.CardRepository
@@ -36,6 +36,7 @@ import domain.theme.use_case.GetCharactersByThemeId
 import domain.theme.use_case.GetRoomCharactersUseCase
 import domain.theme.use_case.GetRoomThemeUseCase
 import domain.user.repository.UserRepository
+import domain.user.use_case.CreateUserUseCase
 import domain.user.use_case.FlowUserUseCase
 import domain.user.use_case.GetProfilePicturesUseCase
 import domain.user.use_case.GetRoomPlayersUseCase
@@ -85,15 +86,16 @@ val domainModule = module {
     single<UpdateUserPictureUseCase> { UpdateUserPictureUseCase(get()) }
     single<GetProfilePicturesUseCase> { GetProfilePicturesUseCase(get(), get()) }
     factory<GetRoomPlayersUseCase> { GetRoomPlayersUseCase(get(), get()) }
+    single<CreateUserUseCase> { CreateUserUseCase(get()) }
 
 //    Auth
     single<AuthService> { AuthServiceImpl(get()) }
     single<AuthenticateUserUseCase> { AuthenticateUserUseCase(get(), get()) }
-    single<CreateUserUseCase> { CreateUserUseCase(get(), get()) }
     single<DeleteAccountUseCase> { DeleteAccountUseCase(get()) }
     single<SignOutUseCase> { SignOutUseCase(get()) }
     single<ChangePasswordWithReAuthenticationUseCase> { ChangePasswordWithReAuthenticationUseCase(get()) }
 
 //    Supabase Auth
     single<SupabaseAuthService> { SupabaseAuthServiceImpl() }
+    single<SignInWithGoogleUseCase> { SignInWithGoogleUseCase(get(), get()) }
 }

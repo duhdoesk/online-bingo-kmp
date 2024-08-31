@@ -81,6 +81,8 @@
 
     <!--    Sign In / Up Screens / Change Password -->
     <string name="sign_in">Entrar</string>
+    <string name="sign_in_google">Entrar com Google</string>
+    <string name="sign_in_apple">Entrar com Apple</string>
     <string name="sign_up">Cadastrar</string>
     <string name="change_password">Change Password</string>
     <string name="email">E-mail</string>

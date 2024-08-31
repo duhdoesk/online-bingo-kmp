@@ -5,9 +5,11 @@ import dev.gitlive.firebase.auth.FirebaseUser
 import domain.auth.getAuthErrorDescription
 import domain.auth.use_case.DeleteAccountUseCase
 import domain.auth.use_case.SignOutUseCase
+import domain.user.model.User
 import domain.user.use_case.FlowUserUseCase
 import domain.user.use_case.UpdateNameUseCase
 import domain.user.use_case.UpdateVictoryMessageUseCase
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.stateIn
@@ -27,7 +29,7 @@ import util.componentCoroutineScope
 
 class ProfileScreenComponent(
     componentContext: ComponentContext,
-    val firebaseUser: FirebaseUser,
+    private val user: Flow<User?>,
     private val onPopBack: () -> Unit,
     private val onSignOut: () -> Unit,
     private val onUpdatePicture: () -> Unit,
@@ -41,14 +43,9 @@ class ProfileScreenComponent(
     private val updateNameUseCase by inject<UpdateNameUseCase>()
     private val updateVictoryMessageUseCase by inject<UpdateVictoryMessageUseCase>()
 
-    private val flowUserUseCase by inject<FlowUserUseCase>()
-
-    private val _userFlow = flowUserUseCase.invoke(firebaseUser.uid)
-
-    private val _profileScreenUiState = combine(_userFlow) {
-        user ->
+    private val _profileScreenUiState = combine(user) { user ->
         if (user.isEmpty()) ProfileScreenUIState.Error
-        else ProfileScreenUIState.Success(user.first())
+        else ProfileScreenUIState.Success(user.first()!!)
     }
 
     val profileScreenUiState = _profileScreenUiState
@@ -106,23 +103,23 @@ class ProfileScreenComponent(
 
     @OptIn(ExperimentalResourceApi::class)
     fun updateName(newName: String) {
-        coroutineScope.launch {
-            updateNameUseCase.invoke(
-                userId = firebaseUser.uid,
-                newName = newName
-            )
-                .onFailure { errorDialogState.showDialog(Res.string.update_nickname_failure) }
-        }
+//        coroutineScope.launch {
+//            updateNameUseCase.invoke(
+//                userId = firebaseUser.uid,
+//                newName = newName
+//            )
+//                .onFailure { errorDialogState.showDialog(Res.string.update_nickname_failure) }
+//        }
     }
 
     @OptIn(ExperimentalResourceApi::class)
     fun updateVictoryMessage(newVictoryMessage: String) {
-        coroutineScope.launch {
-            updateVictoryMessageUseCase.invoke(
-                userId = firebaseUser.uid,
-                newVictoryMessage = newVictoryMessage
-            )
-                .onFailure { errorDialogState.showDialog(Res.string.update_victory_failure) }
-        }
+//        coroutineScope.launch {
+//            updateVictoryMessageUseCase.invoke(
+//                userId = firebaseUser.uid,
+//                newVictoryMessage = newVictoryMessage
+//            )
+//                .onFailure { errorDialogState.showDialog(Res.string.update_victory_failure) }
+//        }
     }
 }

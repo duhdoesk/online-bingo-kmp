@@ -8,7 +8,7 @@ interface UserRepository {
         id: String,
         email: String,
         name: String,
-    )
+    ): Result<Unit>
 
     suspend fun getUserById(id: String): Result<User>
 

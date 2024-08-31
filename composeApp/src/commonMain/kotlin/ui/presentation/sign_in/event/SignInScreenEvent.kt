@@ -1,10 +1,9 @@
 package ui.presentation.sign_in.event
 
-sealed class SignInScreenEvent {
-    data object SignIn: SignInScreenEvent()
-    data object SignUp: SignInScreenEvent()
-    data object SendPasswordResetEmail: SignInScreenEvent()
+import io.github.jan.supabase.compose.auth.composable.NativeSignInResult
 
-    data class UpdateEmail(val email: String): SignInScreenEvent()
-    data class UpdatePassword(val password: String): SignInScreenEvent()
+sealed class SignInScreenEvent {
+    data object UiLoaded: SignInScreenEvent()
+    data class SignInWithGoogle(val result: NativeSignInResult): SignInScreenEvent()
+    data class SignInWithApple(val result: NativeSignInResult): SignInScreenEvent()
 }
