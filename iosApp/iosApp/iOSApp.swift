@@ -27,6 +27,8 @@ class AppDelegate: NSObject, UIApplicationDelegate {
                      open url: URL,
                      options: [UIApplication.OpenURLOptionsKey : Any] = [:],
                      didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey : Any]? = nil) -> Bool {
+        let a = url.absoluteString
+        DeeplinkHandler().handleIOSLaunch(url: a)
         print(url)
         return true
     }
