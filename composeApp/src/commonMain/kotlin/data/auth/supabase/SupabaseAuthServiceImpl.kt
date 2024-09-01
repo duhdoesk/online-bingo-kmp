@@ -20,7 +20,10 @@ class SupabaseAuthServiceImpl : SupabaseAuthService {
         supabaseUrl = SUPABASE_URL,
         supabaseKey = SUPABASE_KEY,
     ) {
-        install(Auth)
+        install(Auth) {
+            host = "com.duhdoesk.themedbingocardsgenerator.ThemedBingo"
+            scheme = "themedbingo"
+        }
         install(ComposeAuth) {
             googleNativeLogin(serverClientId = GOOGLE_SERVER_CLIENT_ID)
             appleNativeLogin()

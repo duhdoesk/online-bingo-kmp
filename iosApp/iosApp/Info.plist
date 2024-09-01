@@ -21,16 +21,32 @@
 	<key>CFBundleURLTypes</key>
 	<array>
 		<dict>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>CFBundleURLName</key>
+			<string>com.duhdoesk.themedbingocardsgenerator.ThemedBingo</string>
 			<key>CFBundleURLSchemes</key>
 			<array>
-				<string>com.googleusercontent.apps.746232526782-paak6m3i5r5eevmm75th5vp9mv2rg0b6</string>
+				<string>localhost://</string>
+				<string>apps.googleusercontent.com.746232526782-dk79men2no3js7he4186g6m67d6edpd1</string>
+				<string>apps.googleusercontent.com.746232526782-mnq2lnm9fp2sunpopk0cfp7pu6v9trcu</string>
+			</array>
+		</dict>
+		<dict>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>CFBundleURLName</key>
+			<string>com.duhdoesk.themedbingocardsgenerator.ThemedBingo</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>themedbingo</string>
 			</array>
 		</dict>
 	</array>
 	<key>CFBundleVersion</key>
 	<string>1</string>
 	<key>GIDClientID</key>
-	<string>746232526782-paak6m3i5r5eevmm75th5vp9mv2rg0b6.apps.googleusercontent.com</string>
+	<string>746232526782-dk79men2no3js7he4186g6m67d6edpd1.apps.googleusercontent.com</string>
 	<key>GIDServerClientID</key>
 	<string>746232526782-mnq2lnm9fp2sunpopk0cfp7pu6v9trcu.apps.googleusercontent.com</string>
 	<key>LSRequiresIPhoneOS</key>

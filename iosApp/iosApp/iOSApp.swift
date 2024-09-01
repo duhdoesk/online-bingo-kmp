@@ -7,6 +7,8 @@ import FirebaseCore
 @main
 struct iOSApp: App {
     
+    @UIApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
+    
     init(){
         FirebaseApp.configure()
         InitKoinKt.doInitKoin()
@@ -18,4 +20,14 @@ struct iOSApp: App {
 		}
 	}
     
+}
+
+class AppDelegate: NSObject, UIApplicationDelegate {
+    func application(_ application: UIApplication, 
+                     open url: URL,
+                     options: [UIApplication.OpenURLOptionsKey : Any] = [:],
+                     didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey : Any]? = nil) -> Bool {
+        print(url)
+        return true
+    }
 }
