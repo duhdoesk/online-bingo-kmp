@@ -25,7 +25,9 @@ fun SignInScreen(
 
     val supabaseClient = component.supabaseClient
     val authState = supabaseClient.composeAuth.rememberSignInWithGoogle(
-        onResult = { result -> component.uiEvent(SignInScreenEvent.SignInWithGoogle(result)) }
+        onResult = {
+//            result -> component.uiEvent(SignInScreenEvent.SignInWithGoogle(result))
+        }
     )
 
     UniqueSignInScreen(

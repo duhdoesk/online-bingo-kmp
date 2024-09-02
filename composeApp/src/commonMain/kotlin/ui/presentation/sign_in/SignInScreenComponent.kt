@@ -5,6 +5,8 @@ import com.arkivanov.decompose.ComponentContext
 import domain.user.model.User
 import io.github.jan.supabase.SupabaseClient
 import io.github.jan.supabase.compose.auth.composable.NativeSignInResult
+import io.github.jan.supabase.gotrue.SessionStatus
+import io.github.jan.supabase.gotrue.auth
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -38,16 +40,25 @@ class SignInScreenComponent(
     val showErrorModal = mutableStateOf(false)
     val showNetworkErrorModal = mutableStateOf(false)
 
+    init {
+        coroutineScope.launch {
+            supabaseClient.auth.sessionStatus.collect {
+                if (it is SessionStatus.Authenticated) onSignIn()
+            }
+        }
+    }
+
     /**
      * Function to delegate the handling of UI Events
      */
     fun uiEvent(event: SignInScreenEvent) {
         when (event) {
             SignInScreenEvent.UiLoaded -> uiLoaded()
-            is SignInScreenEvent.SignInWithGoogle -> signIn(event.result)
-            is SignInScreenEvent.SignInWithApple -> {
-                //todo(): apple login
-            }
+            else -> {}
+//            is SignInScreenEvent.SignInWithGoogle -> signIn(event.result)
+//            is SignInScreenEvent.SignInWithApple -> {
+//                //todo(): apple login
+//            }
         }
     }
 
@@ -62,14 +73,14 @@ class SignInScreenComponent(
         }
     }
 
-    private fun signIn(result: NativeSignInResult) {
-        componentCoroutineScope().launch {
-            when(result) {
-                NativeSignInResult.ClosedByUser -> showErrorModal.value = true
-                is NativeSignInResult.Error -> showErrorModal.value = true
-                is NativeSignInResult.NetworkError -> showNetworkErrorModal.value = true
-                NativeSignInResult.Success -> onSignIn()
-            }
-        }
-    }
+//    private fun signIn(result: NativeSignInResult) {
+//        componentCoroutineScope().launch {
+//            when(result) {
+//                NativeSignInResult.ClosedByUser -> showErrorModal.value = true
+//                is NativeSignInResult.Error -> showErrorModal.value = true
+//                is NativeSignInResult.NetworkError -> showNetworkErrorModal.value = true
+//                NativeSignInResult.Success -> onSignIn()
+//            }
+//        }
+//    }
 }

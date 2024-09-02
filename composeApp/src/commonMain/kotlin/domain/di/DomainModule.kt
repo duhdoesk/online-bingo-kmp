@@ -96,6 +96,6 @@ val domainModule = module {
     single<ChangePasswordWithReAuthenticationUseCase> { ChangePasswordWithReAuthenticationUseCase(get()) }
 
 //    Supabase Auth
-    single<SupabaseAuthService> { SupabaseAuthServiceImpl() }
+    single<SupabaseAuthService> { SupabaseAuthServiceImpl(get()) }
     single<SignInWithGoogleUseCase> { SignInWithGoogleUseCase(get(), get()) }
 }

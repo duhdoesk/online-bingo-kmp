@@ -7,8 +7,6 @@ import FirebaseCore
 @main
 struct iOSApp: App {
     
-    @UIApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
-    
     init(){
         FirebaseApp.configure()
         InitKoinKt.doInitKoin()
@@ -16,20 +14,12 @@ struct iOSApp: App {
     
 	var body: some Scene {
 		WindowGroup {
-            ContentView().ignoresSafeArea(.all)
+            ContentView()
+                .ignoresSafeArea(.all)
+                .onOpenURL(perform: { url in
+                    DeeplinkHandler().handleIOSLaunch(url: url.absoluteURL)
+                })
 		}
 	}
     
-}
-
-class AppDelegate: NSObject, UIApplicationDelegate {
-    func application(_ application: UIApplication, 
-                     open url: URL,
-                     options: [UIApplication.OpenURLOptionsKey : Any] = [:],
-                     didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey : Any]? = nil) -> Bool {
-        let a = url.absoluteString
-        DeeplinkHandler().handleIOSLaunch(url: a)
-        print(url)
-        return true
-    }
 }
