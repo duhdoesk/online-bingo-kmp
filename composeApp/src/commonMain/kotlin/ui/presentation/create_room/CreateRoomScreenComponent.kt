@@ -6,6 +6,8 @@ import domain.room.model.BingoType
 import domain.room.use_case.CreateRoomUseCase
 import domain.theme.model.BingoTheme
 import domain.theme.use_case.GetAllThemesUseCase
+import domain.user.model.User
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.asStateFlow
@@ -30,7 +32,7 @@ import util.componentCoroutineScope
 class CreateRoomScreenComponent(
     componentContext: ComponentContext,
     private val bingoType: BingoType,
-    private val firebaseUser: FirebaseUser,
+    private val user: Flow<User?>,
     private val onPopBack: () -> Unit,
     private val onCreateRoom: (configuration: Configuration) -> Unit,
 ) : ComponentContext by componentContext, KoinComponent {
@@ -202,24 +204,26 @@ class CreateRoomScreenComponent(
 
     private fun createRoom() {
         coroutineScope.launch {
-            uiState.value.run {
-                createRoomUseCase(
-                    hostId = firebaseUser.uid,
-                    name = name,
-                    locked = locked,
-                    password = password,
-                    maxWinners = maxWinners,
-                    type = bingoType,
-                    themeId = selectedTheme?.id.orEmpty(),
-                )
-                    .onSuccess { roomId ->
-                        val config = when (bingoType) {
-                            BingoType.CLASSIC -> Configuration.ClassicHostScreen(roomId)
-                            BingoType.THEMED -> Configuration.HostScreen(roomId)
+            user.collect { collectedUser ->
+                uiState.value.run {
+                    createRoomUseCase(
+                        hostId = collectedUser?.id ?: "",
+                        name = name,
+                        locked = locked,
+                        password = password,
+                        maxWinners = maxWinners,
+                        type = bingoType,
+                        themeId = selectedTheme?.id.orEmpty(),
+                    )
+                        .onSuccess { roomId ->
+                            val config = when (bingoType) {
+                                BingoType.CLASSIC -> Configuration.ClassicHostScreen(roomId)
+                                BingoType.THEMED -> Configuration.HostScreen(roomId)
+                            }
+                            onCreateRoom(config)
                         }
-                        onCreateRoom(config)
-                    }
-                    .onFailure { } //todo(): display error dialog
+                        .onFailure { } //todo(): display error dialog
+                }
             }
         }
     }

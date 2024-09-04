@@ -104,7 +104,7 @@ class RootComponent(
             is Configuration.CreateScreen -> Child.CreateScreen(
                 CreateRoomScreenComponent(
                     componentContext = context,
-                    firebaseUser = firebaseUser!!,
+                    user = user,
                     bingoType = configuration.bingoType,
                     onPopBack = { navigation.pop() },
                     onCreateRoom = { receivedConfig ->
