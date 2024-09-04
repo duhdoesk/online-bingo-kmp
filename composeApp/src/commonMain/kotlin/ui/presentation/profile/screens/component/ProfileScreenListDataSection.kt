@@ -28,8 +28,9 @@ import ui.presentation.profile.event.ProfileScreenEvent
 @OptIn(ExperimentalResourceApi::class)
 @Composable
 fun ProfileScreenListDataSection(
-    event: (event: ProfileScreenEvent) -> Unit,
     modifier: Modifier = Modifier,
+    onUpdatePassword: () -> Unit,
+    onDeleteAccount: () -> Unit,
 ) {
 
     Column(
@@ -53,7 +54,7 @@ fun ProfileScreenListDataSection(
             modifier = Modifier
                 .padding(top = 4.dp)
                 .fillMaxWidth()
-                .clickable { event(ProfileScreenEvent.UpdatePassword) },
+                .clickable { onUpdatePassword() },
         ) {
             Text(
                 text = stringResource(Res.string.change_password),
@@ -77,7 +78,7 @@ fun ProfileScreenListDataSection(
             modifier = Modifier
                 .padding(top = 4.dp)
                 .fillMaxWidth()
-                .clickable { event(ProfileScreenEvent.DeleteAccount) },
+                .clickable { onDeleteAccount() },
         ) {
             Text(
                 text = stringResource(Res.string.delete_account),

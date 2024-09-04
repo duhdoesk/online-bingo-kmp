@@ -27,6 +27,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
+import domain.user.model.User
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.stringResource
 import themedbingo.composeapp.generated.resources.Res
@@ -40,15 +41,16 @@ import ui.presentation.common.components.BottomButtonRow
 import ui.presentation.profile.event.ProfileScreenEvent
 import ui.presentation.profile.screens.component.ProfileScreenListDataSection
 import ui.presentation.profile.screens.component.ProfileScreenStringDataSection
-import ui.presentation.profile.state.ProfileScreenUIState
-import ui.presentation.util.WindowInfo
 
 @OptIn(ExperimentalResourceApi::class)
 @Composable
 fun PortraitProfileScreen(
-    windowInfo: WindowInfo,
-    uiState: ProfileScreenUIState.Success,
+    user: User,
     event: (event: ProfileScreenEvent) -> Unit,
+    onUpdateName: () -> Unit,
+    onUpdateMessage: () -> Unit,
+    onSignOut: () -> Unit,
+    onDeleteAccount: () -> Unit,
 ) {
     Box(
         contentAlignment = Alignment.Center,
@@ -73,7 +75,7 @@ fun PortraitProfileScreen(
                         .padding(top = 16.dp)
                 ) {
                     AsyncImage(
-                        model = uiState.user.pictureUri,
+                        model = user.pictureUri,
                         contentDescription = stringResource(Res.string.user_avatar),
                         modifier = Modifier
                             .size(160.dp)
@@ -104,10 +106,10 @@ fun PortraitProfileScreen(
 
                 ProfileScreenStringDataSection(
                     label = Res.string.nickname,
-                    data = uiState.user.name,
-                    lastEditTimestamp = uiState.user.nameLastUpdated,
+                    data = user.name,
+                    lastEditTimestamp = user.nameLastUpdated,
                     editable = true, //todo(): boolean logic datetime
-                    onEdit = { event(ProfileScreenEvent.UpdateName) },
+                    onEdit = { onUpdateName() },
                     modifier = Modifier.fillMaxWidth(),
                 )
 
@@ -115,17 +117,18 @@ fun PortraitProfileScreen(
 
                 ProfileScreenStringDataSection(
                     label = Res.string.victory_message,
-                    data = uiState.user.victoryMessage,
-                    lastEditTimestamp = uiState.user.victoryMessageLastUpdated,
+                    data = user.victoryMessage,
+                    lastEditTimestamp = user.victoryMessageLastUpdated,
                     editable = true, //todo(): boolean logic datetime
-                    onEdit = { event(ProfileScreenEvent.UpdateVictoryMessage) },
+                    onEdit = { onUpdateMessage()},
                     modifier = Modifier.fillMaxWidth(),
                 )
 
                 Spacer(Modifier.height(48.dp))
 
                 ProfileScreenListDataSection(
-                    event = { event(it) }
+                    onUpdatePassword = { event(ProfileScreenEvent.UpdatePassword) },
+                    onDeleteAccount = { onDeleteAccount() }
                 )
             }
 
@@ -133,7 +136,7 @@ fun PortraitProfileScreen(
                 leftEnabled = true,
                 rightEnabled = true,
                 leftClicked = { event(ProfileScreenEvent.PopBack) },
-                rightClicked = { event(ProfileScreenEvent.SignOut) },
+                rightClicked = { onSignOut() },
                 leftText = Res.string.back_button,
                 rightText = Res.string.exit_button,
                 modifier = Modifier
