@@ -124,7 +124,7 @@ class RootComponent(
             is Configuration.JoinScreen -> Child.JoinScreen(
                 JoinScreenComponent(
                     componentContext = context,
-                    firebaseUser = firebaseUser!!,
+                    user = user,
                     bingoType = configuration.bingoType,
                     onPopBack = { navigation.pop() },
                     onJoinRoom = { config -> navigation.replaceCurrent(configuration = config) },

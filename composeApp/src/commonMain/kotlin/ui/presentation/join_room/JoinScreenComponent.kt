@@ -9,6 +9,8 @@ import domain.room.use_case.GetRoomByIdUseCase
 import domain.room.use_case.GetRunningRoomsUseCase
 import domain.room.use_case.JoinRoomUseCase
 import domain.theme.use_case.GetAllThemesUseCase
+import domain.user.model.User
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -30,7 +32,7 @@ import util.componentCoroutineScope
 
 class JoinScreenComponent(
     componentContext: ComponentContext,
-    private val firebaseUser: FirebaseUser,
+    private val user: Flow<User?>,
     private val bingoType: BingoType,
     private val onPopBack: () -> Unit,
     private val onJoinRoom: (configuration: Configuration) -> Unit,
@@ -118,38 +120,41 @@ class JoinScreenComponent(
     @OptIn(ExperimentalResourceApi::class)
     private fun joinRoom(roomId: String, password: String?) {
         coroutineScope.launch {
-            getRoomByIdUseCase(roomId)
-                .onSuccess { room ->
-                    if (room.hostId == firebaseUser.uid) {
-                        when (bingoType) {
-                            BingoType.CLASSIC -> onJoinRoom(Configuration.ClassicHostScreen(roomId))
-                            BingoType.THEMED -> onJoinRoom(Configuration.HostScreen(roomId))
+            user.collect { collectedUser ->
+                getRoomByIdUseCase(roomId)
+                    .onSuccess { room ->
+                        if (room.hostId == collectedUser?.id) {
+                            when (bingoType) {
+                                BingoType.CLASSIC -> onJoinRoom(Configuration.ClassicHostScreen(roomId))
+                                BingoType.THEMED -> onJoinRoom(Configuration.HostScreen(roomId))
+                            }
+                            return@collect
                         }
-                        return@launch
                     }
-                }
-                .onFailure { return@launch } //todo(): display error message
+                    .onFailure { return@collect } //todo(): display error message
 
-            joinRoomUseCase
-                .invoke(
-                    roomId = roomId,
-                    userId = firebaseUser.uid,
-                    roomPassword = password,
-                )
-                .onSuccess {
-                    when (bingoType) {
-                        BingoType.CLASSIC -> onJoinRoom(Configuration.ClassicPlayScreen(roomId))
-                        BingoType.THEMED -> onJoinRoom(Configuration.PlayScreen(roomId))
+                joinRoomUseCase
+                    .invoke(
+                        roomId = roomId,
+                        userId = collectedUser?.id.orEmpty(),
+                        roomPassword = password,
+                    )
+                    .onSuccess {
+                        when (bingoType) {
+                            BingoType.CLASSIC -> onJoinRoom(Configuration.ClassicPlayScreen(roomId))
+                            BingoType.THEMED -> onJoinRoom(Configuration.PlayScreen(roomId))
+                        }
                     }
-                }
 
-                .onFailure { exception ->
-                    if (exception.message == "Incorrect Password") {
-                        errorDialogState.showDialog(Res.string.join_room_invalid_password)
-                        return@launch
+                    .onFailure { exception ->
+                        if (exception.message == "Incorrect Password") {
+                            errorDialogState.showDialog(Res.string.join_room_invalid_password)
+                            return@collect
+                        }
+                        errorDialogState.showDialog(Res.string.unmapped_error)
                     }
-                    errorDialogState.showDialog(Res.string.unmapped_error)
-                }
+            }
+
         }
     }
 
