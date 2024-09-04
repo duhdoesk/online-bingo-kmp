@@ -9,6 +9,11 @@ data class EditProfilePictureUiState(
     val loading: Boolean,
 
     /**
+     * Flag to when the user is null
+     */
+    val isError: Boolean,
+
+    /**
      * Represents the current user id
      * */
     val userId: String?,
@@ -36,6 +41,7 @@ data class EditProfilePictureUiState(
     companion object {
         val INITIAL = EditProfilePictureUiState(
             loading = true,
+            isError = false,
             userId = null,
             userName = null,
             currentPictureUrl = null,

@@ -189,7 +189,7 @@ class RootComponent(
             Configuration.EditProfilePictureScreen -> Child.EditProfilePictureScreen(
                 EditProfilePictureScreenComponent(
                     componentContext = context,
-                    firebaseUser = firebaseUser,
+                    user = user,
                     onCancel = { navigation.pop() },
                     onPictureSaved = { navigation.pop() }
                 )

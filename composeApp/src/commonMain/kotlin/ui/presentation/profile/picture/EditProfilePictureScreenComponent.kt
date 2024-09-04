@@ -19,7 +19,7 @@ import org.koin.core.component.inject
 import util.componentCoroutineScope
 
 class EditProfilePictureScreenComponent(
-    private val firebaseUser: FirebaseUser?,
+    private val user: Flow<User?>,
     private val onPictureSaved: () -> Unit,
     private val onCancel: () -> Unit,
     componentContext: ComponentContext
@@ -47,20 +47,19 @@ class EditProfilePictureScreenComponent(
     private fun onUiLoaded() {
         coroutineScope.launch {
             combine(
-                getUserData(),
+                user,
                 getProfilePicturesUseCase()
-            ) { userData, pictures ->
-                val user = userData.getOrNull() ?: return@combine EditProfilePictureUiState.INITIAL // TODO: Handle error
-
-                val currentPictureUrl = user.pictureUri.takeIf { it.isNotEmpty() }
+            ) { user, pictures ->
+                val currentPictureUrl = user?.pictureUri
 
                 EditProfilePictureUiState(
                     loading = false,
-                    userId = user.id,
-                    userName = user.name,
+                    userId = user?.id.orEmpty(),
+                    userName = user?.name.orEmpty(),
                     currentPictureUrl = currentPictureUrl,
                     selectedPictureUrl = currentPictureUrl,
-                    pictures = pictures
+                    pictures = pictures,
+                    isError = (user == null)
                 )
             }.collect {
                 _uiState.value = it
@@ -93,7 +92,7 @@ class EditProfilePictureScreenComponent(
 
     private fun getUserData(): Flow<Result<User>> {
         return flow {
-            val userId = firebaseUser?.uid ?: return@flow
+            val userId = uiState.value.userId ?: return@flow
             emit(getUserByIdUseCase(userId))
         }
     }
