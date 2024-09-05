@@ -1,7 +1,6 @@
 package ui.presentation.room.themed.play
 
 import com.arkivanov.decompose.ComponentContext
-import dev.gitlive.firebase.auth.FirebaseUser
 import domain.card.use_case.FlowCardByRoomAndUserIDUseCase
 import domain.card.use_case.SetCardByRoomAndUserIDUseCase
 import domain.character.model.Character
@@ -11,9 +10,11 @@ import domain.theme.use_case.GetRoomCharactersUseCase
 import domain.theme.use_case.GetRoomThemeUseCase
 import domain.user.model.User
 import domain.user.use_case.GetRoomPlayersUseCase
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import org.koin.core.component.KoinComponent
@@ -25,7 +26,7 @@ import util.componentCoroutineScope
 
 class PlayScreenComponent(
     componentContext: ComponentContext,
-    private val firebaseUser: FirebaseUser,
+    private val user: Flow<User?>,
     private val roomId: String,
     private val onPopBack: () -> Unit
 ) : ComponentContext by componentContext, KoinComponent {
@@ -79,12 +80,14 @@ class PlayScreenComponent(
      */
     private fun uiLoaded() {
         coroutineScope.launch {
+            val userId = user.first()?.id.orEmpty()
+
             combine(
                 flowRoomByIdUseCase(roomId),
                 getRoomPlayersUseCase(roomId),
                 getRoomCharactersUseCase(roomId),
                 getRoomThemeUseCase(roomId),
-                flowCardByRoomAndUserIDUseCase(roomId, firebaseUser.uid),
+                flowCardByRoomAndUserIDUseCase(roomId, userId),
             ) { room, players, characters, theme, card ->
 
                 val raffledCharacters = mutableListOf<Character>()
@@ -98,7 +101,7 @@ class PlayScreenComponent(
                 }
 
                 val hasCalledBingo =
-                    room.winners.contains(firebaseUser.uid)
+                    room.winners.contains(userId)
 
                 val cardCharacters = mutableListOf<Character>()
 
@@ -137,24 +140,32 @@ class PlayScreenComponent(
 
     private fun getNewCard() {
         coroutineScope.launch {
-            val newCard = uiState.value.characters.shuffled().subList(0, 9).map { it.id }
+            user.collect { collectedUser ->
+                if (collectedUser != null) {
+                    val newCard = uiState.value.characters.shuffled().subList(0, 9).map { it.id }
 
-            setCardByRoomAndUserIDUseCase(
-                roomId = roomId,
-                userId = firebaseUser.uid,
-                charactersIDs = newCard,
-            )
-                .onFailure { exception -> println(exception) } //todo(): display error message
+                    setCardByRoomAndUserIDUseCase(
+                        roomId = roomId,
+                        userId = collectedUser.id,
+                        charactersIDs = newCard,
+                    )
+                        .onFailure { exception -> println(exception) } //todo(): display error message
+                }
+            }
         }
     }
 
     private fun callBingo() {
         coroutineScope.launch {
-            callBingoUseCase(
-                roomId = roomId,
-                userId = firebaseUser.uid,
-            )
-                .onFailure { exception -> println(exception) } //todo(): display error message
+            user.collect { collectedUser ->
+                if (collectedUser != null) {
+                    callBingoUseCase(
+                        roomId = roomId,
+                        userId = collectedUser.id,
+                    )
+                        .onFailure { exception -> println(exception) } //todo(): display error message
+                }
+            }
         }
     }
 

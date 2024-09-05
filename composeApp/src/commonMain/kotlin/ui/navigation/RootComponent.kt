@@ -143,7 +143,7 @@ class RootComponent(
                     componentContext = context,
                     onPopBack = { navigation.pop() },
                     roomId = configuration.roomId,
-                    firebaseUser = firebaseUser!!,
+                    user = user,
                 )
             )
 
