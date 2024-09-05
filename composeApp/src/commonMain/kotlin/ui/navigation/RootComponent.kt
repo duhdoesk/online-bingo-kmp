@@ -36,16 +36,21 @@ class RootComponent(
     componentContext: ComponentContext,
 ) : ComponentContext by componentContext, KoinComponent {
 
-    private val authService by inject<AuthService>()
+    /**
+     * Use Cases
+     */
     private val supabaseAuthService by inject<SupabaseAuthService>()
     private val getUserByIdUseCase by inject<GetUserByIdUseCase>()
     private val createUserUseCase by inject<CreateUserUseCase>()
 
+    /**
+     * Supabase Client
+     */
     private val supabaseClient = supabaseAuthService.supabaseClient
 
-    private val firebaseUser: FirebaseUser?
-        get() = authService.currentUser
-
+    /**
+     * Current signed in user
+     */
     val user = supabaseClient.auth.sessionStatus.map { sessionStatus ->
         when (sessionStatus) {
             is SessionStatus.Authenticated -> {
@@ -61,8 +66,14 @@ class RootComponent(
         }
     }
 
+    /**
+     * Decompose Navigation Manager
+     */
     private val navigation = StackNavigation<Configuration>()
 
+    /**
+     * Child stack responsible for initializing and managing a stack of components.
+     */
     val childStack = childStack(
         source = navigation,
         serializer = Configuration.serializer(),
@@ -71,6 +82,9 @@ class RootComponent(
         childFactory = ::createChild
     )
 
+    /**
+     * UI representation of auth methods
+     */
     private fun signIn() {
         navigation.replaceCurrent(Configuration.HomeScreen)
     }
@@ -79,6 +93,9 @@ class RootComponent(
         navigation.replaceAll(Configuration.SignInScreen)
     }
 
+    /**
+     * Logic to navigate to each screen
+     */
     private fun createChild(
         configuration: Configuration,
         context: ComponentContext
@@ -213,7 +230,7 @@ class RootComponent(
             is Configuration.ClassicPlayScreen -> Child.ClassicPlayScreen(
                 ClassicPlayScreenComponent(
                     componentContext = context,
-                    firebaseUser = firebaseUser!!,
+                    user = user,
                     roomId = configuration.roomId,
                     onPopBack = { navigation.pop() },
                 )
