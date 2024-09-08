@@ -7,8 +7,6 @@ import com.arkivanov.decompose.router.stack.pop
 import com.arkivanov.decompose.router.stack.pushNew
 import com.arkivanov.decompose.router.stack.replaceAll
 import com.arkivanov.decompose.router.stack.replaceCurrent
-import dev.gitlive.firebase.auth.FirebaseUser
-import domain.auth.AuthService
 import domain.auth.supabase.SupabaseAuthService
 import domain.user.use_case.CreateUserUseCase
 import domain.user.use_case.GetUserByIdUseCase
@@ -54,13 +52,13 @@ class RootComponent(
     val user = supabaseClient.auth.sessionStatus.map { sessionStatus ->
         when (sessionStatus) {
             is SessionStatus.Authenticated -> {
-                if (sessionStatus.isNew) {
+                getUserByIdUseCase(sessionStatus.session.user?.id.orEmpty()).getOrElse {
                     createUserUseCase(
                         id = sessionStatus.session.user?.id.orEmpty(),
                         email = sessionStatus.session.user?.email.orEmpty(),
                     )
+                    getUserByIdUseCase(sessionStatus.session.user?.id.orEmpty()).getOrNull()
                 }
-                getUserByIdUseCase(sessionStatus.session.user?.id.orEmpty()).getOrNull()
             }
             else -> null
         }

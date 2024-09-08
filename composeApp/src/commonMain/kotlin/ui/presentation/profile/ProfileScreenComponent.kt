@@ -1,9 +1,13 @@
 package ui.presentation.profile
 
 import com.arkivanov.decompose.ComponentContext
+import domain.auth.getAuthErrorDescription
+import domain.auth.supabase.use_case.SupabaseDeleteAccountUseCase
+import domain.auth.supabase.use_case.SupabaseSignOutUseCase
 import domain.auth.use_case.DeleteAccountUseCase
 import domain.auth.use_case.SignOutUseCase
 import domain.user.model.User
+import domain.user.use_case.DeleteUserUseCase
 import domain.user.use_case.UpdateNameUseCase
 import domain.user.use_case.UpdateVictoryMessageUseCase
 import kotlinx.coroutines.flow.Flow
@@ -16,6 +20,8 @@ import org.jetbrains.compose.resources.StringResource
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 import themedbingo.composeapp.generated.resources.Res
+import themedbingo.composeapp.generated.resources.delete_account_success
+import themedbingo.composeapp.generated.resources.sign_out_error
 import themedbingo.composeapp.generated.resources.update_nickname_failure
 import themedbingo.composeapp.generated.resources.update_victory_failure
 import ui.presentation.profile.event.ProfileScreenEvent
@@ -41,10 +47,11 @@ class ProfileScreenComponent(
     /**
      * Action Use Cases
      */
-    private val signOutUseCase by inject<SignOutUseCase>()
-    private val deleteAccountUseCase by inject<DeleteAccountUseCase>()
+    private val signOutUseCase by inject<SupabaseSignOutUseCase>()
+    private val deleteAccountUseCase by inject<SupabaseDeleteAccountUseCase>()
     private val updateNameUseCase by inject<UpdateNameUseCase>()
     private val updateVictoryMessageUseCase by inject<UpdateVictoryMessageUseCase>()
+    private val deleteUserUseCase by inject<DeleteUserUseCase>()
 
     /**
      * UI State holder
@@ -97,26 +104,29 @@ class ProfileScreenComponent(
 
     @OptIn(ExperimentalResourceApi::class)
     private fun signOut() {
-//        coroutineScope.launch {
-//            signOutUseCase.invoke()
-//                .onSuccess { onSignOut() }
-//                .onFailure { errorDialogState.showDialog(Res.string.sign_out_error) }
-//        }
+        coroutineScope.launch {
+            signOutUseCase.invoke()
+                .onSuccess { onSignOut() }
+                .onFailure { errorDialogState.showDialog(Res.string.sign_out_error) }
+        }
     }
 
     @OptIn(ExperimentalResourceApi::class)
     private fun deleteAccount() {
-//        coroutineScope.launch {
-//            deleteAccountUseCase.invoke()
-//                .onSuccess {
-//                    successDialogState.showDialog(Res.string.delete_account_success)
-//                    onSignOut()
-//                }
-//                .onFailure { exception ->
-//                    val body = getAuthErrorDescription(exception.message ?: "")
-//                    errorDialogState.showDialog(body)
-//                }
-//        }
+        coroutineScope.launch {
+            val uid = uiState.value.user!!.id
+            deleteAccountUseCase.invoke(uid)
+                .onSuccess {
+                    deleteUserUseCase(uid)
+                    onSignOut()
+                }
+                .onFailure { exception ->
+                    println(exception.cause)
+                    println(exception.message)
+                    val body = getAuthErrorDescription(exception.message ?: "")
+                    errorDialogState.showDialog(body)
+                }
+        }
     }
 
     private fun updatePicture() {

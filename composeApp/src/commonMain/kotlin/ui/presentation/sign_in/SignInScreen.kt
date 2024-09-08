@@ -1,13 +1,20 @@
 package ui.presentation.sign_in
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import io.github.jan.supabase.compose.auth.composable.NativeSignInResult
+import io.github.jan.supabase.compose.auth.composable.rememberSignInWithApple
 import io.github.jan.supabase.compose.auth.composable.rememberSignInWithGoogle
 import io.github.jan.supabase.compose.auth.composeAuth
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import themedbingo.composeapp.generated.resources.Res
 import themedbingo.composeapp.generated.resources.unmapped_error
+import ui.presentation.common.LoadingScreen
 import ui.presentation.sign_in.event.SignInScreenEvent
 import ui.presentation.sign_in.screens.UniqueSignInScreen
 import ui.presentation.util.WindowInfo
@@ -17,35 +24,96 @@ import ui.presentation.util.dialog.GenericErrorDialog
 @Composable
 fun SignInScreen(
     component: SignInScreenComponent,
-    windowInfo: WindowInfo,
 ) {
+    /**
+     * UI State
+     */
     val uiState by component.uiState.collectAsState()
-    val showErrorModal by component.showErrorModal
-    val showNetworkErrorModal by component.showNetworkErrorModal
 
+    /**
+     * Informs the component/view model that the UI is ready
+     */
+    LaunchedEffect(Unit) { component.uiEvent(SignInScreenEvent.UiLoaded) }
+
+    /**
+     * Modal visibility state holders
+     */
+    var showErrorModal by remember { mutableStateOf(false) }
+    var showNetworkErrorModal by remember { mutableStateOf(false) }
+
+    /**
+     * Supabase Client instance to handle sign in attempts
+     */
     val supabaseClient = component.supabaseClient
-    val authState = supabaseClient.composeAuth.rememberSignInWithGoogle(
-        onResult = {
-//            result -> component.uiEvent(SignInScreenEvent.SignInWithGoogle(result))
+
+    /**
+     * Handles Google Sign In
+     */
+    val googleSignIn = supabaseClient.composeAuth.rememberSignInWithGoogle(
+        onResult = { result ->
+            when (result) {
+                is NativeSignInResult.Success -> component.uiEvent(SignInScreenEvent.SignIn)
+                is NativeSignInResult.NetworkError -> {
+                    //todo(): display network error message
+                }
+
+                else -> {
+                    //todo(): display error message
+                }
+            }
         }
     )
 
-    UniqueSignInScreen(
-        uiState = uiState,
-        event = { component.uiEvent(it) },
-        onStartGoogleAuth = { authState.startFlow() },
+    /**
+     * Handles Apple Sign In
+     */
+    val appleSignIn = supabaseClient.composeAuth.rememberSignInWithApple(
+        onResult = { result ->
+            when (result) {
+                is NativeSignInResult.Success -> component.uiEvent(SignInScreenEvent.SignIn)
+                is NativeSignInResult.NetworkError -> {
+                    //todo(): display network error message
+                }
+
+                else -> {
+                    //todo(): display error message
+                }
+            }
+        }
     )
 
+    /**
+     * Displays Loading Screen if UI State is loading still
+     */
+    if (uiState.isLoading) {
+        LoadingScreen()
+        return
+    }
+
+    /**
+     * Displays Sign In screen if there is no user authenticted
+     */
+    UniqueSignInScreen(
+        onStartGoogleAuth = { googleSignIn.startFlow() },
+        onStartAppleAuth = { appleSignIn.startFlow() },
+    )
+
+    /**
+     * Shows error modal
+     */
     if (showErrorModal) {
         GenericErrorDialog(
-            onDismiss = { component.showErrorModal.value = false },
+            onDismiss = { showErrorModal = false },
             body = Res.string.unmapped_error,
         )
     }
 
+    /**
+     * Shows network error modal
+     */
     if (showNetworkErrorModal) {
         GenericErrorDialog(
-            onDismiss = { component.showErrorModal.value = false },
+            onDismiss = { showNetworkErrorModal = false },
             body = Res.string.unmapped_error, //todo(): refactor to network error
         )
     }

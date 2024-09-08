@@ -20,4 +20,5 @@ interface UserRepository {
     suspend fun updateUserEmail(id: String, email: String): Result<Unit>
     suspend fun updateUserPictureUri(id: String, pictureUri: String): Result<Unit>
     suspend fun updateVictoryMessage(id: String, victoryMessage: String): Result<Unit>
+    suspend fun deleteUser(id: String): Result<Unit>
 }

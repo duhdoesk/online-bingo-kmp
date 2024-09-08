@@ -12,9 +12,8 @@ import io.github.jan.supabase.gotrue.providers.Google
 import io.github.jan.supabase.gotrue.user.UserInfo
 
 
-
 class SupabaseAuthServiceImpl(
-    override val supabaseClient: SupabaseClient
+    override val supabaseClient: SupabaseClient,
 ) : SupabaseAuthService {
 
     override val sessionStatus = supabaseClient.auth.sessionStatus
@@ -26,13 +25,23 @@ class SupabaseAuthServiceImpl(
         supabaseClient.auth.signInWith(Google)
     }
 
-    override suspend fun signOut() {
-        supabaseClient.auth.signOut()
+    override suspend fun signOut(): Result<Unit> {
+        try {
+            supabaseClient.auth.signOut()
+            return Result.success(Unit)
+        } catch (e: Exception) {
+            return Result.failure(e)
+        }
     }
 
-    override suspend fun deleteAccount() {
-        currentUser?.id?.let { uid ->
-            supabaseClient.auth.admin.deleteUser(uid)
+    override suspend fun deleteAccount(uid: String): Result<Unit> {
+        try {
+            supabaseClient.auth.signOut()
+            supabaseClient.auth.importAuthToken(SERVICE_ROLE_KEY)
+            supabaseClient.auth.admin.deleteUser(uid = uid)
+            return Result.success(Unit)
+        } catch (e: Exception) {
+            return Result.failure(e)
         }
     }
 }

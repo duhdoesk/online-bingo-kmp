@@ -10,6 +10,8 @@ import data.user.repository.UserRepositoryImpl
 import domain.auth.AuthService
 import domain.auth.supabase.SupabaseAuthService
 import domain.auth.supabase.use_case.SignInWithGoogleUseCase
+import domain.auth.supabase.use_case.SupabaseDeleteAccountUseCase
+import domain.auth.supabase.use_case.SupabaseSignOutUseCase
 import domain.auth.use_case.AuthenticateUserUseCase
 import domain.auth.use_case.ChangePasswordWithReAuthenticationUseCase
 import domain.auth.use_case.DeleteAccountUseCase
@@ -37,6 +39,7 @@ import domain.theme.use_case.GetRoomCharactersUseCase
 import domain.theme.use_case.GetRoomThemeUseCase
 import domain.user.repository.UserRepository
 import domain.user.use_case.CreateUserUseCase
+import domain.user.use_case.DeleteUserUseCase
 import domain.user.use_case.FlowUserUseCase
 import domain.user.use_case.GetProfilePicturesUseCase
 import domain.user.use_case.GetRoomPlayersUseCase
@@ -87,6 +90,7 @@ val domainModule = module {
     single<GetProfilePicturesUseCase> { GetProfilePicturesUseCase(get(), get()) }
     factory<GetRoomPlayersUseCase> { GetRoomPlayersUseCase(get(), get()) }
     single<CreateUserUseCase> { CreateUserUseCase(get()) }
+    single<DeleteUserUseCase> { DeleteUserUseCase(get()) }
 
 //    Auth
     single<AuthService> { AuthServiceImpl(get()) }
@@ -98,4 +102,6 @@ val domainModule = module {
 //    Supabase Auth
     single<SupabaseAuthService> { SupabaseAuthServiceImpl(get()) }
     single<SignInWithGoogleUseCase> { SignInWithGoogleUseCase(get(), get()) }
+    single<SupabaseSignOutUseCase> { SupabaseSignOutUseCase(get()) }
+    single<SupabaseDeleteAccountUseCase> { SupabaseDeleteAccountUseCase(get()) }
 }

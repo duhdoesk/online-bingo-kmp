@@ -59,7 +59,6 @@ fun CreateScreen(
 
         is Child.SignInScreen -> SignInScreen(
             component = instance.component,
-            windowInfo = windowInfo
         )
 
         is Child.SignUpScreen -> SignUpScreen(

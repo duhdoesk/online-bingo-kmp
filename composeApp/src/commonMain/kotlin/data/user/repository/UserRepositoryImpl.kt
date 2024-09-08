@@ -35,11 +35,11 @@ class UserRepositoryImpl(
     }
 
     override suspend fun getUserById(id: String): Result<User> {
-        collection
-            .document(id)
-            .get()
-            .let { documentSnapshot ->
-                if (documentSnapshot.exists) {
+        try {
+            collection
+                .document(id)
+                .get()
+                .let { documentSnapshot ->
                     val user = UserDTO(
                         id = documentSnapshot.id,
                         name = documentSnapshot.get("name"),
@@ -54,10 +54,10 @@ class UserRepositoryImpl(
                         .toModel()
 
                     return Result.success(user)
-                } else {
-                    return Result.failure(NoSuchElementException())
                 }
-            }
+        } catch (e: Exception) {
+            return Result.failure(e)
+        }
     }
 
     override suspend fun createUser(
@@ -174,6 +174,17 @@ class UserRepositoryImpl(
                         "victoryMessageLastUpdated" to Timestamp.now()
                     )
                 )
+            return Result.success(Unit)
+        } catch (e: Exception) {
+            return Result.failure(e)
+        }
+    }
+
+    override suspend fun deleteUser(id: String): Result<Unit> {
+        try {
+            collection
+                .document(id)
+                .delete()
             return Result.success(Unit)
         } catch (e: Exception) {
             return Result.failure(e)

@@ -1,6 +1,6 @@
 package data.di
 
-import data.supabase.createThemeBingoSupabaseClient
+import data.auth.supabase.createThemeBingoSupabaseClient
 import dev.gitlive.firebase.Firebase
 import dev.gitlive.firebase.auth.FirebaseAuth
 import dev.gitlive.firebase.auth.auth

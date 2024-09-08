@@ -20,3 +20,4 @@ composeApp/google-services.json
 iosApp/iosApp/GoogleService-Info.plist
 composeApp/src/commonMain/kotlin/util/Auth/WebClientID.kt
 iosApp/iosApp/Info.plist
+composeApp/src/commonMain/kotlin/data/auth/supabase/SupabaseKeys.kt

@@ -10,6 +10,6 @@ interface SupabaseAuthService {
     val currentUser: UserInfo?
     val sessionStatus: StateFlow<SessionStatus>
     suspend fun signInWithGoogle()
-    suspend fun signOut()
-    suspend fun deleteAccount()
+    suspend fun signOut(): Result<Unit>
+    suspend fun deleteAccount(uid: String): Result<Unit>
 }
