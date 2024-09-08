@@ -26,6 +26,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
@@ -79,6 +80,17 @@ fun PortraitHomeScreen(
                         modifier = Modifier
                             .padding(horizontal = 16.dp)
                             .weight(1f),
+                    )
+
+                    Text(
+                        text = uiState.userName,
+                        textAlign = TextAlign.End,
+                        style = MaterialTheme.typography.bodyLarge,
+                        maxLines = 2,
+                        overflow = TextOverflow.Ellipsis,
+                        modifier = Modifier
+                            .padding(start = 16.dp, end = 4.dp)
+                            .weight(0.5f),
                     )
 
                     AsyncImage(
