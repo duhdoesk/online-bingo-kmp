@@ -120,6 +120,12 @@ kotlin {
             implementation(libs.ktor.client.darwin)
         }
 
+        named { it.lowercase().startsWith("ios") }.configureEach {
+            languageSettings {
+                optIn("kotlinx.cinterop.ExperimentalForeignApi")
+            }
+        }
+
     }
 }
 
