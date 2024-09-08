@@ -1,3 +1,5 @@
+import org.jetbrains.kotlin.gradle.plugin.mpp.KotlinNativeTarget
+
 //import org.jetbrains.compose.desktop.application.dsl.TargetFormat
 
 plugins {

@@ -16,6 +16,9 @@ import com.arkivanov.decompose.extensions.compose.stack.Children
 import com.arkivanov.decompose.extensions.compose.stack.animation.slide
 import com.arkivanov.decompose.extensions.compose.stack.animation.stackAnimation
 import com.arkivanov.decompose.extensions.compose.subscribeAsState
+import com.revenuecat.purchases.kmp.LogLevel
+import com.revenuecat.purchases.kmp.Purchases
+import com.revenuecat.purchases.kmp.configure
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.koin.compose.KoinContext
 import ui.navigation.RootComponent
@@ -29,12 +32,27 @@ fun App(rootComponent: RootComponent) {
     KoinContext {
         MaterialTheme {
 
+            /**
+             * Child Stack representation - navigation
+             */
             val childStack by rootComponent.childStack.subscribeAsState()
 
+            /**
+             * Coil Setup
+             */
             setSingletonImageLoaderFactory { context ->
                 getAsyncImageLoader(context)
             }
 
+            /**
+             * Revenue Cat Setup
+             */
+            Purchases.logLevel = LogLevel.DEBUG
+            Purchases.configure(apiKey = getPlatform().revCatApiKey)
+
+            /**
+             * UI Setup
+             */
             Scaffold(modifier = Modifier.imePadding()) {
 
                 BoxWithConstraints(
