@@ -144,7 +144,7 @@ class RootComponent(
                     onPopBack = { navigation.pop() },
                     onJoinRoom = { config -> navigation.replaceCurrent(configuration = config) },
                     onCreateRoom = {
-                        navigation.replaceCurrent(
+                        navigation.pushNew(
                             Configuration.CreateScreen(
                                 configuration.bingoType
                             )
