@@ -23,6 +23,7 @@ kotlinxSerializationJsonVersion = "1.6.2"
 ktor = "2.3.12"
 firebasePlugin = "4.4.1"
 supabase = "2.5.2"
+purchases-kmp = "1.0.0+13.2.0"
 
 [libraries]
 androidx-activity-compose = { module = "androidx.activity:activity-compose", version.ref = "androidx-activityCompose" }
@@ -58,6 +59,8 @@ ktor-client-okhttp = { module = "io.ktor:ktor-client-okhttp", version.ref = "kto
 supabase-bom = { module = "io.github.jan-tennert.supabase:bom", version.ref = "supabase" }
 supabase-auth-kt = { module = "io.github.jan-tennert.supabase:compose-auth" }
 supabase-gotrue-kt = { module = "io.github.jan-tennert.supabase:gotrue-kt" }
+purchases-core = { module = "com.revenuecat.purchases:purchases-kmp-core", version.ref = "purchases-kmp" }
+purchases-result = { module = "com.revenuecat.purchases:purchases-kmp-result", version.ref = "purchases-kmp" }
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }

@@ -66,6 +66,7 @@ kotlin {
             implementation(libs.koin.core)
             implementation(libs.koin.android)
         }
+
         commonMain.dependencies {
             implementation(compose.runtime)
             implementation(compose.foundation)
@@ -105,10 +106,16 @@ kotlin {
             implementation(project.dependencies.platform(libs.supabase.bom.get()))
             implementation(libs.supabase.auth.kt)
             implementation(libs.supabase.gotrue.kt)
+
+//            Revenue Cat
+            implementation(libs.purchases.core)
+            implementation(libs.purchases.result)
         }
+
 //        desktopMain.dependencies {
 //            implementation(compose.desktop.currentOs)
 //        }
+
         iosMain.dependencies {
             implementation(libs.ktor.client.darwin)
         }
