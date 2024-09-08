@@ -54,30 +54,6 @@ fun ProfileScreenListDataSection(
             modifier = Modifier
                 .padding(top = 4.dp)
                 .fillMaxWidth()
-                .clickable { onUpdatePassword() },
-        ) {
-            Text(
-                text = stringResource(Res.string.change_password),
-                style = MaterialTheme.typography.titleLarge,
-                modifier = Modifier
-                    .padding(horizontal = 16.dp, vertical = 12.dp)
-                    .weight(1f)
-            )
-
-            Icon(
-                imageVector = Icons.AutoMirrored.Filled.KeyboardArrowRight,
-                contentDescription = stringResource(Res.string.change_password),
-                modifier = Modifier.padding(16.dp)
-            )
-        }
-
-        ProfileScreenCustomDivider()
-
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier
-                .padding(top = 4.dp)
-                .fillMaxWidth()
                 .clickable { onDeleteAccount() },
         ) {
             Text(
