@@ -18,6 +18,7 @@ import com.arkivanov.decompose.extensions.compose.stack.animation.stackAnimation
 import com.arkivanov.decompose.extensions.compose.subscribeAsState
 import com.revenuecat.purchases.kmp.LogLevel
 import com.revenuecat.purchases.kmp.Purchases
+import com.revenuecat.purchases.kmp.VerificationResult
 import com.revenuecat.purchases.kmp.configure
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.koin.compose.KoinContext

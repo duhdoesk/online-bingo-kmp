@@ -15,16 +15,20 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.sizeIn
 import androidx.compose.foundation.layout.systemBarsPadding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
@@ -122,7 +126,15 @@ fun PortraitHomeScreen(
                         icon = Res.drawable.smiling_squirrel,
                         title = Res.string.themed_bingo,
                         body = Res.string.themed_bingo_desc,
-                        onClick = { event(HomeScreenEvent.Navigate(Configuration.JoinScreen(BingoType.THEMED))) },
+                        onClick = {
+                            event(
+                                HomeScreenEvent.Navigate(
+                                    Configuration.JoinScreen(
+                                        BingoType.THEMED
+                                    )
+                                )
+                            )
+                        },
                         modifier = Modifier.padding(horizontal = 16.dp),
                     )
 
@@ -133,9 +145,30 @@ fun PortraitHomeScreen(
                         icon = Res.drawable.bingo_balls,
                         title = Res.string.classic_bingo,
                         body = Res.string.classic_bingo_desc,
-                        onClick = { event(HomeScreenEvent.Navigate(Configuration.JoinScreen(BingoType.CLASSIC))) }, //todo(): refactor
+                        onClick = {
+                            event(
+                                HomeScreenEvent.Navigate(
+                                    Configuration.JoinScreen(
+                                        BingoType.CLASSIC
+                                    )
+                                )
+                            )
+                        }, //todo(): refactor
                         modifier = Modifier.padding(horizontal = 16.dp),
                     )
+                }
+
+                if (!uiState.isSubscribed) {
+                    Row(
+                        horizontalArrangement = Arrangement.Center,
+                        modifier = Modifier.padding(bottom = 8.dp).fillMaxWidth(),
+                    ) {
+                        TextButton(
+                            modifier = Modifier.width(200.dp),
+                            onClick = {},
+                            colors = ButtonDefaults.buttonColors().copy(contentColor = Color.Yellow),
+                        ) { Text("Become Premium") }
+                    }
                 }
 
                 NoPictureHWBanner(modifier = Modifier.padding(16.dp).fillMaxWidth())

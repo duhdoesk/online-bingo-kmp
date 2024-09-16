@@ -1,6 +1,9 @@
 package ui.presentation.home
 
+import androidx.compose.runtime.mutableStateOf
 import com.arkivanov.decompose.ComponentContext
+import com.revenuecat.purchases.kmp.Purchases
+import com.revenuecat.purchases.kmp.result.awaitCustomerInfoResult
 import domain.user.model.User
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -32,13 +35,21 @@ class HomeScreenComponent(
 
     private fun uiLoaded() {
         coroutineScope.launch {
+
+            val customerInfo = Purchases.sharedInstance.awaitCustomerInfoResult().getOrNull()
+            val isSubscribed = when (customerInfo == null) {
+                true -> false
+                false -> (customerInfo.entitlements["Premium Subscription"]?.isActive == true)
+            }
+
             user.collect { user ->
                 if (user != null) {
                     _uiState.update {
                         HomeScreenUIState(
                             loading = false,
                             userName = user.name,
-                            userPicture = user.pictureUri
+                            userPicture = user.pictureUri,
+                            isSubscribed = isSubscribed,
                         )
                     }
                 }
