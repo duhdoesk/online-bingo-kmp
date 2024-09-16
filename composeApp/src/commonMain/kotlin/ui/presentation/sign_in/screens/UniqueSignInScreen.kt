@@ -20,6 +20,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import getPlatform
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
@@ -68,6 +69,8 @@ fun UniqueSignInScreen(
         }
 
         Spacer(Modifier.height(8.dp))
+
+        if (getPlatform().name.startsWith("Android")) return@Column
 
         Button(
             onClick = { onStartAppleAuth() },

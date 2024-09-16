@@ -52,13 +52,13 @@ class RootComponent(
     val user = supabaseClient.auth.sessionStatus.map { sessionStatus ->
         when (sessionStatus) {
             is SessionStatus.Authenticated -> {
-                getUserByIdUseCase(sessionStatus.session.user?.id.orEmpty()).getOrElse {
-                    createUserUseCase(
-                        id = sessionStatus.session.user?.id.orEmpty(),
-                        email = sessionStatus.session.user?.email.orEmpty(),
-                    )
-                    getUserByIdUseCase(sessionStatus.session.user?.id.orEmpty()).getOrNull()
-                }
+//                getUserByIdUseCase(sessionStatus.session.user?.id.orEmpty()).getOrElse {
+//                    createUserUseCase(
+//                        id = sessionStatus.session.user?.id.orEmpty(),
+//                        email = sessionStatus.session.user?.email.orEmpty(),
+//                    )
+//                }
+                getUserByIdUseCase(sessionStatus.session.user?.id.orEmpty()).getOrNull()
             }
             else -> null
         }
