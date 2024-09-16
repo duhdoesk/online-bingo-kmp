@@ -137,6 +137,7 @@
 
     <!--    Auth Errors -->
     <string name="auth_unmapped_error">Não conseguimos completar a operação. Por favor, tente novamente mais tarde.</string>
+    <string name="auth_network_error">Parece que há algo errado com a sua conexão à internet. Por favor, verifique sua conexão e tente novamente.</string>
     <string name="auth_email_already_exists">Este endereço de e-mail já está em uso.</string>
     <string name="auth_invalid_credential">E-mail ou senha incorretos. Tente novamente, ou solicite um reset de senha.</string>
     <string name="auth_invalid_password">Senha inválida. Tente novamente, ou solicite um reset de senha.</string>

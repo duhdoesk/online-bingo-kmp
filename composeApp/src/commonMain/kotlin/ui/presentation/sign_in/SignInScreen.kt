@@ -13,11 +13,11 @@ import io.github.jan.supabase.compose.auth.composable.rememberSignInWithGoogle
 import io.github.jan.supabase.compose.auth.composeAuth
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import themedbingo.composeapp.generated.resources.Res
+import themedbingo.composeapp.generated.resources.auth_network_error
 import themedbingo.composeapp.generated.resources.unmapped_error
 import ui.presentation.common.LoadingScreen
 import ui.presentation.sign_in.event.SignInScreenEvent
 import ui.presentation.sign_in.screens.UniqueSignInScreen
-import ui.presentation.util.WindowInfo
 import ui.presentation.util.dialog.GenericErrorDialog
 
 @OptIn(ExperimentalResourceApi::class)
@@ -53,12 +53,20 @@ fun SignInScreen(
         onResult = { result ->
             when (result) {
                 is NativeSignInResult.Success -> component.uiEvent(SignInScreenEvent.SignIn)
+
                 is NativeSignInResult.NetworkError -> {
-                    //todo(): display network error message
+                    (result.message)
+                    showNetworkErrorModal = true
+                }
+
+                is NativeSignInResult.Error -> {
+                    println(result.message)
+                    showErrorModal = true
                 }
 
                 else -> {
-                    //todo(): display error message
+                    println("Closed by User")
+                    showErrorModal = true
                 }
             }
         }
@@ -70,13 +78,23 @@ fun SignInScreen(
     val appleSignIn = supabaseClient.composeAuth.rememberSignInWithApple(
         onResult = { result ->
             when (result) {
-                is NativeSignInResult.Success -> component.uiEvent(SignInScreenEvent.SignIn)
+                is NativeSignInResult.Success -> {
+                    component.uiEvent(SignInScreenEvent.SignIn)
+                }
+
                 is NativeSignInResult.NetworkError -> {
-                    //todo(): display network error message
+                    println(result.message)
+                    showNetworkErrorModal = true
+                }
+
+                is NativeSignInResult.Error -> {
+                    println(result.message)
+                    showErrorModal = true
                 }
 
                 else -> {
-                    //todo(): display error message
+                    println("Closed by User")
+                    showErrorModal = true
                 }
             }
         }
@@ -114,7 +132,7 @@ fun SignInScreen(
     if (showNetworkErrorModal) {
         GenericErrorDialog(
             onDismiss = { showNetworkErrorModal = false },
-            body = Res.string.unmapped_error, //todo(): refactor to network error
+            body = Res.string.auth_network_error,
         )
     }
 }

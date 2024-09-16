@@ -137,6 +137,7 @@
 
     <!--    Auth Errors -->
     <string name="auth_unmapped_error">We can't do that at the moment. Please, try again later.</string>
+    <string name="auth_network_error">There is an error with your network connection. Please, fix it and try again.</string>
     <string name="auth_email_already_exists">The provided email is already in use by an existing user. Each user must have a unique email.</string>
     <string name="auth_invalid_credential">Wrong e-mail or password. Try again, or ask for a password reset.</string>
     <string name="auth_invalid_password">Invalid password. Try again, or ask for a password reset.</string>
