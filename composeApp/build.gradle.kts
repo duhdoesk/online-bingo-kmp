@@ -112,6 +112,7 @@ kotlin {
 //            Revenue Cat
             implementation(libs.purchases.core)
             implementation(libs.purchases.result)
+            implementation(libs.purchases.ui)
         }
 
 //        desktopMain.dependencies {
@@ -127,8 +128,9 @@ kotlin {
                 optIn("kotlinx.cinterop.ExperimentalForeignApi")
             }
         }
-
     }
+
+    
 }
 
 android {

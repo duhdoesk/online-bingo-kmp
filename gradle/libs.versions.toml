@@ -61,7 +61,7 @@ supabase-auth-kt = { module = "io.github.jan-tennert.supabase:compose-auth" }
 supabase-gotrue-kt = { module = "io.github.jan-tennert.supabase:gotrue-kt" }
 purchases-core = { module = "com.revenuecat.purchases:purchases-kmp-core", version.ref = "purchases-kmp" }
 purchases-result = { module = "com.revenuecat.purchases:purchases-kmp-result", version.ref = "purchases-kmp" }
-purchases-ui = { module = "com.revenuecat.purchases:purchases-ui-revenucatui", version.ref = "purchases-kmp" }
+purchases-ui = { module = "com.revenuecat.purchases:purchases-kmp-ui", version.ref = "purchases-kmp" }
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }

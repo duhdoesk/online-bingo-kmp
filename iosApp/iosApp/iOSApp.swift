@@ -3,6 +3,7 @@ import Firebase
 import ComposeApp
 import GoogleSignIn
 import FirebaseCore
+import RevenueCat
 
 @main
 struct iOSApp: App {

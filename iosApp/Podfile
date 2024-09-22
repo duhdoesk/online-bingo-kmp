@@ -7,5 +7,7 @@ target 'iosApp' do
 
   # Pods for Revenue Cat
   pod 'PurchasesHybridCommon', '13.2.0'
+  pod 'RevenueCat', '5.3.1'
+  pod 'RevenueCatUI'
 
 end

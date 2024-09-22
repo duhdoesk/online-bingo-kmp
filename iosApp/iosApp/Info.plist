@@ -27,7 +27,6 @@
 			<string>com.duhdoesk.themedbingocardsgenerator.ThemedBingo</string>
 			<key>CFBundleURLSchemes</key>
 			<array>
-				<string>localhost://</string>
 				<string>apps.googleusercontent.com.746232526782-dk79men2no3js7he4186g6m67d6edpd1</string>
 				<string>apps.googleusercontent.com.746232526782-mnq2lnm9fp2sunpopk0cfp7pu6v9trcu</string>
 			</array>
@@ -66,6 +65,13 @@
 	<string>UIStatusBarStyleLightContent</string>
 	<key>UISupportedInterfaceOrientations</key>
 	<array>
+		<string>UIInterfaceOrientationPortrait</string>
+		<string>UIInterfaceOrientationPortraitUpsideDown</string>
+	</array>
+	<key>UISupportedInterfaceOrientations~ipad</key>
+	<array>
+		<string>UIInterfaceOrientationLandscapeLeft</string>
+		<string>UIInterfaceOrientationLandscapeRight</string>
 		<string>UIInterfaceOrientationPortrait</string>
 		<string>UIInterfaceOrientationPortraitUpsideDown</string>
 	</array>
