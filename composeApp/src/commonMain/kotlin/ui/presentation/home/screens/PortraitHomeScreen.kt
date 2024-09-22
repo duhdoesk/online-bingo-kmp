@@ -4,8 +4,7 @@ import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.expandVertically
 import androidx.compose.animation.shrinkVertically
-import androidx.compose.animation.slideInVertically
-import androidx.compose.animation.slideOutVertically
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -23,12 +22,14 @@ import androidx.compose.foundation.layout.sizeIn
 import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Card
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.rememberModalBottomSheetState
@@ -39,35 +40,43 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.paint
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import coil3.compose.AsyncImage
 import com.revenuecat.purchases.kmp.ui.revenuecatui.Paywall
 import com.revenuecat.purchases.kmp.ui.revenuecatui.PaywallOptions
 import domain.room.model.BingoType
 import getPlatform
 import org.jetbrains.compose.resources.ExperimentalResourceApi
+import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 import themedbingo.composeapp.generated.resources.Res
+import themedbingo.composeapp.generated.resources.become_vip_button
 import themedbingo.composeapp.generated.resources.bingo_balls
 import themedbingo.composeapp.generated.resources.classic_bingo
 import themedbingo.composeapp.generated.resources.classic_bingo_desc
-import themedbingo.composeapp.generated.resources.home_screen
+import themedbingo.composeapp.generated.resources.crown
 import themedbingo.composeapp.generated.resources.hw_blue_bg
+import themedbingo.composeapp.generated.resources.hw_gold_bg
 import themedbingo.composeapp.generated.resources.hw_green_bg
-import themedbingo.composeapp.generated.resources.player_picture
+import themedbingo.composeapp.generated.resources.hw_orange_bg
+import themedbingo.composeapp.generated.resources.hw_red_bg
+import themedbingo.composeapp.generated.resources.premium_crown
 import themedbingo.composeapp.generated.resources.smiling_squirrel
 import themedbingo.composeapp.generated.resources.themed_bingo
 import themedbingo.composeapp.generated.resources.themed_bingo_desc
+import themedbingo.composeapp.generated.resources.vip
+import themedbingo.composeapp.generated.resources.vip_description
+import themedbingo.composeapp.generated.resources.vip_pass
 import ui.navigation.Configuration
 import ui.presentation.common.components.NoPictureHWBanner
 import ui.presentation.home.event.HomeScreenEvent
 import ui.presentation.home.screens.component.BingoTypeCard
 import ui.presentation.home.screens.component.HomeScreenHello
+import ui.presentation.home.screens.component.HomeScreenTopBar
 import ui.presentation.home.state.HomeScreenUIState
 import ui.presentation.util.bottom_sheet.PaywallBottomSheet
 
@@ -95,42 +104,13 @@ fun PortraitHomeScreen(
                 .fillMaxSize(),
         ) {
             Column(modifier = Modifier.sizeIn(maxWidth = 600.dp, maxHeight = 1000.dp)) {
-                Row(
-                    verticalAlignment = Alignment.CenterVertically,
+                HomeScreenTopBar(
+                    isSubscribed = uiState.isSubscribed,
+                    onClickSettings = { event(HomeScreenEvent.Navigate(Configuration.ProfileScreen)) },
                     modifier = Modifier
-                        .clickable { event(HomeScreenEvent.Navigate(Configuration.ProfileScreen)) },
-                ) {
-                    Text(
-                        text = stringResource(Res.string.home_screen),
-                        style = MaterialTheme.typography.headlineSmall,
-                        maxLines = 1,
-                        overflow = TextOverflow.Ellipsis,
-                        modifier = Modifier
-                            .padding(horizontal = 16.dp)
-                            .weight(1f),
-                    )
-
-                    Text(
-                        text = uiState.userName,
-                        textAlign = TextAlign.End,
-                        style = MaterialTheme.typography.bodyLarge,
-                        maxLines = 2,
-                        overflow = TextOverflow.Ellipsis,
-                        modifier = Modifier
-                            .padding(start = 16.dp, end = 4.dp)
-                            .weight(0.5f),
-                    )
-
-                    AsyncImage(
-                        model = uiState.userPicture,
-                        contentDescription = stringResource(Res.string.player_picture),
-                        contentScale = ContentScale.Crop,
-                        modifier = Modifier
-                            .padding(16.dp)
-                            .size(60.dp)
-                            .clip(CircleShape),
-                    )
-                }
+                        .padding(vertical = 12.dp)
+                        .fillMaxWidth(),
+                )
 
                 Column(
                     verticalArrangement = Arrangement.Center,
@@ -177,22 +157,32 @@ fun PortraitHomeScreen(
                                     )
                                 )
                             )
-                        }, //todo(): refactor
+                        },
                         modifier = Modifier.padding(horizontal = 16.dp),
                     )
-                }
 
-                if (!uiState.isSubscribed) {
-                    Row(
-                        horizontalArrangement = Arrangement.Center,
-                        modifier = Modifier.padding(bottom = 8.dp).fillMaxWidth(),
-                    ) {
-                        TextButton(
-                            modifier = Modifier.width(200.dp),
+                    if (!uiState.isSubscribed) {
+                        Spacer(Modifier.height(24.dp))
+
+                        Text(
+                            text = stringResource(Res.string.become_vip_button),
+                            style = MaterialTheme.typography.titleLarge,
+                            fontWeight = FontWeight.SemiBold,
+                            modifier = Modifier
+                                .padding(horizontal = 16.dp)
+                                .fillMaxWidth()
+                        )
+
+                        Spacer(Modifier.height(4.dp))
+
+                        BingoTypeCard(
+                            background = Res.drawable.hw_orange_bg,
+                            icon = Res.drawable.premium_crown,
+                            title = Res.string.vip_pass,
+                            body = Res.string.vip_description, //todo(): refactor
                             onClick = { showPaywall = true },
-                            colors = ButtonDefaults.buttonColors()
-                                .copy(contentColor = Color.Yellow),
-                        ) { Text("Become Premium") }
+                            modifier = Modifier.padding(horizontal = 16.dp),
+                        )
                     }
                 }
 

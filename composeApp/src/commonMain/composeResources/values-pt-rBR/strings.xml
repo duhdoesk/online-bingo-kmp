@@ -16,6 +16,7 @@
     <string name="raffle_button">Sortear</string>
     <string name="new_card_button">Nova Cartela</string>
     <string name="call_bingo_button">Bingo!</string>
+    <string name="become_vip_button">Passe VIP</string>
 
 
     <!--    Generic Labels -->
@@ -25,6 +26,10 @@
     <string name="unmapped_error">Não conseguimos completar a operação. Por favor, tente novamente mais tarde.</string>
     <string name="oops">Oops!</string>
     <string name="search">Pesquisar</string>
+    <string name="premium">Premium</string>
+    <string name="vip">VIP</string>
+    <string name="vip_pass">Passe VIP</string>
+    <string name="vip_description">Aproveite todas as vantagens de um membro VIP, como evitar anúncios e criar suas próprias salas de bingo.</string>
 
 
     <!--    Bingo Types -->

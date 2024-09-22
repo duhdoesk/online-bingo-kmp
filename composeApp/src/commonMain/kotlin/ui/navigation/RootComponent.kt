@@ -8,7 +8,6 @@ import com.arkivanov.decompose.router.stack.pushNew
 import com.arkivanov.decompose.router.stack.replaceAll
 import com.arkivanov.decompose.router.stack.replaceCurrent
 import domain.auth.supabase.SupabaseAuthService
-import domain.user.use_case.CreateUserUseCase
 import domain.user.use_case.GetUserByIdUseCase
 import io.github.jan.supabase.gotrue.SessionStatus
 import io.github.jan.supabase.gotrue.auth
@@ -39,7 +38,6 @@ class RootComponent(
      */
     private val supabaseAuthService by inject<SupabaseAuthService>()
     private val getUserByIdUseCase by inject<GetUserByIdUseCase>()
-    private val createUserUseCase by inject<CreateUserUseCase>()
 
     /**
      * Supabase Client
@@ -52,12 +50,6 @@ class RootComponent(
     val user = supabaseClient.auth.sessionStatus.map { sessionStatus ->
         when (sessionStatus) {
             is SessionStatus.Authenticated -> {
-//                getUserByIdUseCase(sessionStatus.session.user?.id.orEmpty()).getOrElse {
-//                    createUserUseCase(
-//                        id = sessionStatus.session.user?.id.orEmpty(),
-//                        email = sessionStatus.session.user?.email.orEmpty(),
-//                    )
-//                }
                 getUserByIdUseCase(sessionStatus.session.user?.id.orEmpty()).getOrNull()
             }
             else -> null

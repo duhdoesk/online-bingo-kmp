@@ -17,6 +17,7 @@
     <string name="raffle_button">Raffle</string>
     <string name="new_card_button">New Card</string>
     <string name="call_bingo_button">Bingo!</string>
+    <string name="become_vip_button">VIP Pass</string>
 
 
     <!--    Generic Labels -->
@@ -26,6 +27,10 @@
     <string name="unmapped_error">We can't do that at the moment. Please, try again later.</string>
     <string name="oops">Oops!</string>
     <string name="search">Search</string>
+    <string name="premium">Premium</string>
+    <string name="vip">VIP</string>
+    <string name="vip_pass">VIP Pass</string>
+    <string name="vip_description">Enjoy all of the features of a VIP member, like avoiding ads and hosting your own bingo rooms.</string>
 
 
     <!--    Bingo Types -->
