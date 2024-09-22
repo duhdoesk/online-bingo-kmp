@@ -49,6 +49,7 @@ import coil3.compose.AsyncImage
 import com.revenuecat.purchases.kmp.ui.revenuecatui.Paywall
 import com.revenuecat.purchases.kmp.ui.revenuecatui.PaywallOptions
 import domain.room.model.BingoType
+import getPlatform
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.stringResource
 import themedbingo.composeapp.generated.resources.Res
@@ -199,11 +200,22 @@ fun PortraitHomeScreen(
             }
 
             if (showPaywall) {
-                PaywallBottomSheet(
-                    paywallOptions = paywallOptions,
-                    sheetState = paywallBottomSheetState,
-                    onDismiss = { showPaywall = false },
-                )
+                when (getPlatform().name.startsWith("Android")) {
+                    true ->
+                        PaywallBottomSheet(
+                            paywallOptions = paywallOptions,
+                            sheetState = paywallBottomSheetState,
+                            onDismiss = { showPaywall = false },
+                        )
+
+                    false ->
+                        AnimatedVisibility(
+                            visible = showPaywall,
+                            enter = expandVertically(tween(700)),
+                            exit = shrinkVertically(tween(700)),
+                            modifier = Modifier.align(Alignment.BottomCenter),
+                        ) { Paywall(paywallOptions) }
+                }
             }
         }
     }
