@@ -16,6 +16,7 @@ import com.arkivanov.decompose.extensions.compose.stack.Children
 import com.arkivanov.decompose.extensions.compose.stack.animation.slide
 import com.arkivanov.decompose.extensions.compose.stack.animation.stackAnimation
 import com.arkivanov.decompose.extensions.compose.subscribeAsState
+import com.example.compose.AppTheme
 import com.revenuecat.purchases.kmp.LogLevel
 import com.revenuecat.purchases.kmp.Purchases
 import com.revenuecat.purchases.kmp.VerificationResult
@@ -31,7 +32,7 @@ import ui.presentation.util.rememberWindowInfo
 @Preview
 fun App(rootComponent: RootComponent) {
     KoinContext {
-        MaterialTheme {
+        AppTheme {
 
             /**
              * Child Stack representation - navigation
