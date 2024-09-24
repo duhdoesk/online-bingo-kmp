@@ -7,6 +7,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
@@ -28,7 +29,8 @@ fun RoomInfoCard(
     val containerColor = getRandomLightColor()
 
     Card(
-        colors = CardDefaults.cardColors().copy(containerColor = containerColor),
+        colors = CardDefaults.cardColors()
+            .copy(containerColor = containerColor, contentColor = Color.Black),
         modifier = modifier,
     ) {
         Text(
