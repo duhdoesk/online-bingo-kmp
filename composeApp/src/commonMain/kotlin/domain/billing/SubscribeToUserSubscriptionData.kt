@@ -17,7 +17,7 @@ class SubscribeToUserSubscriptionData {
         Purchases.sharedInstance.delegate = object : PurchasesDelegate {
             override fun onCustomerInfoUpdated(customerInfo: CustomerInfo) {
                 subscriptionState.value = UserSubscriptionData(
-                    isSubscribed = customerInfo.entitlements.all.isNotEmpty()
+                    isSubscribed = customerInfo.entitlements.active.isNotEmpty()
                 )
             }
 
