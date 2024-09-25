@@ -16,6 +16,7 @@ import domain.auth.use_case.AuthenticateUserUseCase
 import domain.auth.use_case.ChangePasswordWithReAuthenticationUseCase
 import domain.auth.use_case.DeleteAccountUseCase
 import domain.auth.use_case.SignOutUseCase
+import domain.billing.SubscribeToUserSubscriptionData
 import domain.card.repository.CardRepository
 import domain.card.use_case.FlowCardByRoomAndUserIDUseCase
 import domain.card.use_case.SetCardByRoomAndUserIDUseCase
@@ -104,4 +105,7 @@ val domainModule = module {
     single<SignInWithGoogleUseCase> { SignInWithGoogleUseCase(get(), get()) }
     single<SupabaseSignOutUseCase> { SupabaseSignOutUseCase(get()) }
     single<SupabaseDeleteAccountUseCase> { SupabaseDeleteAccountUseCase(get()) }
+
+//    Billing
+    single<SubscribeToUserSubscriptionData> { SubscribeToUserSubscriptionData() }
 }
