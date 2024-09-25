@@ -83,7 +83,7 @@ fun HomeScreenTopBar(
             contentDescription = "Account Settings",
             modifier = Modifier
                 .padding(end = 16.dp)
-                .size(30.dp)
+                .size(32.dp)
                 .clickable { onClickSettings() },
         )
     }

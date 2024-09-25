@@ -46,8 +46,8 @@
     <string name="profile">Profile</string>
     <string name="classic_bingo">Classic Bingo</string>
     <string name="themed_bingo">Themed Bingo</string>
-    <string name="classic_bingo_desc">Play the classic game, with cards containing 25 or 15 numbers.</string>
-    <string name="themed_bingo_desc">Play an original game, with different themes and cards containing 9 characters.</string>
+    <string name="classic_bingo_desc">Play the classic game, with cards of 24 numbers.</string>
+    <string name="themed_bingo_desc">Play an original game, with different themes and cards of 9 characters.</string>
     <string name="hello">Hello</string>
     <string name="choose_your_game">What are we going to play?</string>
     <string name="home_screen">Home</string>

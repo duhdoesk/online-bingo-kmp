@@ -29,7 +29,7 @@
     <string name="premium">Premium</string>
     <string name="vip">VIP</string>
     <string name="vip_pass">Passe VIP</string>
-    <string name="vip_description">Aproveite todas as vantagens de um membro VIP, como evitar anúncios e criar suas próprias salas de bingo.</string>
+    <string name="vip_description">Aproveite as vantagens do VIP, como evitar anúncios e criar suas próprias salas de bingo.</string>
 
 
     <!--    Bingo Types -->
@@ -45,8 +45,8 @@
     <string name="profile">Perfil</string>
     <string name="classic_bingo">Bingo Clássico</string>
     <string name="themed_bingo">Bingo Temático</string>
-    <string name="classic_bingo_desc">Jogue o bingo tradicional, com cartelas de 25 ou 15 números (tômbola).</string>
-    <string name="themed_bingo_desc">Jogue um bingo original e diferente, com diversos temas e cartelas de 9 personagens.</string>
+    <string name="classic_bingo_desc">Jogue o bingo tradicional, com cartelas de 24 números.</string>
+    <string name="themed_bingo_desc">Jogue um bingo diferente, com temas originais e cartelas de 9 personagens.</string>
     <string name="hello">Olá</string>
     <string name="choose_your_game">O que vamos jogar agora?</string>
     <string name="home_screen">Início</string>
