@@ -58,7 +58,7 @@ fun ProfileScreenStringDataSection(
                 text = stringResource(label),
                 modifier = Modifier
                     .padding(start = 16.dp),
-                style = MaterialTheme.typography.titleLarge,
+                style = MaterialTheme.typography.bodyLarge,
                 fontWeight = FontWeight.Bold,
                 color = MaterialTheme.colorScheme.onSurface,
             )
@@ -66,10 +66,10 @@ fun ProfileScreenStringDataSection(
             Text(
                 text = data,
                 modifier = Modifier
-                    .padding(start = 16.dp, top = 12.dp),
+                    .padding(start = 16.dp, top = 8.dp),
                 overflow = TextOverflow.Ellipsis,
                 maxLines = 1,
-                style = MaterialTheme.typography.titleLarge,
+                style = MaterialTheme.typography.titleMedium,
                 color = MaterialTheme.colorScheme.onSurface,
             )
         }
