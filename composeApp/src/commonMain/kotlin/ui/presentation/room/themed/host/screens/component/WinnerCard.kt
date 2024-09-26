@@ -37,7 +37,10 @@ fun WinnerCard(
     modifier: Modifier = Modifier
 ) {
     Card(modifier = modifier) {
-        Surface(color = surfaceColor) {
+        Surface(
+            color = surfaceColor,
+            contentColor = Color.Black,
+        ) {
             Row(
                 verticalAlignment = Alignment.CenterVertically,
                 modifier = Modifier.fillMaxWidth(),
@@ -64,13 +67,13 @@ fun WinnerCard(
                 Column {
                     Text(
                         text = winner.name,
-                        style = MaterialTheme.typography.headlineSmall,
+                        style = MaterialTheme.typography.titleLarge,
                         fontWeight = FontWeight.SemiBold,
                     )
 
                     Text(
                         text = winner.victoryMessage,
-                        style = MaterialTheme.typography.titleLarge,
+                        style = MaterialTheme.typography.titleMedium,
                         fontWeight = FontWeight.Normal,
                         maxLines = 2,
                         overflow = TextOverflow.Ellipsis,
