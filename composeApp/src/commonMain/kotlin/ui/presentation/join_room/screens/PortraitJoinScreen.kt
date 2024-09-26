@@ -1,5 +1,6 @@
 package ui.presentation.join_room.screens
 
+import OperationalSystem
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.expandVertically
@@ -163,15 +164,15 @@ fun PortraitJoinScreen(
              * Paywall
              */
             if (showPaywall) {
-                when (getPlatform().name.startsWith("Android")) {
-                    true ->
+                when (getPlatform().system) {
+                    OperationalSystem.ANDROID ->
                         PaywallBottomSheet(
                             paywallOptions = paywallOptions,
                             sheetState = paywallBottomSheetState,
                             onDismiss = { showPaywall = false },
                         )
 
-                    false ->
+                    OperationalSystem.IOS ->
                         AnimatedVisibility(
                             visible = showPaywall,
                             enter = expandVertically(tween(700)),

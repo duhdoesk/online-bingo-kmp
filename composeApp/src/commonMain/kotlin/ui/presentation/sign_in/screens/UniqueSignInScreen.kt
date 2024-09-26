@@ -1,5 +1,6 @@
 package ui.presentation.sign_in.screens
 
+import OperationalSystem
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
@@ -70,7 +71,7 @@ fun UniqueSignInScreen(
 
         Spacer(Modifier.height(8.dp))
 
-        if (getPlatform().name.startsWith("Android")) return@Column
+        if (getPlatform().system == OperationalSystem.ANDROID) return@Column
 
         Button(
             onClick = { onStartAppleAuth() },

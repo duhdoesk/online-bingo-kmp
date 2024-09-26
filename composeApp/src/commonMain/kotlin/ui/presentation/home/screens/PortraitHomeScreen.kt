@@ -1,5 +1,6 @@
 package ui.presentation.home.screens
 
+import OperationalSystem
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.expandVertically
@@ -160,7 +161,7 @@ fun PortraitHomeScreen(
                             background = Res.drawable.hw_orange_bg,
                             icon = Res.drawable.premium_crown,
                             title = Res.string.vip_pass,
-                            body = Res.string.vip_description, //todo(): refactor
+                            body = Res.string.vip_description,
                             onClick = { showPaywall = true },
                             modifier = Modifier.padding(horizontal = 16.dp),
                         )
@@ -171,15 +172,15 @@ fun PortraitHomeScreen(
             }
 
             if (showPaywall) {
-                when (getPlatform().name.startsWith("Android")) {
-                    true ->
+                when (getPlatform().system) {
+                    OperationalSystem.ANDROID ->
                         PaywallBottomSheet(
                             paywallOptions = paywallOptions,
                             sheetState = paywallBottomSheetState,
                             onDismiss = { showPaywall = false },
                         )
 
-                    false ->
+                    OperationalSystem.IOS ->
                         AnimatedVisibility(
                             visible = showPaywall,
                             enter = expandVertically(tween(700)),
