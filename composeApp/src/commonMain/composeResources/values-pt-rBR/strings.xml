@@ -77,6 +77,10 @@
     <string name="join_locked_room_body">Insira a senha para entrar na sala</string>
     <string name="join_room_invalid_password">Senha incorreta. Tente novamente, ou verifique se você está com a senha correta.</string>
     <string name="join_room_empty_password">Você precisa inserir a senha para entrar em uma sala trancada.</string>
+    <string name="subscription_dialog_title">Passe VIP necessário</string>
+    <string name="subscription_dialog_body">Você precisa assinar o Passe VIP para criar suas próprias salas de bingo. Deseja ver as opções de assinatura disponíveis?</string>
+    <string name="no_rooms_title">Nada por aqui...</string>
+    <string name="no_rooms_body">Parece que não tem nenhuma sala de bingo aberta nesse momento. Mas você pode criar a sua própria sala se tiver um Passe VIP.</string>
 
 
     <!--    Rotate Screen -->

@@ -22,6 +22,11 @@ data class JoinRoomUIState(
      * Represents the query being made by the user in the search box
      * */
     val query: String,
+
+    /**
+     * Represents whether the user is subscribed or not
+     */
+    val isSubscribed: Boolean,
 ) {
     companion object {
         val INITIAL = JoinRoomUIState(
@@ -29,6 +34,7 @@ data class JoinRoomUIState(
             notStartedRooms = emptyList(),
             runningRooms = emptyList(),
             query = "",
+            isSubscribed = false,
         )
     }
 }

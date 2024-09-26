@@ -2,6 +2,7 @@ package ui.presentation.join_room
 
 import com.arkivanov.decompose.ComponentContext
 import dev.gitlive.firebase.auth.FirebaseUser
+import domain.billing.SubscribeToUserSubscriptionData
 import domain.room.model.BingoRoom
 import domain.room.model.BingoType
 import domain.room.use_case.GetNotStartedRoomsUseCase
@@ -46,6 +47,7 @@ class JoinScreenComponent(
     private val getAllThemesUseCase by inject<GetAllThemesUseCase>()
     private val joinRoomUseCase by inject<JoinRoomUseCase>()
     private val getRoomByIdUseCase by inject<GetRoomByIdUseCase>()
+    private val subscribeToUserSubscriptionData by inject<SubscribeToUserSubscriptionData>()
 
     private val _query = MutableStateFlow("")
 
@@ -83,14 +85,16 @@ class JoinScreenComponent(
                 getNotStartedRoomsUseCase(bingoType),
                 getRunningRoomsUseCase(bingoType),
                 _query,
-            ) { notStarted, running, query ->
+                subscribeToUserSubscriptionData(),
+            ) { notStarted, running, query, subscriptionData ->
 
                 if (query.isEmpty()) {
                     JoinRoomUIState(
                         loading = false,
                         notStartedRooms = notStarted,
                         runningRooms = running,
-                        query = query
+                        query = query,
+                        isSubscribed = subscriptionData.isSubscribed,
                     )
                 } else {
                     val filteredNotStarted =
@@ -102,7 +106,8 @@ class JoinScreenComponent(
                         loading = false,
                         notStartedRooms = filteredNotStarted,
                         runningRooms = filteredRunning,
-                        query = query
+                        query = query,
+                        isSubscribed = subscriptionData.isSubscribed,
                     )
                 }
             }.collect { state -> _uiState.update { state } }

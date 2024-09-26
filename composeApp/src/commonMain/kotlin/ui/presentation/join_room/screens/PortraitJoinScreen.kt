@@ -1,6 +1,9 @@
 package ui.presentation.join_room.screens
 
-import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.expandVertically
+import androidx.compose.animation.shrinkVertically
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -19,38 +22,67 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
+import com.revenuecat.purchases.kmp.ui.revenuecatui.Paywall
+import com.revenuecat.purchases.kmp.ui.revenuecatui.PaywallOptions
 import domain.theme.model.BingoTheme
+import getPlatform
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.stringResource
 import themedbingo.composeapp.generated.resources.Res
 import themedbingo.composeapp.generated.resources.create_button
 import themedbingo.composeapp.generated.resources.join_room
 import themedbingo.composeapp.generated.resources.search
+import themedbingo.composeapp.generated.resources.subscription_dialog_body
+import themedbingo.composeapp.generated.resources.subscription_dialog_title
 import ui.presentation.common.components.BottomButtonRow
 import ui.presentation.join_room.event.JoinRoomUIEvent
 import ui.presentation.join_room.screens.component.JoinScreenLazyColumn
+import ui.presentation.join_room.screens.component.JoinScreenNoRoomsComponent
 import ui.presentation.join_room.state.JoinRoomUIState
+import ui.presentation.util.bottom_sheet.PaywallBottomSheet
+import ui.presentation.util.dialog.GenericActionDialog
 
-@OptIn(ExperimentalResourceApi::class, ExperimentalFoundationApi::class)
+@OptIn(ExperimentalResourceApi::class, ExperimentalMaterial3Api::class)
 @Composable
 fun PortraitJoinScreen(
     uiState: JoinRoomUIState,
     uiEvent: (event: JoinRoomUIEvent) -> Unit,
     themes: List<BingoTheme>,
 ) {
+    /**
+     * Keyboard controller
+     */
     val keyboardController = LocalSoftwareKeyboardController.current
+
+    /**
+     * Paywall config
+     */
+    var showPaywall by remember { mutableStateOf(false) }
+    val paywallBottomSheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
+    val paywallOptions = remember {
+        PaywallOptions(dismissRequest = { showPaywall = false }) {
+            shouldDisplayDismissButton = true
+        }
+    }
+    var showSubscriptionDialog by remember { mutableStateOf(false) }
 
     Scaffold(
         modifier = Modifier.imePadding(),
@@ -98,7 +130,7 @@ fun PortraitJoinScreen(
                     Spacer(Modifier.height(16.dp))
 
                     if (uiState.notStartedRooms.isEmpty() && uiState.runningRooms.isEmpty()) {
-                        //todo(): screen when there is no room to be shown
+                        JoinScreenNoRoomsComponent(modifier = Modifier.padding(horizontal = 16.dp).fillMaxWidth().weight(1f))
                     } else {
                         JoinScreenLazyColumn(
                             notStartedRooms = uiState.notStartedRooms,
@@ -116,11 +148,52 @@ fun PortraitJoinScreen(
                 BottomButtonRow(
                     rightEnabled = true,
                     leftClicked = { uiEvent(JoinRoomUIEvent.PopBack) },
-                    rightClicked = { uiEvent(JoinRoomUIEvent.CreateRoom) },
+                    rightClicked = {
+                        if (uiState.isSubscribed) uiEvent(JoinRoomUIEvent.CreateRoom)
+                        else showSubscriptionDialog = true
+                    },
                     rightText = Res.string.create_button,
                     modifier = Modifier
                         .padding(vertical = 8.dp, horizontal = 16.dp)
                         .fillMaxWidth()
+                )
+            }
+
+            /**
+             * Paywall
+             */
+            if (showPaywall) {
+                when (getPlatform().name.startsWith("Android")) {
+                    true ->
+                        PaywallBottomSheet(
+                            paywallOptions = paywallOptions,
+                            sheetState = paywallBottomSheetState,
+                            onDismiss = { showPaywall = false },
+                        )
+
+                    false ->
+                        AnimatedVisibility(
+                            visible = showPaywall,
+                            enter = expandVertically(tween(700)),
+                            exit = shrinkVertically(tween(700)),
+                            modifier = Modifier.align(Alignment.BottomCenter),
+                        ) { Paywall(paywallOptions) }
+                }
+            }
+
+            /**
+             * Dialog that informs user that subscription is needed to proceed
+             */
+            if (showSubscriptionDialog) {
+                GenericActionDialog(
+                    onDismiss = { showSubscriptionDialog = false },
+                    onConfirm = {
+                        showSubscriptionDialog = false
+                        showPaywall = true
+                    },
+                    title = Res.string.subscription_dialog_title,
+                    body = Res.string.subscription_dialog_body,
+                    permanentAction = false,
                 )
             }
         }
