@@ -1,5 +1,6 @@
 package ui.presentation.room.themed.play.screens.component
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Card
@@ -20,15 +21,20 @@ fun CompactCharacterCard(
     modifier: Modifier = Modifier,
 ) {
     val containerColor =
-        if (hasBeenRaffled) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.primaryContainer
+        if (hasBeenRaffled) MaterialTheme.colorScheme.primaryContainer
+        else MaterialTheme.colorScheme.surface
 
     val contentColor =
-        if (hasBeenRaffled) MaterialTheme.colorScheme.onPrimary else MaterialTheme.colorScheme.onPrimaryContainer
+        if (hasBeenRaffled) MaterialTheme.colorScheme.onPrimaryContainer
+        else MaterialTheme.colorScheme.onSurface
 
-    Card(modifier = modifier) {
+    Card(
+        modifier = modifier,
+        border = BorderStroke(1.dp, MaterialTheme.colorScheme.primaryContainer),
+    ) {
         Surface(
             color = containerColor,
-            contentColor = contentColor
+            contentColor = contentColor,
         ) {
             Text(
                 text = character.name.uppercase(),

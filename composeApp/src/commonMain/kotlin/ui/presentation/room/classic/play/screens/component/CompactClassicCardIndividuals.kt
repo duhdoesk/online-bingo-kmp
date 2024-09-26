@@ -1,5 +1,6 @@
 package ui.presentation.room.classic.play.screens.component
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -21,15 +22,18 @@ fun CompactClassicCardIndividuals(
 ) {
     val containerColor =
         if (number == "-") MaterialTheme.colorScheme.surface
-        else if (hasBeenRaffled) MaterialTheme.colorScheme.primary
-        else MaterialTheme.colorScheme.primaryContainer
+        else if (hasBeenRaffled) MaterialTheme.colorScheme.primaryContainer
+        else MaterialTheme.colorScheme.surface
 
     val contentColor =
-        if (number == "-") MaterialTheme.colorScheme.surface
-        else if (hasBeenRaffled) MaterialTheme.colorScheme.onPrimary
-        else MaterialTheme.colorScheme.onPrimaryContainer
+        if (number == "-") MaterialTheme.colorScheme.onSurface
+        else if (hasBeenRaffled) MaterialTheme.colorScheme.onPrimaryContainer
+        else MaterialTheme.colorScheme.onSurface
 
-    Card(modifier = modifier) {
+    Card(
+        modifier = modifier,
+        border = BorderStroke(1.dp, MaterialTheme.colorScheme.primaryContainer),
+    ) {
         Box(
             contentAlignment = Alignment.Center,
             modifier = Modifier
