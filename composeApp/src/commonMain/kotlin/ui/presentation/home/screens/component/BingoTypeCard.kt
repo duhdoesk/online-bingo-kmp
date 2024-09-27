@@ -20,12 +20,15 @@ import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import org.jetbrains.compose.resources.DrawableResource
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.StringResource
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
+import themedbingo.composeapp.generated.resources.Res
+import themedbingo.composeapp.generated.resources.hw_orange_bg
 
 @OptIn(ExperimentalResourceApi::class)
 @Composable
@@ -41,23 +44,24 @@ fun BingoTypeCard(
         modifier = modifier
             .clickable { onClick() },
     ) {
-        Box(
-            contentAlignment = Alignment.Center,
-            modifier = Modifier.paint(
+        Box(contentAlignment = Alignment.Center) {
+            Image(
                 painter = painterResource(background),
                 contentScale = ContentScale.Crop,
-            ),
-        ) {
+                contentDescription = "Background",
+                modifier = Modifier.matchParentSize(),
+            )
+
             Row(
                 verticalAlignment = Alignment.CenterVertically,
-                modifier = Modifier.padding(vertical = 8.dp)
+                modifier = Modifier.padding(vertical = 16.dp)
             ) {
                 Image(
                     painter = painterResource(icon),
                     contentDescription = null,
                     modifier = Modifier
                         .padding(horizontal = 8.dp)
-                        .size(120.dp),
+                        .size(80.dp),
                 )
 
                 Column(
@@ -67,7 +71,7 @@ fun BingoTypeCard(
                 ) {
                     Text(
                         text = stringResource(title),
-                        style = MaterialTheme.typography.headlineSmall,
+                        style = MaterialTheme.typography.titleLarge,
                         fontWeight = FontWeight.Bold,
                         color = Color.White,
                     )
@@ -76,6 +80,9 @@ fun BingoTypeCard(
                         text = stringResource(body),
                         style = MaterialTheme.typography.bodyLarge,
                         color = Color.White,
+                        minLines = 3,
+                        maxLines = 4,
+                        overflow = TextOverflow.Ellipsis,
                     )
                 }
             }

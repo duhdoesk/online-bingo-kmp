@@ -44,6 +44,7 @@ import themedbingo.composeapp.generated.resources.become_vip_button
 import themedbingo.composeapp.generated.resources.bingo_balls
 import themedbingo.composeapp.generated.resources.classic_bingo
 import themedbingo.composeapp.generated.resources.classic_bingo_desc
+import themedbingo.composeapp.generated.resources.full_exp
 import themedbingo.composeapp.generated.resources.hw_blue_bg
 import themedbingo.composeapp.generated.resources.hw_green_bg
 import themedbingo.composeapp.generated.resources.hw_orange_bg
@@ -92,6 +93,7 @@ fun PortraitHomeScreen(
                     modifier = Modifier
                         .padding(vertical = 12.dp)
                         .fillMaxWidth(),
+                    userName = uiState.userName,
                 )
 
                 Column(
@@ -100,12 +102,23 @@ fun PortraitHomeScreen(
                         .weight(1f)
                         .verticalScroll(rememberScrollState()),
                 ) {
-                    HomeScreenHello(
-                        userName = uiState.userName,
-                        modifier = Modifier.fillMaxWidth()
+//                    HomeScreenHello(
+//                        userName = uiState.userName,
+//                        modifier = Modifier.fillMaxWidth()
+//                    )
+//
+//                    Spacer(Modifier.height(16.dp))
+
+                    Text(
+                        text = "Modos de Jogo",
+                        style = MaterialTheme.typography.titleLarge,
+                        fontWeight = FontWeight.SemiBold,
+                        modifier = Modifier
+                            .padding(horizontal = 16.dp)
+                            .fillMaxWidth()
                     )
 
-                    Spacer(Modifier.height(16.dp))
+                    Spacer(Modifier.height(4.dp))
 
                     BingoTypeCard(
                         background = Res.drawable.hw_green_bg,
@@ -147,7 +160,7 @@ fun PortraitHomeScreen(
                         Spacer(Modifier.height(24.dp))
 
                         Text(
-                            text = stringResource(Res.string.become_vip_button),
+                            text = stringResource(Res.string.full_exp),
                             style = MaterialTheme.typography.titleLarge,
                             fontWeight = FontWeight.SemiBold,
                             modifier = Modifier

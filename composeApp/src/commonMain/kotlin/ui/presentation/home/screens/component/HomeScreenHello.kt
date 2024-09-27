@@ -58,7 +58,7 @@ fun HomeScreenHello(
             Text(
                 text = stringResource(Res.string.choose_your_game).lowercase(),
                 textAlign = TextAlign.End,
-                style = MaterialTheme.typography.titleMedium,
+                style = MaterialTheme.typography.bodyLarge,
                 fontWeight = FontWeight.Normal,
                 modifier = Modifier.padding(horizontal = 16.dp),
             )
@@ -69,7 +69,7 @@ fun HomeScreenHello(
             contentDescription = null,
             modifier = Modifier
                 .padding(horizontal = 16.dp)
-                .size(100.dp),
+                .size(80.dp),
         )
     }
 }

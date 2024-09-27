@@ -45,11 +45,12 @@
     <string name="profile">Perfil</string>
     <string name="classic_bingo">Bingo Clássico</string>
     <string name="themed_bingo">Bingo Temático</string>
-    <string name="classic_bingo_desc">Jogue o bingo tradicional, com cartelas de 24 números.</string>
+    <string name="classic_bingo_desc">Jogue o bingo tradicional, numérico, com cartelas de 24 números.</string>
     <string name="themed_bingo_desc">Jogue um bingo diferente, com temas originais e cartelas de 9 personagens.</string>
     <string name="hello">Olá</string>
     <string name="choose_your_game">O que vamos jogar agora?</string>
     <string name="home_screen">Início</string>
+    <string name="full_exp">Experiência Completa</string>
 
 
     <!--    Create Room Screen -->

@@ -51,6 +51,7 @@
     <string name="hello">Hello</string>
     <string name="choose_your_game">What are we going to play?</string>
     <string name="home_screen">Home</string>
+    <string name="full_exp">Full Experience</string>
 
 
     <!--    Create Room Screen -->
