@@ -2,6 +2,7 @@ package ui.presentation.common
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -13,7 +14,6 @@ fun LoadingScreen() {
         contentAlignment = Alignment.Center,
         modifier = Modifier.fillMaxSize()
     ) {
-        //todo(): a nicer loading screen
-        Text("Loading")
+        CircularProgressIndicator()
     }
 }
