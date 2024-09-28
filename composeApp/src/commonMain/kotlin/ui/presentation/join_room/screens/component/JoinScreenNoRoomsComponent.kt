@@ -35,7 +35,7 @@ fun JoinScreenNoRoomsComponent(modifier: Modifier = Modifier) {
             painter = painterResource(Res.drawable.sad_tiger),
             contentDescription = "Penguin",
             contentScale = ContentScale.Crop,
-            modifier = Modifier.size(200.dp),
+            modifier = Modifier.size(120.dp),
         )
 
         Spacer(Modifier.height(16.dp))
