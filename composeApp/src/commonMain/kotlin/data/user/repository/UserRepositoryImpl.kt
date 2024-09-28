@@ -1,7 +1,6 @@
 package data.user.repository
 
 import data.user.model.UserDTO
-import dev.gitlive.firebase.firestore.DocumentSnapshot
 import dev.gitlive.firebase.firestore.FirebaseFirestore
 import dev.gitlive.firebase.firestore.Timestamp
 import domain.user.model.User
@@ -34,27 +33,27 @@ class UserRepositoryImpl(
             }
     }
 
-    override suspend fun getUserById(id: String): Result<User> {
+    override suspend fun getUserById(id: String): Result<User?> {
         try {
-            collection
-                .document(id)
-                .get()
-                .let { documentSnapshot ->
-                    val user = UserDTO(
-                        id = documentSnapshot.id,
-                        name = documentSnapshot.get("name"),
-                        pictureUri = documentSnapshot.get("pictureUri"),
-                        email = documentSnapshot.get("email"),
-                        nameLastUpdated = documentSnapshot.get("nameLastUpdated"),
-                        pictureUriLastUpdated = documentSnapshot.get("pictureUriLastUpdated"),
-                        lastWinTimestamp = documentSnapshot.get("lastWinTimestamp"),
-                        victoryMessage = documentSnapshot.get("victoryMessage"),
-                        victoryMessageLastUpdated = documentSnapshot.get("victoryMessageLastUpdated"),
-                    )
-                        .toModel()
+            val documentSnapshot = collection.document(id).get()
+            if (documentSnapshot.exists) {
+                val user = UserDTO(
+                    id = documentSnapshot.id,
+                    name = documentSnapshot.get("name"),
+                    pictureUri = documentSnapshot.get("pictureUri"),
+                    email = documentSnapshot.get("email"),
+                    nameLastUpdated = documentSnapshot.get("nameLastUpdated"),
+                    pictureUriLastUpdated = documentSnapshot.get("pictureUriLastUpdated"),
+                    lastWinTimestamp = documentSnapshot.get("lastWinTimestamp"),
+                    victoryMessage = documentSnapshot.get("victoryMessage"),
+                    victoryMessageLastUpdated = documentSnapshot.get("victoryMessageLastUpdated"),
+                )
+                    .toModel()
 
-                    return Result.success(user)
-                }
+                return Result.success(user)
+            } else {
+                return Result.success(null)
+            }
         } catch (e: Exception) {
             return Result.failure(e)
         }

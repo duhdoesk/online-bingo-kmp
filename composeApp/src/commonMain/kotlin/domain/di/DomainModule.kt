@@ -12,7 +12,6 @@ import domain.auth.supabase.SupabaseAuthService
 import domain.auth.supabase.use_case.SignInWithGoogleUseCase
 import domain.auth.supabase.use_case.SupabaseDeleteAccountUseCase
 import domain.auth.supabase.use_case.SupabaseSignOutUseCase
-import domain.auth.use_case.AuthenticateUserUseCase
 import domain.auth.use_case.ChangePasswordWithReAuthenticationUseCase
 import domain.auth.use_case.DeleteAccountUseCase
 import domain.auth.use_case.SignOutUseCase
@@ -95,7 +94,6 @@ val domainModule = module {
 
 //    Auth
     single<AuthService> { AuthServiceImpl(get()) }
-    single<AuthenticateUserUseCase> { AuthenticateUserUseCase(get(), get()) }
     single<DeleteAccountUseCase> { DeleteAccountUseCase(get()) }
     single<SignOutUseCase> { SignOutUseCase(get()) }
     single<ChangePasswordWithReAuthenticationUseCase> { ChangePasswordWithReAuthenticationUseCase(get()) }

@@ -10,7 +10,7 @@ interface UserRepository {
         name: String,
     ): Result<Unit>
 
-    suspend fun getUserById(id: String): Result<User>
+    suspend fun getUserById(id: String): Result<User?>
 
     fun flowUser(id: String): Flow<User>
     fun getListOfUsers(ids: List<String>): Flow<List<User>>

@@ -6,7 +6,7 @@ import domain.user.repository.UserRepository
 class GetUserByIdUseCase(
     private val userRepository: UserRepository
 ) {
-    suspend operator fun invoke(userId: String): Result<User> {
+    suspend operator fun invoke(userId: String): Result<User?> {
         return userRepository.getUserById(userId)
     }
 }

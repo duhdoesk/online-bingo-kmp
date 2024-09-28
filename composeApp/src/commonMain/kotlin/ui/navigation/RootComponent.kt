@@ -45,13 +45,19 @@ class RootComponent(
     private val supabaseClient = supabaseAuthService.supabaseClient
 
     /**
+     * Session Status Flow
+     */
+    private val sessionStatus = supabaseClient.auth.sessionStatus
+
+    /**
      * Current signed in user
      */
-    val user = supabaseClient.auth.sessionStatus.map { sessionStatus ->
-        when (sessionStatus) {
+    val user = sessionStatus.map { status ->
+        when (status) {
             is SessionStatus.Authenticated -> {
-                getUserByIdUseCase(sessionStatus.session.user?.id.orEmpty()).getOrNull()
+                getUserByIdUseCase(status.session.user?.id.orEmpty()).getOrNull()
             }
+
             else -> null
         }
     }
