@@ -189,4 +189,12 @@ class UserRepositoryImpl(
             return Result.failure(e)
         }
     }
+
+    override suspend fun checkIfUserExists(id: String): Result<Boolean> {
+        return try {
+            Result.success(collection.document(id).get().exists)
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
 }

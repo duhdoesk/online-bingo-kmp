@@ -38,6 +38,7 @@ import domain.theme.use_case.GetCharactersByThemeId
 import domain.theme.use_case.GetRoomCharactersUseCase
 import domain.theme.use_case.GetRoomThemeUseCase
 import domain.user.repository.UserRepository
+import domain.user.use_case.CheckIfIsNewUserUseCase
 import domain.user.use_case.CreateUserUseCase
 import domain.user.use_case.DeleteUserUseCase
 import domain.user.use_case.FlowUserUseCase
@@ -91,6 +92,7 @@ val domainModule = module {
     factory<GetRoomPlayersUseCase> { GetRoomPlayersUseCase(get(), get()) }
     single<CreateUserUseCase> { CreateUserUseCase(get()) }
     single<DeleteUserUseCase> { DeleteUserUseCase(get()) }
+    single<CheckIfIsNewUserUseCase> { CheckIfIsNewUserUseCase(get()) }
 
 //    Auth
     single<AuthService> { AuthServiceImpl(get()) }

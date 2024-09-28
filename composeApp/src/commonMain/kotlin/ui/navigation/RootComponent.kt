@@ -8,6 +8,7 @@ import com.arkivanov.decompose.router.stack.pushNew
 import com.arkivanov.decompose.router.stack.replaceAll
 import com.arkivanov.decompose.router.stack.replaceCurrent
 import domain.auth.supabase.SupabaseAuthService
+import domain.user.use_case.CheckIfIsNewUserUseCase
 import domain.user.use_case.GetUserByIdUseCase
 import io.github.jan.supabase.gotrue.SessionStatus
 import io.github.jan.supabase.gotrue.auth
@@ -38,6 +39,7 @@ class RootComponent(
      */
     private val supabaseAuthService by inject<SupabaseAuthService>()
     private val getUserByIdUseCase by inject<GetUserByIdUseCase>()
+    private val checkIfIsNewUserUseCase by inject<CheckIfIsNewUserUseCase>()
 
     /**
      * Supabase Client
@@ -55,7 +57,9 @@ class RootComponent(
     val user = sessionStatus.map { status ->
         when (status) {
             is SessionStatus.Authenticated -> {
-                getUserByIdUseCase(status.session.user?.id.orEmpty()).getOrNull()
+                val authInfo = status.session.user
+                authInfo?.run { checkIfIsNewUserUseCase(userInfo = authInfo) }
+                getUserByIdUseCase(authInfo?.id.orEmpty()).getOrNull()
             }
 
             else -> null
