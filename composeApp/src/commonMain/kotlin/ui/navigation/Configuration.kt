@@ -46,4 +46,7 @@ sealed class Configuration {
 
     @Serializable
     data class ClassicPlayScreen(val roomId: String) : Configuration()
+
+    @Serializable
+    data object PaywallScreen: Configuration()
 }

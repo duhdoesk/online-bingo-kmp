@@ -4,6 +4,7 @@ import ui.presentation.change_password.ChangePasswordScreen
 import ui.presentation.create_room.CreateRoomScreen
 import ui.presentation.forgot_password.ForgotPasswordScreen
 import ui.presentation.home.HomeScreen
+import ui.presentation.paywall.PaywallScreen
 import ui.presentation.join_room.JoinScreen
 import ui.presentation.profile.ProfileScreen
 import ui.presentation.profile.picture.EditProfilePictureScreen
@@ -87,6 +88,10 @@ fun CreateScreen(
 
         is Child.ClassicPlayScreen -> ClassicPlayScreen(
             component = instance.component,
+        )
+
+        is Child.PaywallScreen -> PaywallScreen(
+            viewModel = instance.component,
         )
     }
 }

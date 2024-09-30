@@ -1,10 +1,5 @@
 package ui.presentation.join_room.screens
 
-import OperationalSystem
-import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.core.tween
-import androidx.compose.animation.expandVertically
-import androidx.compose.animation.shrinkVertically
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -23,13 +18,11 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -41,10 +34,7 @@ import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
-import com.revenuecat.purchases.kmp.ui.revenuecatui.Paywall
-import com.revenuecat.purchases.kmp.ui.revenuecatui.PaywallOptions
 import domain.theme.model.BingoTheme
-import getPlatform
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.stringResource
 import themedbingo.composeapp.generated.resources.Res
@@ -53,15 +43,15 @@ import themedbingo.composeapp.generated.resources.join_room
 import themedbingo.composeapp.generated.resources.search
 import themedbingo.composeapp.generated.resources.subscription_dialog_body
 import themedbingo.composeapp.generated.resources.subscription_dialog_title
+import ui.navigation.Configuration
 import ui.presentation.common.components.BottomButtonRow
 import ui.presentation.join_room.event.JoinRoomUIEvent
 import ui.presentation.join_room.screens.component.JoinScreenLazyColumn
 import ui.presentation.join_room.screens.component.JoinScreenNoRoomsComponent
 import ui.presentation.join_room.state.JoinRoomUIState
-import ui.presentation.util.bottom_sheet.PaywallBottomSheet
 import ui.presentation.util.dialog.GenericActionDialog
 
-@OptIn(ExperimentalResourceApi::class, ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalResourceApi::class)
 @Composable
 fun PortraitJoinScreen(
     uiState: JoinRoomUIState,
@@ -74,15 +64,8 @@ fun PortraitJoinScreen(
     val keyboardController = LocalSoftwareKeyboardController.current
 
     /**
-     * Paywall config
+     * Subscription Dialog
      */
-    var showPaywall by remember { mutableStateOf(false) }
-    val paywallBottomSheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
-    val paywallOptions = remember {
-        PaywallOptions(dismissRequest = { showPaywall = false }) {
-            shouldDisplayDismissButton = true
-        }
-    }
     var showSubscriptionDialog by remember { mutableStateOf(false) }
 
     Scaffold(
@@ -161,28 +144,6 @@ fun PortraitJoinScreen(
             }
 
             /**
-             * Paywall
-             */
-            if (showPaywall) {
-                when (getPlatform().system) {
-                    OperationalSystem.ANDROID ->
-                        PaywallBottomSheet(
-                            paywallOptions = paywallOptions,
-                            sheetState = paywallBottomSheetState,
-                            onDismiss = { showPaywall = false },
-                        )
-
-                    OperationalSystem.IOS ->
-                        AnimatedVisibility(
-                            visible = showPaywall,
-                            enter = expandVertically(tween(700)),
-                            exit = shrinkVertically(tween(700)),
-                            modifier = Modifier.align(Alignment.BottomCenter),
-                        ) { Paywall(paywallOptions) }
-                }
-            }
-
-            /**
              * Dialog that informs user that subscription is needed to proceed
              */
             if (showSubscriptionDialog) {
@@ -190,7 +151,7 @@ fun PortraitJoinScreen(
                     onDismiss = { showSubscriptionDialog = false },
                     onConfirm = {
                         showSubscriptionDialog = false
-                        showPaywall = true
+                        uiEvent(JoinRoomUIEvent.Navigate(Configuration.PaywallScreen))
                     },
                     title = Res.string.subscription_dialog_title,
                     body = Res.string.subscription_dialog_body,

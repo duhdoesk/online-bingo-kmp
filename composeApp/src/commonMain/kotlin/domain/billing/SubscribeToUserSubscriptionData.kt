@@ -4,21 +4,25 @@ import com.revenuecat.purchases.kmp.CustomerInfo
 import com.revenuecat.purchases.kmp.Purchases
 import com.revenuecat.purchases.kmp.PurchasesDelegate
 import com.revenuecat.purchases.kmp.PurchasesError
+import com.revenuecat.purchases.kmp.ktx.awaitCustomerInfo
 import com.revenuecat.purchases.kmp.models.StoreProduct
 import com.revenuecat.purchases.kmp.models.StoreTransaction
 import domain.billing.model.UserSubscriptionData
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.update
 
 class SubscribeToUserSubscriptionData {
 
-    private val subscriptionState = MutableStateFlow(UserSubscriptionData(false))
+    private val _subscriptionState = MutableStateFlow(UserSubscriptionData(false))
+    val subscriptionState = _subscriptionState.asStateFlow()
 
-    init {
+    fun setupDelegate() {
         Purchases.sharedInstance.delegate = object : PurchasesDelegate {
             override fun onCustomerInfoUpdated(customerInfo: CustomerInfo) {
-                subscriptionState.value = UserSubscriptionData(
-                    isSubscribed = customerInfo.entitlements.active.isNotEmpty()
-                )
+                _subscriptionState.update {
+                    UserSubscriptionData(customerInfo.entitlements.active.isNotEmpty())
+                }
             }
 
             override fun onPurchasePromoProduct(
@@ -30,6 +34,4 @@ class SubscribeToUserSubscriptionData {
             ) = Unit
         }
     }
-
-    operator fun invoke() = subscriptionState
 }

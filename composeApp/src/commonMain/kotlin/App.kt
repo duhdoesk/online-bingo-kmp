@@ -4,7 +4,6 @@ import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -14,18 +13,12 @@ import com.arkivanov.decompose.extensions.compose.stack.Children
 import com.arkivanov.decompose.extensions.compose.stack.animation.slide
 import com.arkivanov.decompose.extensions.compose.stack.animation.stackAnimation
 import com.arkivanov.decompose.extensions.compose.subscribeAsState
-import com.revenuecat.purchases.kmp.CustomerInfo
-import ui.theme.AppTheme
-import com.revenuecat.purchases.kmp.LogLevel
-import com.revenuecat.purchases.kmp.Purchases
-import com.revenuecat.purchases.kmp.configure
-import kotlinx.coroutines.coroutineScope
-import kotlinx.coroutines.flow.collect
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.koin.compose.KoinContext
 import ui.navigation.RootComponent
 import ui.presentation.util.getAsyncImageLoader
 import ui.presentation.util.rememberWindowInfo
+import ui.theme.AppTheme
 
 @OptIn(ExperimentalCoilApi::class)
 @Composable
@@ -44,26 +37,6 @@ fun App(rootComponent: RootComponent) {
              */
             setSingletonImageLoaderFactory { context ->
                 getAsyncImageLoader(context)
-            }
-
-            /**
-             * Revenue Cat Setup
-             */
-            Purchases.logLevel = LogLevel.DEBUG
-            Purchases.configure(apiKey = getPlatform().revCatApiKey)
-
-            LaunchedEffect(Unit) {
-                coroutineScope {
-                    rootComponent.user.collect { user ->
-                        if (user != null) {
-                            Purchases.sharedInstance.logIn(
-                                newAppUserID = user.id,
-                                onError = {},
-                                onSuccess = { customerInfo: CustomerInfo, b: Boolean -> }
-                            )
-                        }
-                    }
-                }
             }
 
             /**

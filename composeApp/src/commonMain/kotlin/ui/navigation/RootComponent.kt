@@ -7,12 +7,21 @@ import com.arkivanov.decompose.router.stack.pop
 import com.arkivanov.decompose.router.stack.pushNew
 import com.arkivanov.decompose.router.stack.replaceAll
 import com.arkivanov.decompose.router.stack.replaceCurrent
+import com.revenuecat.purchases.kmp.CustomerInfo
+import com.revenuecat.purchases.kmp.LogLevel
+import com.revenuecat.purchases.kmp.Purchases
+import com.revenuecat.purchases.kmp.configure
 import domain.auth.supabase.SupabaseAuthService
+import domain.billing.SubscribeToUserSubscriptionData
 import domain.user.use_case.CheckIfIsNewUserUseCase
 import domain.user.use_case.GetUserByIdUseCase
+import getPlatform
 import io.github.jan.supabase.gotrue.SessionStatus
 import io.github.jan.supabase.gotrue.auth
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.launch
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 import ui.presentation.change_password.ChangePasswordScreenComponent
@@ -20,6 +29,7 @@ import ui.presentation.create_room.CreateRoomScreenComponent
 import ui.presentation.forgot_password.ForgotPasswordScreenComponent
 import ui.presentation.home.HomeScreenComponent
 import ui.presentation.join_room.JoinScreenComponent
+import ui.presentation.paywall.PaywallScreenViewModel
 import ui.presentation.profile.ProfileScreenComponent
 import ui.presentation.profile.picture.EditProfilePictureScreenComponent
 import ui.presentation.room.classic.host.ClassicHostScreenComponent
@@ -29,10 +39,13 @@ import ui.presentation.room.themed.play.PlayScreenComponent
 import ui.presentation.sign_in.SignInScreenComponent
 import ui.presentation.sign_up.SignUpScreenComponent
 import ui.presentation.themes.ThemesScreenComponent
+import util.componentCoroutineScope
 
 class RootComponent(
     componentContext: ComponentContext,
 ) : ComponentContext by componentContext, KoinComponent {
+
+    private val coroutineScope = componentContext.componentCoroutineScope()
 
     /**
      * Use Cases
@@ -40,6 +53,7 @@ class RootComponent(
     private val supabaseAuthService by inject<SupabaseAuthService>()
     private val getUserByIdUseCase by inject<GetUserByIdUseCase>()
     private val checkIfIsNewUserUseCase by inject<CheckIfIsNewUserUseCase>()
+    private val subscribeToUserSubscriptionData by inject<SubscribeToUserSubscriptionData>()
 
     /**
      * Supabase Client
@@ -54,7 +68,7 @@ class RootComponent(
     /**
      * Current signed in user
      */
-    val user = sessionStatus.map { status ->
+    private val user = sessionStatus.map { status ->
         when (status) {
             is SessionStatus.Authenticated -> {
                 val authInfo = status.session.user
@@ -81,6 +95,25 @@ class RootComponent(
         handleBackButton = true,
         childFactory = ::createChild
     )
+
+    init {
+        /**
+         * RevenueCat Setup
+         */
+        coroutineScope.launch {
+            Purchases.logLevel = LogLevel.DEBUG
+            Purchases.configure(apiKey = getPlatform().revCatApiKey)
+            subscribeToUserSubscriptionData.setupDelegate()
+
+            user.filterNotNull().distinctUntilChanged().collect { collectedUser ->
+                Purchases.sharedInstance.logIn(
+                    newAppUserID = collectedUser.id,
+                    onError = {},
+                    onSuccess = { customerInfo: CustomerInfo, b: Boolean -> }
+                )
+            }
+        }
+    }
 
     /**
      * UI representation of auth methods
@@ -151,7 +184,8 @@ class RootComponent(
                                 configuration.bingoType
                             )
                         )
-                    }
+                    },
+                    onNavigate = { navigation.pushNew(it) }
                 )
             )
 
@@ -233,6 +267,13 @@ class RootComponent(
                     user = user,
                     roomId = configuration.roomId,
                     onPopBack = { navigation.pop() },
+                )
+            )
+
+            Configuration.PaywallScreen -> Child.PaywallScreen(
+                PaywallScreenViewModel(
+                    componentContext = context,
+                    onDismiss = { navigation.pop() },
                 )
             )
         }
