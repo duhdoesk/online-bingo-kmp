@@ -50,6 +50,7 @@
     <string name="hello">Olá</string>
     <string name="choose_your_game">O que vamos jogar agora?</string>
     <string name="home_screen">Início</string>
+    <string name="game_modes">Modos de Jogo</string>
     <string name="full_exp">Experiência Completa</string>
 
 
@@ -143,6 +144,7 @@
     <string name="finish_dialog_title">Encerrar Bingo</string>
     <string name="finish_dialog_body">Você realmente deseja encerrar o bingo e fechar a sala? Esta ação é permanente e não pode ser desfeita.</string>
     <string name="room_info">Dados da Sala</string>
+    <string name="my_card">Minha Cartela</string>
 
 
     <!--    Auth Errors -->

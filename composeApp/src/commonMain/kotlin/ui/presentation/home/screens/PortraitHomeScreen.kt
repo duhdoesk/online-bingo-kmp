@@ -29,6 +29,7 @@ import themedbingo.composeapp.generated.resources.Res
 import themedbingo.composeapp.generated.resources.bingo_balls
 import themedbingo.composeapp.generated.resources.classic_bingo
 import themedbingo.composeapp.generated.resources.classic_bingo_desc
+import themedbingo.composeapp.generated.resources.game_modes
 import themedbingo.composeapp.generated.resources.full_exp
 import themedbingo.composeapp.generated.resources.hw_blue_bg
 import themedbingo.composeapp.generated.resources.hw_green_bg
@@ -78,7 +79,7 @@ fun PortraitHomeScreen(
                         .verticalScroll(rememberScrollState()),
                 ) {
                     Text(
-                        text = "Modos de Jogo", //todo(): extract string resource
+                        text = stringResource(Res.string.game_modes),
                         style = MaterialTheme.typography.titleLarge,
                         fontWeight = FontWeight.SemiBold,
                         modifier = Modifier

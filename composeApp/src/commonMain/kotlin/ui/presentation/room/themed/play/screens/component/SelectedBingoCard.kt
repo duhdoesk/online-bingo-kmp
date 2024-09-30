@@ -16,8 +16,12 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import domain.character.model.Character
-import ui.presentation.room.themed.play.screens.component.CompactCharacterCard
+import org.jetbrains.compose.resources.ExperimentalResourceApi
+import org.jetbrains.compose.resources.stringResource
+import themedbingo.composeapp.generated.resources.Res
+import themedbingo.composeapp.generated.resources.my_card
 
+@OptIn(ExperimentalResourceApi::class)
 @Composable
 fun SelectedBingoCard(
     bingoCard: List<Character>,
@@ -35,7 +39,7 @@ fun SelectedBingoCard(
                 contentColor = MaterialTheme.colorScheme.onPrimary,
             ) {
                 Text(
-                    text = "Minha Cartela", //todo(): extract string resource
+                    text = stringResource(Res.string.my_card),
                     style = MaterialTheme.typography.headlineSmall,
                     fontWeight = FontWeight.Bold,
                     textAlign = TextAlign.Center,
