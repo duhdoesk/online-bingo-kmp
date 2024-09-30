@@ -42,27 +42,42 @@ class JoinScreenComponent(
     private val onNavigate: (configuration: Configuration) -> Unit,
 ) : ComponentContext by componentContext, KoinComponent {
 
+    /**
+     * Coroutine Scope to handle each suspend operation
+     */
     private val coroutineScope = componentCoroutineScope()
 
+    /**
+     * Use Cases
+     */
     private val getNotStartedRoomsUseCase by inject<GetNotStartedRoomsUseCase>()
     private val getRunningRoomsUseCase by inject<GetRunningRoomsUseCase>()
     private val getAllThemesUseCase by inject<GetAllThemesUseCase>()
     private val joinRoomUseCase by inject<JoinRoomUseCase>()
     private val getRoomByIdUseCase by inject<GetRoomByIdUseCase>()
 
-    private val _query = MutableStateFlow("")
-
+    /**
+     * UI State holders
+     */
     private val _uiState = MutableStateFlow(JoinRoomUIState.INITIAL)
     val uiState: StateFlow<JoinRoomUIState> get() = _uiState.asStateFlow()
 
     private val _themes = getAllThemesUseCase()
     val themes = _themes
 
+    private val _query = MutableStateFlow("")
+
+    /**
+     * Modal visibility holders
+     */
     val tapRoomDialogState = mutableDialogStateOf<BingoRoom?>(null)
 
     @OptIn(ExperimentalResourceApi::class)
     val errorDialogState = mutableDialogStateOf<StringResource?>(null)
 
+    /**
+     * UI Event handling delegate function
+     */
     fun uiEvent(event: JoinRoomUIEvent) {
         when (event) {
             JoinRoomUIEvent.CreateRoom -> createRoom()
@@ -82,6 +97,9 @@ class JoinScreenComponent(
         }
     }
 
+    /**
+     * Functions to handle each UI Event
+     */
     private fun uiLoaded() {
         coroutineScope.launch {
             combine(
@@ -140,7 +158,7 @@ class JoinScreenComponent(
                             return@collect
                         }
                     }
-                    .onFailure { return@collect } //todo(): display error message
+                    .onFailure { errorDialogState.showDialog(Res.string.unmapped_error) }
 
                 joinRoomUseCase
                     .invoke(
@@ -154,7 +172,6 @@ class JoinScreenComponent(
                             BingoType.THEMED -> onJoinRoom(Configuration.PlayScreen(roomId))
                         }
                     }
-
                     .onFailure { exception ->
                         if (exception.message == "Incorrect Password") {
                             errorDialogState.showDialog(Res.string.join_room_invalid_password)
