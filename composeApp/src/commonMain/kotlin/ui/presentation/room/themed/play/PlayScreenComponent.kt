@@ -61,6 +61,7 @@ class PlayScreenComponent(
      * Dialog called to confirm that the user wants to leave the room
      */
     val popBackDialogState = mutableDialogStateOf(null)
+    val showErrorDialog = mutableDialogStateOf(null)
 
     /**
      * Function to delegate the handling of user interactions
@@ -149,7 +150,7 @@ class PlayScreenComponent(
                         userId = collectedUser.id,
                         charactersIDs = newCard,
                     )
-                        .onFailure { exception -> println(exception) } //todo(): display error message
+                        .onFailure { showErrorDialog.showDialog(null) }
                 }
             }
         }
@@ -163,7 +164,7 @@ class PlayScreenComponent(
                         roomId = roomId,
                         userId = collectedUser.id,
                     )
-                        .onFailure { exception -> println(exception) } //todo(): display error message
+                        .onFailure { showErrorDialog.showDialog(null) }
                 }
             }
         }
