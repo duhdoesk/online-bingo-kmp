@@ -68,8 +68,8 @@ fun ProfileScreen(
      */
     var showSignOutDialog by remember { mutableStateOf(false) }
     var showDeleteAccountDialog by remember { mutableStateOf(false) }
-    val nameBottomSheetState = rememberModalBottomSheetState()
-    val messageBottomSheetState = rememberModalBottomSheetState()
+    val nameBottomSheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
+    val messageBottomSheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
 
     /**
      * Screen calling based on UI State
@@ -116,6 +116,7 @@ fun ProfileScreen(
             title = Res.string.update_nickname_title,
             body = Res.string.update_nickname_body,
             label = Res.string.nickname,
+            sheetState = nameBottomSheetState,
         )
     }
 
@@ -132,6 +133,7 @@ fun ProfileScreen(
             title = Res.string.update_victory_title,
             body = Res.string.update_victory_body,
             label = Res.string.victory_message,
+            sheetState = messageBottomSheetState,
         )
     }
 

@@ -53,13 +53,13 @@ fun CreateRoomScreen(
     /**
      * Bottom Sheet State holders
      */
-    val nameBottomSheetState = rememberModalBottomSheetState()
+    val nameBottomSheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
     var showNameBottomSheet by remember { mutableStateOf(false) }
 
-    val passwordBottomSheetState = rememberModalBottomSheetState()
+    val passwordBottomSheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
     var showPasswordBottomSheet by remember { mutableStateOf(false) }
 
-    val themeBottomSheetState = rememberModalBottomSheetState()
+    val themeBottomSheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
     var showThemeBottomSheet by remember { mutableStateOf(false) }
 
     /**

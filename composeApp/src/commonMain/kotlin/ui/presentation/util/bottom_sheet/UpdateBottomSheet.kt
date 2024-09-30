@@ -39,7 +39,7 @@ import ui.presentation.common.components.BottomButtonRow
 @OptIn(ExperimentalResourceApi::class, ExperimentalMaterial3Api::class)
 @Composable
 fun UpdateBottomSheet(
-    sheetState: SheetState = rememberModalBottomSheetState(),
+    sheetState: SheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true),
     onDismiss: () -> Unit,
     onConfirm: (newData: String) -> Unit,
     currentData: String,
