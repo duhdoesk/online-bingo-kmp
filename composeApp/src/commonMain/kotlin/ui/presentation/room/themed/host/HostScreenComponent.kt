@@ -29,23 +29,38 @@ class HostScreenComponent(
     val roomId: String,
 ) : ComponentContext by componentContext, KoinComponent {
 
+    /**
+     * Coroutine Scope
+     */
     private val coroutineScope = componentCoroutineScope()
 
+    /**
+     * Use Cases
+     */
     private val flowRoomByIdUseCase by inject<FlowRoomByIdUseCase>()
     private val getRoomPlayersUseCase by inject<GetRoomPlayersUseCase>()
     private val getRoomCharactersUseCase by inject<GetRoomCharactersUseCase>()
     private val getRoomThemeUseCase by inject<GetRoomThemeUseCase>()
-    private val canRaffleNextCharacter = MutableStateFlow(true)
-
     private val updateRoomStateUseCase by inject<UpdateRoomStateUseCase>()
     private val raffleNextCharacterUseCase by inject<RaffleNextCharacterUseCase>()
 
+    /**
+     * UI State holders
+     */
     private val _uiState = MutableStateFlow(HostScreenUIState.INITIAL)
     val uiState = _uiState.asStateFlow()
+    private val canRaffleNextCharacter = MutableStateFlow(true)
 
+    /**
+     * Modal visibility holders
+     */
     val finishRaffleDialogState = mutableDialogStateOf(null)
     val popBackDialogState = mutableDialogStateOf(null)
+    val showGenericErrorDialog = mutableDialogStateOf(null)
 
+    /**
+     * UI Event Delegate function
+     */
     fun uiEvent(event: HostScreenUIEvent) {
         when (event) {
             HostScreenUIEvent.FinishRaffle -> finishRaffleDialogState.showDialog(null)
@@ -58,6 +73,9 @@ class HostScreenComponent(
         }
     }
 
+    /**
+     * Functions to handle each UI Event
+     */
     private fun onUiLoaded() {
         coroutineScope.launch {
             combine(
@@ -107,7 +125,7 @@ class HostScreenComponent(
                 roomId = roomId,
                 state = RoomState.RUNNING
             )
-                .onFailure { } //todo(): show error dialog
+                .onFailure { showGenericErrorDialog.showDialog(null) }
         }
     }
 
@@ -117,8 +135,7 @@ class HostScreenComponent(
                 roomId = roomId,
                 state = RoomState.FINISHED
             )
-                .onFailure { } //todo(): show error dialog
-                .onSuccess { } //todo(): show dialog informing that the bingo is over
+                .onFailure { showGenericErrorDialog.showDialog(null) }
         }
     }
 
@@ -135,9 +152,9 @@ class HostScreenComponent(
                 .first()
 
             raffleNextCharacterUseCase(roomId = roomId, characterId = nextCharacter)
-                .onFailure { } //todo(): show error dialog
+                .onFailure { showGenericErrorDialog.showDialog(null) }
                 .onSuccess {
-                    delay(500)
+                    delay(1000)
                     canRaffleNextCharacter.update { true }
                 }
         }
@@ -145,16 +162,5 @@ class HostScreenComponent(
 
     private fun popBack() {
         onPopBack()
-    }
-
-    private fun canRaffleNext(
-        maxWinners: Int,
-        currentWinners: Int,
-        totalCharacters: Int,
-        currentlyRaffledCharacters: Int,
-    ): Boolean {
-        if (currentWinners >= maxWinners) return false
-        if (currentlyRaffledCharacters >= totalCharacters) return false
-        return true
     }
 }

@@ -10,11 +10,14 @@ import themedbingo.composeapp.generated.resources.finish_dialog_body
 import themedbingo.composeapp.generated.resources.finish_dialog_title
 import themedbingo.composeapp.generated.resources.pop_back_dialog_body
 import themedbingo.composeapp.generated.resources.pop_back_dialog_title
+import themedbingo.composeapp.generated.resources.unmapped_error
 import ui.presentation.common.RotateScreen
 import ui.presentation.room.themed.host.event.HostScreenUIEvent
 import ui.presentation.room.themed.host.screens.PortraitHostScreen
 import ui.presentation.util.WindowInfo
 import ui.presentation.util.dialog.GenericActionDialog
+import ui.presentation.util.dialog.GenericErrorDialog
+import ui.presentation.util.dialog.GenericSuccessDialog
 
 @OptIn(ExperimentalResourceApi::class)
 @Composable
@@ -22,12 +25,26 @@ fun HostScreen(
     component: HostScreenComponent,
     windowInfo: WindowInfo
 ) {
+    /**
+     * Launched Effect to trigger viewModel's data loading function
+     */
     LaunchedEffect(Unit) { component.uiEvent(HostScreenUIEvent.UiLoaded) }
 
+    /**
+     * UI State listener
+     */
     val uiState by component.uiState.collectAsState()
+
+    /**
+     * Modal visibility listeners
+     */
     val finishRaffleDialogState = component.finishRaffleDialogState
     val popBackDialogState = component.popBackDialogState
+    val showGenericErrorDialog = component.showGenericErrorDialog
 
+    /**
+     * Screen calling
+     */
     when (windowInfo.screenOrientation) {
         WindowInfo.DeviceOrientation.Landscape ->
             RotateScreen()
@@ -37,6 +54,16 @@ fun HostScreen(
                 uiState = uiState,
                 uiEvent = { event -> component.uiEvent(event) }
             )
+    }
+
+    /**
+     * Modals
+     */
+    if (showGenericErrorDialog.isVisible.value) {
+        GenericErrorDialog(
+            onDismiss = { showGenericErrorDialog.hideDialog() },
+            body = Res.string.unmapped_error,
+        )
     }
 
     if (finishRaffleDialogState.isVisible.value) {
