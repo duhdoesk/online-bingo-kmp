@@ -13,17 +13,32 @@ import ui.presentation.room.classic.play.event.ClassicPlayScreenUIEvent
 import ui.presentation.room.classic.play.screens.NotStartedClassicPlayScreen
 import ui.presentation.room.classic.play.screens.StartedClassicPlayScreen
 import ui.presentation.util.dialog.GenericActionDialog
+import ui.presentation.util.dialog.GenericErrorDialog
 
 @OptIn(ExperimentalResourceApi::class)
 @Composable
 fun ClassicPlayScreen(
     component: ClassicPlayScreenComponent,
 ) {
+    /**
+     * Triggers viewModel's initial data loading function
+     */
     LaunchedEffect(Unit) { component.uiEvent(ClassicPlayScreenUIEvent.UiLoaded) }
 
+    /**
+     * UI State listener
+     */
     val uiState by component.uiState.collectAsState()
-    val popBackDialogState = component.popBackDialogState
 
+    /**
+     * Modal visibility listeners
+     */
+    val popBackDialogState = component.popBackDialogState
+    val showErrorDialog = component.showErrorDialog
+
+    /**
+     * Screen calling
+     */
     when (uiState.bingoState) {
         RoomState.NOT_STARTED ->
             NotStartedClassicPlayScreen(
@@ -36,6 +51,16 @@ fun ClassicPlayScreen(
                 uiState = uiState,
                 uiEvent = { component.uiEvent(it) }
             )
+    }
+
+    /**
+     * Modals
+     */
+    if (showErrorDialog.isVisible.value) {
+        GenericErrorDialog(
+            onDismiss = { showErrorDialog.hideDialog() },
+            body = showErrorDialog.dialogData.value,
+        )
     }
 
     if (popBackDialogState.isVisible.value) {

@@ -54,9 +54,10 @@ class ClassicPlayScreenComponent(
     val uiState = _uiState.asStateFlow()
 
     /**
-     * Dialog called to confirm that the user wants to leave the room
+     * Modal visibility holders
      */
     val popBackDialogState = mutableDialogStateOf(null)
+    val showErrorDialog = mutableDialogStateOf(null)
 
     /**
      * Function to delegate the handling of user interactions
@@ -138,7 +139,7 @@ class ClassicPlayScreenComponent(
                         userId = collectedUser.id,
                         charactersIDs = newCard.map { it.toString() },
                     )
-                        .onFailure { exception -> println(exception) } //todo(): display error message
+                        .onFailure { showErrorDialog.showDialog(null) }
                 }
             }
         }
@@ -152,7 +153,7 @@ class ClassicPlayScreenComponent(
                         roomId = roomId,
                         userId = collectedUser.id,
                     )
-                        .onFailure { exception -> println(exception) } //todo(): display error message
+                        .onFailure { showErrorDialog.showDialog(null) }
                 }
             }
         }
