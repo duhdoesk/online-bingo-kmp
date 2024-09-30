@@ -26,6 +26,7 @@ import ui.presentation.create_room.screens.CreateThemedRoomScreen
 import ui.presentation.util.WindowInfo
 import ui.presentation.util.bottom_sheet.ThemePickerBottomSheet
 import ui.presentation.util.bottom_sheet.UpdateBottomSheet
+import ui.presentation.util.dialog.GenericErrorDialog
 
 @OptIn(ExperimentalResourceApi::class, ExperimentalMaterial3Api::class)
 @Composable
@@ -33,12 +34,25 @@ fun CreateRoomScreen(
     component: CreateRoomScreenComponent,
     windowInfo: WindowInfo
 ) {
+    /**
+     * Triggers viewModel's initial data loading function
+     */
     LaunchedEffect(Unit) { component.uiEvent(CreateScreenEvent.UILoaded) }
 
+    /**
+     * Coroutine Scope to handle suspend operations
+     */
     val coroutineScope = rememberCoroutineScope()
+
+    /**
+     * UI State listeners
+     */
     val uiState by component.uiState.collectAsState()
     val isFormOk by component.isFormOk.collectAsState()
 
+    /**
+     * Bottom Sheet State holders
+     */
     val nameBottomSheetState = rememberModalBottomSheetState()
     var showNameBottomSheet by remember { mutableStateOf(false) }
 
@@ -48,6 +62,14 @@ fun CreateRoomScreen(
     val themeBottomSheetState = rememberModalBottomSheetState()
     var showThemeBottomSheet by remember { mutableStateOf(false) }
 
+    /**
+     * Modal visibility listeners
+     */
+    val showErrorDialog = component.showErrorDialog
+
+    /**
+     * Screen calling
+     */
     when (windowInfo.screenOrientation) {
         WindowInfo.DeviceOrientation.Landscape ->
             RotateScreen()
@@ -75,6 +97,19 @@ fun CreateRoomScreen(
             }
     }
 
+    /**
+     * Modals
+     */
+    if (showErrorDialog.isVisible.value) {
+        GenericErrorDialog(
+            body = showErrorDialog.dialogData.value,
+            onDismiss = { showErrorDialog.hideDialog() },
+        )
+    }
+
+    /**
+     * Bottom Sheets
+     */
     if (showNameBottomSheet) {
         UpdateBottomSheet(
             sheetState = nameBottomSheetState,

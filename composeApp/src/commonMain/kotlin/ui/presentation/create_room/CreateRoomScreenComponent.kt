@@ -38,22 +38,23 @@ class CreateRoomScreenComponent(
 ) : ComponentContext by componentContext, KoinComponent {
 
     /**
-     * Single coroutineScope to handle each suspend operation
+     * Coroutine Scope to handle each suspend operation
      */
     private val coroutineScope = componentCoroutineScope()
 
     /**
-     * Use Cases to build UI STATE
+     * Use Cases
      */
     private val getAllThemesUseCase by inject<GetAllThemesUseCase>()
-
-    /**
-     * Action Use Cases
-     */
     private val createRoomUseCase by inject<CreateRoomUseCase>()
 
     /**
-     * Represents the UI STATE
+     * Modal visibility holders
+     */
+    val showErrorDialog = mutableDialogStateOf(null)
+
+    /**
+     * UI State holder
      */
     private val _uiState = MutableStateFlow(CreateScreenUiState.INITIAL)
     val uiState = _uiState
@@ -222,7 +223,7 @@ class CreateRoomScreenComponent(
                             }
                             onCreateRoom(config)
                         }
-                        .onFailure { } //todo(): display error dialog
+                        .onFailure { showErrorDialog.showDialog(null) }
                 }
             }
         }
