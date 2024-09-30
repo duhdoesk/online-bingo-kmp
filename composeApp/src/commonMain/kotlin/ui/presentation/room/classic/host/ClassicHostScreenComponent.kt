@@ -51,6 +51,7 @@ class ClassicHostScreenComponent(
      */
     val finishRaffleDialogState = mutableDialogStateOf(null)
     val popBackDialogState = mutableDialogStateOf(null)
+    val showGenericErrorDialog = mutableDialogStateOf(null)
 
     /**
      * UI State Holder
@@ -116,7 +117,7 @@ class ClassicHostScreenComponent(
                 roomId = roomId,
                 state = RoomState.RUNNING
             )
-                .onFailure { } //todo(): show error dialog
+                .onFailure { showGenericErrorDialog.showDialog(null) }
         }
     }
 
@@ -126,8 +127,7 @@ class ClassicHostScreenComponent(
                 roomId = roomId,
                 state = RoomState.FINISHED
             )
-                .onFailure { } //todo(): show error dialog
-                .onSuccess { } //todo(): show dialog informing that the bingo is over
+                .onFailure { showGenericErrorDialog.showDialog(null) }
         }
     }
 
@@ -143,7 +143,7 @@ class ClassicHostScreenComponent(
             }
 
             raffleNextCharacterUseCase(roomId = roomId, characterId = nextNumber.toString())
-                .onFailure { } //todo(): show error dialog
+                .onFailure { showGenericErrorDialog.showDialog(null) }
                 .onSuccess {
                     delay(500)
                     canRaffleNextNumber.update { true }

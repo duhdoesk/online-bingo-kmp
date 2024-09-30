@@ -11,22 +11,38 @@ import themedbingo.composeapp.generated.resources.finish_dialog_body
 import themedbingo.composeapp.generated.resources.finish_dialog_title
 import themedbingo.composeapp.generated.resources.pop_back_dialog_body
 import themedbingo.composeapp.generated.resources.pop_back_dialog_title
+import themedbingo.composeapp.generated.resources.unmapped_error
 import ui.presentation.room.classic.host.event.ClassicHostScreenUIEvent
 import ui.presentation.room.classic.host.screens.NotStartedClassicHostScreen
 import ui.presentation.room.classic.host.screens.StartedClassicHostScreen
 import ui.presentation.util.dialog.GenericActionDialog
+import ui.presentation.util.dialog.GenericErrorDialog
 
 @OptIn(ExperimentalResourceApi::class)
 @Composable
 fun ClassicHostScreen(
     component: ClassicHostScreenComponent,
 ) {
+    /**
+     * Launched Effect to trigger viewModel's data loading function
+     */
     LaunchedEffect(Unit) { component.uiEvent(ClassicHostScreenUIEvent.UiLoaded) }
 
+    /**
+     * UI State listener
+     */
     val uiState by component.uiState.collectAsState()
-    val popBackDialogState = component.popBackDialogState
-    val finishRaffleDialogState = component.finishRaffleDialogState
 
+    /**
+     * Modal visibility listeners
+     */
+    val finishRaffleDialogState = component.finishRaffleDialogState
+    val popBackDialogState = component.popBackDialogState
+    val showGenericErrorDialog = component.showGenericErrorDialog
+
+    /**
+     * Screen calling
+     */
     when (uiState.bingoState) {
         RoomState.NOT_STARTED -> {
             NotStartedClassicHostScreen(
@@ -41,6 +57,16 @@ fun ClassicHostScreen(
                 uiEvent = { component.uiEvent(it) }
             )
         }
+    }
+
+    /**
+     * Modals
+     */
+    if (showGenericErrorDialog.isVisible.value) {
+        GenericErrorDialog(
+            onDismiss = { showGenericErrorDialog.hideDialog() },
+            body = showGenericErrorDialog.dialogData.value,
+        )
     }
 
     if (finishRaffleDialogState.isVisible.value) {
