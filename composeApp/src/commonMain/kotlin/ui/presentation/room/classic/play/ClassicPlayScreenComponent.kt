@@ -3,6 +3,7 @@ package ui.presentation.room.classic.play
 import com.arkivanov.decompose.ComponentContext
 import domain.card.use_case.FlowCardByRoomAndUserIDUseCase
 import domain.card.use_case.SetCardByRoomAndUserIDUseCase
+import domain.room.model.RoomState
 import domain.room.use_case.CallBingoUseCase
 import domain.room.use_case.FlowRoomByIdUseCase
 import domain.user.model.User
@@ -117,7 +118,7 @@ class ClassicPlayScreenComponent(
             }
                 .collect { state ->
                     _uiState.update { state }
-                    if (state.myCard.isEmpty()) getNewCard()
+                    if (state.myCard.isEmpty() && state.bingoState == RoomState.NOT_STARTED) getNewCard()
                 }
         }
     }

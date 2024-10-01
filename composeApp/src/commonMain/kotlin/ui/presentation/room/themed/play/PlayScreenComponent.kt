@@ -4,6 +4,7 @@ import com.arkivanov.decompose.ComponentContext
 import domain.card.use_case.FlowCardByRoomAndUserIDUseCase
 import domain.card.use_case.SetCardByRoomAndUserIDUseCase
 import domain.character.model.Character
+import domain.room.model.RoomState
 import domain.room.use_case.CallBingoUseCase
 import domain.room.use_case.FlowRoomByIdUseCase
 import domain.theme.use_case.GetRoomCharactersUseCase
@@ -134,7 +135,7 @@ class PlayScreenComponent(
             }
                 .collect { state ->
                     _uiState.update { state }
-                    if (state.myCard.isEmpty()) getNewCard()
+                    if (state.myCard.isEmpty() && state.bingoState == RoomState.NOT_STARTED) getNewCard()
                 }
         }
     }
