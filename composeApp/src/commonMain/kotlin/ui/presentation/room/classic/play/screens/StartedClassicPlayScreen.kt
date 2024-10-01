@@ -39,6 +39,7 @@ import ui.presentation.room.classic.play.screens.component.CompactClassicCard
 import ui.presentation.room.classic.play.state.ClassicPlayScreenUIState
 import ui.presentation.room.common.FinishedRoomScreenComposable
 import ui.presentation.room.common.PlayersLazyRow
+import ui.presentation.room.common.SpectatorModeInfo
 import ui.presentation.room.themed.play.event.PlayScreenUIEvent
 
 @OptIn(ExperimentalResourceApi::class)
@@ -82,15 +83,19 @@ fun StartedClassicPlayScreen(
                                 .fillMaxWidth()
                         )
 
-                        if (uiState.myCard.isNotEmpty()) {
-                            Spacer(Modifier.height(28.dp))
+                        Spacer(Modifier.height(28.dp))
 
+                        if (uiState.myCard.isNotEmpty()) {
                             CompactClassicCard(
                                 numbers = uiState.myCard,
                                 raffledNumbers = uiState.raffledNumbers,
                                 modifier = Modifier
                                     .padding(horizontal = 16.dp)
                                     .fillMaxWidth(),
+                            )
+                        } else {
+                            SpectatorModeInfo(
+                                modifier = Modifier.padding(horizontal = 16.dp).fillMaxWidth()
                             )
                         }
                     }

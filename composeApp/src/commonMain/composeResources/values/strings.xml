@@ -145,6 +145,8 @@
     <string name="finish_dialog_body">Do you really want to finish the bingo and close the room? This action is permanent and cannot be undone.</string>
     <string name="room_info">Room Info</string>
     <string name="my_card">My Card</string>
+    <string name="spectator_title">Spectator Mode</string>
+    <string name="spectator_body">We could not generate a card to you because the raffle has already started when you joined the room. You can still watch and interact as you wish.</string>
 
 
     <!--    Auth Errors -->

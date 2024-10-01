@@ -145,6 +145,8 @@
     <string name="finish_dialog_body">Você realmente deseja encerrar o bingo e fechar a sala? Esta ação é permanente e não pode ser desfeita.</string>
     <string name="room_info">Dados da Sala</string>
     <string name="my_card">Minha Cartela</string>
+    <string name="spectator_title">Modo Espectador</string>
+    <string name="spectator_body">Não pudemos lhe gerar uma cartela, pois o sorteio já havia começado quando você entrou na sala. Você ainda pode assistir e interagir como desejar.</string>
 
 
     <!--    Auth Errors -->

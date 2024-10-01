@@ -34,6 +34,7 @@ import ui.presentation.common.components.BottomButtonRow
 import ui.presentation.room.themed.play.screens.component.SelectedBingoCard
 import ui.presentation.room.common.FinishedRoomScreenComposable
 import ui.presentation.room.common.PlayersLazyRow
+import ui.presentation.room.common.SpectatorModeInfo
 import ui.presentation.room.themed.component.RunningRoomScreenComposable
 import ui.presentation.room.themed.play.event.PlayScreenUIEvent
 import ui.presentation.room.themed.play.state.PlayScreenUIState
@@ -76,14 +77,17 @@ fun PortraitStartedPlayScreen(
                             modifier = Modifier,
                         )
 
+                        Spacer(Modifier.height(16.dp))
                         if (uiState.myCard.isNotEmpty()) {
-                            Spacer(Modifier.height(16.dp))
-
                             SelectedBingoCard(
                                 bingoCard = uiState.myCard,
                                 raffledCharacters = uiState.raffledCharacters,
                                 modifier = Modifier
                                     .padding(16.dp).fillMaxWidth(),
+                            )
+                        } else {
+                            SpectatorModeInfo(
+                                modifier = Modifier.padding(horizontal = 16.dp).fillMaxWidth()
                             )
                         }
                     }
