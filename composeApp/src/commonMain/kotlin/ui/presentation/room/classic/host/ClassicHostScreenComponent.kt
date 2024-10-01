@@ -145,7 +145,7 @@ class ClassicHostScreenComponent(
             raffleNextCharacterUseCase(roomId = roomId, characterId = nextNumber.toString())
                 .onFailure { showGenericErrorDialog.showDialog(null) }
                 .onSuccess {
-                    delay(500)
+                    delay(1000)
                     canRaffleNextNumber.update { true }
                 }
         }
