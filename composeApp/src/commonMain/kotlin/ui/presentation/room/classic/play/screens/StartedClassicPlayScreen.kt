@@ -83,7 +83,7 @@ fun StartedClassicPlayScreen(
                         )
 
                         if (uiState.myCard.isNotEmpty()) {
-                            Spacer(Modifier.height(48.dp))
+                            Spacer(Modifier.height(28.dp))
 
                             CompactClassicCard(
                                 numbers = uiState.myCard,

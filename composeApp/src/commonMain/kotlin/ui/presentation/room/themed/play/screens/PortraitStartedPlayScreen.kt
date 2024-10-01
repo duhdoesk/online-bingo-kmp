@@ -77,7 +77,7 @@ fun PortraitStartedPlayScreen(
                         )
 
                         if (uiState.myCard.isNotEmpty()) {
-                            Spacer(Modifier.height(32.dp))
+                            Spacer(Modifier.height(16.dp))
 
                             SelectedBingoCard(
                                 bingoCard = uiState.myCard,
