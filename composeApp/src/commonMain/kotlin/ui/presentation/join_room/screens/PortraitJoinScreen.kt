@@ -113,8 +113,18 @@ fun PortraitJoinScreen(
 
                     Spacer(Modifier.height(16.dp))
 
-                    if (uiState.notStartedRooms.isEmpty() && uiState.runningRooms.isEmpty()) {
-                        JoinScreenNoRoomsComponent(modifier = Modifier.padding(horizontal = 16.dp).fillMaxWidth().weight(1f))
+                    if (uiState.loading) {
+                        Box(
+                            modifier = Modifier.fillMaxSize(),
+                            contentAlignment = Alignment.Center,
+                        ) {
+                            CircularProgressIndicator(modifier = Modifier.size(48.dp))
+                        }
+                    } else if (uiState.notStartedRooms.isEmpty() && uiState.runningRooms.isEmpty()) {
+                        JoinScreenNoRoomsComponent(
+                            modifier = Modifier.padding(horizontal = 16.dp).fillMaxWidth()
+                                .weight(1f)
+                        )
                     } else {
                         JoinScreenLazyColumn(
                             notStartedRooms = uiState.notStartedRooms,
@@ -122,10 +132,6 @@ fun PortraitJoinScreen(
                             bingoThemes = themes,
                             onTapRoom = { uiEvent(it) }
                         )
-                    }
-
-                    if (uiState.loading) {
-                        CircularProgressIndicator(modifier = Modifier.size(48.dp))
                     }
                 }
 
