@@ -22,7 +22,7 @@ coil3 = "3.0.0-alpha06"
 kotlinxSerializationJsonVersion = "1.6.2"
 ktor = "2.3.12"
 firebasePlugin = "4.4.1"
-supabase = "2.5.2"
+supabase = "2.5.3"
 purchases-kmp = "1.0.0+13.2.0"
 
 [libraries]
