@@ -6,8 +6,9 @@ import domain.room.model.RoomState
 import domain.room.use_case.FlowRoomByIdUseCase
 import domain.room.use_case.RaffleNextCharacterUseCase
 import domain.room.use_case.UpdateRoomStateUseCase
-import domain.theme.use_case.GetRoomCharactersUseCase
+import domain.theme.model.BingoTheme
 import domain.theme.use_case.GetRoomThemeUseCase
+import domain.theme.use_case.GetThemeCharactersUseCase
 import domain.user.model.User
 import domain.user.use_case.GetRoomPlayersUseCase
 import kotlinx.coroutines.delay
@@ -39,7 +40,7 @@ class HostScreenComponent(
      */
     private val flowRoomByIdUseCase by inject<FlowRoomByIdUseCase>()
     private val getRoomPlayersUseCase by inject<GetRoomPlayersUseCase>()
-    private val getRoomCharactersUseCase by inject<GetRoomCharactersUseCase>()
+    private val getThemeCharactersUseCase by inject<GetThemeCharactersUseCase>()
     private val getRoomThemeUseCase by inject<GetRoomThemeUseCase>()
     private val updateRoomStateUseCase by inject<UpdateRoomStateUseCase>()
     private val raffleNextCharacterUseCase by inject<RaffleNextCharacterUseCase>()
@@ -50,6 +51,12 @@ class HostScreenComponent(
     private val _uiState = MutableStateFlow(HostScreenUIState.INITIAL)
     val uiState = _uiState.asStateFlow()
     private val canRaffleNextCharacter = MutableStateFlow(true)
+
+    /**
+     * Constants
+     */
+    private var theme: BingoTheme? = null
+    private var characters = emptyList<Character>()
 
     /**
      * Modal visibility holders
@@ -78,13 +85,19 @@ class HostScreenComponent(
      */
     private fun onUiLoaded() {
         coroutineScope.launch {
+
+            theme = getRoomThemeUseCase(roomId).getOrNull()
+            characters = getThemeCharactersUseCase(theme?.id.orEmpty()).getOrNull() ?: emptyList()
+
+            if (theme == null || characters.isEmpty()) {
+                //todo(): handle backend errors
+            }
+
             combine(
                 flowRoomByIdUseCase(roomId),
                 getRoomPlayersUseCase(roomId),
-                getRoomCharactersUseCase(roomId),
-                getRoomThemeUseCase(roomId),
                 canRaffleNextCharacter,
-            ) { room, players, characters, theme, canRaffle ->
+            ) { room, players, canRaffle ->
 
                 val raffledCharacters = mutableListOf<Character>()
                 room.drawnCharactersIds.forEach { characterId ->

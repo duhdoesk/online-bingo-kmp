@@ -4,11 +4,11 @@ import com.arkivanov.decompose.ComponentContext
 import domain.card.use_case.FlowCardByRoomAndUserIDUseCase
 import domain.card.use_case.SetCardByRoomAndUserIDUseCase
 import domain.character.model.Character
-import domain.room.model.RoomState
 import domain.room.use_case.CallBingoUseCase
 import domain.room.use_case.FlowRoomByIdUseCase
-import domain.theme.use_case.GetRoomCharactersUseCase
+import domain.theme.model.BingoTheme
 import domain.theme.use_case.GetRoomThemeUseCase
+import domain.theme.use_case.GetThemeCharactersUseCase
 import domain.user.model.User
 import domain.user.use_case.GetRoomPlayersUseCase
 import kotlinx.coroutines.flow.Flow
@@ -21,6 +21,7 @@ import kotlinx.coroutines.launch
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 import ui.presentation.room.themed.play.event.PlayScreenUIEvent
+import ui.presentation.room.themed.play.state.CardState
 import ui.presentation.room.themed.play.state.PlayScreenUIState
 import ui.presentation.util.dialog.dialog_state.mutableDialogStateOf
 import util.componentCoroutineScope
@@ -42,7 +43,7 @@ class PlayScreenComponent(
      */
     private val flowRoomByIdUseCase by inject<FlowRoomByIdUseCase>()
     private val getRoomPlayersUseCase by inject<GetRoomPlayersUseCase>()
-    private val getRoomCharactersUseCase by inject<GetRoomCharactersUseCase>()
+    private val getThemeCharactersUseCase by inject<GetThemeCharactersUseCase>()
     private val getRoomThemeUseCase by inject<GetRoomThemeUseCase>()
     private val flowCardByRoomAndUserIDUseCase by inject<FlowCardByRoomAndUserIDUseCase>()
 
@@ -59,6 +60,13 @@ class PlayScreenComponent(
     val uiState = _uiState.asStateFlow()
 
     /**
+     * Constants
+     */
+    private var characters = emptyList<Character>()
+    private var theme: BingoTheme? = null
+    private var userId = ""
+
+    /**
      * Dialog called to confirm that the user wants to leave the room
      */
     val popBackDialogState = mutableDialogStateOf(null)
@@ -71,7 +79,7 @@ class PlayScreenComponent(
         when (uiEvent) {
             PlayScreenUIEvent.CallBingo -> callBingo()
             PlayScreenUIEvent.ConfirmPopBack -> popBack()
-            PlayScreenUIEvent.GetNewCard -> getNewCard()
+            PlayScreenUIEvent.GetNewCard -> updateCard()
             PlayScreenUIEvent.PopBack -> popBackDialogState.showDialog(null)
             PlayScreenUIEvent.UiLoaded -> uiLoaded()
         }
@@ -82,40 +90,37 @@ class PlayScreenComponent(
      */
     private fun uiLoaded() {
         coroutineScope.launch {
-            val userId = user.first()?.id.orEmpty()
+
+            theme = getRoomThemeUseCase(roomId).getOrNull()
+            characters = getThemeCharactersUseCase(theme?.id.orEmpty()).getOrNull() ?: emptyList()
+            userId = user.first()?.id.orEmpty()
+
+            if (theme == null || characters.isEmpty()) {
+                //todo(): handle backend errors
+            }
 
             combine(
                 flowRoomByIdUseCase(roomId),
                 getRoomPlayersUseCase(roomId),
-                getRoomCharactersUseCase(roomId),
-                getRoomThemeUseCase(roomId),
                 flowCardByRoomAndUserIDUseCase(roomId, userId),
-            ) { room, players, characters, theme, card ->
+            ) { room, players, card ->
 
-                val raffledCharacters = mutableListOf<Character>()
-                room.drawnCharactersIds.forEach { characterId ->
-                    characters.find { it.id == characterId }?.run { raffledCharacters.add(this) }
-                }
+                val raffledCharacters =
+                    checkRaffledCharacters(room.drawnCharactersIds)
 
-                val winnersList = mutableListOf<User>()
-                room.winners.forEach { winnerId ->
-                    players.find { it.id == winnerId }?.run { winnersList.add(this) }
-                }
+                val winnersList =
+                    getWinners(winnersIds = room.winners, players = players)
 
                 val hasCalledBingo =
                     room.winners.contains(userId)
 
-                val cardCharacters = mutableListOf<Character>()
+                val cardState =
+                    checkCardState(card?.characters)
 
-                card?.characters?.forEach { id ->
-                    characters.find { it.id == id }?.run { cardCharacters.add(this) }
-                }
+                if (cardState is CardState.Error) { updateCard() }
 
-                val canCall = canCallBingo(
-                    card = cardCharacters,
-                    raffledCharacters = raffledCharacters,
-                    hasCalledYet = hasCalledBingo,
-                )
+                val canCall =
+                    canCallBingo(cardState, raffledCharacters, hasCalledBingo)
 
                 PlayScreenUIState(
                     loading = false,
@@ -130,44 +135,36 @@ class PlayScreenComponent(
                     bingoState = room.state,
                     canCallBingo = canCall,
                     calledBingo = hasCalledBingo,
-                    myCard = cardCharacters,
+                    myCard = cardState,
                 )
-            }
-                .collect { state ->
-                    _uiState.update { state }
-                    if (state.myCard.isEmpty() && state.bingoState == RoomState.NOT_STARTED) getNewCard()
-                }
+            }.collect { state -> _uiState.update { state } }
         }
     }
 
-    private fun getNewCard() {
+    private fun updateCard() {
         coroutineScope.launch {
-            user.collect { collectedUser ->
-                if (collectedUser != null) {
-                    val newCard = uiState.value.characters.shuffled().subList(0, 9).map { it.id }
+            val newCard = getNewCard().map { it.id }
 
-                    setCardByRoomAndUserIDUseCase(
-                        roomId = roomId,
-                        userId = collectedUser.id,
-                        charactersIDs = newCard,
-                    )
-                        .onFailure { showErrorDialog.showDialog(null) }
-                }
-            }
+            setCardByRoomAndUserIDUseCase(
+                roomId = roomId,
+                userId = userId,
+                charactersIDs = newCard,
+            )
+                .onFailure { showErrorDialog.showDialog(null) }
         }
+    }
+
+    private fun getNewCard(): List<Character> {
+        return characters.shuffled().subList(0, 9)
     }
 
     private fun callBingo() {
         coroutineScope.launch {
-            user.collect { collectedUser ->
-                if (collectedUser != null) {
-                    callBingoUseCase(
-                        roomId = roomId,
-                        userId = collectedUser.id,
-                    )
-                        .onFailure { showErrorDialog.showDialog(null) }
-                }
-            }
+            callBingoUseCase(
+                roomId = roomId,
+                userId = userId,
+            )
+                .onFailure { showErrorDialog.showDialog(null) }
         }
     }
 
@@ -176,13 +173,51 @@ class PlayScreenComponent(
     }
 
     private fun canCallBingo(
-        card: List<Character>,
+        cardState: CardState,
         raffledCharacters: List<Character>,
         hasCalledYet: Boolean,
     ): Boolean {
         if (hasCalledYet) return false
-        if (card.isEmpty()) return false
-        card.forEach { character -> if (character !in raffledCharacters) return false }
+
+        when (cardState) {
+            is CardState.Success -> {
+                if (cardState.characters.isEmpty()) return false
+                cardState.characters.forEach { character -> if (character !in raffledCharacters) return false }
+            }
+
+            else -> return false
+        }
+
         return true
+    }
+
+    private fun checkRaffledCharacters(raffledIds: List<String>): List<Character> {
+        val charactersList = mutableListOf<Character>()
+
+        raffledIds.forEach { characterId ->
+            characters.find { it.id == characterId }?.run { charactersList.add(this) }
+        }
+
+        return charactersList
+    }
+
+    private fun getWinners(winnersIds: List<String>, players: List<User>): List<User> {
+        val winners = mutableListOf<User>()
+
+        winnersIds.forEach { winnerId ->
+            players.find { it.id == winnerId }?.run { winners.add(this) }
+        }
+
+        return winners
+    }
+
+    private fun checkCardState(charactersIds: List<String>?): CardState {
+        if (charactersIds.isNullOrEmpty()) return CardState.Error
+        if (charactersIds.size < 9) return CardState.Error
+
+        val charactersList = charactersIds.let { characterId ->
+            characters.filter { it.id in characterId }
+        }
+        return CardState.Success(charactersList)
     }
 }

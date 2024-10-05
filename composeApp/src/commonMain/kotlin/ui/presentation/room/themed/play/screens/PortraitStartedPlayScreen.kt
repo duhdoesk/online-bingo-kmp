@@ -31,12 +31,13 @@ import themedbingo.composeapp.generated.resources.Res
 import themedbingo.composeapp.generated.resources.back_button
 import themedbingo.composeapp.generated.resources.call_bingo_button
 import ui.presentation.common.components.BottomButtonRow
-import ui.presentation.room.themed.play.screens.component.SelectedBingoCard
 import ui.presentation.room.common.FinishedRoomScreenComposable
 import ui.presentation.room.common.PlayersLazyRow
 import ui.presentation.room.common.SpectatorModeInfo
 import ui.presentation.room.themed.component.RunningRoomScreenComposable
 import ui.presentation.room.themed.play.event.PlayScreenUIEvent
+import ui.presentation.room.themed.play.screens.component.SelectedBingoCard
+import ui.presentation.room.themed.play.state.CardState
 import ui.presentation.room.themed.play.state.PlayScreenUIState
 
 @OptIn(ExperimentalResourceApi::class)
@@ -78,9 +79,10 @@ fun PortraitStartedPlayScreen(
                         )
 
                         Spacer(Modifier.height(16.dp))
-                        if (uiState.myCard.isNotEmpty()) {
+
+                        if (uiState.myCard is CardState.Success) {
                             SelectedBingoCard(
-                                bingoCard = uiState.myCard,
+                                bingoCard = uiState.myCard.characters,
                                 raffledCharacters = uiState.raffledCharacters,
                                 modifier = Modifier
                                     .padding(16.dp).fillMaxWidth(),

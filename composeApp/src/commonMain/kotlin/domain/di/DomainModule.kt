@@ -37,6 +37,7 @@ import domain.theme.use_case.GetAllThemesUseCase
 import domain.theme.use_case.GetCharactersByThemeId
 import domain.theme.use_case.GetRoomCharactersUseCase
 import domain.theme.use_case.GetRoomThemeUseCase
+import domain.theme.use_case.GetThemeCharactersUseCase
 import domain.user.repository.UserRepository
 import domain.user.use_case.CheckIfIsNewUserUseCase
 import domain.user.use_case.CreateUserUseCase
@@ -80,6 +81,7 @@ val domainModule = module {
     factory<FlowThemeByIdUseCase> { FlowThemeByIdUseCase(get()) }
     factory<GetRoomCharactersUseCase> { GetRoomCharactersUseCase(get(), get()) }
     factory<GetRoomThemeUseCase> { GetRoomThemeUseCase(get(), get()) }
+    factory { GetThemeCharactersUseCase(get()) }
 
 //    User
     single<UserRepository> { UserRepositoryImpl(get()) }

@@ -1,5 +1,6 @@
 package data.theme.repository
 
+import data.character.model.CharacterDTO
 import data.theme.model.BingoThemeDTO
 import dev.gitlive.firebase.firestore.FirebaseFirestore
 import domain.character.model.Character
@@ -16,18 +17,22 @@ class BingoThemeRepositoryImpl(
     private val collection = firestore
         .collection("themes")
 
-    override suspend fun getThemeById(id: String): BingoTheme {
-        return collection
-            .document(id)
-            .get()
-            .let { documentSnapshot ->
-                BingoThemeDTO(
-                    id = documentSnapshot.id,
-                    name = documentSnapshot.get("name"),
-                    picture = documentSnapshot.get("picture")
-                )
-            }
-            .toModel()
+    override suspend fun getThemeById(id: String): Result<BingoThemeDTO> {
+        try {
+            val themeDTO = collection
+                .document(id)
+                .get()
+                .let { documentSnapshot ->
+                    BingoThemeDTO(
+                        id = documentSnapshot.id,
+                        name = documentSnapshot.get("name"),
+                        picture = documentSnapshot.get("picture")
+                    )
+                }
+            return Result.success(themeDTO)
+        } catch (e: Exception) {
+            return Result.failure(e)
+        }
     }
 
     override fun flowThemeById(id: String): Flow<BingoTheme> {
@@ -57,7 +62,7 @@ class BingoThemeRepositoryImpl(
             }
     }
 
-    override fun getCharacters(themeId: String): Flow<List<Character>> {
+    override fun flowThemeCharacters(themeId: String): Flow<List<Character>> {
         return flow {
             val characters = collection
                 .document(themeId)
@@ -72,6 +77,26 @@ class BingoThemeRepositoryImpl(
                     )
                 }
             emit(characters)
+        }
+    }
+
+    override suspend fun getThemeCharacters(themeId: String): Result<List<CharacterDTO>> {
+        try {
+            val characters = collection
+                .document(themeId)
+                .collection("characters")
+                .get()
+                .documents
+                .map { document ->
+                    CharacterDTO(
+                        id = document.id,
+                        name = document.get("name"),
+                        pictureUri = document.get("picture"),
+                    )
+                }
+            return Result.success(characters)
+        } catch (e: Exception) {
+            return Result.failure(e)
         }
     }
 }

@@ -7,6 +7,12 @@ import domain.theme.model.BingoTheme
 import domain.user.model.User
 import ui.presentation.room.themed.RoomScreenUIState
 
+sealed class CardState {
+    data object Error: CardState()
+    data object Loading: CardState()
+    data class Success(val characters: List<Character>): CardState()
+}
+
 data class PlayScreenUIState(
     /**
      * Represents the screen loading state
@@ -71,7 +77,8 @@ data class PlayScreenUIState(
     /**
      * Represents the user's Bingo Card
      */
-    val myCard: List<Character>,
+    val myCard: CardState,
+
 ) : RoomScreenUIState(
     loading,
     players,
@@ -98,7 +105,7 @@ data class PlayScreenUIState(
             bingoState = RoomState.NOT_STARTED,
             canCallBingo = false,
             calledBingo = false,
-            myCard = emptyList(),
+            myCard = CardState.Loading,
         )
     }
 }
