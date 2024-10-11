@@ -1,19 +1,19 @@
 package domain.room.repository
 
-import domain.room.model.BingoRoom
+import data.room.model.BingoRoomDTO
 import domain.room.model.BingoType
 import kotlinx.coroutines.flow.Flow
 
 interface BingoRoomRepository {
-    fun getRooms(bingoType: BingoType): Flow<List<BingoRoom>>
+    fun getRooms(bingoType: BingoType): Flow<List<BingoRoomDTO>>
 
-    fun getNotStartedRooms(bingoType: BingoType): Flow<List<BingoRoom>>
+    fun getNotStartedRooms(bingoType: BingoType): Flow<List<BingoRoomDTO>>
 
-    fun getRunningRooms(bingoType: BingoType): Flow<List<BingoRoom>>
+    fun getRunningRooms(bingoType: BingoType): Flow<List<BingoRoomDTO>>
 
-    fun flowRoomById(id: String): Flow<BingoRoom>
+    fun flowRoomById(id: String): Flow<BingoRoomDTO>
 
-    suspend fun getRoomById(id: String): Result<BingoRoom>
+    suspend fun getRoomById(id: String): Result<BingoRoomDTO>
 
     suspend fun createRoom(
         hostId: String,

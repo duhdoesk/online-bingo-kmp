@@ -18,9 +18,11 @@ import domain.user.use_case.GetUserByIdUseCase
 import getPlatform
 import io.github.jan.supabase.gotrue.SessionStatus
 import io.github.jan.supabase.gotrue.auth
+import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
@@ -32,10 +34,8 @@ import ui.presentation.join_room.JoinScreenComponent
 import ui.presentation.paywall.PaywallScreenViewModel
 import ui.presentation.profile.ProfileScreenComponent
 import ui.presentation.profile.picture.EditProfilePictureScreenComponent
-import ui.presentation.room.classic.host.ClassicHostScreenComponent
-import ui.presentation.room.classic.play.ClassicPlayScreenComponent
-import ui.presentation.room.themed.host.HostScreenComponent
-import ui.presentation.room.themed.play.PlayScreenComponent
+import ui.presentation.room.RoomHostViewModel
+import ui.presentation.room.RoomPlayerViewModel
 import ui.presentation.sign_in.SignInScreenComponent
 import ui.presentation.sign_up.SignUpScreenComponent
 import ui.presentation.themes.ThemesScreenComponent
@@ -68,7 +68,7 @@ class RootComponent(
     /**
      * Current signed in user
      */
-    private val user = sessionStatus.map { status ->
+    private val _user = sessionStatus.map { status ->
         when (status) {
             is SessionStatus.Authenticated -> {
                 val authInfo = status.session.user
@@ -79,6 +79,12 @@ class RootComponent(
             else -> null
         }
     }
+
+    val user = _user.stateIn(
+        coroutineScope,
+        SharingStarted.WhileSubscribed(),
+        null
+    )
 
     /**
      * Decompose Navigation Manager
@@ -163,11 +169,39 @@ class RootComponent(
                 )
             )
 
-            is Configuration.HostScreen -> Child.HostScreen(
-                HostScreenComponent(
+            is Configuration.HostScreenThemed -> Child.HostScreen(
+                RoomHostViewModel(
                     componentContext = context,
                     onPopBack = { navigation.pop() },
-                    roomId = configuration.roomId
+                    roomId = configuration.roomId,
+                    user = user.value,
+                )
+            )
+
+            is Configuration.HostScreenClassic -> Child.HostScreen(
+                RoomHostViewModel(
+                    componentContext = context,
+                    roomId = configuration.roomId,
+                    onPopBack = { navigation.pop() },
+                    user = user.value,
+                )
+            )
+
+            is Configuration.PlayerScreenThemed -> Child.PlayerScreen(
+                RoomPlayerViewModel(
+                    componentContext = context,
+                    onPopBack = { navigation.pop() },
+                    roomId = configuration.roomId,
+                    user = user.value,
+                )
+            )
+
+            is Configuration.PlayerScreenClassic -> Child.PlayerScreen(
+                RoomPlayerViewModel(
+                    componentContext = context,
+                    roomId = configuration.roomId,
+                    onPopBack = { navigation.pop() },
+                    user = user.value,
                 )
             )
 
@@ -189,19 +223,10 @@ class RootComponent(
                 )
             )
 
-            is Configuration.PlayScreen -> Child.PlayScreen(
-                PlayScreenComponent(
-                    componentContext = context,
-                    onPopBack = { navigation.pop() },
-                    roomId = configuration.roomId,
-                    user = user,
-                )
-            )
-
             Configuration.ProfileScreen -> Child.ProfileScreen(
                 ProfileScreenComponent(
                     componentContext = context,
-                    user = user,
+                    userId = user.value?.id.orEmpty(),
                     onPopBack = { navigation.pop() },
                     onSignOut = { signOut() },
                     onUpdatePicture = {
@@ -249,23 +274,6 @@ class RootComponent(
             Configuration.ChangePasswordScreen -> Child.ChangePasswordScreen(
                 ChangePasswordScreenComponent(
                     componentContext = context,
-                    onPopBack = { navigation.pop() },
-                )
-            )
-
-            is Configuration.ClassicHostScreen -> Child.ClassicHostScreen(
-                ClassicHostScreenComponent(
-                    componentContext = context,
-                    roomId = configuration.roomId,
-                    onPopBack = { navigation.pop() }
-                )
-            )
-
-            is Configuration.ClassicPlayScreen -> Child.ClassicPlayScreen(
-                ClassicPlayScreenComponent(
-                    componentContext = context,
-                    user = user,
-                    roomId = configuration.roomId,
                     onPopBack = { navigation.pop() },
                 )
             )

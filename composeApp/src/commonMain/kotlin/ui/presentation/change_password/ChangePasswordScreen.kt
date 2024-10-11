@@ -79,10 +79,10 @@ fun ChangePasswordScreen(
         )
     }
 
-    if (component.errorDialog.isVisible.value) {
-        GenericErrorDialog(
-            onDismiss = { component.errorDialog.hideDialog() },
-            body = component.errorDialog.dialogData.value,
-        )
-    }
+//    if (component.errorDialog.isVisible.value) {
+//        GenericErrorDialog(
+//            onDismiss = { component.errorDialog.hideDialog() },
+//            body = component.errorDialog.dialogData.value,
+//        )
+//    }
 }

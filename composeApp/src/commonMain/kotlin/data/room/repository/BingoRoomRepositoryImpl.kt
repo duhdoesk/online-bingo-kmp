@@ -1,5 +1,6 @@
 package data.room.repository
 
+import data.room.model.BingoRoomDTO
 import data.room.model.bingoRoomDTOFromDocumentSnapshot
 import dev.gitlive.firebase.firestore.FieldValue
 import dev.gitlive.firebase.firestore.FirebaseFirestore
@@ -14,47 +15,47 @@ class BingoRoomRepositoryImpl(firestore: FirebaseFirestore) : BingoRoomRepositor
 
     private val collection = firestore.collection("rooms")
 
-    override fun getRooms(bingoType: BingoType): Flow<List<BingoRoom>> =
+    override fun getRooms(bingoType: BingoType): Flow<List<BingoRoomDTO>> =
         collection
             .where { "type" equalTo bingoType.name }
             .snapshots
             .map { querySnapshot ->
                 querySnapshot.documents.map { documentSnapshot ->
-                    bingoRoomDTOFromDocumentSnapshot(documentSnapshot).toModel()
+                    bingoRoomDTOFromDocumentSnapshot(documentSnapshot)
                 }
             }
 
-    override fun getNotStartedRooms(bingoType: BingoType): Flow<List<BingoRoom>> =
+    override fun getNotStartedRooms(bingoType: BingoType): Flow<List<BingoRoomDTO>> =
         collection
             .where { "state" equalTo RoomState.NOT_STARTED.name }
             .where { "type" equalTo bingoType.name }
             .snapshots
             .map { querySnapshot ->
                 querySnapshot.documents.map { documentSnapshot ->
-                    bingoRoomDTOFromDocumentSnapshot(documentSnapshot).toModel()
+                    bingoRoomDTOFromDocumentSnapshot(documentSnapshot)
                 }
             }
 
-    override fun getRunningRooms(bingoType: BingoType): Flow<List<BingoRoom>> =
+    override fun getRunningRooms(bingoType: BingoType): Flow<List<BingoRoomDTO>> =
         collection
             .where { "state" equalTo RoomState.RUNNING.name }
             .where { "type" equalTo bingoType.name }
             .snapshots
             .map { querySnapshot ->
                 querySnapshot.documents.map { documentSnapshot ->
-                    bingoRoomDTOFromDocumentSnapshot(documentSnapshot).toModel()
+                    bingoRoomDTOFromDocumentSnapshot(documentSnapshot)
                 }
             }
 
-    override fun flowRoomById(id: String): Flow<BingoRoom> =
+    override fun flowRoomById(id: String): Flow<BingoRoomDTO> =
         collection
             .document(id)
             .snapshots
             .map { documentSnapshot ->
-                bingoRoomDTOFromDocumentSnapshot(documentSnapshot).toModel()
+                bingoRoomDTOFromDocumentSnapshot(documentSnapshot)
             }
 
-    override suspend fun getRoomById(id: String): Result<BingoRoom> {
+    override suspend fun getRoomById(id: String): Result<BingoRoomDTO> {
         collection
             .document(id)
             .get()
@@ -64,7 +65,7 @@ class BingoRoomRepositoryImpl(firestore: FirebaseFirestore) : BingoRoomRepositor
                 }
 
                 try {
-                    val room = bingoRoomDTOFromDocumentSnapshot(documentSnapshot).toModel()
+                    val room = bingoRoomDTOFromDocumentSnapshot(documentSnapshot)
                     return Result.success(room)
                 } catch (e: Exception) {
                     return Result.failure(e)

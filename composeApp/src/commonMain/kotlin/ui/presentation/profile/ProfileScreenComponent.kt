@@ -4,14 +4,14 @@ import com.arkivanov.decompose.ComponentContext
 import domain.auth.getAuthErrorDescription
 import domain.auth.supabase.use_case.SupabaseDeleteAccountUseCase
 import domain.auth.supabase.use_case.SupabaseSignOutUseCase
-import domain.auth.use_case.DeleteAccountUseCase
-import domain.auth.use_case.SignOutUseCase
 import domain.user.model.User
 import domain.user.use_case.DeleteUserUseCase
+import domain.user.use_case.FlowUserUseCase
 import domain.user.use_case.UpdateNameUseCase
 import domain.user.use_case.UpdateVictoryMessageUseCase
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
@@ -20,7 +20,6 @@ import org.jetbrains.compose.resources.StringResource
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 import themedbingo.composeapp.generated.resources.Res
-import themedbingo.composeapp.generated.resources.delete_account_success
 import themedbingo.composeapp.generated.resources.sign_out_error
 import themedbingo.composeapp.generated.resources.update_nickname_failure
 import themedbingo.composeapp.generated.resources.update_victory_failure
@@ -32,7 +31,7 @@ import util.componentCoroutineScope
 @OptIn(ExperimentalResourceApi::class)
 class ProfileScreenComponent(
     componentContext: ComponentContext,
-    private val user: Flow<User?>,
+    private val userId: String,
     private val onPopBack: () -> Unit,
     private val onSignOut: () -> Unit,
     private val onUpdatePicture: () -> Unit,
@@ -43,6 +42,11 @@ class ProfileScreenComponent(
      * Single Coroutine Scope to handle suspend operations
      */
     private val coroutineScope = componentCoroutineScope()
+
+    /**
+     * UI State Use Cases
+     */
+    private val flowUserByIdUseCase: FlowUserUseCase by inject()
 
     /**
      * Action Use Cases
@@ -87,11 +91,11 @@ class ProfileScreenComponent(
      */
     private fun uiLoaded() {
         coroutineScope.launch {
-            user.collect { collectedUser ->
+            flowUserByIdUseCase(userId).collect { user ->
                 _uiState.update {
                     ProfileScreenUIState(
                         isLoading = false,
-                        user = collectedUser,
+                        user = user,
                     )
                 }
             }

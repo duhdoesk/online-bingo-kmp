@@ -31,6 +31,7 @@ import org.jetbrains.compose.resources.painterResource
 import themedbingo.composeapp.generated.resources.Res
 import themedbingo.composeapp.generated.resources.bingo_balls
 import ui.presentation.join_room.event.JoinRoomUIEvent
+import ui.presentation.room.state.auxiliar.BingoStyle
 
 @OptIn(ExperimentalResourceApi::class)
 @Composable
@@ -70,7 +71,7 @@ fun RoomCard(
                     BingoType.THEMED ->
                         AsyncImage(
                             model = theme?.pictureUri,
-                            contentDescription = "Theme Picture",
+                            contentDescription = "Theme Picture", //todo()
                             modifier = Modifier
                                 .padding(16.dp)
                                 .size(80.dp)
@@ -90,13 +91,13 @@ fun RoomCard(
 
                     if (theme != null) {
                         Text(
-                            text = "Tema: ${theme.name}",
+                            text = "Tema: ${theme.name}", //todo()
                             style = bodyStyle,
                         )
                     }
 
                     Text(
-                        text = "Jogadores: ${room.players.size}",
+                        text = "Jogadores: ${room.players.size}", //todo()
                         style = bodyStyle,
                     )
                 }
@@ -104,14 +105,11 @@ fun RoomCard(
                 if (room.locked) {
                     Icon(
                         imageVector = Icons.Default.Lock,
-                        contentDescription = "Locked",
+                        contentDescription = "Locked", //todo()
                         modifier = Modifier.padding(16.dp).size(32.dp)
                     )
                 }
             }
         }
-
     }
-
-
 }

@@ -1,8 +1,6 @@
 package ui.presentation.join_room
 
 import com.arkivanov.decompose.ComponentContext
-import dev.gitlive.firebase.auth.FirebaseUser
-import domain.billing.SubscribeToUserSubscriptionData
 import domain.billing.hasActiveEntitlements
 import domain.room.model.BingoRoom
 import domain.room.model.BingoType
@@ -152,8 +150,8 @@ class JoinScreenComponent(
                     .onSuccess { room ->
                         if (room.hostId == collectedUser?.id) {
                             when (bingoType) {
-                                BingoType.CLASSIC -> onJoinRoom(Configuration.ClassicHostScreen(roomId))
-                                BingoType.THEMED -> onJoinRoom(Configuration.HostScreen(roomId))
+                                BingoType.CLASSIC -> onJoinRoom(Configuration.HostScreenClassic(roomId))
+                                BingoType.THEMED -> onJoinRoom(Configuration.HostScreenThemed(roomId))
                             }
                             return@collect
                         }
@@ -168,8 +166,8 @@ class JoinScreenComponent(
                     )
                     .onSuccess {
                         when (bingoType) {
-                            BingoType.CLASSIC -> onJoinRoom(Configuration.ClassicPlayScreen(roomId))
-                            BingoType.THEMED -> onJoinRoom(Configuration.PlayScreen(roomId))
+                            BingoType.CLASSIC -> onJoinRoom(Configuration.PlayerScreenClassic(roomId))
+                            BingoType.THEMED -> onJoinRoom(Configuration.PlayerScreenThemed(roomId))
                         }
                     }
                     .onFailure { exception ->

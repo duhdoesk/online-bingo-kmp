@@ -24,12 +24,14 @@ import domain.room.repository.BingoRoomRepository
 import domain.room.use_case.CallBingoUseCase
 import domain.room.use_case.CreateRoomUseCase
 import domain.room.use_case.FlowRoomByIdUseCase
+import domain.room.use_case.GetBingoStyleUseCase
 import domain.room.use_case.GetNotStartedRoomsUseCase
 import domain.room.use_case.GetRoomByIdUseCase
 import domain.room.use_case.GetRoomsUseCase
 import domain.room.use_case.GetRunningRoomsUseCase
 import domain.room.use_case.JoinRoomUseCase
-import domain.room.use_case.RaffleNextCharacterUseCase
+import domain.room.use_case.MapRoomDTOToModelUseCase
+import domain.room.use_case.RaffleNextItemUseCase
 import domain.room.use_case.UpdateRoomStateUseCase
 import domain.theme.repository.BingoThemeRepository
 import domain.theme.use_case.FlowThemeByIdUseCase
@@ -37,6 +39,7 @@ import domain.theme.use_case.GetAllThemesUseCase
 import domain.theme.use_case.GetCharactersByThemeId
 import domain.theme.use_case.GetRoomCharactersUseCase
 import domain.theme.use_case.GetRoomThemeUseCase
+import domain.theme.use_case.GetThemeByIdUseCase
 import domain.theme.use_case.GetThemeCharactersUseCase
 import domain.user.repository.UserRepository
 import domain.user.use_case.CheckIfIsNewUserUseCase
@@ -55,33 +58,36 @@ val domainModule = module {
 
 //    Card
     single<CardRepository> { CardRepositoryImpl(get()) }
-    factory<FlowCardByRoomAndUserIDUseCase> { FlowCardByRoomAndUserIDUseCase(get()) }
-    factory<SetCardByRoomAndUserIDUseCase> { SetCardByRoomAndUserIDUseCase(get()) }
+    single<FlowCardByRoomAndUserIDUseCase> { FlowCardByRoomAndUserIDUseCase(get()) }
+    single<SetCardByRoomAndUserIDUseCase> { SetCardByRoomAndUserIDUseCase(get()) }
 
 //    Character
     single<CharacterRepository> { CharacterRepositoryImpl(get()) }
 
 //    Room
     single<BingoRoomRepository> { BingoRoomRepositoryImpl(get()) }
-    factory<GetRoomsUseCase> { GetRoomsUseCase(get()) }
-    factory<GetNotStartedRoomsUseCase> { GetNotStartedRoomsUseCase(get()) }
-    factory<GetRunningRoomsUseCase> { GetRunningRoomsUseCase(get()) }
-    factory<JoinRoomUseCase> { JoinRoomUseCase(get()) }
-    factory<FlowRoomByIdUseCase> { FlowRoomByIdUseCase(get()) }
-    factory<GetRoomByIdUseCase> { GetRoomByIdUseCase(get()) }
-    factory<UpdateRoomStateUseCase> { UpdateRoomStateUseCase(get()) }
-    factory<RaffleNextCharacterUseCase> { RaffleNextCharacterUseCase(get()) }
-    factory<CreateRoomUseCase> { CreateRoomUseCase(get()) }
-    factory<CallBingoUseCase> { CallBingoUseCase(get()) }
+    single { GetRoomsUseCase(get(), get()) }
+    single { GetNotStartedRoomsUseCase(get(), get()) }
+    single { GetRunningRoomsUseCase(get(), get()) }
+    single { JoinRoomUseCase(get()) }
+    single { FlowRoomByIdUseCase(get(), get()) }
+    single { GetRoomByIdUseCase(get(), get()) }
+    single { UpdateRoomStateUseCase(get()) }
+    single { RaffleNextItemUseCase(get()) }
+    single { CreateRoomUseCase(get()) }
+    single { CallBingoUseCase(get()) }
+    single { GetBingoStyleUseCase(get(), get()) }
+    single { MapRoomDTOToModelUseCase() }
 
 //    Theme
     single<BingoThemeRepository> { BingoThemeRepositoryImpl(get()) }
-    single<GetAllThemesUseCase> { GetAllThemesUseCase(get()) }
-    single<GetCharactersByThemeId> { GetCharactersByThemeId(get()) }
-    factory<FlowThemeByIdUseCase> { FlowThemeByIdUseCase(get()) }
-    factory<GetRoomCharactersUseCase> { GetRoomCharactersUseCase(get(), get()) }
-    factory<GetRoomThemeUseCase> { GetRoomThemeUseCase(get(), get()) }
-    factory { GetThemeCharactersUseCase(get()) }
+    single { GetAllThemesUseCase(get()) }
+    single { GetCharactersByThemeId(get()) }
+    single { FlowThemeByIdUseCase(get()) }
+    single { GetRoomCharactersUseCase(get(), get()) }
+    single { GetRoomThemeUseCase(get(), get()) }
+    single { GetThemeCharactersUseCase(get()) }
+    single { GetThemeByIdUseCase(get()) }
 
 //    User
     single<UserRepository> { UserRepositoryImpl(get()) }
@@ -91,7 +97,7 @@ val domainModule = module {
     single<UpdateVictoryMessageUseCase> { UpdateVictoryMessageUseCase(get()) }
     single<UpdateUserPictureUseCase> { UpdateUserPictureUseCase(get()) }
     single<GetProfilePicturesUseCase> { GetProfilePicturesUseCase(get(), get()) }
-    factory<GetRoomPlayersUseCase> { GetRoomPlayersUseCase(get(), get()) }
+    single<GetRoomPlayersUseCase> { GetRoomPlayersUseCase(get(), get()) }
     single<CreateUserUseCase> { CreateUserUseCase(get()) }
     single<DeleteUserUseCase> { DeleteUserUseCase(get()) }
     single<CheckIfIsNewUserUseCase> { CheckIfIsNewUserUseCase(get()) }

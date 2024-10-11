@@ -1,7 +1,6 @@
 package domain.room.model
 
-import domain.card.model.Card
-import domain.user.model.User
+import ui.presentation.room.state.auxiliar.BingoState
 
 data class BingoRoom(
     val id: String,
@@ -12,8 +11,8 @@ data class BingoRoom(
     val maxWinners: Int,
     val locked: Boolean,
     val password: String?,
-    val drawnCharactersIds: List<String>,
-    val state: RoomState,
+    val raffled: List<String>,
+    val state: BingoState,
     val players: List<String>,
     val winners: List<String>
 )

@@ -18,10 +18,16 @@ sealed class Configuration {
     data class JoinScreen(val bingoType: BingoType) : Configuration()
 
     @Serializable
-    data class HostScreen(val roomId: String) : Configuration()
+    data class HostScreenThemed(val roomId: String) : Configuration()
 
     @Serializable
-    data class PlayScreen(val roomId: String) : Configuration()
+    data class HostScreenClassic(val roomId: String) : Configuration()
+
+    @Serializable
+    data class PlayerScreenThemed(val roomId: String) : Configuration()
+
+    @Serializable
+    data class PlayerScreenClassic(val roomId: String) : Configuration()
 
     @Serializable
     data object ProfileScreen : Configuration()
@@ -42,11 +48,5 @@ sealed class Configuration {
     data object ChangePasswordScreen : Configuration()
 
     @Serializable
-    data class ClassicHostScreen(val roomId: String) : Configuration()
-
-    @Serializable
-    data class ClassicPlayScreen(val roomId: String) : Configuration()
-
-    @Serializable
-    data object PaywallScreen: Configuration()
+    data object PaywallScreen : Configuration()
 }

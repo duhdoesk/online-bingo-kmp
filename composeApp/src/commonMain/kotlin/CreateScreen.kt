@@ -8,10 +8,8 @@ import ui.presentation.paywall.PaywallScreen
 import ui.presentation.join_room.JoinScreen
 import ui.presentation.profile.ProfileScreen
 import ui.presentation.profile.picture.EditProfilePictureScreen
-import ui.presentation.room.classic.host.ClassicHostScreen
-import ui.presentation.room.classic.play.ClassicPlayScreen
-import ui.presentation.room.themed.host.HostScreen
-import ui.presentation.room.themed.play.PlayScreen
+import ui.presentation.room.screens.host.HostScreen
+import ui.presentation.room.screens.player.PlayerScreen
 import ui.presentation.sign_in.SignInScreen
 import ui.presentation.sign_up.SignUpScreen
 import ui.presentation.themes.ThemesScreen
@@ -39,16 +37,14 @@ fun CreateScreen(
         )
 
         is Child.HostScreen -> HostScreen(
-            component = instance.component,
-            windowInfo = windowInfo
+            viewModel = instance.component,
+        )
+
+        is Child.PlayerScreen -> PlayerScreen(
+            viewModel = instance.component,
         )
 
         is Child.JoinScreen -> JoinScreen(
-            component = instance.component,
-            windowInfo = windowInfo
-        )
-
-        is Child.PlayScreen -> PlayScreen(
             component = instance.component,
             windowInfo = windowInfo
         )
@@ -80,14 +76,6 @@ fun CreateScreen(
         is Child.ChangePasswordScreen -> ChangePasswordScreen(
             component = instance.component,
             windowInfo = windowInfo
-        )
-
-        is Child.ClassicHostScreen -> ClassicHostScreen(
-            component = instance.component,
-        )
-
-        is Child.ClassicPlayScreen -> ClassicPlayScreen(
-            component = instance.component,
         )
 
         is Child.PaywallScreen -> PaywallScreen(

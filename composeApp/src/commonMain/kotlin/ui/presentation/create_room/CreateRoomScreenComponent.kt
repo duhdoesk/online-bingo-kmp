@@ -1,7 +1,6 @@
 package ui.presentation.create_room
 
 import com.arkivanov.decompose.ComponentContext
-import dev.gitlive.firebase.auth.FirebaseUser
 import domain.room.model.BingoType
 import domain.room.use_case.CreateRoomUseCase
 import domain.theme.model.BingoTheme
@@ -51,7 +50,7 @@ class CreateRoomScreenComponent(
     /**
      * Modal visibility holders
      */
-    val showErrorDialog = mutableDialogStateOf(null)
+    val showErrorDialog = mutableDialogStateOf<StringResource?>(null)
 
     /**
      * UI State holder
@@ -218,8 +217,8 @@ class CreateRoomScreenComponent(
                     )
                         .onSuccess { roomId ->
                             val config = when (bingoType) {
-                                BingoType.CLASSIC -> Configuration.ClassicHostScreen(roomId)
-                                BingoType.THEMED -> Configuration.HostScreen(roomId)
+                                BingoType.CLASSIC -> Configuration.HostScreenClassic(roomId)
+                                BingoType.THEMED -> Configuration.HostScreenThemed(roomId)
                             }
                             onCreateRoom(config)
                         }

@@ -28,3 +28,15 @@ class User(
         )
 
 }
+
+fun mockUser() = User(
+    id = "",
+    email = "",
+    name = "",
+    nameLastUpdated = Timestamp.now(),
+    pictureUri = "",
+    pictureUriLastUpdated = Timestamp.now(),
+    lastWinTimestamp = Timestamp.now(),
+    victoryMessage = "",
+    victoryMessageLastUpdated = Timestamp.now(),
+)

@@ -13,4 +13,5 @@ sealed interface MutableDialogState<T> : DialogState<T> {
 
     fun showDialog(data: T)
     fun hideDialog()
+    fun confirmAction(onConfirm: () -> Unit)
 }

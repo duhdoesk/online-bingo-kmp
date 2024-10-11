@@ -76,3 +76,55 @@ fun GenericErrorDialog(
         }
     }
 }
+
+@OptIn(ExperimentalResourceApi::class)
+@Composable
+fun GenericErrorDialog(
+    onDismiss: () -> Unit,
+    title: String = stringResource(Res.string.error),
+    body: String?,
+) {
+    Dialog(
+        onDismissRequest = { onDismiss() }
+    ) {
+        Card(
+            colors = CardDefaults.cardColors(
+                containerColor = MaterialTheme.colorScheme.surface,
+                contentColor = MaterialTheme.colorScheme.onSurface
+            ),
+        ) {
+            Column(
+                horizontalAlignment = Alignment.CenterHorizontally,
+                modifier = Modifier
+                    .padding(16.dp)
+                    .fillMaxWidth()
+            ) {
+                Text(
+                    text = title,
+                    style = MaterialTheme.typography.titleLarge,
+                    modifier = Modifier.fillMaxWidth()
+                )
+
+                Spacer(Modifier.height(8.dp))
+
+                Text(
+                    text = body ?: stringResource(Res.string.unmapped_error),
+                    modifier = Modifier.fillMaxWidth()
+                )
+
+                Spacer(Modifier.height(16.dp))
+
+                Row(
+                    horizontalArrangement = Arrangement.End,
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    TextButton(
+                        onClick = { onDismiss() }
+                    ) {
+                        Text(stringResource(Res.string.ok_button))
+                    }
+                }
+            }
+        }
+    }
+}
