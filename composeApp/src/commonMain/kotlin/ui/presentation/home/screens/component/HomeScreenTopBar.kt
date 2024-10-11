@@ -2,7 +2,6 @@ package ui.presentation.home.screens.component
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
@@ -31,7 +30,6 @@ import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 import themedbingo.composeapp.generated.resources.Res
 import themedbingo.composeapp.generated.resources.hello
-import themedbingo.composeapp.generated.resources.home_screen
 import themedbingo.composeapp.generated.resources.hw_orange_bg
 import themedbingo.composeapp.generated.resources.vip
 
@@ -45,7 +43,6 @@ fun HomeScreenTopBar(
 ) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.SpaceBetween,
         modifier = modifier,
     ) {
         if (isSubscribed) {
@@ -65,7 +62,7 @@ fun HomeScreenTopBar(
                         text = stringResource(Res.string.vip),
                         color = Color.White,
                         fontWeight = FontWeight.SemiBold,
-                        style = MaterialTheme.typography.headlineSmall,
+                        style = MaterialTheme.typography.titleLarge,
                         modifier = Modifier
                             .padding(horizontal = 16.dp),
                     )
@@ -85,19 +82,8 @@ fun HomeScreenTopBar(
             style = MaterialTheme.typography.titleLarge,
             maxLines = 1,
             overflow = TextOverflow.Ellipsis,
-            modifier = Modifier.padding(horizontal = 16.dp),
+            modifier = Modifier.padding(horizontal = 8.dp).weight(1f),
         )
-
-//        Text(
-//            text = stringResource(Res.string.home_screen),
-//            fontWeight = FontWeight.SemiBold,
-//            style = MaterialTheme.typography.headlineSmall,
-//            maxLines = 1,
-//            overflow = TextOverflow.Ellipsis,
-//            modifier = Modifier
-//                .padding(horizontal = 16.dp)
-//                .weight(1f),
-//        )
 
         Icon(
             imageVector = Icons.Default.AccountCircle,
