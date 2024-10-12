@@ -46,52 +46,54 @@ fun UniqueSignInScreen(
 
         Spacer(Modifier.height(48.dp))
 
-        Button(
-            onClick = { onStartGoogleAuth() },
-            modifier = Modifier
-                .padding(horizontal = 24.dp)
-                .widthIn(min = 240.dp, max = 360.dp)
-                .height(48.dp),
-            colors = ButtonDefaults.buttonColors().copy(
-                containerColor = Color.White,
-                contentColor = Color.Gray,
-            ),
-            border = BorderStroke(1.dp, Color.Gray)
-        ) {
-            Row(verticalAlignment = Alignment.CenterVertically) {
-                Image(
-                    painter = painterResource(Res.drawable.google_button_logo),
-                    contentDescription = stringResource(Res.string.sign_in_google),
-                    modifier = Modifier.size(24.dp),
-                )
-                Spacer(Modifier.width(12.dp))
-                Text(stringResource(Res.string.sign_in_google))
+        when (getPlatform().system) {
+            OperationalSystem.ANDROID -> {
+                Button(
+                    onClick = { onStartGoogleAuth() },
+                    modifier = Modifier
+                        .padding(horizontal = 24.dp)
+                        .widthIn(min = 240.dp, max = 360.dp)
+                        .height(48.dp),
+                    colors = ButtonDefaults.buttonColors().copy(
+                        containerColor = Color.White,
+                        contentColor = Color.Gray,
+                    ),
+                    border = BorderStroke(1.dp, Color.Gray)
+                ) {
+                    Row(verticalAlignment = Alignment.CenterVertically) {
+                        Image(
+                            painter = painterResource(Res.drawable.google_button_logo),
+                            contentDescription = stringResource(Res.string.sign_in_google),
+                            modifier = Modifier.size(24.dp),
+                        )
+                        Spacer(Modifier.width(12.dp))
+                        Text(stringResource(Res.string.sign_in_google))
+                    }
+                }
             }
-        }
 
-        Spacer(Modifier.height(8.dp))
-
-        if (getPlatform().system == OperationalSystem.ANDROID) return@Column
-
-        Button(
-            onClick = { onStartAppleAuth() },
-            modifier = Modifier
-                .padding(horizontal = 24.dp)
-                .widthIn(min = 240.dp, max = 360.dp)
-                .height(48.dp),
-            colors = ButtonDefaults.buttonColors().copy(
-                containerColor = Color.Black,
-                contentColor = Color.White,
-            )
-        ) {
-            Row(verticalAlignment = Alignment.CenterVertically) {
-                Icon(
-                    painter = painterResource(Res.drawable.apple_button_logo),
-                    contentDescription = stringResource(Res.string.sign_in_apple),
-                    modifier = Modifier.size(24.dp),
-                )
-                Spacer(Modifier.width(12.dp))
-                Text(stringResource(Res.string.sign_in_apple))
+            OperationalSystem.IOS -> {
+                Button(
+                    onClick = { onStartAppleAuth() },
+                    modifier = Modifier
+                        .padding(horizontal = 24.dp)
+                        .widthIn(min = 240.dp, max = 360.dp)
+                        .height(48.dp),
+                    colors = ButtonDefaults.buttonColors().copy(
+                        containerColor = Color.Black,
+                        contentColor = Color.White,
+                    )
+                ) {
+                    Row(verticalAlignment = Alignment.CenterVertically) {
+                        Icon(
+                            painter = painterResource(Res.drawable.apple_button_logo),
+                            contentDescription = stringResource(Res.string.sign_in_apple),
+                            modifier = Modifier.size(24.dp),
+                        )
+                        Spacer(Modifier.width(12.dp))
+                        Text(stringResource(Res.string.sign_in_apple))
+                    }
+                }
             }
         }
     }
