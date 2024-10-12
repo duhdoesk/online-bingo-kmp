@@ -3,6 +3,7 @@ package ui.presentation.profile.screens
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -15,12 +16,14 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.KeyboardArrowLeft
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -34,11 +37,9 @@ import org.jetbrains.compose.resources.stringResource
 import themedbingo.composeapp.generated.resources.Res
 import themedbingo.composeapp.generated.resources.back_button
 import themedbingo.composeapp.generated.resources.edit_button
-import themedbingo.composeapp.generated.resources.exit_button
 import themedbingo.composeapp.generated.resources.nickname
 import themedbingo.composeapp.generated.resources.user_avatar
 import themedbingo.composeapp.generated.resources.victory_message
-import ui.presentation.common.components.BottomButtonRow
 import ui.presentation.profile.event.ProfileScreenEvent
 import ui.presentation.profile.screens.component.ProfileScreenListDataSection
 import ui.presentation.profile.screens.component.ProfileScreenStringDataSection
@@ -50,8 +51,6 @@ fun PortraitProfileScreen(
     event: (event: ProfileScreenEvent) -> Unit,
     onUpdateName: () -> Unit,
     onUpdateMessage: () -> Unit,
-    onSignOut: () -> Unit,
-    onDeleteAccount: () -> Unit,
 ) {
     Box(
         contentAlignment = Alignment.Center,
@@ -140,22 +139,23 @@ fun PortraitProfileScreen(
                 Spacer(Modifier.height(48.dp))
 
                 ProfileScreenListDataSection(
-                    onUpdatePassword = { event(ProfileScreenEvent.UpdatePassword) },
-                    onDeleteAccount = { onDeleteAccount() }
+                    event = { event(it) }
                 )
             }
 
-            BottomButtonRow(
-                leftEnabled = true,
-                rightEnabled = true,
-                leftClicked = { event(ProfileScreenEvent.PopBack) },
-                rightClicked = { onSignOut() },
-                leftText = Res.string.back_button,
-                rightText = Res.string.exit_button,
-                modifier = Modifier
-                    .padding(horizontal = 16.dp, vertical = 8.dp)
-                    .fillMaxWidth(),
-            )
+            Row(modifier = Modifier.fillMaxWidth(),) {
+                TextButton(onClick = { event(ProfileScreenEvent.PopBack) }) {
+                    Icon(
+                        Icons.AutoMirrored.Filled.KeyboardArrowLeft,
+                        contentDescription = stringResource(Res.string.back_button)
+                    )
+
+                    Text(
+                        text = stringResource(Res.string.back_button),
+                        modifier = Modifier.padding(horizontal = 6.dp)
+                    )
+                }
+            }
         }
     }
 }

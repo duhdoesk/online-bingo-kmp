@@ -94,8 +94,6 @@ fun ProfileScreen(
                 event = { component.uiEvent(it) },
                 onUpdateName = { coroutineScope.launch { nameBottomSheetState.show() } },
                 onUpdateMessage = { coroutineScope.launch { messageBottomSheetState.show() } },
-                onSignOut = { showSignOutDialog = true },
-                onDeleteAccount = { showDeleteAccountDialog = true },
             )
         }
     }

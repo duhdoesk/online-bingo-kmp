@@ -10,6 +10,10 @@ import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
@@ -19,14 +23,46 @@ import org.jetbrains.compose.resources.stringResource
 import themedbingo.composeapp.generated.resources.Res
 import themedbingo.composeapp.generated.resources.account
 import themedbingo.composeapp.generated.resources.delete_account
+import themedbingo.composeapp.generated.resources.delete_account_body
+import themedbingo.composeapp.generated.resources.delete_account_title
+import themedbingo.composeapp.generated.resources.exit_button
+import themedbingo.composeapp.generated.resources.sign_out_dialog_body
+import themedbingo.composeapp.generated.resources.sign_out_dialog_title
+import ui.presentation.profile.event.ProfileScreenEvent
+import ui.presentation.util.dialog.GenericActionDialog
 
 @OptIn(ExperimentalResourceApi::class)
 @Composable
 fun ProfileScreenListDataSection(
     modifier: Modifier = Modifier,
-    onUpdatePassword: () -> Unit,
-    onDeleteAccount: () -> Unit,
+    event: (event: ProfileScreenEvent) -> Unit,
 ) {
+    var showSignOutDialog by remember { mutableStateOf(false) }
+    var showDeleteAccountDialog by remember { mutableStateOf(false) }
+
+    if (showSignOutDialog) {
+        GenericActionDialog(
+            onDismiss = { showSignOutDialog = false },
+            onConfirm = {
+                showSignOutDialog = false
+                event(ProfileScreenEvent.SignOut)
+            },
+            title = Res.string.sign_out_dialog_title,
+            body = Res.string.sign_out_dialog_body,
+        )
+    }
+
+    if (showDeleteAccountDialog) {
+        GenericActionDialog(
+            onDismiss = { showDeleteAccountDialog = false },
+            onConfirm = {
+                showDeleteAccountDialog = false
+                event(ProfileScreenEvent.DeleteAccount)
+            },
+            title = Res.string.delete_account_title,
+            body = Res.string.delete_account_body,
+        )
+    }
 
     Column(
         horizontalAlignment = Alignment.Start,
@@ -48,7 +84,24 @@ fun ProfileScreenListDataSection(
             verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier
                 .fillMaxWidth()
-                .clickable { onDeleteAccount() },
+                .clickable { showSignOutDialog = true },
+        ) {
+            Text(
+                text = stringResource(Res.string.exit_button),
+                style = MaterialTheme.typography.titleMedium,
+                modifier = Modifier
+                    .padding(horizontal = 16.dp, vertical = 12.dp)
+                    .fillMaxWidth()
+            )
+        }
+
+        ProfileScreenCustomDivider()
+
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            modifier = Modifier
+                .fillMaxWidth()
+                .clickable { showDeleteAccountDialog = true },
         ) {
             Text(
                 text = stringResource(Res.string.delete_account),
