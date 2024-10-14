@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.grid.GridCells
@@ -44,6 +45,7 @@ import themedbingo.composeapp.generated.resources.yellow_ball
 @Composable
 fun RaffledItemClassic(
     raffled: List<String>,
+    isHost: Boolean = false,
     modifier: Modifier = Modifier,
 ) {
     val item = raffled.lastOrNull()
@@ -89,12 +91,15 @@ fun RaffledItemClassic(
             }
         }
 
+        if (!isHost) return@Column
+
         LazyVerticalGrid(
             columns = GridCells.Fixed(7),
             contentPadding = PaddingValues(horizontal = 8.dp),
             modifier = Modifier
                 .padding(vertical = 8.dp)
-                .fillMaxWidth(),
+                .fillMaxWidth()
+                .heightIn(max = 600.dp),
         ) {
             val numbers = (1..75).toList().map { it.toString() }
 

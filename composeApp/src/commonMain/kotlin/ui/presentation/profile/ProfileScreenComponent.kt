@@ -11,8 +11,8 @@ import domain.user.use_case.UpdateNameUseCase
 import domain.user.use_case.UpdateVictoryMessageUseCase
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.ExperimentalResourceApi
@@ -31,7 +31,7 @@ import util.componentCoroutineScope
 @OptIn(ExperimentalResourceApi::class)
 class ProfileScreenComponent(
     componentContext: ComponentContext,
-    private val userId: String,
+    private val user: Flow<User?>,
     private val onPopBack: () -> Unit,
     private val onSignOut: () -> Unit,
     private val onUpdatePicture: () -> Unit,
@@ -91,7 +91,8 @@ class ProfileScreenComponent(
      */
     private fun uiLoaded() {
         coroutineScope.launch {
-            flowUserByIdUseCase(userId).collect { user ->
+            val userId = user.first()?.id
+            flowUserByIdUseCase(userId.orEmpty()).collect { user ->
                 _uiState.update {
                     ProfileScreenUIState(
                         isLoading = false,

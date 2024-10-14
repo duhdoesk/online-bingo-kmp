@@ -10,12 +10,14 @@ import ui.presentation.room.state.auxiliar.BingoStyle
 fun RaffledPresentation(
     bingoStyle: BingoStyle,
     raffled: List<String>,
+    isHost: Boolean = false,
 ) {
     when (bingoStyle) {
         is BingoStyle.Classic -> {
             RaffledItemClassic(
                 raffled = raffled,
                 modifier = Modifier.fillMaxWidth(),
+                isHost = isHost,
             )
         }
 

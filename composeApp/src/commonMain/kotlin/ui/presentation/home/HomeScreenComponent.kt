@@ -29,6 +29,7 @@ class HomeScreenComponent(
         when (event) {
             is HomeScreenEvent.Navigate -> navigate(event.configuration)
             is HomeScreenEvent.UILoaded -> uiLoaded()
+            is HomeScreenEvent.Reload -> uiLoaded()
         }
     }
 
@@ -44,6 +45,14 @@ class HomeScreenComponent(
                             userName = collectedUser.name,
                             userPicture = collectedUser.pictureUri,
                             isSubscribed = isSubscribed,
+                            error = false,
+                        )
+                    }
+                } else {
+                    _uiState.update {
+                        it.copy(
+                            loading = false,
+                            error = true,
                         )
                     }
                 }

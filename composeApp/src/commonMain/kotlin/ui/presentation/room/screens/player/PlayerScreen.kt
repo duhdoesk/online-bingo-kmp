@@ -104,7 +104,7 @@ fun PlayerScreen(viewModel: RoomPlayerViewModel) {
             onDismiss = { viewModel.popBackDialogState.hideDialog() },
             onConfirm = {
                 viewModel.popBackDialogState.hideDialog()
-                viewModel.uiEvent(RoomPlayerEvent.PopBack)
+                viewModel.uiEvent(RoomPlayerEvent.ConfirmPopBack)
             },
             title = Res.string.pop_back_dialog_title,
             body = Res.string.pop_back_dialog_body,

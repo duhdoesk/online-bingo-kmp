@@ -1,6 +1,7 @@
 package ui.navigation
 
 import domain.room.model.BingoType
+import io.github.jan.supabase.gotrue.user.UserInfo
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -49,4 +50,7 @@ sealed class Configuration {
 
     @Serializable
     data object PaywallScreen : Configuration()
+
+    @Serializable
+    data class CreateUserScreen(val authInfo: UserInfo?): Configuration()
 }

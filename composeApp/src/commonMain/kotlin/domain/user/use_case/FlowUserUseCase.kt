@@ -7,6 +7,6 @@ import kotlinx.coroutines.flow.Flow
 class FlowUserUseCase(
     private val userRepository: UserRepository
 ) {
-    operator fun invoke(id: String): Flow<User> =
+    operator fun invoke(id: String): Flow<User?> =
         userRepository.flowUser(id)
 }

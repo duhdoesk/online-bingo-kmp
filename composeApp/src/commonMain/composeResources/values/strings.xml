@@ -38,6 +38,11 @@
     <string name="classic_bingo_type">Classic Bingo</string>
 
 
+    <!--    Create User Screen -->
+    <string name="create_user_screen_title">User Creation</string>
+    <string name="create_user_screen_body">Set up your avatar, nickname and even your victory message - it will be displayed to everyone in the winners screen every time you win a bingo!</string>
+
+
     <!--    Home Screen -->
     <string name="hot_water_software">Hot Water Software</string>
     <string name="mobile_apps_development">Mobile Apps Development</string>

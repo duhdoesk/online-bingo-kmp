@@ -1,7 +1,10 @@
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
+import org.jetbrains.compose.resources.ExperimentalResourceApi
 import ui.navigation.Child
 import ui.presentation.change_password.ChangePasswordScreen
 import ui.presentation.create_room.CreateRoomScreen
+import ui.presentation.create_user.CreateUserScreen
 import ui.presentation.forgot_password.ForgotPasswordScreen
 import ui.presentation.home.HomeScreen
 import ui.presentation.paywall.PaywallScreen
@@ -15,6 +18,8 @@ import ui.presentation.sign_up.SignUpScreen
 import ui.presentation.themes.ThemesScreen
 import ui.presentation.util.WindowInfo
 
+@ExperimentalResourceApi
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CreateScreen(
     instance: Child,
@@ -80,6 +85,10 @@ fun CreateScreen(
 
         is Child.PaywallScreen -> PaywallScreen(
             viewModel = instance.component,
+        )
+
+        is Child.CreateUserScreen -> CreateUserScreen(
+            viewModel = instance.component
         )
     }
 }

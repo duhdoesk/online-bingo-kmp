@@ -14,22 +14,26 @@ class UserRepositoryImpl(
 
     private val collection = firestore.collection("users")
 
-    override fun flowUser(id: String): Flow<User> {
+    override fun flowUser(id: String): Flow<User?> {
         return collection
             .document(id)
             .snapshots
             .map { documentSnapshot ->
-                UserDTO(
-                    id = documentSnapshot.id,
-                    name = documentSnapshot.get("name"),
-                    pictureUri = documentSnapshot.get("pictureUri"),
-                    email = documentSnapshot.get("email"),
-                    nameLastUpdated = documentSnapshot.get("nameLastUpdated"),
-                    pictureUriLastUpdated = documentSnapshot.get("pictureUriLastUpdated"),
-                    lastWinTimestamp = documentSnapshot.get("lastWinTimestamp"),
-                    victoryMessage = documentSnapshot.get("victoryMessage"),
-                    victoryMessageLastUpdated = documentSnapshot.get("victoryMessageLastUpdated"),
-                ).toModel()
+                if (documentSnapshot.exists) {
+                    UserDTO(
+                        id = documentSnapshot.id,
+                        name = documentSnapshot.get("name"),
+                        pictureUri = documentSnapshot.get("pictureUri"),
+                        email = documentSnapshot.get("email"),
+                        nameLastUpdated = documentSnapshot.get("nameLastUpdated"),
+                        pictureUriLastUpdated = documentSnapshot.get("pictureUriLastUpdated"),
+                        lastWinTimestamp = documentSnapshot.get("lastWinTimestamp"),
+                        victoryMessage = documentSnapshot.get("victoryMessage"),
+                        victoryMessageLastUpdated = documentSnapshot.get("victoryMessageLastUpdated"),
+                    ).toModel()
+                } else {
+                    null
+                }
             }
     }
 
@@ -63,6 +67,8 @@ class UserRepositoryImpl(
         id: String,
         email: String,
         name: String,
+        pictureUri: String,
+        victoryMessage: String,
     ): Result<Unit> {
         try {
             collection
@@ -71,8 +77,8 @@ class UserRepositoryImpl(
                     data = hashMapOf(
                         "name" to name,
                         "email" to email,
-                        "pictureUri" to "https://i.imgur.com/DujcYDE.jpg",
-                        "victoryMessage" to "O Bingo Temático é demais!"
+                        "pictureUri" to pictureUri,
+                        "victoryMessage" to victoryMessage,
                     )
                 )
             return Result.success(Unit)

@@ -9,21 +9,21 @@ class SignInWithGoogleUseCase(
     private val supabaseAuthService: SupabaseAuthService,
     private val userRepository: UserRepository,
 ) {
-    suspend operator fun invoke() {
-        supabaseAuthService.signInWithGoogle()
-
-        val sessionStatus = supabaseAuthService
-            .supabaseClient
-            .auth
-            .sessionStatus
-            .value
-
-        if (sessionStatus is SessionStatus.Authenticated && sessionStatus.isNew) {
-            userRepository.createUser(
-                id = sessionStatus.session.user?.id.orEmpty(),
-                email = sessionStatus.session.user?.email.orEmpty(),
-                name = "Amigo Temático",
-            )
-        }
-    }
+//    suspend operator fun invoke() {
+//        supabaseAuthService.signInWithGoogle()
+//
+//        val sessionStatus = supabaseAuthService
+//            .supabaseClient
+//            .auth
+//            .sessionStatus
+//            .value
+//
+//        if (sessionStatus is SessionStatus.Authenticated && sessionStatus.isNew) {
+//            userRepository.createUser(
+//                id = sessionStatus.session.user?.id.orEmpty(),
+//                email = sessionStatus.session.user?.email.orEmpty(),
+//                name = "Amigo Temático",
+//            )
+//        }
+//    }
 }

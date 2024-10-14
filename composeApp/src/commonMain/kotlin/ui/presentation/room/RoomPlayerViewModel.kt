@@ -8,6 +8,7 @@ import domain.room.use_case.FlowRoomByIdUseCase
 import domain.room.use_case.GetBingoStyleUseCase
 import domain.user.model.User
 import domain.user.use_case.GetRoomPlayersUseCase
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.combine
@@ -25,7 +26,7 @@ import util.componentCoroutineScope
 
 class RoomPlayerViewModel(
     private val componentContext: ComponentContext,
-    private val user: User?,
+    private val user: Flow<User?>,
     private val roomId: String,
     private val onPopBack: () -> Unit,
 ) : ComponentContext by componentContext, KoinComponent {
@@ -69,7 +70,7 @@ class RoomPlayerViewModel(
             RoomPlayerEvent.CallBingo -> callBingo()
             RoomPlayerEvent.GetNewCard -> updateCard()
             RoomPlayerEvent.PopBack -> popBackDialogState.showDialog(null)
-            RoomPlayerEvent.ConfirmPopBack -> { onPopBack() }
+            RoomPlayerEvent.ConfirmPopBack -> onPopBack()
             RoomPlayerEvent.UiLoaded -> uiLoaded()
         }
     }
@@ -79,53 +80,57 @@ class RoomPlayerViewModel(
      */
     private fun uiLoaded() {
         coroutineScope.launch {
+            user.collect { collectedUser ->
+                val userId = collectedUser?.id
+                userId?.let {
+                    combine(
+                        flowRoomByIdUseCase(roomId),
+                        getRoomPlayersUseCase(roomId),
+                        flowCardByRoomAndUserIDUseCase(roomId, userId),
+                    ) { room, players, card ->
 
-            combine(
-                flowRoomByIdUseCase(roomId),
-                getRoomPlayersUseCase(roomId),
-                flowCardByRoomAndUserIDUseCase(roomId, user?.id.orEmpty()),
-            ) { room, players, card ->
+                        val cardState =
+                            checkCardState(card?.characters)
 
-                val dataState =
-                    if (user == null) DataState.ERROR
-                    else DataState.SUCCESS
+                        if (cardState is CardState.Error) {
+                            updateCard(userId)
+                            return@combine RoomPlayerState.INITIAL.copy(dataState = DataState.ERROR)
+                        }
 
-                val cardState =
-                    checkCardState(card?.characters)
+                        val hasCalled = hasCalledBingo(room.winners)
 
-                if (cardState is CardState.Error) { updateCard() }
+                        val canCall = canCallBingo(
+                            cardState = cardState,
+                            raffledCharacters = room.raffled,
+                            hasCalledYet = hasCalled,
+                        )
 
-                val hasCalled = hasCalledBingo(room.winners)
+                        val bingoStyle = getBingoStyleUseCase(
+                            bingoType = room.type,
+                            themeId = room.themeId,
+                        ).getOrNull()
 
-                val canCall = canCallBingo(
-                    cardState = cardState,
-                    raffledCharacters = room.raffled,
-                    hasCalledYet = hasCalled,
-                )
+                        if (bingoStyle == null)
+                            return@combine RoomPlayerState.INITIAL.copy(dataState = DataState.ERROR)
 
-                val bingoStyle = getBingoStyleUseCase(
-                    bingoType = room.type,
-                    themeId = room.themeId,
-                ).getOrNull()
-
-                if (bingoStyle == null)
-                    return@combine RoomPlayerState.INITIAL.copy(dataState = DataState.ERROR)
-
-                RoomPlayerState(
-                    dataState = dataState,
-                    bingoStyle = bingoStyle,
-                    bingoState = room.state,
-                    roomName = room.name,
-                    players = players,
-                    winners = getWinners(ids = room.winners, players = players),
-                    maxWinners = room.maxWinners,
-                    raffledItems = room.raffled,
-                    canCallBingo = canCall,
-                    hasCalledBingo = hasCalled,
-                    cardState = cardState,
-                )
-            }.collect { state ->
-                _screenState.update { state }
+                        RoomPlayerState(
+                            dataState = DataState.SUCCESS,
+                            bingoStyle = bingoStyle,
+                            bingoState = room.state,
+                            roomName = room.name,
+                            players = players,
+                            winners = getWinners(ids = room.winners, players = players),
+                            maxWinners = room.maxWinners,
+                            raffledItems = room.raffled,
+                            canCallBingo = canCall,
+                            hasCalledBingo = hasCalled,
+                            cardState = cardState,
+                            userId = userId,
+                        )
+                    }.collect { state ->
+                        _screenState.update { state }
+                    }
+                }
             }
         }
     }
@@ -137,7 +142,7 @@ class RoomPlayerViewModel(
         coroutineScope.launch {
             callBingoUseCase(
                 roomId = roomId,
-                userId = user?.id.orEmpty(),
+                userId = screenState.value.userId.orEmpty(),
             ).onFailure { exception -> errorDialogState.showDialog(exception.message) }
         }
     }
@@ -157,6 +162,7 @@ class RoomPlayerViewModel(
                 if (cardState.items.isEmpty()) return false
                 cardState.items.forEach { character -> if (character !in raffledCharacters) return false }
             }
+
             else -> return false
         }
 
@@ -183,20 +189,32 @@ class RoomPlayerViewModel(
      * Checks if player has called bingo already
      */
     private fun hasCalledBingo(winners: List<String>): Boolean {
-        if (user == null) return false
-        return winners.contains(user.id)
+        if (screenState.value.userId == null) return false
+        return winners.contains(screenState.value.userId)
     }
 
     /**
      * Get a new random card
      */
+    private fun updateCard(userId: String) {
+        coroutineScope.launch {
+            val newCard = getNewCard()
+
+            setCardByRoomAndUserIDUseCase(
+                roomId = roomId,
+                userId = userId,
+                charactersIDs = newCard,
+            ).onFailure { exception -> errorDialogState.showDialog(exception.message) }
+        }
+    }
+
     private fun updateCard() {
         coroutineScope.launch {
             val newCard = getNewCard()
 
             setCardByRoomAndUserIDUseCase(
                 roomId = roomId,
-                userId = user?.id.orEmpty(),
+                userId = screenState.value.userId.orEmpty(),
                 charactersIDs = newCard,
             ).onFailure { exception -> errorDialogState.showDialog(exception.message) }
         }
@@ -214,6 +232,7 @@ class RoomPlayerViewModel(
 
                 return newCard.map { it.toString() }
             }
+
             is BingoStyle.Themed -> {
                 val items = style.characters.map { it.id }
                 return items.shuffled().subList(0, 9)

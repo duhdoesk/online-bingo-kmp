@@ -37,6 +37,11 @@
     <string name="classic_bingo_type">Bingo Clássico</string>
 
 
+    <!--    Create User Screen -->
+    <string name="create_user_screen_title">Tela de Criação</string>
+    <string name="create_user_screen_body">Defina seu avatar, seu apelido e também o seu grito de vitória - ele aparecerá para todos na tela de vencedores sempre que você ganhar um bingo!</string>
+
+
     <!--    Home Screen -->
     <string name="hot_water_software">Hot Water Software</string>
     <string name="mobile_apps_development">Mobile Apps Development</string>

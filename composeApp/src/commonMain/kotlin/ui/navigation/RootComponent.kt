@@ -13,21 +13,19 @@ import com.revenuecat.purchases.kmp.Purchases
 import com.revenuecat.purchases.kmp.configure
 import domain.auth.supabase.SupabaseAuthService
 import domain.billing.SubscribeToUserSubscriptionData
-import domain.user.use_case.CheckIfIsNewUserUseCase
 import domain.user.use_case.GetUserByIdUseCase
 import getPlatform
 import io.github.jan.supabase.gotrue.SessionStatus
 import io.github.jan.supabase.gotrue.auth
-import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 import ui.presentation.change_password.ChangePasswordScreenComponent
 import ui.presentation.create_room.CreateRoomScreenComponent
+import ui.presentation.create_user.CreateUserViewModel
 import ui.presentation.forgot_password.ForgotPasswordScreenComponent
 import ui.presentation.home.HomeScreenComponent
 import ui.presentation.join_room.JoinScreenComponent
@@ -52,7 +50,6 @@ class RootComponent(
      */
     private val supabaseAuthService by inject<SupabaseAuthService>()
     private val getUserByIdUseCase by inject<GetUserByIdUseCase>()
-    private val checkIfIsNewUserUseCase by inject<CheckIfIsNewUserUseCase>()
     private val subscribeToUserSubscriptionData by inject<SubscribeToUserSubscriptionData>()
 
     /**
@@ -72,19 +69,12 @@ class RootComponent(
         when (status) {
             is SessionStatus.Authenticated -> {
                 val authInfo = status.session.user
-                authInfo?.run { checkIfIsNewUserUseCase(userInfo = authInfo) }
                 getUserByIdUseCase(authInfo?.id.orEmpty()).getOrNull()
             }
 
             else -> null
         }
     }
-
-    val user = _user.stateIn(
-        coroutineScope,
-        SharingStarted.WhileSubscribed(),
-        null
-    )
 
     /**
      * Decompose Navigation Manager
@@ -111,7 +101,7 @@ class RootComponent(
             Purchases.configure(apiKey = getPlatform().revCatApiKey)
             subscribeToUserSubscriptionData.setupDelegate()
 
-            user.filterNotNull().distinctUntilChanged().collect { collectedUser ->
+            _user.filterNotNull().distinctUntilChanged().collect { collectedUser ->
                 Purchases.sharedInstance.logIn(
                     newAppUserID = collectedUser.id,
                     onError = {},
@@ -125,7 +115,20 @@ class RootComponent(
      * UI representation of auth methods
      */
     private fun signIn() {
-        navigation.replaceCurrent(Configuration.HomeScreen)
+        coroutineScope.launch {
+            when (val status = sessionStatus.value) {
+                is SessionStatus.Authenticated -> {
+                    val thisUser = getUserByIdUseCase(status.session.user?.id.orEmpty()).getOrNull()
+
+                    if (thisUser != null) navigation.replaceCurrent(Configuration.HomeScreen)
+                    else navigation.replaceCurrent(Configuration.CreateUserScreen(status.session.user))
+                }
+
+                else -> {
+                    return@launch
+                }
+            }
+        }
     }
 
     private fun signOut() {
@@ -143,7 +146,7 @@ class RootComponent(
             Configuration.HomeScreen -> Child.HomeScreen(
                 HomeScreenComponent(
                     componentContext = context,
-                    user = user,
+                    user = _user,
                     onNavigate = { receivedConfig ->
                         navigation.pushNew(configuration = receivedConfig)
                     }
@@ -160,7 +163,7 @@ class RootComponent(
             is Configuration.CreateScreen -> Child.CreateScreen(
                 CreateRoomScreenComponent(
                     componentContext = context,
-                    user = user,
+                    user = _user,
                     bingoType = configuration.bingoType,
                     onPopBack = { navigation.pop() },
                     onCreateRoom = { receivedConfig ->
@@ -174,7 +177,7 @@ class RootComponent(
                     componentContext = context,
                     onPopBack = { navigation.pop() },
                     roomId = configuration.roomId,
-                    user = user.value,
+                    user = _user,
                 )
             )
 
@@ -183,7 +186,7 @@ class RootComponent(
                     componentContext = context,
                     roomId = configuration.roomId,
                     onPopBack = { navigation.pop() },
-                    user = user.value,
+                    user = _user,
                 )
             )
 
@@ -192,7 +195,7 @@ class RootComponent(
                     componentContext = context,
                     onPopBack = { navigation.pop() },
                     roomId = configuration.roomId,
-                    user = user.value,
+                    user = _user,
                 )
             )
 
@@ -201,14 +204,14 @@ class RootComponent(
                     componentContext = context,
                     roomId = configuration.roomId,
                     onPopBack = { navigation.pop() },
-                    user = user.value,
+                    user = _user,
                 )
             )
 
             is Configuration.JoinScreen -> Child.JoinScreen(
                 JoinScreenComponent(
                     componentContext = context,
-                    user = user,
+                    user = _user,
                     bingoType = configuration.bingoType,
                     onPopBack = { navigation.pop() },
                     onJoinRoom = { config -> navigation.replaceCurrent(configuration = config) },
@@ -226,7 +229,7 @@ class RootComponent(
             Configuration.ProfileScreen -> Child.ProfileScreen(
                 ProfileScreenComponent(
                     componentContext = context,
-                    userId = user.value?.id.orEmpty(),
+                    user = _user,
                     onPopBack = { navigation.pop() },
                     onSignOut = { signOut() },
                     onUpdatePicture = {
@@ -242,7 +245,7 @@ class RootComponent(
                 SignInScreenComponent(
                     componentContext = context,
                     onSignIn = { signIn() },
-                    user = user,
+                    user = _user,
                     supabaseClient = supabaseClient,
                 )
             )
@@ -265,7 +268,7 @@ class RootComponent(
             Configuration.EditProfilePictureScreen -> Child.EditProfilePictureScreen(
                 EditProfilePictureScreenComponent(
                     componentContext = context,
-                    user = user,
+                    user = _user,
                     onCancel = { navigation.pop() },
                     onPictureSaved = { navigation.pop() }
                 )
@@ -282,6 +285,15 @@ class RootComponent(
                 PaywallScreenViewModel(
                     componentContext = context,
                     onDismiss = { navigation.pop() },
+                )
+            )
+
+            is Configuration.CreateUserScreen -> Child.CreateUserScreen(
+                CreateUserViewModel(
+                    componentContext = context,
+                    sessionStatus = sessionStatus,
+                    onSignOut = { navigation.replaceAll(Configuration.SignInScreen) },
+                    onUserCreated = { navigation.pushNew(Configuration.HomeScreen) },
                 )
             )
         }

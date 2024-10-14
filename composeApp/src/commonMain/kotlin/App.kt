@@ -13,6 +13,7 @@ import com.arkivanov.decompose.extensions.compose.stack.Children
 import com.arkivanov.decompose.extensions.compose.stack.animation.slide
 import com.arkivanov.decompose.extensions.compose.stack.animation.stackAnimation
 import com.arkivanov.decompose.extensions.compose.subscribeAsState
+import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.koin.compose.KoinContext
 import ui.navigation.RootComponent
@@ -20,6 +21,7 @@ import ui.presentation.util.getAsyncImageLoader
 import ui.presentation.util.rememberWindowInfo
 import ui.theme.AppTheme
 
+@ExperimentalResourceApi
 @OptIn(ExperimentalCoilApi::class)
 @Composable
 @Preview

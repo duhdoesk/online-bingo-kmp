@@ -9,6 +9,11 @@ import ui.presentation.room.state.auxiliar.DataState
 data class RoomPlayerState(
 
     /**
+     * Holds the User ID
+     */
+    val userId: String?,
+
+    /**
      * Represents the data loading state
      * */
     val dataState: DataState,
@@ -76,6 +81,7 @@ data class RoomPlayerState(
             canCallBingo = false,
             hasCalledBingo = false,
             cardState = CardState.Loading,
+            userId = null
         )
     }
 }

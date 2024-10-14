@@ -9,6 +9,7 @@ import domain.room.use_case.UpdateRoomStateUseCase
 import domain.user.model.User
 import domain.user.use_case.GetRoomPlayersUseCase
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.combine
@@ -24,7 +25,7 @@ import util.componentCoroutineScope
 
 class RoomHostViewModel(
     private val componentContext: ComponentContext,
-    private val user: User?,
+    private val user: Flow<User?>,
     private val roomId: String,
     private val onPopBack: () -> Unit,
 ) : ComponentContext by componentContext, KoinComponent {
@@ -183,7 +184,7 @@ class RoomHostViewModel(
             raffleNextItemUseCase(roomId = roomId, item = nextItem)
 
             if (canRaffleNext(raffled = raffled, style = style)) {
-                delay(1000)
+                delay(500)
                 canRaffleNext.update { true }
             }
         }
