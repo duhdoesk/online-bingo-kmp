@@ -245,8 +245,8 @@ class RootComponent(
                 SignInScreenComponent(
                     componentContext = context,
                     onSignIn = { signIn() },
-                    user = _user,
                     supabaseClient = supabaseClient,
+                    sessionStatus = sessionStatus,
                 )
             )
 

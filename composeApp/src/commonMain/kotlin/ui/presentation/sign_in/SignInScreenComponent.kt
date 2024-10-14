@@ -1,8 +1,8 @@
 package ui.presentation.sign_in
 
 import com.arkivanov.decompose.ComponentContext
-import domain.user.model.User
 import io.github.jan.supabase.SupabaseClient
+import io.github.jan.supabase.gotrue.SessionStatus
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -16,7 +16,7 @@ import util.componentCoroutineScope
 class SignInScreenComponent(
     componentContext: ComponentContext,
     val supabaseClient: SupabaseClient,
-    private val user: Flow<User?>,
+    private val sessionStatus: Flow<SessionStatus>,
     private val onSignIn: () -> Unit,
 ) : ComponentContext by componentContext, KoinComponent {
 
@@ -46,9 +46,11 @@ class SignInScreenComponent(
      */
     private fun uiLoaded() {
         coroutineScope.launch {
-            user.collect { collectedUser ->
-                if (collectedUser != null) onSignIn()
-                else _uiState.update { state -> state.copy(isLoading = false) }
+            sessionStatus.collect { status ->
+                when (status) {
+                    is SessionStatus.Authenticated -> onSignIn()
+                    else -> _uiState.update { state -> state.copy(isLoading = false) }
+                }
             }
         }
     }
