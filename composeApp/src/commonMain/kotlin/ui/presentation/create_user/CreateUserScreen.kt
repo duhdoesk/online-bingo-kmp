@@ -76,9 +76,13 @@ fun CreateUserScreen(viewModel: CreateUserViewModel) {
              * Show error if there is any
              */
             if (viewModel.errorDialogState.isVisible.value) {
+                val castString =
+                    try { viewModel.errorDialogState.dialogData as String? }
+                    catch(e: Exception) { null }
+
                 GenericErrorDialog(
                     onDismiss = { viewModel.errorDialogState.hideDialog() },
-                    body = viewModel.errorDialogState.dialogData as String?,
+                    body = castString,
                 )
             }
         }

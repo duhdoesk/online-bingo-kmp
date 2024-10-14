@@ -1,6 +1,7 @@
 package ui.presentation.create_user
 
 import com.arkivanov.decompose.ComponentContext
+import domain.auth.supabase.use_case.SupabaseSignOutUseCase
 import domain.user.use_case.CreateUserUseCase
 import domain.user.use_case.GetProfilePicturesUseCase
 import io.github.jan.supabase.gotrue.SessionStatus
@@ -35,6 +36,7 @@ class CreateUserViewModel(
      */
     private val createUserUseCase: CreateUserUseCase by inject()
     private val getProfilePicturesUseCase: GetProfilePicturesUseCase by inject()
+    private val signOutUseCase by inject<SupabaseSignOutUseCase>()
 
     /**
      * Screen State holder
@@ -53,7 +55,7 @@ class CreateUserViewModel(
     fun uiEvent(event: CreateUserEvent) {
         when (event) {
             CreateUserEvent.CreateUser -> createUser()
-            CreateUserEvent.SignOut -> onSignOut()
+            CreateUserEvent.SignOut -> signOut()
             CreateUserEvent.UiLoaded -> uiLoaded()
             is CreateUserEvent.UpdateName -> updateName(event.name)
             is CreateUserEvent.UpdatePicture -> updatePicture(event.pictureUri)
@@ -82,13 +84,7 @@ class CreateUserViewModel(
                     }
 
                     else -> {
-                        errorDialogState.showDialog("User is not authenticated")
-                        _screenState.update {
-                            it.copy(
-                                profilePictures = pics,
-                                processing = false
-                            )
-                        }
+                        onSignOut()
                     }
                 }
             }.collect()
@@ -140,5 +136,11 @@ class CreateUserViewModel(
 
     private fun updateName(name: String) {
         _screenState.update { it.copy(name = name) }
+    }
+
+    private fun signOut() {
+        coroutineScope.launch {
+            signOutUseCase()
+        }
     }
 }

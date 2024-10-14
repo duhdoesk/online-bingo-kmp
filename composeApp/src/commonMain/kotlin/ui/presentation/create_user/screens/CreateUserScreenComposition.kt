@@ -25,6 +25,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -47,7 +48,10 @@ import org.jetbrains.compose.resources.stringResource
 import themedbingo.composeapp.generated.resources.Res
 import themedbingo.composeapp.generated.resources.create_button
 import themedbingo.composeapp.generated.resources.edit_button
+import themedbingo.composeapp.generated.resources.exit_button
 import themedbingo.composeapp.generated.resources.nickname
+import themedbingo.composeapp.generated.resources.sign_out_dialog_body
+import themedbingo.composeapp.generated.resources.sign_out_dialog_title
 import themedbingo.composeapp.generated.resources.update_nickname_body
 import themedbingo.composeapp.generated.resources.update_nickname_title
 import themedbingo.composeapp.generated.resources.update_victory_body
@@ -58,6 +62,7 @@ import ui.presentation.create_user.event.CreateUserEvent
 import ui.presentation.create_user.state.CreateUserState
 import ui.presentation.profile.screens.component.ProfileScreenStringDataSection
 import ui.presentation.util.bottom_sheet.UpdateBottomSheet
+import ui.presentation.util.dialog.GenericActionDialog
 
 @ExperimentalResourceApi
 @ExperimentalMaterial3Api
@@ -82,6 +87,8 @@ fun CreateUserScreenComposition(
 
     var updatePictureVisible by remember { mutableStateOf(false) }
     val updatePictureState = rememberModalBottomSheetState(true)
+
+    var exitConfirmationVisible by remember { mutableStateOf(false) }
 
     Surface {
         Column(
@@ -170,6 +177,16 @@ fun CreateUserScreenComposition(
             ) {
                 Text(stringResource(Res.string.create_button))
             }
+
+            Spacer(Modifier.height(8.dp))
+
+            TextButton(
+                onClick = { exitConfirmationVisible = true },
+                modifier = Modifier.width(200.dp),
+                enabled = true,
+            ) {
+                Text(stringResource(Res.string.exit_button))
+            }
         }
     }
 
@@ -229,5 +246,17 @@ fun CreateUserScreenComposition(
                 }
             )
         }
+    }
+
+    if (exitConfirmationVisible) {
+        GenericActionDialog(
+            onDismiss = { exitConfirmationVisible = false },
+            onConfirm = {
+                exitConfirmationVisible = false
+                event(CreateUserEvent.SignOut)
+            },
+            title = Res.string.sign_out_dialog_title,
+            body = Res.string.sign_out_dialog_body,
+        )
     }
 }
