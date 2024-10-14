@@ -23,7 +23,6 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.rememberModalBottomSheetState
@@ -47,6 +46,8 @@ import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.stringResource
 import themedbingo.composeapp.generated.resources.Res
 import themedbingo.composeapp.generated.resources.create_button
+import themedbingo.composeapp.generated.resources.create_user_screen_body
+import themedbingo.composeapp.generated.resources.create_user_screen_title
 import themedbingo.composeapp.generated.resources.edit_button
 import themedbingo.composeapp.generated.resources.exit_button
 import themedbingo.composeapp.generated.resources.nickname
@@ -90,103 +91,104 @@ fun CreateUserScreenComposition(
 
     var exitConfirmationVisible by remember { mutableStateOf(false) }
 
-    Surface {
-        Column(
-            horizontalAlignment = Alignment.CenterHorizontally,
-            modifier = Modifier.sizeIn(maxWidth = 600.dp, maxHeight = 1000.dp),
+    Column(
+        horizontalAlignment = Alignment.CenterHorizontally,
+        modifier = Modifier
+            .sizeIn(maxWidth = 600.dp, maxHeight = 1000.dp)
+            .verticalScroll(rememberScrollState()),
+    ) {
+        Text(
+            text = stringResource(Res.string.create_user_screen_title),
+            style = MaterialTheme.typography.titleLarge,
+            fontWeight = FontWeight.Bold,
+            textAlign = TextAlign.Center,
+            modifier = Modifier
+                .padding(horizontal = 16.dp)
+                .fillMaxWidth()
+        )
+
+        Text(
+            text = stringResource(Res.string.create_user_screen_body),
+            textAlign = TextAlign.Center,
+            modifier = Modifier
+                .padding(horizontal = 16.dp)
+                .fillMaxWidth()
+        )
+
+        Spacer(Modifier.height(20.dp))
+
+        Box(
+            modifier = Modifier
+                .padding(top = 16.dp)
         ) {
-            Text(
-                text = "Tela de Criação",
-                style = MaterialTheme.typography.titleLarge,
-                fontWeight = FontWeight.Bold,
-                textAlign = TextAlign.Center,
-                modifier = Modifier.padding(horizontal = 16.dp).fillMaxWidth()
-            )
-
-            Text(
-                text = "Defina seu apelido, seu avatar e seu até grito de vitória - ele aparecerá na tela de vencedores sempre que você ganhar um bingo!",
-                textAlign = TextAlign.Center,
+            AsyncImage(
+                model = screenState.pictureUri,
+                contentDescription = stringResource(Res.string.user_avatar),
                 modifier = Modifier
-                    .padding(horizontal = 16.dp)
-                    .fillMaxWidth()
-                    .verticalScroll(rememberScrollState())
+                    .size(160.dp)
+                    .clip(CircleShape),
+                contentScale = ContentScale.Crop,
+                clipToBounds = true,
             )
 
-            Spacer(Modifier.height(40.dp))
-
-            Box(
-                modifier = Modifier
-                    .padding(top = 16.dp)
-            ) {
-                AsyncImage(
-                    model = screenState.pictureUri,
-                    contentDescription = stringResource(Res.string.user_avatar),
-                    modifier = Modifier
-                        .size(160.dp)
-                        .clip(CircleShape),
-                    contentScale = ContentScale.Crop,
-                    clipToBounds = true,
-                )
-
-                IconButton(
-                    onClick = { updatePictureVisible = true },
-                    enabled = true,
-                    modifier = Modifier
-                        .align(Alignment.BottomEnd),
-                    colors = IconButtonDefaults.iconButtonColors().copy(
-                        containerColor = MaterialTheme.colorScheme.primary,
-                        contentColor = MaterialTheme.colorScheme.onPrimary,
-                    ),
-                    content = {
-                        Icon(
-                            imageVector = Icons.Default.Edit,
-                            contentDescription = stringResource(Res.string.edit_button)
-                        )
-                    }
-                )
-            }
-
-            Spacer(Modifier.height(40.dp))
-
-            ProfileScreenStringDataSection(
-                label = Res.string.nickname,
-                data = screenState.name,
-                lastEditTimestamp = Timestamp.now(),
-                editable = true,
-                onEdit = { updateNameVisible = true },
-                modifier = Modifier.fillMaxWidth(),
-            )
-
-            Spacer(Modifier.height(48.dp))
-
-            ProfileScreenStringDataSection(
-                label = Res.string.victory_message,
-                data = screenState.message,
-                lastEditTimestamp = Timestamp.now(),
-                editable = true,
-                onEdit = { updateMessageVisible = true },
-                modifier = Modifier.fillMaxWidth(),
-            )
-
-            Spacer(Modifier.height(48.dp))
-
-            Button(
-                onClick = { event(CreateUserEvent.CreateUser) },
-                modifier = Modifier.width(200.dp),
-                enabled = true, //todo(): button logic
-            ) {
-                Text(stringResource(Res.string.create_button))
-            }
-
-            Spacer(Modifier.height(8.dp))
-
-            TextButton(
-                onClick = { exitConfirmationVisible = true },
-                modifier = Modifier.width(200.dp),
+            IconButton(
+                onClick = { updatePictureVisible = true },
                 enabled = true,
-            ) {
-                Text(stringResource(Res.string.exit_button))
-            }
+                modifier = Modifier
+                    .align(Alignment.BottomEnd),
+                colors = IconButtonDefaults.iconButtonColors().copy(
+                    containerColor = MaterialTheme.colorScheme.primary,
+                    contentColor = MaterialTheme.colorScheme.onPrimary,
+                ),
+                content = {
+                    Icon(
+                        imageVector = Icons.Default.Edit,
+                        contentDescription = stringResource(Res.string.edit_button)
+                    )
+                }
+            )
+        }
+
+        Spacer(Modifier.height(40.dp))
+
+        ProfileScreenStringDataSection(
+            label = Res.string.nickname,
+            data = screenState.name,
+            lastEditTimestamp = Timestamp.now(),
+            editable = true,
+            onEdit = { updateNameVisible = true },
+            modifier = Modifier.fillMaxWidth(),
+        )
+
+        Spacer(Modifier.height(48.dp))
+
+        ProfileScreenStringDataSection(
+            label = Res.string.victory_message,
+            data = screenState.message,
+            lastEditTimestamp = Timestamp.now(),
+            editable = true,
+            onEdit = { updateMessageVisible = true },
+            modifier = Modifier.fillMaxWidth(),
+        )
+
+        Spacer(Modifier.height(48.dp))
+
+        Button(
+            onClick = { event(CreateUserEvent.CreateUser) },
+            modifier = Modifier.width(200.dp),
+            enabled = screenState.canProceed,
+        ) {
+            Text(stringResource(Res.string.create_button))
+        }
+
+        Spacer(Modifier.height(8.dp))
+
+        TextButton(
+            onClick = { exitConfirmationVisible = true },
+            modifier = Modifier.width(200.dp),
+            enabled = true,
+        ) {
+            Text(stringResource(Res.string.exit_button))
         }
     }
 

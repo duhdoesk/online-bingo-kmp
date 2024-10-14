@@ -128,14 +128,29 @@ class CreateUserViewModel(
 
     private fun updateMessage(message: String) {
         _screenState.update { it.copy(message = message) }
+        checkIfCanProceed()
     }
 
     private fun updatePicture(pictureUri: String) {
         _screenState.update { it.copy(pictureUri = pictureUri) }
+        checkIfCanProceed()
     }
 
     private fun updateName(name: String) {
         _screenState.update { it.copy(name = name) }
+        checkIfCanProceed()
+    }
+
+    private fun checkIfCanProceed() {
+        val state = screenState.value
+
+        val lengths = listOf(
+            state.name.length,
+            state.message.length,
+            state.message.length
+        )
+
+        _screenState.update { it.copy(canProceed = (lengths.min() >= 4)) }
     }
 
     private fun signOut() {

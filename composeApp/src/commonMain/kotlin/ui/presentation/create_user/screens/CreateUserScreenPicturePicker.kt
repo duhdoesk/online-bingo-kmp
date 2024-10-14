@@ -77,11 +77,11 @@ fun CreateUserScreenPicturePicker(
 
             Row(
                 horizontalArrangement = Arrangement.Center,
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier.fillMaxWidth().padding(bottom = 16.dp),
             ) {
                 Button(
                     onClick = { hide() },
-                    modifier = Modifier.padding(16.dp).width(200.dp)
+                    modifier = Modifier.padding(12.dp).width(200.dp)
                 ) {
                     Text(stringResource(Res.string.confirm_button))
                 }

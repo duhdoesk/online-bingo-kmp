@@ -146,8 +146,8 @@ android {
         applicationId = "com.duscaranari.themedbingocardsgenerator"
         minSdk = libs.versions.android.minSdk.get().toInt()
         targetSdk = libs.versions.android.targetSdk.get().toInt()
-        versionCode = 38
-        versionName = "6.0"
+        versionCode = 41
+        versionName = "6.1"
     }
     packaging {
         resources {

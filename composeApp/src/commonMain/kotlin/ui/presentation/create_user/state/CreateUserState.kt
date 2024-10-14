@@ -6,28 +6,24 @@ import io.github.jan.supabase.gotrue.user.UserInfo
 
 data class CreateUserState(
     val processing: Boolean,
-    val mode: CreateUserStateMode,
     val name: String,
     val message: String,
     val pictureUri: String,
     val profilePictures: ProfilePictures?,
-    val userInfo: UserInfo?
+    val userInfo: UserInfo?,
+    val canProceed: Boolean,
 ) {
     companion object {
         val IDLE = CreateUserState(
             processing = true,
-            mode = CreateUserStateMode.GENERAL,
             name = "",
             message = getLocalizedMessage(),
             pictureUri = getRandomPictureUri(),
             profilePictures = null,
             userInfo = null,
+            canProceed = false,
         )
     }
-}
-
-enum class CreateUserStateMode {
-    GENERAL, PICTURE
 }
 
 private fun getLocalizedName(): String {

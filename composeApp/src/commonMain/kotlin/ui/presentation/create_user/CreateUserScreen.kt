@@ -43,13 +43,14 @@ fun CreateUserScreen(viewModel: CreateUserViewModel) {
     /**
      * Screen composing
      */
-    Scaffold(modifier = Modifier.imePadding()) { innerPadding ->
+    Scaffold(
+        modifier = Modifier.imePadding()
+    ) { innerPadding ->
         Box(
             contentAlignment = Alignment.Center,
             modifier = Modifier
                 .padding(innerPadding)
                 .consumeWindowInsets(innerPadding)
-                .systemBarsPadding()
                 .fillMaxSize(),
         ) {
             CreateUserScreenComposition(
