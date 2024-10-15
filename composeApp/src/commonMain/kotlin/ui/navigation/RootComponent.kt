@@ -31,7 +31,6 @@ import ui.presentation.home.HomeScreenComponent
 import ui.presentation.join_room.JoinScreenComponent
 import ui.presentation.paywall.PaywallScreenViewModel
 import ui.presentation.profile.ProfileScreenComponent
-import ui.presentation.profile.picture.EditProfilePictureScreenComponent
 import ui.presentation.room.RoomHostViewModel
 import ui.presentation.room.RoomPlayerViewModel
 import ui.presentation.sign_in.SignInScreenComponent
@@ -232,12 +231,6 @@ class RootComponent(
                     user = _user,
                     onPopBack = { navigation.pop() },
                     onSignOut = { signOut() },
-                    onUpdatePicture = {
-                        navigation.pushNew(configuration = Configuration.EditProfilePictureScreen)
-                    },
-                    onUpdatePassword = {
-                        navigation.pushNew(configuration = Configuration.ChangePasswordScreen)
-                    }
                 )
             )
 
@@ -262,15 +255,6 @@ class RootComponent(
                 ForgotPasswordScreenComponent(
                     componentContext = context,
                     onPopBack = { navigation.pop() },
-                )
-            )
-
-            Configuration.EditProfilePictureScreen -> Child.EditProfilePictureScreen(
-                EditProfilePictureScreenComponent(
-                    componentContext = context,
-                    user = _user,
-                    onCancel = { navigation.pop() },
-                    onPictureSaved = { navigation.pop() }
                 )
             )
 

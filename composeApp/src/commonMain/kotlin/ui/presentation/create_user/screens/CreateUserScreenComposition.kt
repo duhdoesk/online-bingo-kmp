@@ -3,10 +3,8 @@ package ui.presentation.create_user.screens
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.ime
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.sizeIn
@@ -22,7 +20,6 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.rememberModalBottomSheetState
@@ -63,6 +60,7 @@ import ui.presentation.create_user.event.CreateUserEvent
 import ui.presentation.create_user.state.CreateUserState
 import ui.presentation.profile.screens.component.ProfileScreenStringDataSection
 import ui.presentation.util.bottom_sheet.UpdateBottomSheet
+import ui.presentation.util.bottom_sheet.UpdatePictureBottomSheet
 import ui.presentation.util.dialog.GenericActionDialog
 
 @ExperimentalResourceApi
@@ -232,22 +230,19 @@ fun CreateUserScreenComposition(
     }
 
     if (updatePictureVisible) {
-        ModalBottomSheet(
-            onDismissRequest = { updatePictureVisible = false },
+        UpdatePictureBottomSheet(
             sheetState = updatePictureState,
-            windowInsets = WindowInsets.ime,
-        ) {
-            CreateUserScreenPicturePicker(
-                screenState = screenState,
-                event = { event -> event(event) },
-                hide = {
-                    coroutineScope.launch {
-                        updatePictureState.hide()
-                        updatePictureVisible = false
-                    }
+            currentName = screenState.name,
+            currentPicture = screenState.pictureUri,
+            availablePictures = screenState.profilePictures,
+            onUpdatePicture = { event(CreateUserEvent.UpdatePicture(it)) },
+            onHide = {
+                coroutineScope.launch {
+                    updatePictureState.hide()
+                    updatePictureVisible = false
                 }
-            )
-        }
+            }
+        )
     }
 
     if (exitConfirmationVisible) {

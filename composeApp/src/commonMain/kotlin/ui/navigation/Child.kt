@@ -8,7 +8,6 @@ import ui.presentation.home.HomeScreenComponent
 import ui.presentation.join_room.JoinScreenComponent
 import ui.presentation.paywall.PaywallScreenViewModel
 import ui.presentation.profile.ProfileScreenComponent
-import ui.presentation.profile.picture.EditProfilePictureScreenComponent
 import ui.presentation.room.RoomHostViewModel
 import ui.presentation.room.RoomPlayerViewModel
 import ui.presentation.sign_in.SignInScreenComponent
@@ -27,7 +26,6 @@ sealed class Child {
     data class SignInScreen(val component: SignInScreenComponent): Child()
     data class SignUpScreen(val component: SignUpScreenComponent): Child()
     data class ForgotPasswordScreen(val component: ForgotPasswordScreenComponent): Child()
-    data class EditProfilePictureScreen(val component: EditProfilePictureScreenComponent): Child()
     data class ChangePasswordScreen(val component: ChangePasswordScreenComponent): Child()
     data class CreateUserScreen(val component: CreateUserViewModel): Child()
 }

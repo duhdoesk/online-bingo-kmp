@@ -18,13 +18,20 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.KeyboardArrowLeft
 import androidx.compose.material.icons.filled.Edit
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
+import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -32,26 +39,58 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
 import domain.user.model.User
+import domain.user.use_case.ProfilePictures
+import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.stringResource
 import themedbingo.composeapp.generated.resources.Res
 import themedbingo.composeapp.generated.resources.back_button
+import themedbingo.composeapp.generated.resources.delete_account_body
+import themedbingo.composeapp.generated.resources.delete_account_title
 import themedbingo.composeapp.generated.resources.edit_button
 import themedbingo.composeapp.generated.resources.nickname
+import themedbingo.composeapp.generated.resources.sign_out_dialog_body
+import themedbingo.composeapp.generated.resources.sign_out_dialog_title
+import themedbingo.composeapp.generated.resources.update_nickname_body
+import themedbingo.composeapp.generated.resources.update_nickname_title
+import themedbingo.composeapp.generated.resources.update_victory_body
+import themedbingo.composeapp.generated.resources.update_victory_title
 import themedbingo.composeapp.generated.resources.user_avatar
 import themedbingo.composeapp.generated.resources.victory_message
 import ui.presentation.profile.event.ProfileScreenEvent
 import ui.presentation.profile.screens.component.ProfileScreenListDataSection
 import ui.presentation.profile.screens.component.ProfileScreenStringDataSection
+import ui.presentation.util.bottom_sheet.UpdateBottomSheet
+import ui.presentation.util.bottom_sheet.UpdatePictureBottomSheet
+import ui.presentation.util.dialog.GenericActionDialog
 
-@OptIn(ExperimentalResourceApi::class)
+@OptIn(ExperimentalResourceApi::class, ExperimentalMaterial3Api::class)
 @Composable
 fun PortraitProfileScreen(
     user: User,
+    profilePictures: ProfilePictures?,
     event: (event: ProfileScreenEvent) -> Unit,
-    onUpdateName: () -> Unit,
-    onUpdateMessage: () -> Unit,
 ) {
+    /**
+     * Coroutine Scope
+     */
+    val coroutineScope = rememberCoroutineScope()
+
+    /**
+     * Update Bottom Sheets visibility holders
+     */
+    var updateNameVisible by remember { mutableStateOf(false) }
+    val updateNameState = rememberModalBottomSheetState(true)
+
+    var updateMessageVisible by remember { mutableStateOf(false) }
+    val updateMessageState = rememberModalBottomSheetState(true)
+
+    var updatePictureVisible by remember { mutableStateOf(false) }
+    val updatePictureState = rememberModalBottomSheetState(true)
+
+    var signOutVisible by remember { mutableStateOf(false) }
+    var deleteAccountVisible by remember { mutableStateOf(false) }
+
     Box(
         contentAlignment = Alignment.Center,
         modifier = Modifier
@@ -85,7 +124,7 @@ fun PortraitProfileScreen(
                     )
 
                     IconButton(
-                        onClick = { event(ProfileScreenEvent.UpdatePicture) },
+                        onClick = { updatePictureVisible = true },
                         enabled = true,
                         modifier = Modifier
                             .align(Alignment.BottomEnd),
@@ -121,7 +160,7 @@ fun PortraitProfileScreen(
                     data = user.name,
                     lastEditTimestamp = user.nameLastUpdated,
                     editable = true, //todo(): boolean logic datetime
-                    onEdit = { onUpdateName() },
+                    onEdit = { updateNameVisible = true },
                     modifier = Modifier.fillMaxWidth(),
                 )
 
@@ -132,7 +171,7 @@ fun PortraitProfileScreen(
                     data = user.victoryMessage,
                     lastEditTimestamp = user.victoryMessageLastUpdated,
                     editable = true, //todo(): boolean logic datetime
-                    onEdit = { onUpdateMessage()},
+                    onEdit = { updateMessageVisible = true },
                     modifier = Modifier.fillMaxWidth(),
                 )
 
@@ -143,7 +182,7 @@ fun PortraitProfileScreen(
                 )
             }
 
-            Row(modifier = Modifier.fillMaxWidth(),) {
+            Row(modifier = Modifier.fillMaxWidth()) {
                 TextButton(onClick = { event(ProfileScreenEvent.PopBack) }) {
                     Icon(
                         Icons.AutoMirrored.Filled.KeyboardArrowLeft,
@@ -157,5 +196,84 @@ fun PortraitProfileScreen(
                 }
             }
         }
+    }
+
+    /**
+     * Visibility of dialogs and bottom sheets
+     */
+    if (updateNameVisible) {
+        UpdateBottomSheet(
+            onDismiss = { coroutineScope.launch { updateNameVisible = false } },
+            onConfirm = {
+                coroutineScope.launch {
+                    updateNameState.hide()
+                    updateNameVisible = false
+                    event(ProfileScreenEvent.UpdateName(it))
+                }
+            },
+            currentData = user.name,
+            title = Res.string.update_nickname_title,
+            body = Res.string.update_nickname_body,
+            label = Res.string.nickname,
+            sheetState = updateNameState,
+        )
+    }
+
+    if (updateMessageVisible) {
+        UpdateBottomSheet(
+            onDismiss = { coroutineScope.launch { updateMessageVisible = false } },
+            onConfirm = {
+                coroutineScope.launch {
+                    updateMessageState.hide()
+                    updateMessageVisible = false
+                    event(ProfileScreenEvent.UpdateMessage(it))
+                }
+            },
+            currentData = user.victoryMessage,
+            title = Res.string.update_victory_title,
+            body = Res.string.update_victory_body,
+            label = Res.string.victory_message,
+            sheetState = updateMessageState,
+        )
+    }
+
+    if (updatePictureVisible) {
+        UpdatePictureBottomSheet(
+            sheetState = updatePictureState,
+            currentName = user.name,
+            currentPicture = user.pictureUri,
+            availablePictures = profilePictures,
+            onUpdatePicture = { event(ProfileScreenEvent.UpdatePicture(it)) },
+            onHide = {
+                coroutineScope.launch {
+                    updatePictureState.hide()
+                    updatePictureVisible = false
+                }
+            }
+        )
+    }
+
+    if (signOutVisible) {
+        GenericActionDialog(
+            onDismiss = { signOutVisible = false },
+            onConfirm = {
+                signOutVisible = false
+                event(ProfileScreenEvent.SignOut)
+            },
+            title = Res.string.sign_out_dialog_title,
+            body = Res.string.sign_out_dialog_body,
+        )
+    }
+
+    if (deleteAccountVisible) {
+        GenericActionDialog(
+            onDismiss = { deleteAccountVisible = false },
+            onConfirm = {
+                deleteAccountVisible = false
+                event(ProfileScreenEvent.DeleteAccount)
+            },
+            title = Res.string.delete_account_title,
+            body = Res.string.delete_account_body,
+        )
     }
 }

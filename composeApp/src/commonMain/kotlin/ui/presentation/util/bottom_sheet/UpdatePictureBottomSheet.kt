@@ -1,4 +1,4 @@
-package ui.presentation.profile.picture
+package ui.presentation.util.bottom_sheet
 
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -6,24 +6,33 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.ime
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.systemBars
+import androidx.compose.foundation.layout.windowInsetsBottomHeight
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.Button
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Scaffold
+import androidx.compose.material3.ModalBottomSheet
+import androidx.compose.material3.SheetState
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
@@ -42,126 +51,78 @@ import domain.user.use_case.ProfilePictures
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.stringResource
 import themedbingo.composeapp.generated.resources.Res
+import themedbingo.composeapp.generated.resources.cancel_button
 import themedbingo.composeapp.generated.resources.confirm_button
 import themedbingo.composeapp.generated.resources.user_avatar
-import ui.presentation.common.RotateScreen
-import ui.presentation.common.components.BottomButtonRow
-import ui.presentation.util.WindowInfo
 
+@OptIn(ExperimentalResourceApi::class, ExperimentalMaterial3Api::class)
 @Composable
-fun EditProfilePictureScreen(
-    component: EditProfilePictureScreenComponent,
-    windowInfo: WindowInfo,
+fun UpdatePictureBottomSheet(
+    sheetState: SheetState,
+    currentName: String,
+    currentPicture: String,
+    availablePictures: ProfilePictures?,
+    onUpdatePicture: (pictureUri: String) -> Unit,
+    onHide: () -> Unit,
 ) {
-    val state by component.uiState.collectAsState()
+    var updatedPicture by remember { mutableStateOf(currentPicture) }
 
-    LaunchedEffect(Unit) {
-        component.onEvent(EditProfilePictureUiEvent.OnUiLoaded)
-    }
-
-    when (windowInfo.screenOrientation) {
-        WindowInfo.DeviceOrientation.Landscape ->
-            RotateScreen()
-
-        WindowInfo.DeviceOrientation.Portrait ->
-            EditProfilePictureContent(
-                state = state,
-                onEvent = component::onEvent
-            )
-    }
-}
-
-@Composable
-private fun EditProfilePictureContent(
-    state: EditProfilePictureUiState,
-    onEvent: (event: EditProfilePictureUiEvent) -> Unit,
-    modifier: Modifier = Modifier
-) {
-    Scaffold(
-        modifier = modifier
-    ) { padding ->
-        when {
-            state.loading -> EditProfilePictureLoadingState(
-                modifier = Modifier
-                    .padding(padding)
+    ModalBottomSheet(
+        onDismissRequest = { onHide() },
+        sheetState = sheetState,
+        windowInsets = WindowInsets.ime,
+    ) {
+        Column {
+            EditProfilePictureCurrentUserData(
+                name = currentName,
+                avatarUrl = updatedPicture,
             )
 
-            state.pictures != null -> EditProfilePictureLoadedState(
-                currentPictureUrl = state.currentPictureUrl,
-                userName = state.userName,
-                selectedPictureUrl = state.selectedPictureUrl,
-                pictures = state.pictures,
-                onItemClick = { pictureUrl ->
-                    onEvent(EditProfilePictureUiEvent.OnPictureSelected(pictureUrl))
-                },
-                onCancel = {
-                    onEvent(EditProfilePictureUiEvent.OnCancel)
-                },
-                onConfirm = {
-                    onEvent(EditProfilePictureUiEvent.OnConfirm)
-                },
-                modifier = Modifier
-                    .padding(padding)
-            )
+            if (availablePictures != null) {
+                EditProfilePicturePictures(
+                    pictures = availablePictures,
+                    selectedPictureUrl = updatedPicture,
+                    onItemClick = { updatedPicture = it },
+                    modifier = Modifier.weight(1f),
+                )
+            }
+
+            Row(
+                horizontalArrangement = Arrangement.SpaceBetween,
+                modifier = Modifier.fillMaxWidth().padding(bottom = 16.dp, top = 8.dp),
+            ) {
+                TextButton(
+                    onClick = { onHide() },
+                    modifier = Modifier.padding(start = 16.dp)
+                ) {
+                    Text(
+                        text = stringResource(Res.string.cancel_button),
+                        modifier = Modifier.padding(horizontal = 8.dp),
+                    )
+                }
+
+                Button(
+                    onClick = {
+                        onHide()
+                        onUpdatePicture(updatedPicture)
+                    },
+                    modifier = Modifier.padding(end = 16.dp)
+                ) {
+                    Text(
+                        text = stringResource(Res.string.confirm_button),
+                        modifier = Modifier.padding(horizontal = 8.dp),
+                        )
+                }
+            }
+
+            Spacer(Modifier.windowInsetsBottomHeight(WindowInsets.systemBars))
         }
     }
 }
 
-@Composable
-private fun EditProfilePictureLoadingState(
-    modifier: Modifier = Modifier
-) {
-    Box(
-        modifier = modifier
-            .fillMaxSize(),
-        contentAlignment = Alignment.Center
-    ) {
-        CircularProgressIndicator(
-            modifier = Modifier.size(48.dp)
-        )
-    }
-}
-
 @OptIn(ExperimentalResourceApi::class)
 @Composable
-private fun EditProfilePictureLoadedState(
-    currentPictureUrl: String?,
-    userName: String?,
-    selectedPictureUrl: String?,
-    pictures: ProfilePictures,
-    onItemClick: (pictureUrl: String) -> Unit,
-    onConfirm: () -> Unit,
-    onCancel: () -> Unit,
-    modifier: Modifier = Modifier
-) {
-    Column(
-        modifier = modifier
-    ) {
-        EditProfilePictureCurrentUserData(
-            avatarUrl = currentPictureUrl,
-            name = userName,
-        )
-
-        EditProfilePicturePictures(
-            pictures = pictures,
-            selectedPictureUrl = selectedPictureUrl,
-            onItemClick = onItemClick,
-            modifier = Modifier.weight(1f)
-        )
-
-        BottomButtonRow(
-            rightEnabled = selectedPictureUrl != null,
-            rightText = Res.string.confirm_button,
-            leftClicked = onCancel,
-            rightClicked = onConfirm,
-            modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)
-        )
-    }
-}
-
-@OptIn(ExperimentalResourceApi::class)
-@Composable
-private fun EditProfilePictureCurrentUserData(
+fun EditProfilePictureCurrentUserData(
     name: String?,
     avatarUrl: String?,
     modifier: Modifier = Modifier
@@ -296,5 +257,4 @@ private fun EditProfilePicturePictureItem(
         contentScale = ContentScale.Crop,
         clipToBounds = true
     )
-
 }

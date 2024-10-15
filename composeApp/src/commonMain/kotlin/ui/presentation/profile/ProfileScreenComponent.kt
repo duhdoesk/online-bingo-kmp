@@ -6,11 +6,16 @@ import domain.auth.supabase.use_case.SupabaseDeleteAccountUseCase
 import domain.auth.supabase.use_case.SupabaseSignOutUseCase
 import domain.user.model.User
 import domain.user.use_case.DeleteUserUseCase
+import domain.user.use_case.FlowUserUseCase
+import domain.user.use_case.GetProfilePicturesUseCase
 import domain.user.use_case.UpdateNameUseCase
+import domain.user.use_case.UpdateUserPictureUseCase
 import domain.user.use_case.UpdateVictoryMessageUseCase
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.ExperimentalResourceApi
@@ -19,6 +24,7 @@ import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 import themedbingo.composeapp.generated.resources.Res
 import themedbingo.composeapp.generated.resources.sign_out_error
+import themedbingo.composeapp.generated.resources.unmapped_error
 import themedbingo.composeapp.generated.resources.update_nickname_failure
 import themedbingo.composeapp.generated.resources.update_victory_failure
 import ui.presentation.profile.event.ProfileScreenEvent
@@ -32,8 +38,6 @@ class ProfileScreenComponent(
     private val user: Flow<User?>,
     private val onPopBack: () -> Unit,
     private val onSignOut: () -> Unit,
-    private val onUpdatePicture: () -> Unit,
-    private val onUpdatePassword: () -> Unit,
 ) : ComponentContext by componentContext, KoinComponent {
 
     /**
@@ -49,6 +53,13 @@ class ProfileScreenComponent(
     private val updateNameUseCase by inject<UpdateNameUseCase>()
     private val updateVictoryMessageUseCase by inject<UpdateVictoryMessageUseCase>()
     private val deleteUserUseCase by inject<DeleteUserUseCase>()
+    private val updatePictureUseCase: UpdateUserPictureUseCase by inject()
+
+    /**
+     * UI State Use Cases
+     */
+    private val flowUserUseCase: FlowUserUseCase by inject()
+    private val getProfilePicturesUseCase: GetProfilePicturesUseCase by inject()
 
     /**
      * UI State holder
@@ -71,9 +82,8 @@ class ProfileScreenComponent(
             ProfileScreenEvent.PopBack -> popBack()
             ProfileScreenEvent.SignOut -> signOut()
             ProfileScreenEvent.UILoaded -> uiLoaded()
-            ProfileScreenEvent.UpdatePassword -> updatePassword()
-            ProfileScreenEvent.UpdatePicture -> updatePicture()
 
+            is ProfileScreenEvent.UpdatePicture -> updatePicture(event.newPictureUri)
             is ProfileScreenEvent.UpdateName -> updateName(event.newName)
             is ProfileScreenEvent.UpdateMessage -> updateMessage(event.newMessage)
         }
@@ -84,21 +94,20 @@ class ProfileScreenComponent(
      */
     private fun uiLoaded() {
         coroutineScope.launch {
-            user.collect { collectedUser ->
-                if (collectedUser == null) {
+            val userId = user.first()?.id
+
+            userId?.let {
+                combine(flowUserUseCase(userId), getProfilePicturesUseCase()) { collectedUser, pics ->
+                    val error = (collectedUser == null)
+
                     ProfileScreenUIState(
                         isLoading = false,
-                        user = null,
-                        error = true,
+                        user = collectedUser,
+                        error = error,
+                        profilePictures = pics,
                     )
-                } else {
-                    _uiState.update {
-                        ProfileScreenUIState(
-                            isLoading = false,
-                            user = collectedUser,
-                            error = false,
-                        )
-                    }
+                }.collect { state ->
+                    _uiState.update { state }
                 }
             }
         }
@@ -135,12 +144,20 @@ class ProfileScreenComponent(
         }
     }
 
-    private fun updatePicture() {
-        onUpdatePicture()
-    }
+    private fun updatePicture(newPictureUri: String) {
+        coroutineScope.launch {
+            if (newPictureUri.isEmpty()) return@launch
 
-    private fun updatePassword() {
-        onUpdatePassword()
+            val currentPictureUri = uiState.value.user?.pictureUri.orEmpty()
+            if (currentPictureUri == newPictureUri) return@launch
+
+            uiState.value.user?.run {
+                updatePictureUseCase(
+                    userId = id,
+                    pictureUri = newPictureUri,
+                ).onFailure { errorDialogState.showDialog(Res.string.unmapped_error) }
+            }
+        }
     }
 
     @OptIn(ExperimentalResourceApi::class)
@@ -150,9 +167,7 @@ class ProfileScreenComponent(
                 updateNameUseCase.invoke(
                     userId = id,
                     newName = newName
-                )
-                    .onSuccess { uiLoaded() }
-                    .onFailure { errorDialogState.showDialog(Res.string.update_nickname_failure) }
+                ).onFailure { errorDialogState.showDialog(Res.string.update_nickname_failure) }
             }
         }
     }
@@ -164,9 +179,7 @@ class ProfileScreenComponent(
                 updateVictoryMessageUseCase.invoke(
                     userId = id,
                     newVictoryMessage = newVictoryMessage
-                )
-                    .onSuccess { uiLoaded() }
-                    .onFailure { errorDialogState.showDialog(Res.string.update_victory_failure) }
+                ).onFailure { errorDialogState.showDialog(Res.string.update_victory_failure) }
             }
         }
     }

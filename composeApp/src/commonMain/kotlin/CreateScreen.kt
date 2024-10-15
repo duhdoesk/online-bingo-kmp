@@ -7,10 +7,9 @@ import ui.presentation.create_room.CreateRoomScreen
 import ui.presentation.create_user.CreateUserScreen
 import ui.presentation.forgot_password.ForgotPasswordScreen
 import ui.presentation.home.HomeScreen
-import ui.presentation.paywall.PaywallScreen
 import ui.presentation.join_room.JoinScreen
+import ui.presentation.paywall.PaywallScreen
 import ui.presentation.profile.ProfileScreen
-import ui.presentation.profile.picture.EditProfilePictureScreen
 import ui.presentation.room.screens.host.HostScreen
 import ui.presentation.room.screens.player.PlayerScreen
 import ui.presentation.sign_in.SignInScreen
@@ -69,11 +68,6 @@ fun CreateScreen(
         )
 
         is Child.ForgotPasswordScreen -> ForgotPasswordScreen(
-            component = instance.component,
-            windowInfo = windowInfo
-        )
-
-        is Child.EditProfilePictureScreen -> EditProfilePictureScreen(
             component = instance.component,
             windowInfo = windowInfo
         )
