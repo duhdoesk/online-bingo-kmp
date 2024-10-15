@@ -7,6 +7,7 @@ plugins {
     alias(libs.plugins.androidApplication)
     alias(libs.plugins.jetbrainsCompose)
     alias(libs.plugins.firebasePlugin) apply false
+    alias(libs.plugins.crashlyticsPlugin) apply false
     alias(libs.plugins.kotlinSerialization)
 }
 
@@ -96,8 +97,10 @@ kotlin {
             implementation(libs.koin.compose)
 
 //            Firebase
-            implementation(libs.gitlive.firebase.firestore)
+            implementation(libs.gitlive.firebase.analytics)
             implementation(libs.gitlive.firebase.auth)
+            implementation(libs.gitlive.firebase.crashlytics)
+            implementation(libs.gitlive.firebase.firestore)
             implementation(libs.dev.firebase.common)
             implementation(libs.jetbrains.kotlinx.serialization.json)
 
@@ -135,6 +138,8 @@ kotlin {
 
 android {
     apply(plugin = "com.google.gms.google-services")
+    apply(plugin = "com.google.firebase.crashlytics")
+
     namespace = "com.duscaranari.themedbingocardsgenerator"
     compileSdk = libs.versions.android.compileSdk.get().toInt()
 
@@ -146,7 +151,7 @@ android {
         applicationId = "com.duscaranari.themedbingocardsgenerator"
         minSdk = libs.versions.android.minSdk.get().toInt()
         targetSdk = libs.versions.android.targetSdk.get().toInt()
-        versionCode = 41
+        versionCode = 42
         versionName = "6.1"
     }
     packaging {

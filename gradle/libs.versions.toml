@@ -22,6 +22,7 @@ coil3 = "3.0.0-alpha06"
 kotlinxSerializationJsonVersion = "1.6.2"
 ktor = "2.3.12"
 firebasePlugin = "4.4.1"
+crashlyticsPlugin = "3.0.2"
 supabase = "2.5.3"
 purchases-kmp = "1.0.0+13.2.0"
 
@@ -44,6 +45,8 @@ decompose-extensions-compose = { group = "com.arkivanov.decompose", name = "exte
 dev-firebase-common = { module = "dev.gitlive:firebase-common", version.ref = "gitliveFirebase" }
 gitlive-firebase-firestore = { module = "dev.gitlive:firebase-firestore", version.ref = "gitliveFirebase" }
 gitlive-firebase-auth = { module = "dev.gitlive:firebase-auth", version.ref = "gitliveFirebase" }
+gitlive-firebase-crashlytics = { module = "dev.gitlive:firebase-crashlytics", version.ref = "gitliveFirebase" }
+gitlive-firebase-analytics = { module = "dev.gitlive:firebase-analytics", version.ref = "gitliveFirebase" }
 jetbrains-kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinxSerializationJsonVersion" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 koin-android = { module = "io.insert-koin:koin-android" }
@@ -70,3 +73,4 @@ jetbrainsCompose = { id = "org.jetbrains.compose", version.ref = "compose-plugin
 kotlinMultiplatform = { id = "org.jetbrains.kotlin.multiplatform", version.ref = "kotlin" }
 kotlinSerialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
 firebasePlugin = { id = "com.google.gms.google-services", version.ref = "firebasePlugin" }
+crashlyticsPlugin = { id = "com.google.firebase.crashlytics", version.ref = "crashlyticsPlugin" }
