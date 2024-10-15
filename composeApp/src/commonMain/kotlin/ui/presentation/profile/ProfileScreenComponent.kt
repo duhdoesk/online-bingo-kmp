@@ -6,13 +6,11 @@ import domain.auth.supabase.use_case.SupabaseDeleteAccountUseCase
 import domain.auth.supabase.use_case.SupabaseSignOutUseCase
 import domain.user.model.User
 import domain.user.use_case.DeleteUserUseCase
-import domain.user.use_case.FlowUserUseCase
 import domain.user.use_case.UpdateNameUseCase
 import domain.user.use_case.UpdateVictoryMessageUseCase
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.ExperimentalResourceApi
@@ -42,11 +40,6 @@ class ProfileScreenComponent(
      * Single Coroutine Scope to handle suspend operations
      */
     private val coroutineScope = componentCoroutineScope()
-
-    /**
-     * UI State Use Cases
-     */
-    private val flowUserByIdUseCase: FlowUserUseCase by inject()
 
     /**
      * Action Use Cases
@@ -91,13 +84,21 @@ class ProfileScreenComponent(
      */
     private fun uiLoaded() {
         coroutineScope.launch {
-            val userId = user.first()?.id
-            flowUserByIdUseCase(userId.orEmpty()).collect { user ->
-                _uiState.update {
+            user.collect { collectedUser ->
+                if (collectedUser == null) {
                     ProfileScreenUIState(
                         isLoading = false,
-                        user = user,
+                        user = null,
+                        error = true,
                     )
+                } else {
+                    _uiState.update {
+                        ProfileScreenUIState(
+                            isLoading = false,
+                            user = collectedUser,
+                            error = false,
+                        )
+                    }
                 }
             }
         }
