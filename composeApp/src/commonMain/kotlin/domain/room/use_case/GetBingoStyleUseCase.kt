@@ -22,7 +22,7 @@ class GetBingoStyleUseCase(
                 val characters =
                     themeId?.let { getThemeCharactersUseCase(it) }?.getOrNull()
 
-                if (theme == null || characters == null) {
+                if (theme == null || characters.isNullOrEmpty()) {
                     return Result.failure(Exception())
                 }
 

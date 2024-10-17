@@ -41,6 +41,7 @@ fun PlayerScreenNotStarted(
                 screenState = screenState,
                 pagerState = pagerState,
                 modifier = Modifier.fillMaxWidth(),
+                onGetCard = { event(RoomPlayerEvent.GetNewCard) }
             )
 
             Spacer(Modifier.weight(1f))

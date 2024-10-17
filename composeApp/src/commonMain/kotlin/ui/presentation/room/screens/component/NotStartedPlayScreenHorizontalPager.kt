@@ -21,6 +21,7 @@ fun NotStartedPlayScreenHorizontalPager(
     screenState: RoomPlayerState,
     pagerState: PagerState,
     modifier: Modifier = Modifier,
+    onGetCard: () -> Unit,
 ) {
     HorizontalPager(
         state = pagerState,
@@ -38,12 +39,22 @@ fun NotStartedPlayScreenHorizontalPager(
                     )
                 }
 
-                else -> {
+                is CardState.Loading -> {
                     Box(
                         contentAlignment = Alignment.Center,
                         modifier = Modifier.padding(16.dp).fillMaxSize(),
                     ) {
                         CircularProgressIndicator()
+                    }
+                }
+
+                is CardState.Error -> {
+                    Box(
+                        contentAlignment = Alignment.Center,
+                        modifier = Modifier.padding(16.dp).fillMaxSize(),
+                    ) {
+                        CircularProgressIndicator()
+                        onGetCard()
                     }
                 }
             }

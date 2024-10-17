@@ -3,6 +3,7 @@ package ui.presentation.room
 import com.arkivanov.decompose.ComponentContext
 import domain.card.use_case.FlowCardByRoomAndUserIDUseCase
 import domain.card.use_case.SetCardByRoomAndUserIDUseCase
+import domain.room.model.BingoType
 import domain.room.use_case.CallBingoUseCase
 import domain.room.use_case.FlowRoomByIdUseCase
 import domain.room.use_case.GetBingoStyleUseCase
@@ -89,13 +90,10 @@ class RoomPlayerViewModel(
                         flowCardByRoomAndUserIDUseCase(roomId, userId),
                     ) { room, players, card ->
 
-                        val cardState =
-                            checkCardState(card?.characters)
-
-                        if (cardState is CardState.Error) {
-                            updateCard(userId)
-                            return@combine RoomPlayerState.INITIAL.copy(dataState = DataState.ERROR)
-                        }
+                        val cardState = checkCardState(
+                            items = card?.characters,
+                            bingoType = room.type,
+                        )
 
                         val hasCalled = hasCalledBingo(room.winners)
 
@@ -169,8 +167,20 @@ class RoomPlayerViewModel(
         return true
     }
 
-    private fun checkCardState(items: List<String>?): CardState {
+    private fun checkCardState(
+        items: List<String>?,
+        bingoType: BingoType,
+    ): CardState {
+        // Returns Error if there is no list of items
         if (items == null) return CardState.Error
+
+        // Returns Error if there is not enough items for each bingo type
+        when (bingoType) {
+            BingoType.CLASSIC -> if (items.size < 24) return CardState.Error
+            BingoType.THEMED -> if (items.size < 9) return CardState.Error
+        }
+
+        // Returns Success after passing the checks
         return CardState.Success(items = items)
     }
 
