@@ -9,7 +9,6 @@ import domain.room.use_case.UpdateRoomStateUseCase
 import domain.user.model.User
 import domain.user.use_case.GetRoomPlayersUseCase
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.combine
@@ -21,11 +20,11 @@ import ui.presentation.room.event.RoomHostEvent
 import ui.presentation.room.state.RoomHostState
 import ui.presentation.room.state.auxiliar.BingoStyle
 import ui.presentation.room.state.auxiliar.DataState
+import ui.presentation.room.state.auxiliar.RaffleButtonState
 import util.componentCoroutineScope
 
 class RoomHostViewModel(
     private val componentContext: ComponentContext,
-    private val user: Flow<User?>,
     private val roomId: String,
     private val onPopBack: () -> Unit,
 ) : ComponentContext by componentContext, KoinComponent {
@@ -54,7 +53,7 @@ class RoomHostViewModel(
     private val raffleNextItemUseCase by inject<RaffleNextItemUseCase>()
     private val updateRoomStateUseCase by inject<UpdateRoomStateUseCase>()
 
-    private val canRaffleNext = MutableStateFlow(true)
+//    private val raffleButtonState = MutableStateFlow(RaffleButtonState.SUSPEND)
 
     /**
      * Delegates the handling of each UI Event
@@ -77,12 +76,7 @@ class RoomHostViewModel(
             combine(
                 flowRoomByIdUseCase(roomId = roomId),
                 getRoomPlayersUseCase(roomId = roomId),
-                canRaffleNext,
-            ) { room, players, canRaffleNext ->
-
-                val dataState =
-                    if (user == null) DataState.ERROR
-                    else DataState.SUCCESS
+            ) { room, players ->
 
                 val bingoStyle = getBingoStyleUseCase(
                     bingoType = room.type,
@@ -92,8 +86,12 @@ class RoomHostViewModel(
                 if (bingoStyle == null)
                     return@combine RoomHostState.INITIAL.copy(dataState = DataState.ERROR)
 
+                val buttonState =
+                    if (canRaffleNext(room.raffled.size, bingoStyle)) RaffleButtonState.AVAILABLE
+                    else RaffleButtonState.DONE
+
                 RoomHostState(
-                    dataState = dataState,
+                    dataState = DataState.SUCCESS,
                     bingoStyle = bingoStyle,
                     bingoState = room.state,
                     roomName = room.name,
@@ -101,8 +99,7 @@ class RoomHostViewModel(
                     winners = getWinners(ids = room.winners, players = players),
                     maxWinners = room.maxWinners,
                     raffledItems = room.raffled,
-                    canRaffleNext = canRaffleNext,
-//                    canRaffleNext = canRaffleNext(raffled = room.raffled, style = bingoStyle),
+                    raffleButtonState = buttonState,
                 )
             }.collect { state ->
                 _screenState.update { state }
@@ -113,17 +110,32 @@ class RoomHostViewModel(
     /**
      * Calculates if host can raffle next item
      */
-    private fun canRaffleNext(raffled: List<String>, style: BingoStyle): Boolean {
+    private fun canRaffleNext(raffledSize: Int, style: BingoStyle): Boolean {
         return when (style) {
             is BingoStyle.Classic -> {
-                raffled.size < 75
+                raffledSize < 75
             }
 
             is BingoStyle.Themed -> {
-                raffled.size < style.characters.size
+                raffledSize < style.characters.size
             }
         }
     }
+
+    /**
+     * Updates the button state
+     */
+//    private suspend fun updateButtonState(
+//        raffledSize: Int,
+//        style: BingoStyle,
+//    ) {
+//        if (canRaffleNext(raffledSize = (raffledSize), style = style)) {
+//            delay(750)
+//            raffleButtonState.update { RaffleButtonState.AVAILABLE }
+//        } else {
+//            raffleButtonState.update { RaffleButtonState.DONE }
+//        }
+//    }
 
     /**
      * Finishes the raffle, changing the room state from RUNNING to FINISHED
@@ -162,7 +174,7 @@ class RoomHostViewModel(
     private fun raffleNextItem() {
         coroutineScope.launch {
 
-            canRaffleNext.update { false }
+            _screenState.update { it.copy(raffleButtonState = RaffleButtonState.SUSPEND) }
 
             val style = screenState.value.bingoStyle
             val raffled = screenState.value.raffledItems
@@ -179,14 +191,18 @@ class RoomHostViewModel(
                 }
             }
 
-            val nextItem = notRaffled.shuffled().first()
-
-            raffleNextItemUseCase(roomId = roomId, item = nextItem)
-
-            if (canRaffleNext(raffled = raffled, style = style)) {
-                delay(500)
-                canRaffleNext.update { true }
+            // If UI fails to update button state and it still enable when having no item left
+            // to be raffled, the function should stop here, preventing crashes by returning@launch
+            if (notRaffled.isEmpty()) {
+                _screenState.update { it.copy(raffleButtonState = RaffleButtonState.DONE) }
+                return@launch
             }
+
+            // Delays the operation to keep the button suspended for 750ms (ux rule), then raffles
+            // the next item and sends info to API
+            delay(750)
+            val nextItem = notRaffled.shuffled().first()
+            raffleNextItemUseCase(roomId = roomId, item = nextItem)
         }
     }
 

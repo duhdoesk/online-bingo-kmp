@@ -13,27 +13,33 @@ import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.stringResource
 import themedbingo.composeapp.generated.resources.Res
 import themedbingo.composeapp.generated.resources.raffle_button
+import ui.presentation.room.state.auxiliar.RaffleButtonState
 
 @OptIn(ExperimentalResourceApi::class)
 @Composable
 fun RaffleNextButton(
     modifier: Modifier = Modifier,
-    enabled: Boolean = true,
+    buttonState: RaffleButtonState,
     onClick: () -> Unit,
 ) {
+    val enabled = (buttonState == RaffleButtonState.AVAILABLE)
 
     Button(
         onClick = { onClick() },
         enabled = enabled,
         modifier = modifier.animateContentSize(),
     ) {
-        if (enabled) {
-            Text(
-                text = stringResource(Res.string.raffle_button),
-                modifier = Modifier.padding(horizontal = 28.dp),
-            )
-        } else {
-            CircularProgressIndicator(Modifier.size(20.dp))
+        when (buttonState) {
+            RaffleButtonState.SUSPEND -> {
+                CircularProgressIndicator(Modifier.size(20.dp))
+            }
+
+            else -> {
+                Text(
+                    text = stringResource(Res.string.raffle_button),
+                    modifier = Modifier.padding(horizontal = 28.dp),
+                )
+            }
         }
     }
 }

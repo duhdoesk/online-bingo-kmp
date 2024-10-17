@@ -85,7 +85,7 @@ fun HostScreenRunning(
         Spacer(Modifier.height(16.dp))
 
         RaffleNextButton(
-            enabled = screenState.canRaffleNext,
+            buttonState = screenState.raffleButtonState,
             onClick = { event(RoomHostEvent.RaffleNextItem) }
         )
     }

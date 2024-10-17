@@ -176,7 +176,6 @@ class RootComponent(
                     componentContext = context,
                     onPopBack = { navigation.pop() },
                     roomId = configuration.roomId,
-                    user = _user,
                 )
             )
 
@@ -185,7 +184,6 @@ class RootComponent(
                     componentContext = context,
                     roomId = configuration.roomId,
                     onPopBack = { navigation.pop() },
-                    user = _user,
                 )
             )
 

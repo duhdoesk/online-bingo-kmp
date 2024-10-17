@@ -3,6 +3,7 @@ package ui.presentation.room.state
 import domain.user.model.User
 import ui.presentation.room.state.auxiliar.BingoState
 import ui.presentation.room.state.auxiliar.BingoStyle
+import ui.presentation.room.state.auxiliar.RaffleButtonState
 import ui.presentation.room.state.auxiliar.DataState
 
 data class RoomHostState(
@@ -50,7 +51,7 @@ data class RoomHostState(
     /**
      * Represents if host can raffle next item
      */
-    val canRaffleNext: Boolean,
+    val raffleButtonState: RaffleButtonState,
 ) {
     companion object {
         val INITIAL = RoomHostState(
@@ -62,7 +63,7 @@ data class RoomHostState(
             winners = listOf(),
             maxWinners = 1,
             raffledItems = listOf(),
-            canRaffleNext = false,
+            raffleButtonState = RaffleButtonState.SUSPEND,
         )
     }
 }
