@@ -98,34 +98,41 @@ class RoomPlayerViewModel(
                 flowCardByRoomAndUserIDUseCase(roomId, userId),
             ) { room, players, card ->
 
+                // Builds card state
                 val cardState = checkCardState(
                     items = card?.characters,
                     bingoType = room.type,
                 )
 
-                val hasCalled = hasCalledBingo(room.winners)
-
+                // Checks if user can call bingo
                 val canCall = canCallBingo(
                     cardState = cardState,
                     raffledCharacters = room.raffled,
-                    hasCalledYet = hasCalled,
+                    winners = room.winners,
                 )
 
+                // Checks bingo style
                 val bingoStyle = getBingoStyleUseCase(
                     bingoType = room.type,
                     themeId = room.themeId,
                 ).getOrNull()
 
+                // Informs the UI if there is an error with the data
                 if (bingoStyle == null)
                     return@combine RoomPlayerState.INITIAL.copy(dataState = DataState.ERROR)
 
+                // Builds the list of winners
+                val winners =
+                    getWinners(ids = room.winners, players = players)
+
+                // Builds the UI State
                 RoomPlayerState(
                     dataState = DataState.SUCCESS,
                     bingoStyle = bingoStyle,
                     bingoState = room.state,
                     roomName = room.name,
                     players = players,
-                    winners = getWinners(ids = room.winners, players = players),
+                    winners = winners,
                     maxWinners = room.maxWinners,
                     raffledItems = room.raffled,
                     canCallBingo = canCall,
@@ -156,22 +163,36 @@ class RoomPlayerViewModel(
     private fun canCallBingo(
         cardState: CardState,
         raffledCharacters: List<String>,
-        hasCalledYet: Boolean,
+        winners: List<String>,
     ): Boolean {
-        if (hasCalledYet) return false
+        // Check if user is null, then returns false if true
+        if (screenState.value.userId == null) return false
+
+        // Check if user has not called bingo already
+        if (winners.contains(screenState.value.userId)) return false
 
         when (cardState) {
             is CardState.Success -> {
+                // Checks if card is empty
                 if (cardState.items.isEmpty()) return false
-                cardState.items.forEach { character -> if (character !in raffledCharacters) return false }
+
+                // Checks if all items of the card has been already raffled
+                cardState.items.forEach { character ->
+                    if (!raffledCharacters.contains(character)) return false
+                }
             }
 
+            // Returns false if there is no card for the user
             else -> return false
         }
 
+        // Return true if passed all the checks
         return true
     }
 
+    /**
+     * Returns the state of the user's card
+     */
     private fun checkCardState(
         items: List<String>?,
         bingoType: BingoType,
@@ -201,20 +222,17 @@ class RoomPlayerViewModel(
     }
 
     /**
-     * Checks if player has called bingo already
-     */
-    private fun hasCalledBingo(winners: List<String>): Boolean {
-        if (screenState.value.userId == null) return false
-        return winners.contains(screenState.value.userId)
-    }
-
-    /**
-     * Get a new random card
+     * Updates user card
      */
     private fun updateCard() {
         coroutineScope.launch {
+            // Informs the UI that a new card is being generated
+            _screenState.update { it.copy(cardState = CardState.Loading) }
+
+            // Gets a random new card
             val newCard = getNewCard()
 
+            // Updates the backend with the new user's card
             setCardByRoomAndUserIDUseCase(
                 roomId = roomId,
                 userId = screenState.value.userId.orEmpty(),
@@ -223,6 +241,9 @@ class RoomPlayerViewModel(
         }
     }
 
+    /**
+     * Generates a random new card
+     */
     private fun getNewCard(): List<String> {
         when (val style = screenState.value.bingoStyle) {
             is BingoStyle.Classic -> {
