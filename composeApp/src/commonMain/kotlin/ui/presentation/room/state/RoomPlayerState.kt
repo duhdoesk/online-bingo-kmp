@@ -59,11 +59,6 @@ data class RoomPlayerState(
     val canCallBingo: Boolean,
 
     /**
-     * Represents if players has already called bingo
-     */
-    val hasCalledBingo: Boolean,
-
-    /**
      * Represents the player's card state
      */
     val cardState: CardState,
@@ -79,7 +74,6 @@ data class RoomPlayerState(
             maxWinners = 1,
             raffledItems = listOf(),
             canCallBingo = false,
-            hasCalledBingo = false,
             cardState = CardState.Loading,
             userId = null
         )
