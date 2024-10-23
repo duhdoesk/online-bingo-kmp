@@ -179,10 +179,10 @@ class RoomPlayerViewModel(
         // Returns Error if there is no list of items
         if (items == null) return CardState.Error
 
-        // Returns Error if there is not enough items for each bingo type
+        // Returns Error if there is card size is different than requested
         when (bingoType) {
-            BingoType.CLASSIC -> if (items.size < 24) return CardState.Error
-            BingoType.THEMED -> if (items.size < 9) return CardState.Error
+            BingoType.CLASSIC -> if (items.size != 24) return CardState.Error
+            BingoType.THEMED -> if (items.size != 9) return CardState.Error
         }
 
         // Returns Success after passing the checks
