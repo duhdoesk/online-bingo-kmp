@@ -53,8 +53,6 @@ class RoomHostViewModel(
     private val raffleNextItemUseCase by inject<RaffleNextItemUseCase>()
     private val updateRoomStateUseCase by inject<UpdateRoomStateUseCase>()
 
-//    private val raffleButtonState = MutableStateFlow(RaffleButtonState.SUSPEND)
-
     /**
      * Delegates the handling of each UI Event
      */
@@ -123,21 +121,6 @@ class RoomHostViewModel(
     }
 
     /**
-     * Updates the button state
-     */
-//    private suspend fun updateButtonState(
-//        raffledSize: Int,
-//        style: BingoStyle,
-//    ) {
-//        if (canRaffleNext(raffledSize = (raffledSize), style = style)) {
-//            delay(750)
-//            raffleButtonState.update { RaffleButtonState.AVAILABLE }
-//        } else {
-//            raffleButtonState.update { RaffleButtonState.DONE }
-//        }
-//    }
-
-    /**
      * Finishes the raffle, changing the room state from RUNNING to FINISHED
      */
     private fun finishRaffle() {
@@ -198,9 +181,9 @@ class RoomHostViewModel(
                 return@launch
             }
 
-            // Delays the operation to keep the button suspended for 750ms (ux rule), then raffles
+            // Delays the operation to keep the button suspended for 400ms (ux rule), then raffles
             // the next item and sends info to API
-            delay(750)
+            delay(400)
             val nextItem = notRaffled.shuffled().first()
             raffleNextItemUseCase(roomId = roomId, item = nextItem)
         }
