@@ -88,6 +88,7 @@
     <string name="subscription_dialog_body">Você precisa assinar o Passe VIP para criar suas próprias salas de bingo. Deseja ver as opções de assinatura disponíveis?</string>
     <string name="no_rooms_title">Nada por aqui...</string>
     <string name="no_rooms_body">Parece que não tem nenhuma sala de bingo aberta nesse momento. Mas você pode criar a sua própria sala se tiver um Passe VIP.</string>
+    <string name="locked">Trancado</string>
 
 
     <!--    Rotate Screen -->

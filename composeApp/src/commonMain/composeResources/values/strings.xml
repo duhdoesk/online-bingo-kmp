@@ -89,6 +89,7 @@
     <string name="subscription_dialog_body">You need to have a VIP Pass subscription in order to create your own bingo rooms. Do you want to check the available subscription options?</string>
     <string name="no_rooms_title">Nothing here...</string>
     <string name="no_rooms_body">Seems like there is no open room right now. You can create your own room if you have a VIP Pass.</string>
+    <string name="locked">Locked</string>
 
 
     <!--    Rotate Screen -->

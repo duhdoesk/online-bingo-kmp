@@ -28,10 +28,14 @@ import domain.room.model.BingoType
 import domain.theme.model.BingoTheme
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.painterResource
+import org.jetbrains.compose.resources.stringResource
 import themedbingo.composeapp.generated.resources.Res
 import themedbingo.composeapp.generated.resources.bingo_balls
+import themedbingo.composeapp.generated.resources.locked
+import themedbingo.composeapp.generated.resources.players_card
+import themedbingo.composeapp.generated.resources.theme_picture
+import themedbingo.composeapp.generated.resources.theme_textField
 import ui.presentation.join_room.event.JoinRoomUIEvent
-import ui.presentation.room.state.auxiliar.BingoStyle
 
 @OptIn(ExperimentalResourceApi::class)
 @Composable
@@ -71,7 +75,7 @@ fun RoomCard(
                     BingoType.THEMED ->
                         AsyncImage(
                             model = theme?.pictureUri,
-                            contentDescription = "Theme Picture", //todo()
+                            contentDescription = stringResource(Res.string.theme_picture),
                             modifier = Modifier
                                 .padding(16.dp)
                                 .size(80.dp)
@@ -91,13 +95,13 @@ fun RoomCard(
 
                     if (theme != null) {
                         Text(
-                            text = "Tema: ${theme.name}", //todo()
+                            text = "${stringResource(Res.string.theme_textField)}: ${theme.name}",
                             style = bodyStyle,
                         )
                     }
 
                     Text(
-                        text = "Jogadores: ${room.players.size}", //todo()
+                        text = "${stringResource(Res.string.players_card)}: ${room.players.size}",
                         style = bodyStyle,
                     )
                 }
@@ -105,7 +109,7 @@ fun RoomCard(
                 if (room.locked) {
                     Icon(
                         imageVector = Icons.Default.Lock,
-                        contentDescription = "Locked", //todo()
+                        contentDescription = stringResource(Res.string.locked),
                         modifier = Modifier.padding(16.dp).size(32.dp)
                     )
                 }
