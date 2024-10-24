@@ -153,6 +153,8 @@
     <string name="my_card">My Card</string>
     <string name="spectator_title">Spectator Mode</string>
     <string name="spectator_body">We could not generate a card to you because the raffle has already started when you joined the room. You can still watch and interact as you wish.</string>
+    <string name="start_raffle_error">We could not start the raffle. Please, try again.</string>
+    <string name="finish_raffle_error">We could not finish the bingo. Please, try again.</string>
 
 
     <!--    Auth Errors -->

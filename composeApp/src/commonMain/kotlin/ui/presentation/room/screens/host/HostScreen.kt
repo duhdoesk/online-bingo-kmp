@@ -10,18 +10,29 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.sizeIn
 import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarDuration
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import org.jetbrains.compose.resources.ExperimentalResourceApi
+import org.jetbrains.compose.resources.stringResource
+import themedbingo.composeapp.generated.resources.Res
+import themedbingo.composeapp.generated.resources.finish_raffle_error
+import themedbingo.composeapp.generated.resources.start_raffle_error
 import ui.presentation.room.RoomHostViewModel
 import ui.presentation.room.event.RoomHostEvent
 import ui.presentation.room.screens.component.PlayersLazyRow
+import ui.presentation.room.state.HostScreenError
 import ui.presentation.room.state.auxiliar.BingoState
 
+@OptIn(ExperimentalResourceApi::class)
 @Composable
 fun HostScreen(viewModel: RoomHostViewModel) {
     /**
@@ -35,11 +46,40 @@ fun HostScreen(viewModel: RoomHostViewModel) {
     val screenState by viewModel.screenState.collectAsState()
 
     /**
+     * Snackbar host state and string resources
+     */
+    val snackbarHostState = remember { SnackbarHostState() }
+    val startRaffleErrorMessage = stringResource(Res.string.start_raffle_error)
+    val finishRaffleErrorMessage = stringResource(Res.string.finish_raffle_error)
+
+    /**
+     * Triggers Snackbar when there is any error
+     */
+    LaunchedEffect(screenState.hostScreenError) {
+        if (screenState.hostScreenError == null) return@LaunchedEffect
+
+        val errorMessage =
+            if (screenState.hostScreenError == HostScreenError.START) startRaffleErrorMessage
+            else finishRaffleErrorMessage
+
+        snackbarHostState.showSnackbar(
+            message = errorMessage,
+            actionLabel = null,
+            withDismissAction = true,
+            duration = SnackbarDuration.Short,
+        )
+
+        viewModel.uiEvent(RoomHostEvent.CleanErrors)
+    }
+
+    /**
      * Screen calling
      */
     Scaffold(
         modifier = Modifier.imePadding(),
+        snackbarHost = { SnackbarHost(snackbarHostState) },
     ) { innerPadding ->
+
         Box(
             contentAlignment = Alignment.Center,
             modifier = Modifier

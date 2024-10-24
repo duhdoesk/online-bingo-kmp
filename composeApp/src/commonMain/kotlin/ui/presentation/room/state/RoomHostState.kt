@@ -52,6 +52,11 @@ data class RoomHostState(
      * Represents if host can raffle next item
      */
     val raffleButtonState: RaffleButtonState,
+
+    /**
+     * Represents any error that may occur
+     */
+    val hostScreenError: HostScreenError?,
 ) {
     companion object {
         val INITIAL = RoomHostState(
@@ -64,6 +69,11 @@ data class RoomHostState(
             maxWinners = 1,
             raffledItems = listOf(),
             raffleButtonState = RaffleButtonState.SUSPEND,
+            hostScreenError = null,
         )
     }
+}
+
+enum class HostScreenError {
+    START, FINISH
 }

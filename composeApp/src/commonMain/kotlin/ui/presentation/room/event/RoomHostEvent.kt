@@ -6,4 +6,5 @@ sealed class RoomHostEvent {
     data object StartRaffle: RoomHostEvent()
     data object FinishRaffle: RoomHostEvent()
     data object RaffleNextItem: RoomHostEvent()
+    data object CleanErrors: RoomHostEvent()
 }

@@ -153,6 +153,8 @@
     <string name="my_card">Minha Cartela</string>
     <string name="spectator_title">Modo Espectador</string>
     <string name="spectator_body">Não pudemos lhe gerar uma cartela, pois o sorteio já havia começado quando você entrou na sala. Você ainda pode assistir e interagir como desejar.</string>
+    <string name="start_raffle_error">Ops! Não conseguimos iniciar o sorteio. Por favor, tente novamente.</string>
+    <string name="finish_raffle_error">Ops! Não conseguimos encerrar o bingo. Por favor, tente novamente.</string>
 
 
     <!--    Auth Errors -->

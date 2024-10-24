@@ -17,6 +17,7 @@ import kotlinx.coroutines.launch
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 import ui.presentation.room.event.RoomHostEvent
+import ui.presentation.room.state.HostScreenError
 import ui.presentation.room.state.RoomHostState
 import ui.presentation.room.state.auxiliar.BingoStyle
 import ui.presentation.room.state.auxiliar.DataState
@@ -63,6 +64,7 @@ class RoomHostViewModel(
             RoomHostEvent.StartRaffle -> startRaffle()
             RoomHostEvent.UiLoaded -> uiLoaded()
             RoomHostEvent.PopBack -> popBack()
+            RoomHostEvent.CleanErrors -> cleanErrors()
         }
     }
 
@@ -98,6 +100,7 @@ class RoomHostViewModel(
                     maxWinners = room.maxWinners,
                     raffledItems = room.raffled,
                     raffleButtonState = buttonState,
+                    hostScreenError = null,
                 )
             }.collect { state ->
                 _screenState.update { state }
@@ -128,8 +131,7 @@ class RoomHostViewModel(
             updateRoomStateUseCase(
                 roomId = roomId,
                 state = RoomState.FINISHED
-            )
-                .onFailure { } //todo(): inform UI
+            ).onFailure { _screenState.update { it.copy(hostScreenError = HostScreenError.FINISH) } }
         }
     }
 
@@ -197,8 +199,14 @@ class RoomHostViewModel(
             updateRoomStateUseCase(
                 roomId = roomId,
                 state = RoomState.RUNNING
-            )
-                .onFailure { } //todo(): inform UI
+            ).onFailure { _screenState.update { it.copy(hostScreenError = HostScreenError.START) } }
         }
+    }
+
+    /**
+     * Clears any error message in Screen State
+     */
+    private fun cleanErrors() {
+        _screenState.update { it.copy(hostScreenError = null) }
     }
 }
