@@ -11,7 +11,7 @@ import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
 
 class BingoThemeRepositoryImpl(
-    private val firestore: FirebaseFirestore
+    firestore: FirebaseFirestore
 ) : BingoThemeRepository {
 
     private val collection = firestore
@@ -26,7 +26,8 @@ class BingoThemeRepositoryImpl(
                     BingoThemeDTO(
                         id = documentSnapshot.id,
                         name = documentSnapshot.get("name"),
-                        picture = documentSnapshot.get("picture")
+                        picture = documentSnapshot.get("picture"),
+                        nameEnglish = documentSnapshot.get("name_en"),
                     )
                 }
             return Result.success(themeDTO)
@@ -43,7 +44,8 @@ class BingoThemeRepositoryImpl(
                 BingoThemeDTO(
                     id = documentSnapshot.id,
                     name = documentSnapshot.get("name"),
-                    picture = documentSnapshot.get("picture")
+                    picture = documentSnapshot.get("picture"),
+                    nameEnglish = documentSnapshot.get("name_en"),
                 ).toModel()
             }
     }
@@ -56,7 +58,8 @@ class BingoThemeRepositoryImpl(
                     BingoThemeDTO(
                         id = documentSnapshot.id,
                         name = documentSnapshot.get("name"),
-                        picture = documentSnapshot.get("picture")
+                        picture = documentSnapshot.get("picture"),
+                        nameEnglish = documentSnapshot.get("name_en"),
                     ).toModel()
                 }
             }
