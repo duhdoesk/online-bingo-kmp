@@ -2,9 +2,8 @@ package data.theme.repository
 
 import data.character.model.CharacterDTO
 import data.theme.model.BingoThemeDTO
+import dev.gitlive.firebase.firestore.DocumentSnapshot
 import dev.gitlive.firebase.firestore.FirebaseFirestore
-import domain.character.model.Character
-import domain.theme.model.BingoTheme
 import domain.theme.repository.BingoThemeRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
@@ -23,12 +22,7 @@ class BingoThemeRepositoryImpl(
                 .document(id)
                 .get()
                 .let { documentSnapshot ->
-                    BingoThemeDTO(
-                        id = documentSnapshot.id,
-                        name = documentSnapshot.get("name"),
-                        picture = documentSnapshot.get("picture"),
-                        nameEnglish = documentSnapshot.get("name_en"),
-                    )
+                    buildBingoThemeDTO(documentSnapshot)
                 }
             return Result.success(themeDTO)
         } catch (e: Exception) {
@@ -36,48 +30,34 @@ class BingoThemeRepositoryImpl(
         }
     }
 
-    override fun flowThemeById(id: String): Flow<BingoTheme> {
+    override fun flowThemeById(id: String): Flow<BingoThemeDTO> {
         return collection
             .document(id)
             .snapshots
             .map { documentSnapshot ->
-                BingoThemeDTO(
-                    id = documentSnapshot.id,
-                    name = documentSnapshot.get("name"),
-                    picture = documentSnapshot.get("picture"),
-                    nameEnglish = documentSnapshot.get("name_en"),
-                ).toModel()
+                buildBingoThemeDTO(documentSnapshot)
             }
     }
 
-    override fun getAllThemes(): Flow<List<BingoTheme>> {
+    override fun getAllThemes(): Flow<List<BingoThemeDTO>> {
         return collection
             .snapshots
             .map { querySnapshot ->
                 querySnapshot.documents.map { documentSnapshot ->
-                    BingoThemeDTO(
-                        id = documentSnapshot.id,
-                        name = documentSnapshot.get("name"),
-                        picture = documentSnapshot.get("picture"),
-                        nameEnglish = documentSnapshot.get("name_en"),
-                    ).toModel()
+                    buildBingoThemeDTO(documentSnapshot)
                 }
             }
     }
 
-    override fun flowThemeCharacters(themeId: String): Flow<List<Character>> {
+    override fun flowThemeCharacters(themeId: String): Flow<List<CharacterDTO>> {
         return flow {
             val characters = collection
                 .document(themeId)
                 .collection("characters")
                 .get()
                 .documents
-                .map { document ->
-                    Character(
-                        id = document.id,
-                        name = document.get("name"),
-                        pictureUri = document.get("picture")
-                    )
+                .map { documentSnapshot ->
+                    buildCharacterDTO(documentSnapshot)
                 }
             emit(characters)
         }
@@ -90,16 +70,29 @@ class BingoThemeRepositoryImpl(
                 .collection("characters")
                 .get()
                 .documents
-                .map { document ->
-                    CharacterDTO(
-                        id = document.id,
-                        name = document.get("name"),
-                        pictureUri = document.get("picture"),
-                    )
+                .map { documentSnapshot ->
+                    buildCharacterDTO(documentSnapshot)
                 }
             return Result.success(characters)
         } catch (e: Exception) {
             return Result.failure(e)
         }
+    }
+
+    private fun buildBingoThemeDTO(documentSnapshot: DocumentSnapshot): BingoThemeDTO {
+        return BingoThemeDTO(
+            id = documentSnapshot.id,
+            name = documentSnapshot.get("name"),
+            picture = documentSnapshot.get("picture"),
+            nameEnglish = documentSnapshot.get("name_en"),
+        )
+    }
+
+    private fun buildCharacterDTO(documentSnapshot: DocumentSnapshot): CharacterDTO {
+        return CharacterDTO(
+            id = documentSnapshot.id,
+            name = documentSnapshot.get("name"),
+            pictureUri = documentSnapshot.get("picture"),
+        )
     }
 }

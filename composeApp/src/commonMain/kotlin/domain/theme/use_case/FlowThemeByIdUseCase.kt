@@ -7,6 +7,6 @@ import kotlinx.coroutines.flow.flow
 
 class FlowThemeByIdUseCase(private val bingoThemeRepository: BingoThemeRepository) {
     operator fun invoke(themeId: String): Flow<BingoTheme> = flow {
-        bingoThemeRepository.getThemeById(themeId)
+        bingoThemeRepository.getThemeById(themeId).map { it.toModel() }
     }
 }

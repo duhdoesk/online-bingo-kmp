@@ -18,8 +18,8 @@ class GetRoomCharactersUseCase(
                     onFailure = { exception ->
                         return Result.failure(exception)
                     },
-                    onSuccess = { dto ->
-                        val model = dto.map { it.toModel() }
+                    onSuccess = { list ->
+                        val model = list.map { dto -> dto.toModel() }
                         return Result.success(model)
                     }
                 )
