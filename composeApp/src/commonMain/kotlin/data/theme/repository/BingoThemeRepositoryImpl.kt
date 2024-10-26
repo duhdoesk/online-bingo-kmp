@@ -49,6 +49,17 @@ class BingoThemeRepositoryImpl(
             }
     }
 
+    override fun observeAvailableThemes(): Flow<List<BingoThemeDTO>> {
+        return collection
+            .where { "available" equalTo true }
+            .snapshots
+            .map { querySnapshot ->
+                querySnapshot.documents.map { documentSnapshot ->
+                    buildBingoThemeDTO(documentSnapshot)
+                }
+            }
+    }
+
     override fun flowThemeCharacters(themeId: String): Flow<List<CharacterDTO>> {
         return flow {
             val characters = collection

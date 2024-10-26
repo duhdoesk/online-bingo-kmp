@@ -8,7 +8,7 @@ import domain.room.use_case.GetNotStartedRoomsUseCase
 import domain.room.use_case.GetRoomByIdUseCase
 import domain.room.use_case.GetRunningRoomsUseCase
 import domain.room.use_case.JoinRoomUseCase
-import domain.theme.use_case.GetAllThemesUseCase
+import domain.theme.use_case.ObserveAvailableThemes
 import domain.user.model.User
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -50,7 +50,7 @@ class JoinScreenComponent(
      */
     private val getNotStartedRoomsUseCase by inject<GetNotStartedRoomsUseCase>()
     private val getRunningRoomsUseCase by inject<GetRunningRoomsUseCase>()
-    private val getAllThemesUseCase by inject<GetAllThemesUseCase>()
+    private val observeAvailableThemes: ObserveAvailableThemes by inject()
     private val joinRoomUseCase by inject<JoinRoomUseCase>()
     private val getRoomByIdUseCase by inject<GetRoomByIdUseCase>()
 
@@ -60,7 +60,7 @@ class JoinScreenComponent(
     private val _uiState = MutableStateFlow(JoinRoomUIState.INITIAL)
     val uiState: StateFlow<JoinRoomUIState> get() = _uiState.asStateFlow()
 
-    private val _themes = getAllThemesUseCase()
+    private val _themes = observeAvailableThemes()
     val themes = _themes
 
     private val _query = MutableStateFlow("")

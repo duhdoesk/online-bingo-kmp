@@ -41,6 +41,7 @@ import domain.theme.use_case.GetRoomCharactersUseCase
 import domain.theme.use_case.GetRoomThemeUseCase
 import domain.theme.use_case.GetThemeByIdUseCase
 import domain.theme.use_case.GetThemeCharactersUseCase
+import domain.theme.use_case.ObserveAvailableThemes
 import domain.user.repository.UserRepository
 import domain.user.use_case.CheckIfIsNewUserUseCase
 import domain.user.use_case.CreateUserUseCase
@@ -88,6 +89,7 @@ val domainModule = module {
     single { GetRoomThemeUseCase(get(), get()) }
     single { GetThemeCharactersUseCase(get()) }
     single { GetThemeByIdUseCase(get()) }
+    single { ObserveAvailableThemes(get()) }
 
 //    User
     single<UserRepository> { UserRepositoryImpl(get()) }

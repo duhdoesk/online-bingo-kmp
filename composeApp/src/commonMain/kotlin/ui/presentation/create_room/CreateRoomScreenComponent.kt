@@ -4,7 +4,7 @@ import com.arkivanov.decompose.ComponentContext
 import domain.room.model.BingoType
 import domain.room.use_case.CreateRoomUseCase
 import domain.theme.model.BingoTheme
-import domain.theme.use_case.GetAllThemesUseCase
+import domain.theme.use_case.ObserveAvailableThemes
 import domain.user.model.User
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -44,8 +44,8 @@ class CreateRoomScreenComponent(
     /**
      * Use Cases
      */
-    private val getAllThemesUseCase by inject<GetAllThemesUseCase>()
     private val createRoomUseCase by inject<CreateRoomUseCase>()
+    private val observeAvailableThemes: ObserveAvailableThemes by inject()
 
     /**
      * Modal visibility holders
@@ -125,7 +125,7 @@ class CreateRoomScreenComponent(
                 }
 
                 BingoType.THEMED -> {
-                    getAllThemesUseCase().collect { themes ->
+                    observeAvailableThemes().collect { themes ->
                         _uiState.update {
                             CreateScreenUiState(
                                 loading = false,
