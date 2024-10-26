@@ -36,11 +36,11 @@ import domain.room.use_case.UpdateRoomStateUseCase
 import domain.theme.repository.BingoThemeRepository
 import domain.theme.use_case.FlowThemeByIdUseCase
 import domain.theme.use_case.GetAllThemesUseCase
-import domain.theme.use_case.GetCharactersByThemeId
-import domain.theme.use_case.GetRoomCharactersUseCase
+import domain.character.use_case.ObserveThemeCharacters
+import domain.character.use_case.GetRoomCharacters
 import domain.theme.use_case.GetRoomThemeUseCase
 import domain.theme.use_case.GetThemeByIdUseCase
-import domain.theme.use_case.GetThemeCharactersUseCase
+import domain.character.use_case.GetThemeCharacters
 import domain.theme.use_case.ObserveAvailableThemes
 import domain.user.repository.UserRepository
 import domain.user.use_case.CheckIfIsNewUserUseCase
@@ -83,11 +83,11 @@ val domainModule = module {
 //    Theme
     single<BingoThemeRepository> { BingoThemeRepositoryImpl(get()) }
     single { GetAllThemesUseCase(get()) }
-    single { GetCharactersByThemeId(get()) }
+    single { ObserveThemeCharacters(get()) }
     single { FlowThemeByIdUseCase(get()) }
-    single { GetRoomCharactersUseCase(get(), get()) }
+    single { GetRoomCharacters(get(), get()) }
     single { GetRoomThemeUseCase(get(), get()) }
-    single { GetThemeCharactersUseCase(get()) }
+    single { GetThemeCharacters(get()) }
     single { GetThemeByIdUseCase(get()) }
     single { ObserveAvailableThemes(get()) }
 

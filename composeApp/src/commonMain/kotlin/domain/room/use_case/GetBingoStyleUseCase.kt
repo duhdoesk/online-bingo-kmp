@@ -2,12 +2,12 @@ package domain.room.use_case
 
 import domain.room.model.BingoType
 import domain.theme.use_case.GetThemeByIdUseCase
-import domain.theme.use_case.GetThemeCharactersUseCase
+import domain.character.use_case.GetThemeCharacters
 import ui.presentation.room.state.auxiliar.BingoStyle
 
 class GetBingoStyleUseCase(
     private val getThemeByIdUseCase: GetThemeByIdUseCase,
-    private val getThemeCharactersUseCase: GetThemeCharactersUseCase,
+    private val getThemeCharacters: GetThemeCharacters,
 ) {
     suspend operator fun invoke(
         bingoType: BingoType,
@@ -20,7 +20,7 @@ class GetBingoStyleUseCase(
                     themeId?.let { getThemeByIdUseCase(it) }?.getOrNull()
 
                 val characters =
-                    themeId?.let { getThemeCharactersUseCase(it) }?.getOrNull()
+                    themeId?.let { getThemeCharacters(it) }?.getOrNull()
 
                 if (theme == null || characters.isNullOrEmpty()) {
                     return Result.failure(Exception())

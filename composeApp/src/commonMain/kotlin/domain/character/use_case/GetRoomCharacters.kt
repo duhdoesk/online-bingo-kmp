@@ -1,12 +1,12 @@
-package domain.theme.use_case
+package domain.character.use_case
 
 import domain.character.model.Character
+import domain.character.repository.CharacterRepository
 import domain.room.repository.BingoRoomRepository
-import domain.theme.repository.BingoThemeRepository
 
-class GetRoomCharactersUseCase(
+class GetRoomCharacters(
     private val roomRepository: BingoRoomRepository,
-    private val themeRepository: BingoThemeRepository,
+    private val characterRepository: CharacterRepository,
 ) {
     suspend operator fun invoke(roomId: String): Result<List<Character>> {
         roomRepository.getRoomById(roomId).fold(
@@ -14,7 +14,7 @@ class GetRoomCharactersUseCase(
                 return Result.failure(exception)
             },
             onSuccess = { room ->
-                themeRepository.getThemeCharacters(room.themeId!!).fold(
+                characterRepository.getThemeCharacters(room.themeId!!).fold(
                     onFailure = { exception ->
                         return Result.failure(exception)
                     },

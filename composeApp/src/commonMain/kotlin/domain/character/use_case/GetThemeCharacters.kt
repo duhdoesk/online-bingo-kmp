@@ -1,11 +1,11 @@
-package domain.theme.use_case
+package domain.character.use_case
 
 import domain.character.model.Character
-import domain.theme.repository.BingoThemeRepository
+import domain.character.repository.CharacterRepository
 
-class GetThemeCharactersUseCase(private val themeRepository: BingoThemeRepository) {
+class GetThemeCharacters(private val repository: CharacterRepository) {
     suspend operator fun invoke(themeId: String): Result<List<Character>> {
-        themeRepository.getThemeCharacters(themeId).fold(
+        repository.getThemeCharacters(themeId).fold(
             onFailure = { exception ->
                 return Result.failure(exception)
             },
