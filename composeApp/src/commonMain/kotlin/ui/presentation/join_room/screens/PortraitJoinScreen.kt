@@ -44,7 +44,7 @@ import themedbingo.composeapp.generated.resources.search
 import themedbingo.composeapp.generated.resources.subscription_dialog_body
 import themedbingo.composeapp.generated.resources.subscription_dialog_title
 import ui.navigation.Configuration
-import ui.presentation.common.components.BottomButtonRow
+import ui.presentation.common.components.DoubleButtonRow
 import ui.presentation.join_room.event.JoinRoomUIEvent
 import ui.presentation.join_room.screens.component.JoinScreenLazyColumn
 import ui.presentation.join_room.screens.component.JoinScreenNoRoomsComponent
@@ -135,7 +135,7 @@ fun PortraitJoinScreen(
                     }
                 }
 
-                BottomButtonRow(
+                DoubleButtonRow(
                     rightEnabled = true,
                     leftClicked = { uiEvent(JoinRoomUIEvent.PopBack) },
                     rightClicked = {

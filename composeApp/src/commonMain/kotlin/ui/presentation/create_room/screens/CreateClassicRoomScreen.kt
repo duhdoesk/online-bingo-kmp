@@ -22,7 +22,7 @@ import themedbingo.composeapp.generated.resources.Res
 import themedbingo.composeapp.generated.resources.create_button
 import themedbingo.composeapp.generated.resources.create_classic_room_title
 import themedbingo.composeapp.generated.resources.name_textField
-import ui.presentation.common.components.BottomButtonRow
+import ui.presentation.common.components.DoubleButtonRow
 import ui.presentation.common.components.CreateRoomHeader
 import ui.presentation.create_room.event.CreateScreenEvent
 import ui.presentation.create_room.screens.components.CreateRoomEditMaxWinners
@@ -92,7 +92,7 @@ fun CreateClassicRoomScreen(
             )
         }
 
-        BottomButtonRow(
+        DoubleButtonRow(
             leftClicked = { event(CreateScreenEvent.PopBack) },
             rightClicked = { event(CreateScreenEvent.CreateRoom) },
             rightText = Res.string.create_button,

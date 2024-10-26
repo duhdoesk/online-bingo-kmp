@@ -16,7 +16,7 @@ import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import themedbingo.composeapp.generated.resources.Res
 import themedbingo.composeapp.generated.resources.new_card_button
-import ui.presentation.common.components.BottomButtonRow
+import ui.presentation.common.components.DoubleButtonRow
 import ui.presentation.room.event.RoomPlayerEvent
 import ui.presentation.room.screens.component.HorizontalPagerIndicator
 import ui.presentation.room.screens.component.NotStartedPlayScreenHorizontalPager
@@ -54,7 +54,7 @@ fun PlayerScreenNotStarted(
             )
         }
 
-        BottomButtonRow(
+        DoubleButtonRow(
             leftEnabled = true,
             rightEnabled = true,
             leftClicked = { event(RoomPlayerEvent.PopBack) },
@@ -63,7 +63,6 @@ fun PlayerScreenNotStarted(
                 coroutineScope.launch { pagerState.animateScrollToPage(0) }
             },
             rightText = Res.string.new_card_button,
-            rightButtonHasIcon = false,
             modifier = Modifier
                 .padding(horizontal = 16.dp, vertical = 8.dp)
                 .fillMaxWidth()

@@ -1,7 +1,5 @@
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.imePadding
-import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -44,11 +42,11 @@ fun App(rootComponent: RootComponent) {
             /**
              * UI Setup
              */
-            Scaffold(modifier = Modifier.imePadding()) {
+            Scaffold(modifier = Modifier) {
 
                 BoxWithConstraints(
                     contentAlignment = Alignment.Center,
-                    modifier = Modifier.fillMaxSize().systemBarsPadding(),
+                    modifier = Modifier.fillMaxSize(),
                 ) {
 
                     val windowInfo = rememberWindowInfo(

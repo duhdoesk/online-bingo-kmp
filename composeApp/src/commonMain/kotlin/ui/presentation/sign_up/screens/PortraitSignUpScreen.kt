@@ -40,7 +40,7 @@ import themedbingo.composeapp.generated.resources.password_info_text
 import themedbingo.composeapp.generated.resources.repeat_password
 import themedbingo.composeapp.generated.resources.sign_up
 import themedbingo.composeapp.generated.resources.sign_up_button
-import ui.presentation.common.components.BottomButtonRow
+import ui.presentation.common.components.DoubleButtonRow
 import ui.presentation.common.components.CreateRoomHeader
 import ui.presentation.sign_up.event.SignUpScreenEvent
 import ui.presentation.sign_up.state.SignUpScreenUIState
@@ -162,7 +162,7 @@ fun PortraitSignUpScreen(
                 Spacer(Modifier.height(16.dp))
             }
 
-            BottomButtonRow(
+            DoubleButtonRow(
                 rightEnabled = isFormValid,
                 leftClicked = { event(SignUpScreenEvent.PopBack) },
                 rightClicked = { event(SignUpScreenEvent.SignUp) },

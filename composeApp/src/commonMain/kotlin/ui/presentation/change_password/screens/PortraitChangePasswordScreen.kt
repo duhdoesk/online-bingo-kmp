@@ -16,8 +16,6 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ThumbUp
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.Icon
@@ -42,25 +40,17 @@ import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 import themedbingo.composeapp.generated.resources.Res
-import themedbingo.composeapp.generated.resources.auth_unmapped_error
 import themedbingo.composeapp.generated.resources.baseline_visibility_24
 import themedbingo.composeapp.generated.resources.baseline_visibility_off_24
 import themedbingo.composeapp.generated.resources.change_password
 import themedbingo.composeapp.generated.resources.confirm_button
 import themedbingo.composeapp.generated.resources.current_password
-import themedbingo.composeapp.generated.resources.email
-import themedbingo.composeapp.generated.resources.email_info_text
 import themedbingo.composeapp.generated.resources.new_password
-import themedbingo.composeapp.generated.resources.password
 import themedbingo.composeapp.generated.resources.password_info_text
 import themedbingo.composeapp.generated.resources.repeat_password
-import themedbingo.composeapp.generated.resources.sign_up
-import themedbingo.composeapp.generated.resources.sign_up_button
 import ui.presentation.change_password.event.ChangePasswordScreenUIEvent
-import ui.presentation.common.components.BottomButtonRow
+import ui.presentation.common.components.DoubleButtonRow
 import ui.presentation.common.components.CreateRoomHeader
-import ui.presentation.sign_up.event.SignUpScreenEvent
-import ui.presentation.util.dialog.AuthErrorDialog
 
 @OptIn(ExperimentalResourceApi::class)
 @Composable
@@ -191,7 +181,7 @@ fun PortraitChangePasswordScreen(
                 Spacer(Modifier.height(16.dp))
             }
 
-            BottomButtonRow(
+            DoubleButtonRow(
                 rightEnabled = isFormValid,
                 leftClicked = { event(ChangePasswordScreenUIEvent.PopBack) },
                 rightClicked = { event(ChangePasswordScreenUIEvent.ConfirmPasswordChange) },

@@ -15,7 +15,7 @@ import androidx.compose.ui.unit.dp
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import themedbingo.composeapp.generated.resources.Res
 import themedbingo.composeapp.generated.resources.call_bingo_button
-import ui.presentation.common.components.BottomButtonRow
+import ui.presentation.common.components.DoubleButtonRow
 import ui.presentation.room.event.RoomPlayerEvent
 import ui.presentation.room.screens.component.CompactSelectedBingoCard
 import ui.presentation.room.screens.component.RaffledAmount
@@ -63,13 +63,12 @@ fun PlayerScreenRunning(
             }
         }
 
-        BottomButtonRow(
+        DoubleButtonRow(
             leftEnabled = true,
             rightEnabled = screenState.canCallBingo,
             leftClicked = { event(RoomPlayerEvent.PopBack) },
             rightClicked = { event(RoomPlayerEvent.CallBingo) },
             rightText = Res.string.call_bingo_button,
-            rightButtonHasIcon = false,
             modifier = Modifier
                 .padding(horizontal = 16.dp, vertical = 8.dp)
                 .fillMaxWidth()

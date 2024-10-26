@@ -2,6 +2,7 @@
 
 package ui.presentation.room.screens.component
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -18,6 +19,7 @@ import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Card
+import androidx.compose.material3.CardColors
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
@@ -97,19 +99,26 @@ fun RaffledItemClassic(
             columns = GridCells.Fixed(7),
             contentPadding = PaddingValues(horizontal = 8.dp),
             modifier = Modifier
-                .padding(vertical = 8.dp)
+                .padding(top = 8.dp)
                 .fillMaxWidth()
                 .heightIn(max = 600.dp),
         ) {
             val numbers = (1..75).toList().map { it.toString() }
 
             items(numbers) { str ->
-                val containerColor = GetContainerColor(str, raffled)
+                val cardColors = GetContainerColor(str, raffled)
 
                 Card(
+                    border = BorderStroke(
+                        width = 1.dp,
+                        color = MaterialTheme.colorScheme.secondaryContainer,
+                    ),
                     modifier = Modifier.padding(2.dp).fillMaxSize(),
                 ) {
-                    Surface(color = containerColor) {
+                    Surface(
+                        color = cardColors.containerColor,
+                        contentColor = cardColors.contentColor,
+                    ) {
                         Text(
                             text = getFormattedNumber(str.toInt()),
                             textAlign = TextAlign.Center,
@@ -129,7 +138,13 @@ fun RaffledItemClassic(
 }
 
 @Composable
-private fun GetContainerColor(number: String, raffled: List<String>): Color {
-    return if (number in raffled) MaterialTheme.colorScheme.primaryContainer
-    else CardDefaults.cardColors().containerColor
+private fun GetContainerColor(number: String, raffled: List<String>): CardColors {
+    return if (number in raffled) CardDefaults.cardColors().copy(
+        containerColor = MaterialTheme.colorScheme.secondaryContainer,
+        contentColor = MaterialTheme.colorScheme.onSecondaryContainer,
+    )
+    else CardDefaults.cardColors().copy(
+        containerColor = MaterialTheme.colorScheme.surface,
+        contentColor = MaterialTheme.colorScheme.onSurface,
+    )
 }

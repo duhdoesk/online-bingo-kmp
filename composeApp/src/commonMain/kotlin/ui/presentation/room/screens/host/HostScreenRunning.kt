@@ -2,12 +2,10 @@ package ui.presentation.room.screens.host
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.MaterialTheme
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Check
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -23,7 +21,7 @@ import themedbingo.composeapp.generated.resources.finish_dialog_body
 import themedbingo.composeapp.generated.resources.finish_dialog_title
 import themedbingo.composeapp.generated.resources.pop_back_dialog_body
 import themedbingo.composeapp.generated.resources.pop_back_dialog_title
-import ui.presentation.common.components.BottomButtonRow
+import ui.presentation.common.components.DoubleButtonRow
 import ui.presentation.room.event.RoomHostEvent
 import ui.presentation.room.screens.component.RaffleNextButton
 import ui.presentation.room.screens.component.RaffledAmount
@@ -81,27 +79,25 @@ fun HostScreenRunning(
             raffled = screenState.raffledItems,
             isHost = true,
         )
-
-        Spacer(Modifier.height(16.dp))
-
-        RaffleNextButton(
-            buttonState = screenState.raffleButtonState,
-            onClick = { event(RoomHostEvent.RaffleNextItem) }
-        )
     }
 
-    BottomButtonRow(
+    RaffleNextButton(
+        buttonState = screenState.raffleButtonState,
+        onClick = { event(RoomHostEvent.RaffleNextItem) },
+        modifier = Modifier
+            .padding(start = 16.dp, top = 8.dp, end =16.dp, bottom = 16.dp)
+            .fillMaxWidth()
+    )
+
+    DoubleButtonRow(
         leftEnabled = true,
         rightEnabled = true,
         leftClicked = { showPopBackConfirmation = true },
         rightClicked = { showFinishConfirmation = true },
         rightText = Res.string.finish_button,
-        rightButtonColors = ButtonDefaults.buttonColors().copy(
-            containerColor = MaterialTheme.colorScheme.error,
-            contentColor = MaterialTheme.colorScheme.onError,
-        ),
+        rightButtonIcon = Icons.Default.Check,
         modifier = Modifier
-            .padding(horizontal = 16.dp, vertical = 8.dp)
+            .padding(8.dp)
             .fillMaxWidth()
     )
 }

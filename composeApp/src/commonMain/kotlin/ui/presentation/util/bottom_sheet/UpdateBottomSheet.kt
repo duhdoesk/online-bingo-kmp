@@ -34,7 +34,7 @@ import org.jetbrains.compose.resources.stringResource
 import themedbingo.composeapp.generated.resources.Res
 import themedbingo.composeapp.generated.resources.cancel_button
 import themedbingo.composeapp.generated.resources.confirm_button
-import ui.presentation.common.components.BottomButtonRow
+import ui.presentation.common.components.DoubleButtonRow
 
 @OptIn(ExperimentalResourceApi::class, ExperimentalMaterial3Api::class)
 @Composable
@@ -129,7 +129,7 @@ private fun UpdateBottomSheetContent(
 
             Spacer(Modifier.height(48.dp))
 
-            BottomButtonRow(
+            DoubleButtonRow(
                 leftEnabled = true,
                 rightEnabled = isValueValid,
                 leftText = Res.string.cancel_button,

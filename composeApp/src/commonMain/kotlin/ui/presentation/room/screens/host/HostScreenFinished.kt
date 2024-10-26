@@ -7,13 +7,9 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.KeyboardArrowLeft
-import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -26,10 +22,10 @@ import domain.user.model.User
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.stringResource
 import themedbingo.composeapp.generated.resources.Res
-import themedbingo.composeapp.generated.resources.back_button
 import themedbingo.composeapp.generated.resources.pop_back_dialog_body
 import themedbingo.composeapp.generated.resources.pop_back_dialog_title
 import themedbingo.composeapp.generated.resources.winners
+import ui.presentation.common.components.SingleButtonRow
 import ui.presentation.room.event.RoomHostEvent
 import ui.presentation.room.screens.component.WinnerCard
 import ui.presentation.util.dialog.GenericActionDialog
@@ -90,19 +86,11 @@ fun HostScreenFinished(
             }
         }
 
-        TextButton(
+        SingleButtonRow(
             onClick = { showPopBackConfirmation = true },
-            modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)
-        ) {
-            Icon(
-                Icons.AutoMirrored.Filled.KeyboardArrowLeft,
-                contentDescription = stringResource(Res.string.back_button)
-            )
-
-            Text(
-                text = stringResource(Res.string.back_button),
-                modifier = Modifier.padding(horizontal = 6.dp)
-            )
-        }
+            modifier = Modifier
+                .padding(8.dp)
+                .fillMaxWidth()
+        )
     }
 }
