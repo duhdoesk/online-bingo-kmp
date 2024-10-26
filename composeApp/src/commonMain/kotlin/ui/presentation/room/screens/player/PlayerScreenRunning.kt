@@ -12,11 +12,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import org.jetbrains.compose.resources.ExperimentalResourceApi
-import themedbingo.composeapp.generated.resources.Res
-import themedbingo.composeapp.generated.resources.call_bingo_button
-import ui.presentation.common.components.DoubleButtonRow
+import ui.presentation.common.components.SingleButtonRow
 import ui.presentation.room.event.RoomPlayerEvent
+import ui.presentation.room.screens.component.BingoButton
 import ui.presentation.room.screens.component.CompactSelectedBingoCard
 import ui.presentation.room.screens.component.RaffledAmount
 import ui.presentation.room.screens.component.RaffledPresentation
@@ -24,7 +22,6 @@ import ui.presentation.room.screens.component.SpectatorModeInfo
 import ui.presentation.room.state.RoomPlayerState
 import ui.presentation.room.state.auxiliar.CardState
 
-@OptIn(ExperimentalResourceApi::class)
 @Composable
 fun PlayerScreenRunning(
     screenState: RoomPlayerState,
@@ -63,14 +60,18 @@ fun PlayerScreenRunning(
             }
         }
 
-        DoubleButtonRow(
-            leftEnabled = true,
-            rightEnabled = screenState.canCallBingo,
-            leftClicked = { event(RoomPlayerEvent.PopBack) },
-            rightClicked = { event(RoomPlayerEvent.CallBingo) },
-            rightText = Res.string.call_bingo_button,
+        BingoButton(
+            enabled = screenState.canCallBingo,
+            onClick = { event(RoomPlayerEvent.CallBingo) },
             modifier = Modifier
-                .padding(horizontal = 16.dp, vertical = 8.dp)
+                .padding(start = 16.dp, top = 8.dp, end = 16.dp, bottom = 16.dp)
+                .fillMaxWidth(),
+        )
+
+        SingleButtonRow(
+            onClick = { event(RoomPlayerEvent.PopBack) },
+            modifier = Modifier
+                .padding(8.dp)
                 .fillMaxWidth()
         )
     }

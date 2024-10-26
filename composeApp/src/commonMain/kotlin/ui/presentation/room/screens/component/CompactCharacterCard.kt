@@ -21,16 +21,16 @@ fun CompactCharacterCard(
     modifier: Modifier = Modifier,
 ) {
     val containerColor =
-        if (hasBeenRaffled) MaterialTheme.colorScheme.primaryContainer
+        if (hasBeenRaffled) MaterialTheme.colorScheme.secondaryContainer
         else MaterialTheme.colorScheme.surface
 
     val contentColor =
-        if (hasBeenRaffled) MaterialTheme.colorScheme.onPrimaryContainer
+        if (hasBeenRaffled) MaterialTheme.colorScheme.onSecondaryContainer
         else MaterialTheme.colorScheme.onSurface
 
     Card(
         modifier = modifier,
-        border = BorderStroke(1.dp, MaterialTheme.colorScheme.primaryContainer),
+        border = BorderStroke(1.dp, MaterialTheme.colorScheme.secondaryContainer),
     ) {
         Surface(
             color = containerColor,

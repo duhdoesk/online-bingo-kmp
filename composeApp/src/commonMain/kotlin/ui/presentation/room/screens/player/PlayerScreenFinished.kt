@@ -26,6 +26,7 @@ import org.jetbrains.compose.resources.stringResource
 import themedbingo.composeapp.generated.resources.Res
 import themedbingo.composeapp.generated.resources.back_button
 import themedbingo.composeapp.generated.resources.winners
+import ui.presentation.common.components.SingleButtonRow
 import ui.presentation.room.event.RoomPlayerEvent
 import ui.presentation.room.screens.component.WinnerCard
 import ui.presentation.util.getRandomLightColor
@@ -70,19 +71,11 @@ fun PlayerScreenFinished(
             }
         }
 
-        TextButton(
+        SingleButtonRow(
             onClick = { event(RoomPlayerEvent.PopBack) },
-            modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)
-        ) {
-            Icon(
-                Icons.AutoMirrored.Filled.KeyboardArrowLeft,
-                contentDescription = stringResource(Res.string.back_button)
-            )
-
-            Text(
-                text = stringResource(Res.string.back_button),
-                modifier = Modifier.padding(horizontal = 6.dp)
-            )
-        }
+            modifier = Modifier
+                .padding(8.dp)
+                .fillMaxWidth()
+        )
     }
 }
