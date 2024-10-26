@@ -65,6 +65,7 @@ fun PlayerScreen(viewModel: RoomPlayerViewModel) {
                 PlayersLazyRow(
                     players = screenState.players.reversed(),
                     winners = screenState.winners,
+                    host = screenState.host,
                     modifier = Modifier.fillMaxWidth(),
                 )
 

@@ -7,11 +7,13 @@ import domain.room.use_case.GetBingoStyleUseCase
 import domain.room.use_case.RaffleNextItemUseCase
 import domain.room.use_case.UpdateRoomStateUseCase
 import domain.user.model.User
+import domain.user.use_case.FlowUserUseCase
 import domain.user.use_case.GetRoomPlayersUseCase
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import org.koin.core.component.KoinComponent
@@ -47,6 +49,7 @@ class RoomHostViewModel(
     private val flowRoomByIdUseCase by inject<FlowRoomByIdUseCase>()
     private val getRoomPlayersUseCase by inject<GetRoomPlayersUseCase>()
     private val getBingoStyleUseCase: GetBingoStyleUseCase by inject()
+    private val observeUser: FlowUserUseCase by inject()
 
     /**
      * Action Use Cases
@@ -90,11 +93,15 @@ class RoomHostViewModel(
                     if (canRaffleNext(room.raffled.size, bingoStyle)) RaffleButtonState.AVAILABLE
                     else RaffleButtonState.DONE
 
+                val host =
+                    observeUser(room.hostId).first()
+
                 RoomHostState(
                     dataState = DataState.SUCCESS,
                     bingoStyle = bingoStyle,
                     bingoState = room.state,
                     roomName = room.name,
+                    host = host,
                     players = players,
                     winners = getWinners(ids = room.winners, players = players),
                     maxWinners = room.maxWinners,

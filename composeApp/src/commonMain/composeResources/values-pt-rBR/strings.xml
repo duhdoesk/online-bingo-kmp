@@ -132,6 +132,7 @@
 
 
     <!--    Host / Play Screen -->
+    <string name="host">Host</string>
     <string name="players_card">Jogadores</string>
     <string name="room_name_card">Nome da Sala</string>
     <string name="max_winners_card">Máximo de Vencedores</string>

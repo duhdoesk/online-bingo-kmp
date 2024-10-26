@@ -8,6 +8,7 @@ import domain.room.use_case.CallBingoUseCase
 import domain.room.use_case.FlowRoomByIdUseCase
 import domain.room.use_case.GetBingoStyleUseCase
 import domain.user.model.User
+import domain.user.use_case.FlowUserUseCase
 import domain.user.use_case.GetRoomPlayersUseCase
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -51,6 +52,7 @@ class RoomPlayerViewModel(
     private val getRoomPlayersUseCase by inject<GetRoomPlayersUseCase>()
     private val flowCardByRoomAndUserIDUseCase by inject<FlowCardByRoomAndUserIDUseCase>()
     private val getBingoStyleUseCase: GetBingoStyleUseCase by inject()
+    private val observeUser: FlowUserUseCase by inject()
 
     /**
      * Action Use Cases
@@ -125,12 +127,17 @@ class RoomPlayerViewModel(
                 val winners =
                     getWinners(ids = room.winners, players = players)
 
+                // Returns the host of the room
+                val host =
+                    observeUser(room.hostId).first()
+
                 // Builds the UI State
                 RoomPlayerState(
                     dataState = DataState.SUCCESS,
                     bingoStyle = bingoStyle,
                     bingoState = room.state,
                     roomName = room.name,
+                    host = host,
                     players = players,
                     winners = winners,
                     maxWinners = room.maxWinners,

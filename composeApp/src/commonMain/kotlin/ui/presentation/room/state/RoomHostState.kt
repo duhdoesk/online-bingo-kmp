@@ -29,6 +29,11 @@ data class RoomHostState(
     val roomName: String,
 
     /**
+     * Represents the host of the room
+     */
+    val host: User?,
+
+    /**
      * Represents a list of players and their info
      */
     val players: List<User>,
@@ -64,6 +69,7 @@ data class RoomHostState(
             bingoStyle = BingoStyle.Classic,
             bingoState = BingoState.NOT_STARTED,
             roomName = "",
+            host = null,
             players = listOf(),
             winners = listOf(),
             maxWinners = 1,
