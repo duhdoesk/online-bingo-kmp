@@ -140,7 +140,7 @@ fun UserContent(
 
         Box(contentAlignment = Alignment.Center) {
             val borderColor = when (winner) {
-                true -> MaterialTheme.colorScheme.primary
+                true -> MaterialTheme.colorScheme.secondary
                 false -> Color.Transparent
             }
 
@@ -169,7 +169,7 @@ fun UserContent(
                     contentAlignment = Alignment.Center,
                     modifier = Modifier.align(Alignment.BottomEnd)
                 ) {
-                    val containerColor = MaterialTheme.colorScheme.primary
+                    val containerColor = MaterialTheme.colorScheme.secondary
 
                     Canvas(
                         modifier = Modifier.size(30.dp),
@@ -180,7 +180,7 @@ fun UserContent(
                         text = place.toString(),
                         style = MaterialTheme.typography.titleLarge,
                         fontWeight = FontWeight.Bold,
-                        color = MaterialTheme.colorScheme.onPrimary,
+                        color = MaterialTheme.colorScheme.onSecondary,
                     )
                 }
             }
