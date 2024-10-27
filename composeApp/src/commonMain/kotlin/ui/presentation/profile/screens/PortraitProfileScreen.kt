@@ -3,20 +3,20 @@ package ui.presentation.profile.screens
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.asPaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.sizeIn
+import androidx.compose.foundation.layout.systemBars
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.KeyboardArrowLeft
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -24,7 +24,6 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -44,7 +43,6 @@ import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.stringResource
 import themedbingo.composeapp.generated.resources.Res
-import themedbingo.composeapp.generated.resources.back_button
 import themedbingo.composeapp.generated.resources.delete_account_body
 import themedbingo.composeapp.generated.resources.delete_account_title
 import themedbingo.composeapp.generated.resources.edit_button
@@ -57,6 +55,7 @@ import themedbingo.composeapp.generated.resources.update_victory_body
 import themedbingo.composeapp.generated.resources.update_victory_title
 import themedbingo.composeapp.generated.resources.user_avatar
 import themedbingo.composeapp.generated.resources.victory_message
+import ui.presentation.common.components.SingleButtonRow
 import ui.presentation.profile.event.ProfileScreenEvent
 import ui.presentation.profile.screens.component.ProfileScreenListDataSection
 import ui.presentation.profile.screens.component.ProfileScreenStringDataSection
@@ -91,10 +90,12 @@ fun PortraitProfileScreen(
     var signOutVisible by remember { mutableStateOf(false) }
     var deleteAccountVisible by remember { mutableStateOf(false) }
 
+    val topPadding = WindowInsets.systemBars.asPaddingValues().calculateTopPadding()
+
     Box(
         contentAlignment = Alignment.Center,
         modifier = Modifier
-            .imePadding()
+            .padding(top = topPadding)
             .fillMaxSize()
     ) {
         Column(
@@ -182,19 +183,12 @@ fun PortraitProfileScreen(
                 )
             }
 
-            Row(modifier = Modifier.fillMaxWidth()) {
-                TextButton(onClick = { event(ProfileScreenEvent.PopBack) }) {
-                    Icon(
-                        Icons.AutoMirrored.Filled.KeyboardArrowLeft,
-                        contentDescription = stringResource(Res.string.back_button)
-                    )
-
-                    Text(
-                        text = stringResource(Res.string.back_button),
-                        modifier = Modifier.padding(horizontal = 6.dp)
-                    )
-                }
-            }
+            SingleButtonRow(
+                onClick = { event(ProfileScreenEvent.PopBack) },
+                modifier = Modifier
+                    .padding(8.dp)
+                    .fillMaxWidth(),
+            )
         }
     }
 
