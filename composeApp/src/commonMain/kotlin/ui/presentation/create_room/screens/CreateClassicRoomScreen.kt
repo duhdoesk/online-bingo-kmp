@@ -27,6 +27,8 @@ import themedbingo.composeapp.generated.resources.create_classic_room_title
 import themedbingo.composeapp.generated.resources.name_textField
 import ui.presentation.common.components.CreateRoomHeader
 import ui.presentation.common.components.DoubleButtonRow
+import ui.presentation.common.components.PrimaryActionButton
+import ui.presentation.common.components.SingleButtonRow
 import ui.presentation.create_room.event.CreateScreenEvent
 import ui.presentation.create_room.screens.components.CreateRoomEditMaxWinners
 import ui.presentation.create_room.screens.components.CreateRoomEditPassword
@@ -98,12 +100,20 @@ fun CreateClassicRoomScreen(
             )
         }
 
-        DoubleButtonRow(
-            leftClicked = { event(CreateScreenEvent.PopBack) },
-            rightClicked = { event(CreateScreenEvent.CreateRoom) },
-            rightText = Res.string.create_button,
-            rightEnabled = isFormOk,
-            modifier = Modifier.padding(vertical = 8.dp, horizontal = 16.dp),
+        PrimaryActionButton(
+            enabled = isFormOk,
+            text = stringResource(Res.string.create_button),
+            onClick = { event(CreateScreenEvent.CreateRoom) },
+            modifier = Modifier
+                .padding(start = 16.dp, top = 8.dp, end = 16.dp, bottom = 16.dp)
+                .fillMaxWidth(),
+        )
+
+        SingleButtonRow(
+            onClick = { event(CreateScreenEvent.PopBack) },
+            modifier = Modifier
+                .padding(8.dp)
+                .fillMaxWidth(),
         )
     }
 }

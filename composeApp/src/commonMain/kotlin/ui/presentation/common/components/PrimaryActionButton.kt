@@ -1,4 +1,4 @@
-package ui.presentation.room.screens.component
+package ui.presentation.common.components
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.height
@@ -12,15 +12,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import org.jetbrains.compose.resources.ExperimentalResourceApi
-import org.jetbrains.compose.resources.stringResource
-import themedbingo.composeapp.generated.resources.Res
-import themedbingo.composeapp.generated.resources.call_bingo_button
 
-@OptIn(ExperimentalResourceApi::class)
 @Composable
-fun BingoButton(
+fun PrimaryActionButton(
     enabled: Boolean = false,
+    text: String,
     modifier: Modifier = Modifier,
     onClick: () -> Unit,
 ) {
@@ -30,8 +26,8 @@ fun BingoButton(
         modifier = modifier,
         shape = RoundedCornerShape(12.dp),
         colors = ButtonDefaults.buttonColors().copy(
-            containerColor = MaterialTheme.colorScheme.tertiary,
-            contentColor = MaterialTheme.colorScheme.onTertiary,
+            containerColor = MaterialTheme.colorScheme.tertiaryContainer,
+            contentColor = MaterialTheme.colorScheme.onTertiaryContainer,
         )
     ) {
         Box(
@@ -39,7 +35,7 @@ fun BingoButton(
             modifier = Modifier.height(32.dp),
         ) {
             Text(
-                text = stringResource(Res.string.call_bingo_button).uppercase(),
+                text = text.uppercase(),
                 fontWeight = FontWeight.Bold,
             )
         }

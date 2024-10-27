@@ -6,15 +6,12 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.asPaddingValues
-import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.sizeIn
 import androidx.compose.foundation.layout.systemBars
-import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.MaterialTheme
@@ -32,8 +29,9 @@ import themedbingo.composeapp.generated.resources.create_button
 import themedbingo.composeapp.generated.resources.create_room_title
 import themedbingo.composeapp.generated.resources.name_textField
 import themedbingo.composeapp.generated.resources.theme_textField
-import ui.presentation.common.components.DoubleButtonRow
 import ui.presentation.common.components.CreateRoomHeader
+import ui.presentation.common.components.PrimaryActionButton
+import ui.presentation.common.components.SingleButtonRow
 import ui.presentation.create_room.event.CreateScreenEvent
 import ui.presentation.create_room.screens.components.CreateRoomEditMaxWinners
 import ui.presentation.create_room.screens.components.CreateRoomEditPassword
@@ -105,7 +103,13 @@ fun CreateThemedRoomScreen(
 
                     CreateRoomEditMaxWinners(
                         currentValue = uiState.maxWinners,
-                        onClick = { maxWinners -> event(CreateScreenEvent.UpdateMaxWinners(maxWinners)) },
+                        onClick = { maxWinners ->
+                            event(
+                                CreateScreenEvent.UpdateMaxWinners(
+                                    maxWinners
+                                )
+                            )
+                        },
                         modifier = Modifier.padding(horizontal = 16.dp).fillMaxWidth(),
                     )
 
@@ -120,12 +124,20 @@ fun CreateThemedRoomScreen(
                     )
                 }
 
-                DoubleButtonRow(
-                    leftClicked = { event(CreateScreenEvent.PopBack) },
-                    rightClicked = { event(CreateScreenEvent.CreateRoom) },
-                    rightText = Res.string.create_button,
-                    rightEnabled = isFormOk,
-                    modifier = Modifier.padding(vertical = 8.dp, horizontal = 16.dp),
+                PrimaryActionButton(
+                    enabled = isFormOk,
+                    text = stringResource(Res.string.create_button),
+                    onClick = { event(CreateScreenEvent.CreateRoom) },
+                    modifier = Modifier
+                        .padding(start = 16.dp, top = 8.dp, end = 16.dp, bottom = 16.dp)
+                        .fillMaxWidth(),
+                )
+
+                SingleButtonRow(
+                    onClick = { event(CreateScreenEvent.PopBack) },
+                    modifier = Modifier
+                        .padding(8.dp)
+                        .fillMaxWidth(),
                 )
             }
 

@@ -12,9 +12,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import org.jetbrains.compose.resources.ExperimentalResourceApi
+import org.jetbrains.compose.resources.stringResource
+import themedbingo.composeapp.generated.resources.Res
+import themedbingo.composeapp.generated.resources.call_bingo_button
+import ui.presentation.common.components.PrimaryActionButton
 import ui.presentation.common.components.SingleButtonRow
 import ui.presentation.room.event.RoomPlayerEvent
-import ui.presentation.room.screens.component.BingoButton
 import ui.presentation.room.screens.component.CompactSelectedBingoCard
 import ui.presentation.room.screens.component.RaffledAmount
 import ui.presentation.room.screens.component.RaffledPresentation
@@ -22,6 +26,7 @@ import ui.presentation.room.screens.component.SpectatorModeInfo
 import ui.presentation.room.state.RoomPlayerState
 import ui.presentation.room.state.auxiliar.CardState
 
+@OptIn(ExperimentalResourceApi::class)
 @Composable
 fun PlayerScreenRunning(
     screenState: RoomPlayerState,
@@ -60,8 +65,9 @@ fun PlayerScreenRunning(
             }
         }
 
-        BingoButton(
+        PrimaryActionButton(
             enabled = screenState.canCallBingo,
+            text = stringResource(Res.string.call_bingo_button),
             onClick = { event(RoomPlayerEvent.CallBingo) },
             modifier = Modifier
                 .padding(start = 16.dp, top = 8.dp, end = 16.dp, bottom = 16.dp)

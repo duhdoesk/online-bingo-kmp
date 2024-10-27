@@ -35,8 +35,8 @@ fun RaffleNextButton(
         modifier = modifier,
         shape = RoundedCornerShape(12.dp),
         colors = ButtonDefaults.buttonColors().copy(
-            containerColor = MaterialTheme.colorScheme.primary,
-            contentColor = MaterialTheme.colorScheme.onPrimary,
+            containerColor = MaterialTheme.colorScheme.tertiaryContainer,
+            contentColor = MaterialTheme.colorScheme.onTertiaryContainer,
         )
     ) {
         Box(
@@ -52,7 +52,6 @@ fun RaffleNextButton(
                     Text(
                         text = stringResource(Res.string.raffle_button).uppercase(),
                         fontWeight = FontWeight.Bold,
-                        style = MaterialTheme.typography.titleMedium,
                     )
                 }
             }
