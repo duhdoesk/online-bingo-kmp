@@ -3,10 +3,13 @@ package ui.presentation.create_room.screens
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.asPaddingValues
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.sizeIn
+import androidx.compose.foundation.layout.systemBars
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.MaterialTheme
@@ -22,8 +25,8 @@ import themedbingo.composeapp.generated.resources.Res
 import themedbingo.composeapp.generated.resources.create_button
 import themedbingo.composeapp.generated.resources.create_classic_room_title
 import themedbingo.composeapp.generated.resources.name_textField
-import ui.presentation.common.components.DoubleButtonRow
 import ui.presentation.common.components.CreateRoomHeader
+import ui.presentation.common.components.DoubleButtonRow
 import ui.presentation.create_room.event.CreateScreenEvent
 import ui.presentation.create_room.screens.components.CreateRoomEditMaxWinners
 import ui.presentation.create_room.screens.components.CreateRoomEditPassword
@@ -39,11 +42,14 @@ fun CreateClassicRoomScreen(
     onEditPassword: () -> Unit,
     isFormOk: Boolean,
 ) {
+    val topPadding = WindowInsets.systemBars.asPaddingValues().calculateTopPadding()
+
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center,
         modifier = Modifier
-            .sizeIn(maxWidth = 600.dp, maxHeight = 1000.dp)
+            .padding(top = topPadding)
+            .fillMaxSize()
     ) {
         Column(
             verticalArrangement = Arrangement.Center,
