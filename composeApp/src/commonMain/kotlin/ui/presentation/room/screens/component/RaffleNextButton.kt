@@ -52,6 +52,7 @@ fun RaffleNextButton(
                     Text(
                         text = stringResource(Res.string.raffle_button).uppercase(),
                         fontWeight = FontWeight.Bold,
+                        style = MaterialTheme.typography.titleMedium,
                     )
                 }
             }

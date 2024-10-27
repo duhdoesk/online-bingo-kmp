@@ -35,8 +35,8 @@ fun SingleButtonRow(
     val bottomPadding = WindowInsets.navigationBars.asPaddingValues().calculateBottomPadding()
 
     Surface(
-        color = MaterialTheme.colorScheme.secondaryContainer,
-        contentColor = MaterialTheme.colorScheme.onSecondaryContainer
+        color = MaterialTheme.colorScheme.primaryContainer,
+        contentColor = MaterialTheme.colorScheme.onPrimaryContainer
     ) {
         Row(
             modifier = modifier
