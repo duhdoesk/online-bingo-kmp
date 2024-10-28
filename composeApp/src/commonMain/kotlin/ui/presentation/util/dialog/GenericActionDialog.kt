@@ -7,8 +7,6 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
@@ -24,10 +22,8 @@ import org.jetbrains.compose.resources.StringResource
 import org.jetbrains.compose.resources.stringResource
 import themedbingo.composeapp.generated.resources.Res
 import themedbingo.composeapp.generated.resources.action
-import themedbingo.composeapp.generated.resources.auth_error
 import themedbingo.composeapp.generated.resources.cancel_button
 import themedbingo.composeapp.generated.resources.confirm_button
-import themedbingo.composeapp.generated.resources.ok_button
 
 @OptIn(ExperimentalResourceApi::class)
 @Composable
@@ -71,18 +67,8 @@ fun GenericActionDialog(
                         Text(stringResource(Res.string.cancel_button))
                     }
 
-                    val confirmButtonColors = when (permanentAction) {
-                        true ->
-                            ButtonDefaults.buttonColors()
-                                .copy(contentColor = MaterialTheme.colorScheme.error)
-
-                        false ->
-                            ButtonDefaults.buttonColors()
-                    }
-
                     TextButton(
                         onClick = { onConfirm() },
-                        colors = confirmButtonColors
                     ) {
                         Text(stringResource(Res.string.confirm_button))
                     }
