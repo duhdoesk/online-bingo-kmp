@@ -1,5 +1,6 @@
 package ui.presentation.room.screens.component
 
+import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.border
@@ -89,7 +90,9 @@ fun PlayersLazyRow(
                 containerColor = MaterialTheme.colorScheme.secondaryContainer,
                 contentColor = MaterialTheme.colorScheme.onSecondaryContainer,
             ),
-            modifier = Modifier.weight(1f),
+            modifier = Modifier
+                .weight(1f)
+                .animateContentSize(),
         ) {
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally,
