@@ -6,7 +6,6 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
@@ -21,13 +20,11 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.SheetState
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -51,11 +48,9 @@ import domain.user.use_case.ProfilePictures
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.stringResource
 import themedbingo.composeapp.generated.resources.Res
-import themedbingo.composeapp.generated.resources.cancel_button
-import themedbingo.composeapp.generated.resources.confirm_button
 import themedbingo.composeapp.generated.resources.user_avatar
 
-@OptIn(ExperimentalResourceApi::class, ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun UpdatePictureBottomSheet(
     sheetState: SheetState,
@@ -87,33 +82,17 @@ fun UpdatePictureBottomSheet(
                 )
             }
 
-            Row(
-                horizontalArrangement = Arrangement.SpaceBetween,
-                modifier = Modifier.fillMaxWidth().padding(bottom = 16.dp, top = 8.dp),
-            ) {
-                TextButton(
-                    onClick = { onHide() },
-                    modifier = Modifier.padding(start = 16.dp)
-                ) {
-                    Text(
-                        text = stringResource(Res.string.cancel_button),
-                        modifier = Modifier.padding(horizontal = 8.dp),
-                    )
-                }
-
-                Button(
-                    onClick = {
-                        onHide()
-                        onUpdatePicture(updatedPicture)
-                    },
-                    modifier = Modifier.padding(end = 16.dp)
-                ) {
-                    Text(
-                        text = stringResource(Res.string.confirm_button),
-                        modifier = Modifier.padding(horizontal = 8.dp),
-                        )
-                }
-            }
+            BottomSheetButtons(
+                onCancel = { onHide() },
+                onConfirm = {
+                    onHide()
+                    onUpdatePicture(updatedPicture)
+                },
+                canConfirm = (currentPicture != updatedPicture),
+                modifier = Modifier
+                    .padding(8.dp)
+                    .fillMaxWidth()
+            )
 
             Spacer(Modifier.windowInsetsBottomHeight(WindowInsets.systemBars))
         }
