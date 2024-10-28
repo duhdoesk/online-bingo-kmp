@@ -31,10 +31,6 @@ import androidx.compose.ui.unit.dp
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.StringResource
 import org.jetbrains.compose.resources.stringResource
-import themedbingo.composeapp.generated.resources.Res
-import themedbingo.composeapp.generated.resources.cancel_button
-import themedbingo.composeapp.generated.resources.confirm_button
-import ui.presentation.common.components.DoubleButtonRow
 
 @OptIn(ExperimentalResourceApi::class, ExperimentalMaterial3Api::class)
 @Composable
@@ -99,22 +95,23 @@ private fun UpdateBottomSheetContent(
         sheetState = sheetState,
         windowInsets = WindowInsets.ime,
     ) {
-        Column(
-            modifier = Modifier
-                .padding(horizontal = 16.dp)
-        ) {
+        Column {
             Text(
                 text = stringResource(title),
                 style = MaterialTheme.typography.titleLarge,
                 fontWeight = FontWeight.Bold,
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier
+                    .padding(horizontal = 16.dp)
+                    .fillMaxWidth(),
             )
 
             Spacer(Modifier.height(8.dp))
 
             Text(
                 text = stringResource(body),
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier
+                    .padding(horizontal = 16.dp)
+                    .fillMaxWidth()
             )
 
             Spacer(Modifier.height(24.dp))
@@ -124,20 +121,18 @@ private fun UpdateBottomSheetContent(
                 label = label,
                 onValueUpdate = onValueUpdate,
                 onConfirm = onConfirm,
-                isValid = isValueValid
+                isValid = isValueValid,
+                modifier = Modifier.padding(horizontal = 16.dp),
             )
 
             Spacer(Modifier.height(48.dp))
 
-            DoubleButtonRow(
-                leftEnabled = true,
-                rightEnabled = isValueValid,
-                leftText = Res.string.cancel_button,
-                rightText = Res.string.confirm_button,
-                leftClicked = onCancel,
-                rightClicked = onConfirm,
+            BottomSheetButtons(
+                onCancel = onCancel,
+                onConfirm = onConfirm,
+                canConfirm = isValueValid,
                 modifier = Modifier
-                    .padding(bottom = 16.dp)
+                    .padding(8.dp)
                     .fillMaxWidth()
             )
 
