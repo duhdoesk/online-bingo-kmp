@@ -49,7 +49,7 @@ fun DoubleButtonRow(
         Row(
             modifier = modifier
                 .padding(bottom = bottomPadding)
-                .padding(12.dp),
+                .padding(horizontal = 12.dp, vertical = 8.dp),
             verticalAlignment = Alignment.CenterVertically,
         ) {
             Row(
@@ -68,6 +68,7 @@ fun DoubleButtonRow(
 
                 Text(
                     text = stringResource(leftText),
+                    style = MaterialTheme.typography.labelLarge,
                     modifier = Modifier.padding(horizontal = 6.dp),
                 )
             }
@@ -85,6 +86,7 @@ fun DoubleButtonRow(
             ) {
                 Text(
                     text = stringResource(rightText),
+                    style = MaterialTheme.typography.labelLarge,
                     modifier = Modifier.padding(horizontal = 6.dp),
                 )
 
