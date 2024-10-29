@@ -6,6 +6,7 @@ import dev.gitlive.firebase.firestore.Timestamp
 import domain.user.model.User
 import domain.user.repository.UserRepository
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
 
 class UserRepositoryImpl(
@@ -15,6 +16,8 @@ class UserRepositoryImpl(
     private val collection = firestore.collection("users")
 
     override fun observeUser(id: String): Flow<User?> {
+        if (id.isBlank()) return flowOf(null)
+
         return collection
             .document(id)
             .snapshots
