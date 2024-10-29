@@ -7,7 +7,7 @@ import domain.room.use_case.GetBingoStyleUseCase
 import domain.room.use_case.RaffleNextItemUseCase
 import domain.room.use_case.UpdateRoomStateUseCase
 import domain.user.model.User
-import domain.user.use_case.FlowUserUseCase
+import domain.user.use_case.ObserveUser
 import domain.user.use_case.GetRoomPlayersUseCase
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -49,7 +49,7 @@ class RoomHostViewModel(
     private val flowRoomByIdUseCase by inject<FlowRoomByIdUseCase>()
     private val getRoomPlayersUseCase by inject<GetRoomPlayersUseCase>()
     private val getBingoStyleUseCase: GetBingoStyleUseCase by inject()
-    private val observeUser: FlowUserUseCase by inject()
+    private val observeUser: ObserveUser by inject()
 
     /**
      * Action Use Cases

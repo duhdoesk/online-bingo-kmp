@@ -14,9 +14,7 @@ class UserRepositoryImpl(
 
     private val collection = firestore.collection("users")
 
-    override fun flowUser(id: String): Flow<User?> {
-        val a = collection.document(id)
-
+    override fun observeUser(id: String): Flow<User?> {
         return collection
             .document(id)
             .snapshots

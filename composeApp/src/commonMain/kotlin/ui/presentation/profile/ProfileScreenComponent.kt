@@ -6,7 +6,7 @@ import domain.auth.supabase.use_case.SupabaseDeleteAccountUseCase
 import domain.auth.supabase.use_case.SupabaseSignOutUseCase
 import domain.user.model.User
 import domain.user.use_case.DeleteUserUseCase
-import domain.user.use_case.FlowUserUseCase
+import domain.user.use_case.ObserveUser
 import domain.user.use_case.GetProfilePicturesUseCase
 import domain.user.use_case.UpdateNameUseCase
 import domain.user.use_case.UpdateUserPictureUseCase
@@ -58,7 +58,7 @@ class ProfileScreenComponent(
     /**
      * UI State Use Cases
      */
-    private val flowUserUseCase: FlowUserUseCase by inject()
+    private val observeUser: ObserveUser by inject()
     private val getProfilePicturesUseCase: GetProfilePicturesUseCase by inject()
 
     /**
@@ -97,7 +97,7 @@ class ProfileScreenComponent(
             val userId = user.first()?.id
 
             userId?.let {
-                combine(flowUserUseCase(userId), getProfilePicturesUseCase()) { collectedUser, pics ->
+                combine(observeUser(userId), getProfilePicturesUseCase()) { collectedUser, pics ->
                     val error = (collectedUser == null)
 
                     ProfileScreenUIState(

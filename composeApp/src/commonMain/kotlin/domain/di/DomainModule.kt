@@ -46,7 +46,7 @@ import domain.user.repository.UserRepository
 import domain.user.use_case.CheckIfIsNewUserUseCase
 import domain.user.use_case.CreateUserUseCase
 import domain.user.use_case.DeleteUserUseCase
-import domain.user.use_case.FlowUserUseCase
+import domain.user.use_case.ObserveUser
 import domain.user.use_case.GetProfilePicturesUseCase
 import domain.user.use_case.GetRoomPlayersUseCase
 import domain.user.use_case.GetUserByIdUseCase
@@ -94,7 +94,7 @@ val domainModule = module {
 //    User
     single<UserRepository> { UserRepositoryImpl(get()) }
     single<GetUserByIdUseCase> { GetUserByIdUseCase(get()) }
-    single<FlowUserUseCase> { FlowUserUseCase(get()) }
+    single<ObserveUser> { ObserveUser(get()) }
     single<UpdateNameUseCase> { UpdateNameUseCase(get()) }
     single<UpdateVictoryMessageUseCase> { UpdateVictoryMessageUseCase(get()) }
     single<UpdateUserPictureUseCase> { UpdateUserPictureUseCase(get()) }

@@ -14,7 +14,7 @@ interface UserRepository {
 
     suspend fun getUserById(id: String): Result<User?>
 
-    fun flowUser(id: String): Flow<User?>
+    fun observeUser(id: String): Flow<User?>
     fun getListOfUsers(ids: List<String>): Flow<List<User>>
 
     suspend fun setUser(id: String, user: User)
