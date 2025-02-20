@@ -2,17 +2,30 @@ default_platform(:ios)
 
 platform :ios do
   desc "Build and upload to TestFlight"
+
+  # Lane for building and uploading to TestFlight (with automatic match integration)
+  lane :build do
+    # Match will handle certificates and provisioning profiles automatically (recommended)
+    match(type: "appstore", app_identifier: "com.duscaranari.themedbingocardsgenerator")
+
+    gym(
+      scheme: "iosApp",         # Replace with your app's actual scheme
+      export_method: "app-store"       # Use App Store export method
+    )
+  end
+
+  # Separate lane for uploading to TestFlight (if build is already done)
   lane :beta do
-    # Install certificates and provisioning profiles manually
     build_app(
-      scheme: "iosApp",               # Adjust with your actual scheme
+      scheme: "iosApp",                # Replace with your app's actual scheme
       export_method: "app-store",      # App Store export method
-      output_directory: "./output",    # Where to save the .ipa
-      output_name: "iosApp.ipa"        # Name of the .ipa file
+      output_directory: "./output",    # Directory to save the .ipa file
+      output_name: "iosApp.ipa"        # Name of the output .ipa file
     )
 
+    # Upload to TestFlight
     upload_to_testflight(
-      skip_waiting_for_build_processing: true,  # Speeds up upload
+      skip_waiting_for_build_processing: true,  # Skips waiting for processing to complete (optional)
     )
   end
 end
