@@ -1,0 +1,18 @@
+default_platform(:ios)
+
+platform :ios do
+  desc "Build and upload to TestFlight"
+  lane :beta do
+    # Install certificates and provisioning profiles manually
+    build_app(
+      scheme: "iosApp",               # Adjust with your actual scheme
+      export_method: "app-store",      # App Store export method
+      output_directory: "./output",    # Where to save the .ipa
+      output_name: "iosApp.ipa"        # Name of the .ipa file
+    )
+
+    upload_to_testflight(
+      skip_waiting_for_build_processing: true,  # Speeds up upload
+    )
+  end
+end
