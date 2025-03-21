@@ -1,11 +1,10 @@
 plugins {
-    alias(libs.plugins.kotlinMultiplatform)
+    alias(libs.plugins.hws.kotlinMultiplatform)
     alias(libs.plugins.androidApplication)
     alias(libs.plugins.jetbrainsCompose)
     alias(libs.plugins.firebasePlugin) apply false
     alias(libs.plugins.crashlyticsPlugin) apply false
     alias(libs.plugins.kotlinSerialization)
-    alias(libs.plugins.ktlint)
 }
 
 ktlint {
@@ -25,18 +24,6 @@ kotlin {
             kotlinOptions {
                 jvmTarget = "11"
             }
-        }
-    }
-
-    listOf(
-        iosX64(),
-        iosArm64(),
-        iosSimulatorArm64()
-    ).forEach { iosTarget ->
-        iosTarget.binaries.framework {
-            baseName = "ComposeApp"
-            isStatic = true
-            binaryOption("bundleId", "com.duscaranari.themedbingocardsgenerator")
         }
     }
 
