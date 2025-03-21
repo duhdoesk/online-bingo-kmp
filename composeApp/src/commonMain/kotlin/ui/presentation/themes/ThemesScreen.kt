@@ -27,5 +27,4 @@ fun ThemesScreen(
             Text("Back")
         }
     }
-
 }

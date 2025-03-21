@@ -12,7 +12,7 @@ class UserDTO(
     private val pictureUriLastUpdated: Timestamp?,
     private val lastWinTimestamp: Timestamp?,
     private val victoryMessage: String?,
-    private val victoryMessageLastUpdated: Timestamp?,
+    private val victoryMessageLastUpdated: Timestamp?
 ) {
     fun toModel(): User =
         User(
@@ -26,5 +26,4 @@ class UserDTO(
             victoryMessage = victoryMessage ?: "",
             victoryMessageLastUpdated = victoryMessageLastUpdated ?: Timestamp(0, 0)
         )
-
 }

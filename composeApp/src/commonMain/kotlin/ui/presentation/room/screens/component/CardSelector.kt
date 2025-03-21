@@ -11,18 +11,18 @@ import ui.presentation.room.state.auxiliar.CardState
 @Composable
 fun CardSelector(
     cardState: CardState.Success,
-    bingoStyle: BingoStyle,
+    bingoStyle: BingoStyle
 ) {
     when (bingoStyle) {
         is BingoStyle.Classic -> CardSelectorClassic(
             cardState = cardState,
-            modifier = Modifier.padding(16.dp).fillMaxSize(),
+            modifier = Modifier.padding(16.dp).fillMaxSize()
         )
 
         is BingoStyle.Themed -> CardSelectorThemed(
             cardState = cardState,
             characters = bingoStyle.characters,
-            modifier = Modifier.padding(16.dp).fillMaxSize(),
+            modifier = Modifier.padding(16.dp).fillMaxSize()
         )
     }
 }

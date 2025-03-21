@@ -11,20 +11,20 @@ import ui.presentation.room.state.auxiliar.CardState
 fun CompactSelectedBingoCard(
     bingoStyle: BingoStyle,
     cardState: CardState.Success,
-    raffled: List<String>,
+    raffled: List<String>
 ) {
     when (bingoStyle) {
         is BingoStyle.Classic -> CompactSelectedBingoCardClassic(
             cardState = cardState,
             raffled = raffled,
-            modifier = Modifier.padding(horizontal = 16.dp),
+            modifier = Modifier.padding(horizontal = 16.dp)
         )
 
         is BingoStyle.Themed -> CompactSelectedBingoCardThemed(
             cardState = cardState,
             characters = bingoStyle.characters,
             raffled = raffled,
-            modifier = Modifier.padding(horizontal = 16.dp),
+            modifier = Modifier.padding(horizontal = 16.dp)
         )
     }
 }

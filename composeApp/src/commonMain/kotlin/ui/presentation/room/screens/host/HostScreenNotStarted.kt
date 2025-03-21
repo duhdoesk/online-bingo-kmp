@@ -41,13 +41,13 @@ fun HostScreenNotStarted(
                 event(RoomHostEvent.PopBack)
             },
             title = Res.string.pop_back_dialog_title,
-            body = Res.string.pop_back_dialog_body,
+            body = Res.string.pop_back_dialog_body
         )
     }
 
     Box(
         contentAlignment = Alignment.Center,
-        modifier = modifier.verticalScroll(rememberScrollState()),
+        modifier = modifier.verticalScroll(rememberScrollState())
     ) {
         RoomInfo(
             roomName = screenState.roomName,

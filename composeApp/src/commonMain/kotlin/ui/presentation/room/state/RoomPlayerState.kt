@@ -66,7 +66,7 @@ data class RoomPlayerState(
     /**
      * Represents the player's card state
      */
-    val cardState: CardState,
+    val cardState: CardState
 ) {
     companion object {
         val INITIAL = RoomPlayerState(

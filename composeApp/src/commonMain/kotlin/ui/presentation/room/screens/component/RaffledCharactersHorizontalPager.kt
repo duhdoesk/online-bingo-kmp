@@ -47,7 +47,7 @@ import themedbingo.composeapp.generated.resources.go_to_first
 @Composable
 fun RaffledCharactersHorizontalPager(
     characters: List<Character>,
-    modifier: Modifier = Modifier,
+    modifier: Modifier = Modifier
 ) {
     val pagerState = rememberPagerState { characters.size }
     val coroutineScope = rememberCoroutineScope()
@@ -58,14 +58,14 @@ fun RaffledCharactersHorizontalPager(
             modifier = Modifier.fillMaxWidth(),
             contentPadding = PaddingValues(horizontal = 80.dp, vertical = 16.dp),
             pageSpacing = 8.dp,
-            verticalAlignment = Alignment.CenterVertically,
+            verticalAlignment = Alignment.CenterVertically
         ) { index ->
             val pageOffset =
                 (pagerState.currentPage - index) + pagerState.currentPageOffsetFraction
 
             val imageSize by animateFloatAsState(
                 targetValue = if (pageOffset < -0.1f || pageOffset > 0.1f) 0.75f else 1f,
-                animationSpec = tween(durationMillis = 300),
+                animationSpec = tween(durationMillis = 300)
             )
 
             Column(
@@ -85,7 +85,7 @@ fun RaffledCharactersHorizontalPager(
                         .fillMaxWidth()
                         .aspectRatio(1f)
                         .clip(RoundedCornerShape(16.dp)),
-                    contentScale = ContentScale.Crop,
+                    contentScale = ContentScale.Crop
                 )
 
                 Spacer(Modifier.height(8.dp))
@@ -99,7 +99,7 @@ fun RaffledCharactersHorizontalPager(
                     overflow = TextOverflow.Ellipsis,
                     modifier = Modifier
                         .padding(horizontal = 16.dp)
-                        .fillMaxWidth(),
+                        .fillMaxWidth()
                 )
             }
         }
@@ -117,11 +117,11 @@ fun RaffledCharactersHorizontalPager(
                 shape = CircleShape,
                 modifier = Modifier
                     .padding(16.dp)
-                    .align(Alignment.CenterStart),
+                    .align(Alignment.CenterStart)
             ) {
                 Icon(
                     imageVector = Icons.AutoMirrored.Default.KeyboardArrowLeft,
-                    contentDescription = stringResource(Res.string.go_to_first),
+                    contentDescription = stringResource(Res.string.go_to_first)
                 )
             }
         }

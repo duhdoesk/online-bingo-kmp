@@ -25,11 +25,11 @@ import ui.presentation.util.getRandomLightColor
 fun FinishedRoomScreenComposable(
     winners: List<User>,
     maxWinners: Int,
-    modifier: Modifier = Modifier,
+    modifier: Modifier = Modifier
 ) {
     LazyColumn(
         contentPadding = PaddingValues(16.dp),
-        modifier = modifier,
+        modifier = modifier
     ) {
         stickyHeader {
             Surface {

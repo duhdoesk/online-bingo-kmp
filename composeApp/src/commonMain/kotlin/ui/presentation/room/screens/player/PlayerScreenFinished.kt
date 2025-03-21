@@ -9,13 +9,9 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.KeyboardArrowLeft
-import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
@@ -24,7 +20,6 @@ import domain.user.model.User
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.stringResource
 import themedbingo.composeapp.generated.resources.Res
-import themedbingo.composeapp.generated.resources.back_button
 import themedbingo.composeapp.generated.resources.winners
 import ui.presentation.common.components.SingleButtonRow
 import ui.presentation.room.event.RoomPlayerEvent
@@ -35,12 +30,12 @@ import ui.presentation.util.getRandomLightColor
 fun PlayerScreenFinished(
     winners: List<User>,
     maxWinners: Int,
-    event: (event: RoomPlayerEvent) -> Unit,
+    event: (event: RoomPlayerEvent) -> Unit
 ) {
     Column {
         LazyColumn(
             contentPadding = PaddingValues(16.dp),
-            modifier = Modifier.fillMaxWidth().weight(1f),
+            modifier = Modifier.fillMaxWidth().weight(1f)
         ) {
             stickyHeader {
                 Surface {

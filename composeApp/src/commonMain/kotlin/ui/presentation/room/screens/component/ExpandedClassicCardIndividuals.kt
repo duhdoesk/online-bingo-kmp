@@ -16,7 +16,7 @@ import androidx.compose.ui.text.font.FontWeight
 @Composable
 fun ExpandedClassicCardIndividuals(
     number: Int,
-    modifier: Modifier = Modifier,
+    modifier: Modifier = Modifier
 ) {
     val background = getBackgroundColorByNumber(number)
 
@@ -25,14 +25,14 @@ fun ExpandedClassicCardIndividuals(
             contentAlignment = Alignment.Center,
             modifier = Modifier
                 .fillMaxSize()
-                .background(background),
+                .background(background)
         ) {
             val color = if (isSystemInDarkTheme()) Color.White else Color.Black
             Text(
                 text = number.toString(),
                 style = MaterialTheme.typography.headlineSmall,
                 fontWeight = FontWeight.Bold,
-                color = color,
+                color = color
             )
         }
     }

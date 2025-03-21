@@ -4,7 +4,6 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.MaterialTheme
@@ -31,7 +30,7 @@ import themedbingo.composeapp.generated.resources.hw_mascot_transparent_bg
 @Composable
 fun HomeScreenHello(
     userName: String,
-    modifier: Modifier = Modifier,
+    modifier: Modifier = Modifier
 ) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
@@ -39,7 +38,6 @@ fun HomeScreenHello(
         modifier = modifier
     ) {
         Column(horizontalAlignment = Alignment.End) {
-
             Text(
                 text = buildAnnotatedString {
                     append("${stringResource(Res.string.hello)}, ")
@@ -52,7 +50,7 @@ fun HomeScreenHello(
                 style = MaterialTheme.typography.titleLarge,
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis,
-                modifier = Modifier.padding(horizontal = 16.dp),
+                modifier = Modifier.padding(horizontal = 16.dp)
             )
 
             Text(
@@ -60,7 +58,7 @@ fun HomeScreenHello(
                 textAlign = TextAlign.End,
                 style = MaterialTheme.typography.bodyLarge,
                 fontWeight = FontWeight.Normal,
-                modifier = Modifier.padding(horizontal = 16.dp),
+                modifier = Modifier.padding(horizontal = 16.dp)
             )
         }
 
@@ -69,7 +67,7 @@ fun HomeScreenHello(
             contentDescription = null,
             modifier = Modifier
                 .padding(horizontal = 16.dp)
-                .size(80.dp),
+                .size(80.dp)
         )
     }
 }

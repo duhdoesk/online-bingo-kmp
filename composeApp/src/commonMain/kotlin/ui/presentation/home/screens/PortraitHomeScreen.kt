@@ -29,8 +29,8 @@ import themedbingo.composeapp.generated.resources.Res
 import themedbingo.composeapp.generated.resources.bingo_balls
 import themedbingo.composeapp.generated.resources.classic_bingo
 import themedbingo.composeapp.generated.resources.classic_bingo_desc
-import themedbingo.composeapp.generated.resources.game_modes
 import themedbingo.composeapp.generated.resources.full_exp
+import themedbingo.composeapp.generated.resources.game_modes
 import themedbingo.composeapp.generated.resources.hw_blue_bg
 import themedbingo.composeapp.generated.resources.hw_green_bg
 import themedbingo.composeapp.generated.resources.hw_orange_bg
@@ -51,7 +51,7 @@ import ui.presentation.home.state.HomeScreenUIState
 @Composable
 fun PortraitHomeScreen(
     uiState: HomeScreenUIState,
-    event: (event: HomeScreenEvent) -> Unit,
+    event: (event: HomeScreenEvent) -> Unit
 ) {
     Scaffold(modifier = Modifier.imePadding()) { innerPadding ->
         Box(
@@ -60,7 +60,7 @@ fun PortraitHomeScreen(
                 .padding(innerPadding)
                 .consumeWindowInsets(innerPadding)
                 .systemBarsPadding()
-                .fillMaxSize(),
+                .fillMaxSize()
         ) {
             Column(modifier = Modifier.sizeIn(maxWidth = 600.dp, maxHeight = 1000.dp)) {
                 HomeScreenTopBar(
@@ -69,14 +69,14 @@ fun PortraitHomeScreen(
                     modifier = Modifier
                         .padding(vertical = 12.dp)
                         .fillMaxWidth(),
-                    userName = uiState.userName,
+                    userName = uiState.userName
                 )
 
                 Column(
                     verticalArrangement = Arrangement.Center,
                     modifier = Modifier
                         .weight(1f)
-                        .verticalScroll(rememberScrollState()),
+                        .verticalScroll(rememberScrollState())
                 ) {
                     Text(
                         text = stringResource(Res.string.game_modes),
@@ -103,7 +103,7 @@ fun PortraitHomeScreen(
                                 )
                             )
                         },
-                        modifier = Modifier.padding(horizontal = 16.dp),
+                        modifier = Modifier.padding(horizontal = 16.dp)
                     )
 
                     Spacer(Modifier.height(8.dp))
@@ -122,7 +122,7 @@ fun PortraitHomeScreen(
                                 )
                             )
                         },
-                        modifier = Modifier.padding(horizontal = 16.dp),
+                        modifier = Modifier.padding(horizontal = 16.dp)
                     )
 
                     if (!uiState.isSubscribed) {
@@ -145,7 +145,7 @@ fun PortraitHomeScreen(
                             title = Res.string.vip_pass,
                             body = Res.string.vip_description,
                             onClick = { event(HomeScreenEvent.Navigate(Configuration.PaywallScreen)) },
-                            modifier = Modifier.padding(horizontal = 16.dp),
+                            modifier = Modifier.padding(horizontal = 16.dp)
                         )
                     }
                 }

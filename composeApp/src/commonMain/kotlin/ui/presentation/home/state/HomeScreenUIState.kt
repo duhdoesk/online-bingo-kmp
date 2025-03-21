@@ -5,7 +5,7 @@ data class HomeScreenUIState(
     val userName: String,
     val userPicture: String,
     val isSubscribed: Boolean,
-    val error: Boolean,
+    val error: Boolean
 ) {
     companion object {
         val INITIAL = HomeScreenUIState(
@@ -13,7 +13,7 @@ data class HomeScreenUIState(
             userName = "",
             userPicture = "",
             isSubscribed = false,
-            error = false,
+            error = false
         )
     }
 }

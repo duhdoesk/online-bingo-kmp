@@ -19,9 +19,8 @@ import ui.presentation.util.dialog.GenericSuccessDialog
 @Composable
 fun ProfileScreen(
     component: ProfileScreenComponent,
-    windowInfo: WindowInfo,
+    windowInfo: WindowInfo
 ) {
-
     /**
      * Build the UI State when the UI is ready
      */
@@ -50,13 +49,13 @@ fun ProfileScreen(
         ErrorScreen(
             retry = { component.uiEvent(ProfileScreenEvent.UILoaded) },
             popBack = { component.uiEvent(ProfileScreenEvent.PopBack) },
-            message = Res.string.unmapped_error,
+            message = Res.string.unmapped_error
         )
     } else {
         PortraitProfileScreen(
             user = uiState.user!!,
             profilePictures = uiState.profilePictures,
-            event = { component.uiEvent(it) },
+            event = { component.uiEvent(it) }
         )
     }
 
@@ -66,15 +65,14 @@ fun ProfileScreen(
     if (successState.isVisible.value) {
         GenericSuccessDialog(
             onDismiss = { successState.hideDialog() },
-            body = successState.dialogData.value,
+            body = successState.dialogData.value
         )
     }
 
     if (errorState.isVisible.value) {
         GenericErrorDialog(
             onDismiss = { errorState.hideDialog() },
-            body = errorState.dialogData.value,
+            body = errorState.dialogData.value
         )
     }
 }
-

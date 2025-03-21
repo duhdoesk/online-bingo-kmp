@@ -18,23 +18,29 @@ import domain.character.model.Character
 fun CompactCharacterCard(
     character: Character,
     hasBeenRaffled: Boolean,
-    modifier: Modifier = Modifier,
+    modifier: Modifier = Modifier
 ) {
     val containerColor =
-        if (hasBeenRaffled) MaterialTheme.colorScheme.secondaryContainer
-        else MaterialTheme.colorScheme.surface
+        if (hasBeenRaffled) {
+            MaterialTheme.colorScheme.secondaryContainer
+        } else {
+            MaterialTheme.colorScheme.surface
+        }
 
     val contentColor =
-        if (hasBeenRaffled) MaterialTheme.colorScheme.onSecondaryContainer
-        else MaterialTheme.colorScheme.onSurface
+        if (hasBeenRaffled) {
+            MaterialTheme.colorScheme.onSecondaryContainer
+        } else {
+            MaterialTheme.colorScheme.onSurface
+        }
 
     Card(
         modifier = modifier,
-        border = BorderStroke(1.dp, MaterialTheme.colorScheme.secondaryContainer),
+        border = BorderStroke(1.dp, MaterialTheme.colorScheme.secondaryContainer)
     ) {
         Surface(
             color = containerColor,
-            contentColor = contentColor,
+            contentColor = contentColor
         ) {
             Text(
                 text = character.name.uppercase(),
@@ -44,7 +50,7 @@ fun CompactCharacterCard(
                 maxLines = 1,
                 modifier = Modifier
                     .padding(horizontal = 4.dp, vertical = 6.dp)
-                    .fillMaxWidth(),
+                    .fillMaxWidth()
             )
         }
     }

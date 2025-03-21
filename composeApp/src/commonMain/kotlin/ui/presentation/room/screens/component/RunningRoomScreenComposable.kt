@@ -23,7 +23,7 @@ import themedbingo.composeapp.generated.resources.raffled
 fun RunningRoomScreenComposable(
     raffled: List<String>,
     characters: List<Character>,
-    modifier: Modifier = Modifier,
+    modifier: Modifier = Modifier
 ) {
     val raffledCharacters = raffled.map { id ->
         characters.find { character -> character.id == id }
@@ -32,19 +32,19 @@ fun RunningRoomScreenComposable(
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center,
-        modifier = modifier,
+        modifier = modifier
     ) {
         Text(
             text = "${stringResource(Res.string.raffled)}: ${raffled.size} / ${characters.size}",
             style = MaterialTheme.typography.titleLarge,
             fontWeight = FontWeight.Normal,
             textAlign = TextAlign.Center,
-            modifier = Modifier.padding(horizontal = 16.dp).fillMaxWidth(),
+            modifier = Modifier.padding(horizontal = 16.dp).fillMaxWidth()
         )
 
         RaffledCharactersHorizontalPager(
             characters = raffledCharacters,
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier.fillMaxWidth()
         )
     }
 }

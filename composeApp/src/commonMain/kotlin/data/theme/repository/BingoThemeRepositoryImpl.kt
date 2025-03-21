@@ -63,7 +63,7 @@ class BingoThemeRepositoryImpl(
             id = documentSnapshot.id,
             name = documentSnapshot.get("name"),
             picture = documentSnapshot.get("picture"),
-            nameEnglish = documentSnapshot.get("name_en"),
+            nameEnglish = documentSnapshot.get("name_en")
         )
     }
 }

@@ -35,7 +35,7 @@ import ui.presentation.util.dialog.GenericActionDialog
 @Composable
 fun ProfileScreenListDataSection(
     modifier: Modifier = Modifier,
-    event: (event: ProfileScreenEvent) -> Unit,
+    event: (event: ProfileScreenEvent) -> Unit
 ) {
     var showSignOutDialog by remember { mutableStateOf(false) }
     var showDeleteAccountDialog by remember { mutableStateOf(false) }
@@ -48,7 +48,7 @@ fun ProfileScreenListDataSection(
                 event(ProfileScreenEvent.SignOut)
             },
             title = Res.string.sign_out_dialog_title,
-            body = Res.string.sign_out_dialog_body,
+            body = Res.string.sign_out_dialog_body
         )
     }
 
@@ -60,7 +60,7 @@ fun ProfileScreenListDataSection(
                 event(ProfileScreenEvent.DeleteAccount)
             },
             title = Res.string.delete_account_title,
-            body = Res.string.delete_account_body,
+            body = Res.string.delete_account_body
         )
     }
 
@@ -69,7 +69,6 @@ fun ProfileScreenListDataSection(
         verticalArrangement = Arrangement.Center,
         modifier = modifier
     ) {
-
         Text(
             text = stringResource(Res.string.account),
             modifier = Modifier
@@ -77,14 +76,14 @@ fun ProfileScreenListDataSection(
                 .fillMaxWidth(),
             style = MaterialTheme.typography.bodyLarge,
             fontWeight = FontWeight.Bold,
-            color = MaterialTheme.colorScheme.onSurface,
+            color = MaterialTheme.colorScheme.onSurface
         )
 
         Row(
             verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier
                 .fillMaxWidth()
-                .clickable { showSignOutDialog = true },
+                .clickable { showSignOutDialog = true }
         ) {
             Text(
                 text = stringResource(Res.string.exit_button),
@@ -101,7 +100,7 @@ fun ProfileScreenListDataSection(
             verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier
                 .fillMaxWidth()
-                .clickable { showDeleteAccountDialog = true },
+                .clickable { showDeleteAccountDialog = true }
         ) {
             Text(
                 text = stringResource(Res.string.delete_account),

@@ -11,9 +11,8 @@ import ui.presentation.room.state.RoomPlayerState
 fun NSClassicPlayScreenPager(
     screenState: RoomPlayerState,
     pagerState: PagerState,
-    modifier: Modifier = Modifier,
+    modifier: Modifier = Modifier
 ) {
-
 //    HorizontalPager(
 //        state = pagerState,
 //        modifier = modifier,

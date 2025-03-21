@@ -48,7 +48,7 @@ class CharacterRepositoryImpl(
             id = documentSnapshot.id,
             name = documentSnapshot.get("name"),
             nameInEnglish = documentSnapshot.get("name_en"),
-            pictureUri = documentSnapshot.get("picture"),
+            pictureUri = documentSnapshot.get("picture")
         )
     }
 }

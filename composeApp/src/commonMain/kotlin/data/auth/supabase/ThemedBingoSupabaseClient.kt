@@ -8,7 +8,7 @@ import io.github.jan.supabase.gotrue.Auth
 
 fun createThemeBingoSupabaseClient() = createSupabaseClient(
     supabaseUrl = SUPABASE_URL,
-    supabaseKey = SUPABASE_KEY,
+    supabaseKey = SUPABASE_KEY
 ) {
     install(Auth) {
         host = "com.duhdoesk.themedbingocardsgenerator.ThemedBingo"

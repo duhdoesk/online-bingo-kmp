@@ -46,7 +46,7 @@ import themedbingo.composeapp.generated.resources.yellow_ball
 @Composable
 fun RaffledNumbersHorizontalPager(
     raffledNumbers: List<Int>,
-    modifier: Modifier = Modifier,
+    modifier: Modifier = Modifier
 ) {
     val pagerState = rememberPagerState { raffledNumbers.size }
     val coroutineScope = rememberCoroutineScope()
@@ -56,14 +56,14 @@ fun RaffledNumbersHorizontalPager(
             state = pagerState,
             modifier = Modifier.fillMaxWidth(),
             contentPadding = PaddingValues(horizontal = 100.dp, vertical = 16.dp),
-            verticalAlignment = Alignment.CenterVertically,
+            verticalAlignment = Alignment.CenterVertically
         ) { index ->
             val pageOffset =
                 (pagerState.currentPage - index) + pagerState.currentPageOffsetFraction
 
             val imageSize by animateFloatAsState(
                 targetValue = if (pageOffset < -0.1f || pageOffset > 0.1f) 0.75f else 1f,
-                animationSpec = tween(durationMillis = 300),
+                animationSpec = tween(durationMillis = 300)
             )
 
             Box(
@@ -73,7 +73,7 @@ fun RaffledNumbersHorizontalPager(
                     .graphicsLayer {
                         scaleX = imageSize
                         scaleY = imageSize
-                    },
+                    }
             ) {
                 val painter = when (raffledNumbers[index]) {
                     in 1..14 -> Res.drawable.blue_ball
@@ -86,14 +86,14 @@ fun RaffledNumbersHorizontalPager(
                 Image(
                     painter = painterResource(painter),
                     contentDescription = null,
-                    modifier = Modifier.size(160.dp),
+                    modifier = Modifier.size(160.dp)
                 )
 
                 Box(
                     modifier = Modifier
                         .clip(CircleShape)
                         .background(Color.Black.copy(alpha = 0.5f))
-                        .border(4.dp, Color.White, CircleShape),
+                        .border(4.dp, Color.White, CircleShape)
                 ) {
                     Text(
                         text = getFormattedNumber(raffledNumbers[index]),
@@ -119,11 +119,11 @@ fun RaffledNumbersHorizontalPager(
                 shape = CircleShape,
                 modifier = Modifier
                     .padding(16.dp)
-                    .align(Alignment.CenterStart),
+                    .align(Alignment.CenterStart)
             ) {
                 Icon(
                     imageVector = Icons.AutoMirrored.Default.KeyboardArrowLeft,
-                    contentDescription = stringResource(Res.string.go_to_first),
+                    contentDescription = stringResource(Res.string.go_to_first)
                 )
             }
         }

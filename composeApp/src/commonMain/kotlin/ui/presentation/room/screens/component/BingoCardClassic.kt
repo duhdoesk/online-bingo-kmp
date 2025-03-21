@@ -26,19 +26,19 @@ import themedbingo.composeapp.generated.resources.classic_bingo
 @Composable
 fun BingoCardClassic(
     card: List<Int>,
-    modifier: Modifier = Modifier,
+    modifier: Modifier = Modifier
 ) {
     var index = 0
 
     Column(
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally,
-        modifier = modifier,
+        modifier = modifier
     ) {
         Card(modifier = Modifier.widthIn(400.dp)) {
             Surface(
                 color = MaterialTheme.colorScheme.primary,
-                contentColor = MaterialTheme.colorScheme.onPrimary,
+                contentColor = MaterialTheme.colorScheme.onPrimary
             ) {
                 Text(
                     text = stringResource(Res.string.classic_bingo).uppercase(),
@@ -47,7 +47,7 @@ fun BingoCardClassic(
                     fontWeight = FontWeight.Bold,
                     modifier = Modifier
                         .padding(4.dp)
-                        .fillMaxWidth(),
+                        .fillMaxWidth()
                 )
             }
         }
@@ -56,7 +56,7 @@ fun BingoCardClassic(
 
         ExpandedClassicCard(
             card = card,
-            modifier = Modifier,
+            modifier = Modifier
         )
     }
 }

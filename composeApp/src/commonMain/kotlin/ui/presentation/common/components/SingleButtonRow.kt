@@ -29,7 +29,7 @@ import themedbingo.composeapp.generated.resources.back_button
 fun SingleButtonRow(
     enabled: Boolean = true,
     onClick: () -> Unit,
-    modifier: Modifier = Modifier,
+    modifier: Modifier = Modifier
 ) {
     val interactionSource = remember { MutableInteractionSource() }
     val bottomPadding = WindowInsets.navigationBars.asPaddingValues().calculateBottomPadding()
@@ -42,7 +42,7 @@ fun SingleButtonRow(
             modifier = modifier
                 .padding(bottom = bottomPadding)
                 .padding(horizontal = 12.dp, vertical = 8.dp),
-            verticalAlignment = Alignment.CenterVertically,
+            verticalAlignment = Alignment.CenterVertically
         ) {
             Row(
                 verticalAlignment = Alignment.CenterVertically,
@@ -61,7 +61,7 @@ fun SingleButtonRow(
                 Text(
                     text = stringResource(Res.string.back_button),
                     style = MaterialTheme.typography.labelLarge,
-                    modifier = Modifier.padding(horizontal = 6.dp),
+                    modifier = Modifier.padding(horizontal = 6.dp)
                 )
             }
 

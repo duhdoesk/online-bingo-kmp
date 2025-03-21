@@ -10,14 +10,14 @@ import ui.presentation.room.state.auxiliar.BingoStyle
 fun RaffledPresentation(
     bingoStyle: BingoStyle,
     raffled: List<String>,
-    isHost: Boolean = false,
+    isHost: Boolean = false
 ) {
     when (bingoStyle) {
         is BingoStyle.Classic -> {
             RaffledItemClassic(
                 raffled = raffled,
                 modifier = Modifier.fillMaxWidth(),
-                isHost = isHost,
+                isHost = isHost
             )
         }
 
@@ -35,7 +35,7 @@ fun RaffledPresentation(
 
 private fun getRaffledCharacters(
     raffled: List<String>,
-    characters: List<Character>,
+    characters: List<Character>
 ): List<Character> {
     val raffledCharacters = mutableListOf<Character>()
     raffled.forEach { raffledId ->

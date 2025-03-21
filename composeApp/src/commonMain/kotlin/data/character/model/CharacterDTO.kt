@@ -13,8 +13,11 @@ class CharacterDTO(
         val localization = Locale.current.language
 
         val localizedName =
-            if (nameInEnglish == null || localization.contains("pt")) name
-            else nameInEnglish
+            if (nameInEnglish == null || localization.contains("pt")) {
+                name
+            } else {
+                nameInEnglish
+            }
 
         return Character(id = id, name = localizedName, pictureUri = pictureUri)
     }

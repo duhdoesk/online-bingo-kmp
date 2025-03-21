@@ -14,5 +14,5 @@ enum class BingoState {
     /**
      * Bingo is already over
      */
-    FINISHED,
+    FINISHED
 }

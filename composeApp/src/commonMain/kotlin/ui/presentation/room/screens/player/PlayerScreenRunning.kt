@@ -30,7 +30,7 @@ import ui.presentation.room.state.auxiliar.CardState
 @Composable
 fun PlayerScreenRunning(
     screenState: RoomPlayerState,
-    event: (uiEvent: RoomPlayerEvent) -> Unit,
+    event: (uiEvent: RoomPlayerEvent) -> Unit
 ) {
     Column {
         Column(
@@ -42,12 +42,12 @@ fun PlayerScreenRunning(
         ) {
             RaffledAmount(
                 raffled = screenState.raffledItems.size,
-                bingoStyle = screenState.bingoStyle,
+                bingoStyle = screenState.bingoStyle
             )
 
             RaffledPresentation(
                 bingoStyle = screenState.bingoStyle,
-                raffled = screenState.raffledItems,
+                raffled = screenState.raffledItems
             )
 
             Spacer(Modifier.height(16.dp))
@@ -56,7 +56,7 @@ fun PlayerScreenRunning(
                 CompactSelectedBingoCard(
                     bingoStyle = screenState.bingoStyle,
                     cardState = screenState.cardState,
-                    raffled = screenState.raffledItems,
+                    raffled = screenState.raffledItems
                 )
             } else {
                 SpectatorModeInfo(
@@ -71,7 +71,7 @@ fun PlayerScreenRunning(
             onClick = { event(RoomPlayerEvent.CallBingo) },
             modifier = Modifier
                 .padding(start = 16.dp, top = 8.dp, end = 16.dp, bottom = 16.dp)
-                .fillMaxWidth(),
+                .fillMaxWidth()
         )
 
         SingleButtonRow(

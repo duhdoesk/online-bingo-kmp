@@ -44,14 +44,14 @@ fun ClassicRunningRoomScreenComposable(
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center,
-        modifier = modifier,
+        modifier = modifier
     ) {
         Text(
             text = "${stringResource(Res.string.raffled)}: ${raffledNumbers.size} / $totalNumbers",
             style = MaterialTheme.typography.titleMedium,
             fontWeight = FontWeight.Normal,
             textAlign = TextAlign.Center,
-            modifier = Modifier.padding(horizontal = 16.dp).fillMaxWidth(),
+            modifier = Modifier.padding(horizontal = 16.dp).fillMaxWidth()
         )
 
         if (raffledNumbers.isEmpty()) return@Column
@@ -60,7 +60,7 @@ fun ClassicRunningRoomScreenComposable(
 
         Box(
             contentAlignment = Alignment.Center,
-            modifier = modifier,
+            modifier = modifier
         ) {
             val painter = when (raffledNumbers.last()) {
                 in 1..14 -> Res.drawable.blue_ball
@@ -73,14 +73,14 @@ fun ClassicRunningRoomScreenComposable(
             Image(
                 painter = painterResource(painter),
                 contentDescription = null,
-                modifier = Modifier.size(200.dp),
+                modifier = Modifier.size(200.dp)
             )
 
             Box(
                 modifier = Modifier
                     .clip(CircleShape)
                     .background(Color.Black.copy(alpha = 0.5f))
-                    .border(4.dp, Color.White, CircleShape),
+                    .border(4.dp, Color.White, CircleShape)
             ) {
                 Text(
                     text = getFormattedNumber(raffledNumbers.last()),

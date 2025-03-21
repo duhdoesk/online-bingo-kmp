@@ -28,19 +28,19 @@ import ui.presentation.room.state.auxiliar.CardState
 @Composable
 fun CardSelectorClassic(
     cardState: CardState.Success,
-    modifier: Modifier = Modifier,
+    modifier: Modifier = Modifier
 ) {
     var index = 0
 
     Column(
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally,
-        modifier = modifier,
+        modifier = modifier
     ) {
         Card(modifier = Modifier.widthIn(400.dp)) {
             Surface(
                 color = MaterialTheme.colorScheme.primary,
-                contentColor = MaterialTheme.colorScheme.onPrimary,
+                contentColor = MaterialTheme.colorScheme.onPrimary
             ) {
                 Text(
                     text = stringResource(Res.string.classic_bingo).uppercase(),
@@ -49,7 +49,7 @@ fun CardSelectorClassic(
                     fontWeight = FontWeight.Bold,
                     modifier = Modifier
                         .padding(4.dp)
-                        .fillMaxWidth(),
+                        .fillMaxWidth()
                 )
             }
         }
@@ -58,7 +58,7 @@ fun CardSelectorClassic(
 
         ExpandedClassicCard(
             card = cardState.items.map { it.toInt() },
-            modifier = Modifier,
+            modifier = Modifier
         )
     }
 }

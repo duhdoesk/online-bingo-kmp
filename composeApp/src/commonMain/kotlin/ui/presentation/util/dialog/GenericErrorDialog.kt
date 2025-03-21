@@ -30,7 +30,7 @@ import themedbingo.composeapp.generated.resources.unmapped_error
 fun GenericErrorDialog(
     onDismiss: () -> Unit,
     title: StringResource = Res.string.error,
-    body: StringResource?,
+    body: StringResource?
 ) {
     Dialog(
         onDismissRequest = { onDismiss() }
@@ -39,7 +39,7 @@ fun GenericErrorDialog(
             colors = CardDefaults.cardColors(
                 containerColor = MaterialTheme.colorScheme.surface,
                 contentColor = MaterialTheme.colorScheme.onSurface
-            ),
+            )
         ) {
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally,
@@ -82,7 +82,7 @@ fun GenericErrorDialog(
 fun GenericErrorDialog(
     onDismiss: () -> Unit,
     title: String = stringResource(Res.string.error),
-    body: String?,
+    body: String?
 ) {
     Dialog(
         onDismissRequest = { onDismiss() }
@@ -91,7 +91,7 @@ fun GenericErrorDialog(
             colors = CardDefaults.cardColors(
                 containerColor = MaterialTheme.colorScheme.surface,
                 contentColor = MaterialTheme.colorScheme.onSurface
-            ),
+            )
         ) {
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally,

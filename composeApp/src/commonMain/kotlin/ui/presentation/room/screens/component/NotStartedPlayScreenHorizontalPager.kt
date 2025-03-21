@@ -21,28 +21,28 @@ fun NotStartedPlayScreenHorizontalPager(
     screenState: RoomPlayerState,
     pagerState: PagerState,
     modifier: Modifier = Modifier,
-    onGetCard: () -> Unit,
+    onGetCard: () -> Unit
 ) {
     HorizontalPager(
         state = pagerState,
         modifier = modifier,
         pageSpacing = 8.dp,
         beyondBoundsPageCount = 2,
-        verticalAlignment = Alignment.Top,
+        verticalAlignment = Alignment.Top
     ) { index ->
         when (index) {
             0 -> when (screenState.cardState) {
                 is CardState.Success -> {
                     CardSelector(
                         cardState = screenState.cardState,
-                        bingoStyle = screenState.bingoStyle,
+                        bingoStyle = screenState.bingoStyle
                     )
                 }
 
                 is CardState.Loading -> {
                     Box(
                         contentAlignment = Alignment.Center,
-                        modifier = Modifier.padding(16.dp).fillMaxSize(),
+                        modifier = Modifier.padding(16.dp).fillMaxSize()
                     ) {
                         CircularProgressIndicator()
                     }
@@ -51,7 +51,7 @@ fun NotStartedPlayScreenHorizontalPager(
                 is CardState.Error -> {
                     Box(
                         contentAlignment = Alignment.Center,
-                        modifier = Modifier.padding(16.dp).fillMaxSize(),
+                        modifier = Modifier.padding(16.dp).fillMaxSize()
                     ) {
                         CircularProgressIndicator()
                         onGetCard()
@@ -65,7 +65,7 @@ fun NotStartedPlayScreenHorizontalPager(
                 bingoStyle = screenState.bingoStyle,
                 modifier = Modifier
                     .padding(16.dp)
-                    .widthIn(max = 400.dp),
+                    .widthIn(max = 400.dp)
             )
         }
     }

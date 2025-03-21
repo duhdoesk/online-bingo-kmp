@@ -25,7 +25,7 @@ import ui.presentation.room.state.auxiliar.RaffleButtonState
 fun RaffleNextButton(
     modifier: Modifier = Modifier,
     buttonState: RaffleButtonState,
-    onClick: () -> Unit,
+    onClick: () -> Unit
 ) {
     val enabled = (buttonState == RaffleButtonState.AVAILABLE)
 
@@ -36,12 +36,12 @@ fun RaffleNextButton(
         shape = RoundedCornerShape(12.dp),
         colors = ButtonDefaults.buttonColors().copy(
             containerColor = MaterialTheme.colorScheme.tertiaryContainer,
-            contentColor = MaterialTheme.colorScheme.onTertiaryContainer,
+            contentColor = MaterialTheme.colorScheme.onTertiaryContainer
         )
     ) {
         Box(
             contentAlignment = Alignment.Center,
-            modifier = Modifier.height(32.dp),
+            modifier = Modifier.height(32.dp)
         ) {
             when (buttonState) {
                 RaffleButtonState.SUSPEND -> {
@@ -51,7 +51,7 @@ fun RaffleNextButton(
                 else -> {
                     Text(
                         text = stringResource(Res.string.raffle_button).uppercase(),
-                        fontWeight = FontWeight.Bold,
+                        fontWeight = FontWeight.Bold
                     )
                 }
             }

@@ -8,7 +8,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
@@ -29,7 +28,7 @@ import ui.presentation.room.state.RoomPlayerState
 @Composable
 fun PlayerScreenNotStarted(
     screenState: RoomPlayerState,
-    event: (uiEvent: RoomPlayerEvent) -> Unit,
+    event: (uiEvent: RoomPlayerEvent) -> Unit
 ) {
     val coroutineScope = rememberCoroutineScope()
     val pagerState = rememberPagerState { 2 }
@@ -38,7 +37,7 @@ fun PlayerScreenNotStarted(
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Top,
-            modifier = Modifier.weight(1f).fillMaxWidth(),
+            modifier = Modifier.weight(1f).fillMaxWidth()
         ) {
             NotStartedPlayScreenHorizontalPager(
                 screenState = screenState,
@@ -53,7 +52,7 @@ fun PlayerScreenNotStarted(
                 pageCount = 2,
                 currentPage = pagerState.currentPage,
                 targetPage = pagerState.targetPage,
-                currentPageOffsetFraction = pagerState.currentPageOffsetFraction,
+                currentPageOffsetFraction = pagerState.currentPageOffsetFraction
             )
         }
 

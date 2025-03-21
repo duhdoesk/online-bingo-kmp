@@ -36,7 +36,7 @@ import ui.presentation.util.getRandomLightColor
 fun HostScreenFinished(
     winners: List<User>,
     maxWinners: Int,
-    event: (event: RoomHostEvent) -> Unit,
+    event: (event: RoomHostEvent) -> Unit
 ) {
     var showPopBackConfirmation by remember { mutableStateOf(false) }
 
@@ -48,14 +48,14 @@ fun HostScreenFinished(
                 event(RoomHostEvent.PopBack)
             },
             title = Res.string.pop_back_dialog_title,
-            body = Res.string.pop_back_dialog_body,
+            body = Res.string.pop_back_dialog_body
         )
     }
 
     Column {
         LazyColumn(
             contentPadding = PaddingValues(16.dp),
-            modifier = Modifier.fillMaxWidth().weight(1f),
+            modifier = Modifier.fillMaxWidth().weight(1f)
         ) {
             stickyHeader {
                 Surface {

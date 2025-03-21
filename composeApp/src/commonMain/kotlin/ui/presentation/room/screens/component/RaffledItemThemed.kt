@@ -31,7 +31,7 @@ import themedbingo.composeapp.generated.resources.character_picture
 @Composable
 fun RaffledItemThemed(
     item: Character,
-    modifier: Modifier = Modifier,
+    modifier: Modifier = Modifier
 ) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -44,7 +44,7 @@ fun RaffledItemThemed(
             modifier = Modifier
                 .size(200.dp)
                 .clip(RoundedCornerShape(16.dp)),
-            contentScale = ContentScale.Crop,
+            contentScale = ContentScale.Crop
         )
 
         Spacer(Modifier.height(8.dp))
@@ -58,7 +58,7 @@ fun RaffledItemThemed(
             overflow = TextOverflow.Ellipsis,
             modifier = Modifier
                 .padding(horizontal = 16.dp)
-                .fillMaxWidth(),
+                .fillMaxWidth()
         )
     }
 }

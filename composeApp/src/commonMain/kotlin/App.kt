@@ -26,7 +26,6 @@ import ui.theme.AppTheme
 fun App(rootComponent: RootComponent) {
     KoinContext {
         AppTheme {
-
             /**
              * Child Stack representation - navigation
              */
@@ -43,25 +42,23 @@ fun App(rootComponent: RootComponent) {
              * UI Setup
              */
             Scaffold(modifier = Modifier) {
-
                 BoxWithConstraints(
                     contentAlignment = Alignment.Center,
-                    modifier = Modifier.fillMaxSize(),
+                    modifier = Modifier.fillMaxSize()
                 ) {
-
                     val windowInfo = rememberWindowInfo(
                         screenHeight = this.maxHeight,
-                        screenWidth = this.maxWidth,
+                        screenWidth = this.maxWidth
                     )
 
                     Children(
                         stack = childStack,
-                        animation = stackAnimation(slide()),
+                        animation = stackAnimation(slide())
                     ) { child ->
 
                         CreateScreen(
                             instance = child.instance,
-                            windowInfo = windowInfo,
+                            windowInfo = windowInfo
                         )
                     }
                 }

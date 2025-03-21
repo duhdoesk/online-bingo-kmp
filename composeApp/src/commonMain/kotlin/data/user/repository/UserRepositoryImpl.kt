@@ -29,7 +29,7 @@ class UserRepositoryImpl(
                         pictureUriLastUpdated = documentSnapshot.get("pictureUriLastUpdated"),
                         lastWinTimestamp = documentSnapshot.get("lastWinTimestamp"),
                         victoryMessage = documentSnapshot.get("victoryMessage"),
-                        victoryMessageLastUpdated = documentSnapshot.get("victoryMessageLastUpdated"),
+                        victoryMessageLastUpdated = documentSnapshot.get("victoryMessageLastUpdated")
                     ).toModel()
                 } else {
                     null
@@ -50,7 +50,7 @@ class UserRepositoryImpl(
                     pictureUriLastUpdated = documentSnapshot.get("pictureUriLastUpdated"),
                     lastWinTimestamp = documentSnapshot.get("lastWinTimestamp"),
                     victoryMessage = documentSnapshot.get("victoryMessage"),
-                    victoryMessageLastUpdated = documentSnapshot.get("victoryMessageLastUpdated"),
+                    victoryMessageLastUpdated = documentSnapshot.get("victoryMessageLastUpdated")
                 )
                     .toModel()
 
@@ -68,7 +68,7 @@ class UserRepositoryImpl(
         email: String,
         name: String,
         pictureUri: String,
-        victoryMessage: String,
+        victoryMessage: String
     ): Result<Unit> {
         try {
             collection
@@ -78,7 +78,7 @@ class UserRepositoryImpl(
                         "name" to name,
                         "email" to email,
                         "pictureUri" to pictureUri,
-                        "victoryMessage" to victoryMessage,
+                        "victoryMessage" to victoryMessage
                     )
                 )
             return Result.success(Unit)
@@ -106,7 +106,7 @@ class UserRepositoryImpl(
                             pictureUriLastUpdated = documentSnapshot.get("pictureUriLastUpdated"),
                             lastWinTimestamp = documentSnapshot.get("lastWinTimestamp"),
                             victoryMessage = documentSnapshot.get("victoryMessage"),
-                            victoryMessageLastUpdated = documentSnapshot.get("victoryMessageLastUpdated"),
+                            victoryMessageLastUpdated = documentSnapshot.get("victoryMessageLastUpdated")
                         )
                             .toModel()
                     }
@@ -120,7 +120,7 @@ class UserRepositoryImpl(
                 data = hashMapOf(
                     "name" to user.name,
                     "email" to user.email,
-                    "pictureUri" to user.pictureUri,
+                    "pictureUri" to user.pictureUri
                 ),
                 merge = true
             )

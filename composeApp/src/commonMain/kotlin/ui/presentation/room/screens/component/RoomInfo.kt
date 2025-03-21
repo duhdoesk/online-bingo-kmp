@@ -25,16 +25,16 @@ fun RoomInfo(
     roomName: String,
     maxWinners: Int,
     bingoStyle: BingoStyle,
-    modifier: Modifier = Modifier,
+    modifier: Modifier = Modifier
 ) {
     Column(
         verticalArrangement = Arrangement.spacedBy(space = 8.dp),
-        modifier = modifier,
+        modifier = modifier
     ) {
         Text(
             text = stringResource(Res.string.room_info),
             style = MaterialTheme.typography.headlineSmall,
-            fontWeight = FontWeight.Bold,
+            fontWeight = FontWeight.Bold
         )
 
         val cardModifier = Modifier.fillMaxWidth()
@@ -42,27 +42,27 @@ fun RoomInfo(
         RoomInfoCard(
             key = Res.string.room_name_card,
             value = roomName,
-            modifier = cardModifier,
+            modifier = cardModifier
         )
 
         RoomInfoCard(
             key = Res.string.bingo_type_card,
             value = stringResource(bingoStyle.stringResource),
-            modifier = cardModifier,
+            modifier = cardModifier
         )
 
         if (bingoStyle is BingoStyle.Themed) {
             RoomInfoCard(
                 key = Res.string.theme_card,
                 value = bingoStyle.theme.name,
-                modifier = cardModifier,
+                modifier = cardModifier
             )
         }
 
         RoomInfoCard(
             key = Res.string.max_winners_card,
             value = maxWinners.toString(),
-            modifier = cardModifier,
+            modifier = cardModifier
         )
     }
 }

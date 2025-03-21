@@ -4,7 +4,6 @@ import data.room.model.BingoRoomDTO
 import data.room.model.bingoRoomDTOFromDocumentSnapshot
 import dev.gitlive.firebase.firestore.FieldValue
 import dev.gitlive.firebase.firestore.FirebaseFirestore
-import domain.room.model.BingoRoom
 import domain.room.model.BingoType
 import domain.room.model.RoomState
 import domain.room.repository.BingoRoomRepository

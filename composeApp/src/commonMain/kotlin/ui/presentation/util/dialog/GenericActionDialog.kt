@@ -39,7 +39,7 @@ fun GenericActionDialog(
             colors = CardDefaults.cardColors(
                 containerColor = MaterialTheme.colorScheme.surface,
                 contentColor = MaterialTheme.colorScheme.onSurface
-            ),
+            )
         ) {
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally,
@@ -54,7 +54,8 @@ fun GenericActionDialog(
                 Spacer(Modifier.height(8.dp))
 
                 Text(
-                    text = stringResource(body), modifier = Modifier.fillMaxWidth()
+                    text = stringResource(body),
+                    modifier = Modifier.fillMaxWidth()
                 )
 
                 Spacer(Modifier.height(16.dp))
@@ -68,7 +69,7 @@ fun GenericActionDialog(
                     }
 
                     TextButton(
-                        onClick = { onConfirm() },
+                        onClick = { onConfirm() }
                     ) {
                         Text(stringResource(Res.string.confirm_button))
                     }

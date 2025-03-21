@@ -28,7 +28,7 @@ fun PoppinsFontFamily() = FontFamily(
     Font(Res.font.Poppins_Medium, weight = FontWeight.Medium),
     Font(Res.font.Poppins_Regular, weight = FontWeight.Normal),
     Font(Res.font.Poppins_SemiBold, weight = FontWeight.SemiBold),
-    Font(Res.font.Poppins_Thin, weight = FontWeight.Thin),
+    Font(Res.font.Poppins_Thin, weight = FontWeight.Thin)
 )
 
 @Composable
@@ -49,6 +49,6 @@ fun PoppinsTypography() = Typography().run {
         bodySmall = bodySmall.copy(fontFamily = fontFamily),
         labelLarge = labelLarge.copy(fontFamily = fontFamily),
         labelMedium = labelMedium.copy(fontFamily = fontFamily),
-        labelSmall = labelSmall.copy(fontFamily = fontFamily),
+        labelSmall = labelSmall.copy(fontFamily = fontFamily)
     )
 }

@@ -32,7 +32,7 @@ fun formatDateTime(): DateTimeFormat<LocalDateTime> {
                         "setembro",
                         "outubro",
                         "novembro",
-                        "dezembro",
+                        "dezembro"
                     )
                 )
                 chars(" de ")
@@ -60,7 +60,7 @@ fun formatDateTime(): DateTimeFormat<LocalDateTime> {
                         "September",
                         "October",
                         "November",
-                        "December",
+                        "December"
                     )
                 )
                 char(' ')

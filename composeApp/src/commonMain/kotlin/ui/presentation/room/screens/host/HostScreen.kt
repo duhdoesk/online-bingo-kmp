@@ -59,14 +59,17 @@ fun HostScreen(viewModel: RoomHostViewModel) {
         if (screenState.hostScreenError == null) return@LaunchedEffect
 
         val errorMessage =
-            if (screenState.hostScreenError == HostScreenError.START) startRaffleErrorMessage
-            else finishRaffleErrorMessage
+            if (screenState.hostScreenError == HostScreenError.START) {
+                startRaffleErrorMessage
+            } else {
+                finishRaffleErrorMessage
+            }
 
         snackbarHostState.showSnackbar(
             message = errorMessage,
             actionLabel = null,
             withDismissAction = true,
-            duration = SnackbarDuration.Short,
+            duration = SnackbarDuration.Short
         )
 
         viewModel.uiEvent(RoomHostEvent.CleanErrors)
@@ -78,7 +81,7 @@ fun HostScreen(viewModel: RoomHostViewModel) {
      * Screen calling
      */
     Scaffold(
-        snackbarHost = { SnackbarHost(snackbarHostState) },
+        snackbarHost = { SnackbarHost(snackbarHostState) }
     ) {
         Box(
             contentAlignment = Alignment.Center,
@@ -91,26 +94,26 @@ fun HostScreen(viewModel: RoomHostViewModel) {
                     players = screenState.players.reversed(),
                     host = screenState.host,
                     winners = screenState.winners,
-                    modifier = Modifier.fillMaxWidth(),
+                    modifier = Modifier.fillMaxWidth()
                 )
 
                 when (screenState.bingoState) {
                     BingoState.NOT_STARTED -> HostScreenNotStarted(
                         screenState = screenState,
                         event = { viewModel.uiEvent(it) },
-                        modifier = Modifier.weight(1f),
+                        modifier = Modifier.weight(1f)
                     )
 
                     BingoState.RUNNING -> HostScreenRunning(
                         screenState = screenState,
                         event = { viewModel.uiEvent(it) },
-                        modifier = Modifier.weight(1f).fillMaxWidth(),
+                        modifier = Modifier.weight(1f).fillMaxWidth()
                     )
 
                     BingoState.FINISHED -> HostScreenFinished(
                         winners = screenState.winners,
                         maxWinners = screenState.maxWinners,
-                        event = { viewModel.uiEvent(it) },
+                        event = { viewModel.uiEvent(it) }
                     )
                 }
             }
