@@ -1,7 +1,3 @@
-import org.jetbrains.kotlin.gradle.plugin.mpp.KotlinNativeTarget
-
-//import org.jetbrains.compose.desktop.application.dsl.TargetFormat
-
 plugins {
     alias(libs.plugins.kotlinMultiplatform)
     alias(libs.plugins.androidApplication)
@@ -9,26 +5,21 @@ plugins {
     alias(libs.plugins.firebasePlugin) apply false
     alias(libs.plugins.crashlyticsPlugin) apply false
     alias(libs.plugins.kotlinSerialization)
+    alias(libs.plugins.ktlint)
+}
+
+ktlint {
+    verbose.set(true)
+    outputToConsole.set(true)
+    enableExperimentalRules.set(true)
+    filter {
+        exclude { element ->
+            element.file.path.contains("/build/generated/") || element.file.path.contains("/generated/")
+        }
+    }
 }
 
 kotlin {
-//    @OptIn(ExperimentalWasmDsl::class)
-//    wasmJs {
-//        moduleName = "composeApp"
-//        browser {
-//            commonWebpackConfig {
-//                outputFileName = "composeApp.js"
-//                devServer = (devServer ?: KotlinWebpackConfig.DevServer()).apply {
-//                    static = (static ?: mutableListOf()).apply {
-//                        // Serve sources to debug inside browser
-//                        add(project.projectDir.path)
-//                    }
-//                }
-//            }
-//        }
-//        binaries.executable()
-//    }
-
     androidTarget {
         compilations.all {
             kotlinOptions {
@@ -36,8 +27,6 @@ kotlin {
             }
         }
     }
-
-//    jvm("desktop")
 
     listOf(
         iosX64(),
@@ -52,8 +41,6 @@ kotlin {
     }
 
     sourceSets {
-//        val desktopMain by getting
-
         androidMain.dependencies {
             implementation(libs.compose.ui.tooling.preview)
             implementation(libs.androidx.activity.compose)
@@ -104,7 +91,7 @@ kotlin {
             implementation(libs.dev.firebase.common)
             implementation(libs.jetbrains.kotlinx.serialization.json)
 
-//            DateTime  
+//            DateTime
             implementation(libs.kotlinx.datetime)
 
 //            Supabase
@@ -118,10 +105,6 @@ kotlin {
             implementation(libs.purchases.ui)
         }
 
-//        desktopMain.dependencies {
-//            implementation(compose.desktop.currentOs)
-//        }
-
         iosMain.dependencies {
             implementation(libs.ktor.client.darwin)
         }
@@ -132,8 +115,6 @@ kotlin {
             }
         }
     }
-
-    
 }
 
 android {
@@ -173,20 +154,6 @@ android {
     }
 }
 
-//compose.desktop {
-//    application {
-//        mainClass = "MainKt"
-//
-//        nativeDistributions {
-//            targetFormats(TargetFormat.Dmg, TargetFormat.Msi, TargetFormat.Deb)
-//            packageName = "com.duscaranari.themedbingocardsgenerator"
-//            packageVersion = "1.0.0"
-//        }
-//    }
-//}
-
-//compose.experimental {
-//    web.application {}
-//}
-//
-task("testClasses")
+dependencies {
+    ktlintRuleset(libs.ktlintRuleset)
+}

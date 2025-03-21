@@ -2,18 +2,12 @@ package data.auth.supabase
 
 import domain.auth.supabase.SupabaseAuthService
 import io.github.jan.supabase.SupabaseClient
-import io.github.jan.supabase.compose.auth.ComposeAuth
-import io.github.jan.supabase.compose.auth.appleNativeLogin
-import io.github.jan.supabase.compose.auth.googleNativeLogin
-import io.github.jan.supabase.createSupabaseClient
-import io.github.jan.supabase.gotrue.Auth
 import io.github.jan.supabase.gotrue.auth
 import io.github.jan.supabase.gotrue.providers.Google
 import io.github.jan.supabase.gotrue.user.UserInfo
 
-
 class SupabaseAuthServiceImpl(
-    override val supabaseClient: SupabaseClient,
+    override val supabaseClient: SupabaseClient
 ) : SupabaseAuthService {
 
     override val sessionStatus = supabaseClient.auth.sessionStatus

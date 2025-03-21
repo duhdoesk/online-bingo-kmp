@@ -9,10 +9,12 @@ fun rememberWindowInfo(
     screenHeight: Dp,
     screenWidth: Dp
 ): WindowInfo {
-
     val deviceOrientation =
-        if (screenHeight > screenWidth) WindowInfo.DeviceOrientation.Portrait
-        else WindowInfo.DeviceOrientation.Landscape
+        if (screenHeight > screenWidth) {
+            WindowInfo.DeviceOrientation.Portrait
+        } else {
+            WindowInfo.DeviceOrientation.Landscape
+        }
 
     return WindowInfo(
         screenWidthInfo = when {
@@ -48,9 +50,7 @@ data class WindowInfo(
     }
 
     sealed class DeviceOrientation {
-        data object Portrait: DeviceOrientation()
-        data object Landscape: DeviceOrientation()
+        data object Portrait : DeviceOrientation()
+        data object Landscape : DeviceOrientation()
     }
 }
-
-

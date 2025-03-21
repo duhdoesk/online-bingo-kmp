@@ -8,7 +8,7 @@ import com.revenuecat.purchases.kmp.ui.revenuecatui.PaywallOptions
 
 @Composable
 fun PaywallScreen(
-    viewModel: PaywallScreenViewModel,
+    viewModel: PaywallScreenViewModel
 ) {
     /**
      * Paywall State, Options and Visibility

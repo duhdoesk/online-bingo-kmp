@@ -38,7 +38,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
 import domain.user.model.User
-import domain.user.use_case.ProfilePictures
+import domain.user.useCase.ProfilePictures
 import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.stringResource
@@ -59,8 +59,8 @@ import ui.presentation.common.components.SingleButtonRow
 import ui.presentation.profile.event.ProfileScreenEvent
 import ui.presentation.profile.screens.component.ProfileScreenListDataSection
 import ui.presentation.profile.screens.component.ProfileScreenStringDataSection
-import ui.presentation.util.bottom_sheet.UpdateBottomSheet
-import ui.presentation.util.bottom_sheet.UpdatePictureBottomSheet
+import ui.presentation.util.bottomSheet.UpdateBottomSheet
+import ui.presentation.util.bottomSheet.UpdatePictureBottomSheet
 import ui.presentation.util.dialog.GenericActionDialog
 
 @OptIn(ExperimentalResourceApi::class, ExperimentalMaterial3Api::class)
@@ -68,7 +68,7 @@ import ui.presentation.util.dialog.GenericActionDialog
 fun PortraitProfileScreen(
     user: User,
     profilePictures: ProfilePictures?,
-    event: (event: ProfileScreenEvent) -> Unit,
+    event: (event: ProfileScreenEvent) -> Unit
 ) {
     /**
      * Coroutine Scope
@@ -121,7 +121,7 @@ fun PortraitProfileScreen(
                             .size(160.dp)
                             .clip(CircleShape),
                         contentScale = ContentScale.Crop,
-                        clipToBounds = true,
+                        clipToBounds = true
                     )
 
                     IconButton(
@@ -131,7 +131,7 @@ fun PortraitProfileScreen(
                             .align(Alignment.BottomEnd),
                         colors = IconButtonDefaults.iconButtonColors().copy(
                             containerColor = MaterialTheme.colorScheme.primary,
-                            contentColor = MaterialTheme.colorScheme.onPrimary,
+                            contentColor = MaterialTheme.colorScheme.onPrimary
                         ),
                         content = {
                             Icon(
@@ -146,12 +146,12 @@ fun PortraitProfileScreen(
 
                 Text(
                     text = "ID: ${user.id}",
-                    style = MaterialTheme.typography.bodySmall,
+                    style = MaterialTheme.typography.bodySmall
                 )
 
                 Text(
                     text = "E-mail: ${user.email}",
-                    style = MaterialTheme.typography.bodySmall,
+                    style = MaterialTheme.typography.bodySmall
                 )
 
                 Spacer(Modifier.height(40.dp))
@@ -160,9 +160,9 @@ fun PortraitProfileScreen(
                     label = Res.string.nickname,
                     data = user.name,
                     lastEditTimestamp = user.nameLastUpdated,
-                    editable = true, //todo(): boolean logic datetime
+                    editable = true, // todo(): boolean logic datetime
                     onEdit = { updateNameVisible = true },
-                    modifier = Modifier.fillMaxWidth(),
+                    modifier = Modifier.fillMaxWidth()
                 )
 
                 Spacer(Modifier.height(48.dp))
@@ -171,9 +171,9 @@ fun PortraitProfileScreen(
                     label = Res.string.victory_message,
                     data = user.victoryMessage,
                     lastEditTimestamp = user.victoryMessageLastUpdated,
-                    editable = true, //todo(): boolean logic datetime
+                    editable = true, // todo(): boolean logic datetime
                     onEdit = { updateMessageVisible = true },
-                    modifier = Modifier.fillMaxWidth(),
+                    modifier = Modifier.fillMaxWidth()
                 )
 
                 Spacer(Modifier.height(48.dp))
@@ -187,7 +187,7 @@ fun PortraitProfileScreen(
                 onClick = { event(ProfileScreenEvent.PopBack) },
                 modifier = Modifier
                     .padding(8.dp)
-                    .fillMaxWidth(),
+                    .fillMaxWidth()
             )
         }
     }
@@ -209,7 +209,7 @@ fun PortraitProfileScreen(
             title = Res.string.update_nickname_title,
             body = Res.string.update_nickname_body,
             label = Res.string.nickname,
-            sheetState = updateNameState,
+            sheetState = updateNameState
         )
     }
 
@@ -227,7 +227,7 @@ fun PortraitProfileScreen(
             title = Res.string.update_victory_title,
             body = Res.string.update_victory_body,
             label = Res.string.victory_message,
-            sheetState = updateMessageState,
+            sheetState = updateMessageState
         )
     }
 
@@ -255,7 +255,7 @@ fun PortraitProfileScreen(
                 event(ProfileScreenEvent.SignOut)
             },
             title = Res.string.sign_out_dialog_title,
-            body = Res.string.sign_out_dialog_body,
+            body = Res.string.sign_out_dialog_body
         )
     }
 
@@ -267,7 +267,7 @@ fun PortraitProfileScreen(
                 event(ProfileScreenEvent.DeleteAccount)
             },
             title = Res.string.delete_account_title,
-            body = Res.string.delete_account_body,
+            body = Res.string.delete_account_body
         )
     }
 }

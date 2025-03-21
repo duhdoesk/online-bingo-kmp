@@ -28,13 +28,11 @@ import themedbingo.composeapp.generated.resources.mobile_apps_development
 @OptIn(ExperimentalResourceApi::class)
 @Composable
 fun CreateRoomHeader(modifier: Modifier = Modifier) {
-
     Row(
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.Center,
-        modifier = modifier,
+        modifier = modifier
     ) {
-
         Image(
             painter = painterResource(resource = Res.drawable.hot_water_logo),
             contentDescription = "Hot Water Logo",
@@ -46,7 +44,6 @@ fun CreateRoomHeader(modifier: Modifier = Modifier) {
         Spacer(modifier = Modifier.width(12.dp))
 
         Column {
-
             Text(
                 text = stringResource(resource = Res.string.hot_water_software),
                 style = MaterialTheme.typography.bodyLarge

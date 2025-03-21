@@ -27,12 +27,12 @@ import themedbingo.composeapp.generated.resources.character_picture
 @Composable
 fun CharacterCard(
     character: Character,
-    modifier: Modifier = Modifier,
+    modifier: Modifier = Modifier
 ) {
     Column(
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally,
-        modifier = modifier,
+        modifier = modifier
     ) {
         AsyncImage(
             model = character.pictureUri,
@@ -41,7 +41,7 @@ fun CharacterCard(
             modifier = Modifier
                 .clip(RoundedCornerShape(16.dp))
                 .fillMaxWidth()
-                .aspectRatio(1f),
+                .aspectRatio(1f)
         )
 
         Text(
@@ -51,7 +51,7 @@ fun CharacterCard(
             textAlign = TextAlign.Center,
             maxLines = 1,
             overflow = TextOverflow.Ellipsis,
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier.fillMaxWidth()
         )
     }
 }

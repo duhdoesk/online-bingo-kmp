@@ -10,7 +10,8 @@ import themedbingo.composeapp.generated.resources.Res
 import themedbingo.composeapp.generated.resources.classic_bingo
 import themedbingo.composeapp.generated.resources.themed_bingo
 
-sealed class BingoStyle @OptIn(ExperimentalResourceApi::class) constructor(val stringResource: StringResource) {
+@OptIn(ExperimentalResourceApi::class)
+sealed class BingoStyle constructor(val stringResource: StringResource) {
     /**
      * Represents the classic bingo, played with numbers
      */

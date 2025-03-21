@@ -25,19 +25,16 @@ import themedbingo.composeapp.generated.resources.hot_water_logo
 import themedbingo.composeapp.generated.resources.hot_water_software
 import themedbingo.composeapp.generated.resources.mobile_apps_development
 
-
 @OptIn(ExperimentalResourceApi::class)
 @Composable
 fun HomeScreenHeader(
     modifier: Modifier = Modifier,
     maxPictureWidth: Dp = 240.dp
 ) {
-
     Column(
         modifier = modifier,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-
         Image(
             painter = painterResource(
                 resource = Res.drawable.hot_water_logo

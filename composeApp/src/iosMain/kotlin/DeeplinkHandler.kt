@@ -10,5 +10,4 @@ object DeeplinkHandler : KoinComponent {
     fun handleIOSLaunch(url: platform.Foundation.NSURL) {
         supabase.handleDeeplinks(url)
     }
-
 }

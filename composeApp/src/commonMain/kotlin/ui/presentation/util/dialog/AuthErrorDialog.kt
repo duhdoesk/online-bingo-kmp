@@ -28,7 +28,7 @@ import themedbingo.composeapp.generated.resources.ok_button
 @Composable
 fun AuthErrorDialog(
     stringRes: StringResource,
-    onDismiss: () -> Unit,
+    onDismiss: () -> Unit
 ) {
     Dialog(
         onDismissRequest = { onDismiss() }
@@ -37,7 +37,7 @@ fun AuthErrorDialog(
             colors = CardDefaults.cardColors(
                 containerColor = MaterialTheme.colorScheme.surface,
                 contentColor = MaterialTheme.colorScheme.onSurface
-            ),
+            )
         ) {
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally,

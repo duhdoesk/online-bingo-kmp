@@ -39,11 +39,9 @@ fun HorizontalPagerIndicator(
             .wrapContentSize()
             .height(selectedIndicatorSize + indicatorPadding * 2)
     ) {
-
         repeat(pageCount) { page ->
             val (color, size) =
                 if (currentPage == page || targetPage == page) {
-
                     val pageOffset =
                         ((currentPage - page) + currentPageOffsetFraction).absoluteValue
 

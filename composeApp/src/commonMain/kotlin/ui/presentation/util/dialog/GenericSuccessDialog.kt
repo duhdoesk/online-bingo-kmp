@@ -28,7 +28,7 @@ import themedbingo.composeapp.generated.resources.success
 @Composable
 fun GenericSuccessDialog(
     body: StringResource?,
-    onDismiss: () -> Unit,
+    onDismiss: () -> Unit
 ) {
     Dialog(
         onDismissRequest = { onDismiss() }

@@ -50,36 +50,36 @@ fun PlayersLazyRow(
     winners: List<User>,
     host: User?,
     contentSize: Dp = 60.dp,
-    modifier: Modifier = Modifier,
+    modifier: Modifier = Modifier
 ) {
     Row(
         horizontalArrangement = Arrangement.spacedBy(8.dp),
-        modifier = modifier.padding(8.dp),
+        modifier = modifier.padding(8.dp)
     ) {
         host?.let {
             Card(
                 colors = CardDefaults.cardColors().copy(
                     containerColor = MaterialTheme.colorScheme.secondary,
-                    contentColor = MaterialTheme.colorScheme.onSecondary,
-                ),
+                    contentColor = MaterialTheme.colorScheme.onSecondary
+                )
             ) {
                 Column(
                     horizontalAlignment = Alignment.CenterHorizontally,
-                    modifier = Modifier.padding(8.dp),
+                    modifier = Modifier.padding(8.dp)
                 ) {
                     Text(
                         text = stringResource(Res.string.host),
                         overflow = TextOverflow.Ellipsis,
                         fontWeight = FontWeight.SemiBold,
                         textAlign = TextAlign.Center,
-                        maxLines = 1,
+                        maxLines = 1
                     )
 
                     Spacer(Modifier.height(4.dp))
 
                     UserContent(
                         player = host,
-                        contentSize = contentSize,
+                        contentSize = contentSize
                     )
                 }
             }
@@ -88,21 +88,21 @@ fun PlayersLazyRow(
         Card(
             colors = CardDefaults.cardColors().copy(
                 containerColor = MaterialTheme.colorScheme.secondaryContainer,
-                contentColor = MaterialTheme.colorScheme.onSecondaryContainer,
+                contentColor = MaterialTheme.colorScheme.onSecondaryContainer
             ),
             modifier = Modifier
                 .weight(1f)
-                .animateContentSize(),
+                .animateContentSize()
         ) {
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally,
                 modifier = Modifier
                     .padding(8.dp)
-                    .fillMaxWidth(),
+                    .fillMaxWidth()
             ) {
                 Text(
                     text = stringResource(Res.string.players_card) + ": ${players.size}",
-                    fontWeight = FontWeight.SemiBold,
+                    fontWeight = FontWeight.SemiBold
                 )
 
                 LazyRow(
@@ -117,7 +117,7 @@ fun PlayersLazyRow(
                             player = winner,
                             winner = true,
                             contentSize = contentSize,
-                            place = index + 1,
+                            place = index + 1
                         )
                     }
 
@@ -137,10 +137,9 @@ fun UserContent(
     player: User,
     contentSize: Dp,
     winner: Boolean = false,
-    place: Int = 0,
+    place: Int = 0
 ) {
     Column(horizontalAlignment = Alignment.CenterHorizontally) {
-
         Box(contentAlignment = Alignment.Center) {
             val borderColor = when (winner) {
                 true -> MaterialTheme.colorScheme.secondary
@@ -156,7 +155,6 @@ fun UserContent(
                     ),
                 onDraw = { drawCircle(color = Color.Transparent) }
             )
-
 
             AsyncImage(
                 model = player.pictureUri,
@@ -183,7 +181,7 @@ fun UserContent(
                         text = place.toString(),
                         style = MaterialTheme.typography.titleLarge,
                         fontWeight = FontWeight.Bold,
-                        color = MaterialTheme.colorScheme.onSecondary,
+                        color = MaterialTheme.colorScheme.onSecondary
                     )
                 }
             }
@@ -196,7 +194,7 @@ fun UserContent(
             maxLines = 1,
             minLines = 1,
             style = MaterialTheme.typography.bodySmall,
-            modifier = Modifier.width(contentSize),
+            modifier = Modifier.width(contentSize)
         )
     }
 }

@@ -1,5 +1,6 @@
 [versions]
-agp = "8.2.0"
+# Android
+agp = "8.8.2"
 android-compileSdk = "34"
 android-minSdk = "24"
 android-targetSdk = "34"
@@ -10,23 +11,42 @@ androidx-core-ktx = "1.13.0"
 androidx-espresso-core = "3.5.1"
 androidx-material = "1.11.0"
 androidx-test-junit = "1.1.5"
+
+# Compose
 compose = "1.6.2"
 compose-plugin = "1.6.2"
-gitliveFirebase = "1.13.0"
-junit = "4.13.2"
-koin = "3.5.3"
+
+# Kotlin
 kotlin = "1.9.23"
 kotlinx-datetime = "0.6.0"
-decompose = "3.0.0"
-coil3 = "3.0.0-alpha06"
-kotlinxSerializationJsonVersion = "1.6.2"
-ktor = "2.3.12"
+
+# Code Style Check
+ktlint = "11.6.1"
+ktlintRuleset = "0.4.22"
+
+# Dependency injection
+koin = "3.5.3"
+
+# Firebase
+gitliveFirebase = "1.13.0"
 firebasePlugin = "4.4.1"
 crashlyticsPlugin = "3.0.2"
-supabase = "2.5.3"
+
+# Monetization
 purchases-kmp = "1.0.0+13.2.0"
 
+# Navigation
+decompose = "3.0.0"
+kotlinxSerializationJsonVersion = "1.6.2"
+ktor = "2.3.12"
+supabase = "2.5.3"
+
+# Networking
+coil3 = "3.0.0-alpha06"
+
+
 [libraries]
+# Android
 androidx-activity-compose = { module = "androidx.activity:activity-compose", version.ref = "androidx-activityCompose" }
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "androidx-core-ktx" }
 androidx-test-junit = { group = "androidx.test.ext", name = "junit", version.ref = "androidx-test-junit" }
@@ -34,43 +54,63 @@ androidx-espresso-core = { group = "androidx.test.espresso", name = "espresso-co
 androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "androidx-appcompat" }
 androidx-material = { group = "com.google.android.material", name = "material", version.ref = "androidx-material" }
 androidx-constraintlayout = { group = "androidx.constraintlayout", name = "constraintlayout", version.ref = "androidx-constraintlayout" }
-coil-compose = { module = "io.coil-kt.coil3:coil-compose", version.ref = "coil3" }
-coil-compose-core = { module = "io.coil-kt.coil3:coil-compose-core", version.ref = "coil3" }
-coil-mp = { module = "io.coil-kt.coil3:coil", version.ref = "coil3" }
-coil-network-ktor = { module = "io.coil-kt.coil3:coil-network-ktor", version.ref = "coil3" }
+
+# Compose
 compose-ui-tooling = { module = "androidx.compose.ui:ui-tooling", version.ref = "compose" }
 compose-ui-tooling-preview = { module = "androidx.compose.ui:ui-tooling-preview", version.ref = "compose" }
-decompose = { group = "com.arkivanov.decompose", name = "decompose", version.ref = "decompose" }
-decompose-extensions-compose = { group = "com.arkivanov.decompose", name = "extensions-compose", version.ref = "decompose" }
+
+# Kotlin
+jetbrains-kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinxSerializationJsonVersion" }
+kotlinx-datetime = { module = "org.jetbrains.kotlinx:kotlinx-datetime", version.ref = "kotlinx-datetime" }
+
+# Code Style
+ktlintRuleset = { module = "io.nlopez.compose.rules:ktlint", version.ref = "ktlintRuleset" }
+
+# Dependency Injection
+koin-android = { module = "io.insert-koin:koin-android" }
+koin-bom = { module = "io.insert-koin:koin-bom", version.ref = "koin" }
+koin-compose = { module = "io.insert-koin:koin-compose" }
+koin-core = { module = "io.insert-koin:koin-core" }
+
+# Firebase
 dev-firebase-common = { module = "dev.gitlive:firebase-common", version.ref = "gitliveFirebase" }
 gitlive-firebase-firestore = { module = "dev.gitlive:firebase-firestore", version.ref = "gitliveFirebase" }
 gitlive-firebase-auth = { module = "dev.gitlive:firebase-auth", version.ref = "gitliveFirebase" }
 gitlive-firebase-crashlytics = { module = "dev.gitlive:firebase-crashlytics", version.ref = "gitliveFirebase" }
 gitlive-firebase-analytics = { module = "dev.gitlive:firebase-analytics", version.ref = "gitliveFirebase" }
-jetbrains-kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinxSerializationJsonVersion" }
-junit = { group = "junit", name = "junit", version.ref = "junit" }
-koin-android = { module = "io.insert-koin:koin-android" }
-koin-bom = { module = "io.insert-koin:koin-bom", version.ref = "koin" }
-koin-compose = { module = "io.insert-koin:koin-compose" }
-koin-core = { module = "io.insert-koin:koin-core" }
-kotlin-test = { module = "org.jetbrains.kotlin:kotlin-test", version.ref = "kotlin" }
-kotlin-test-junit = { module = "org.jetbrains.kotlin:kotlin-test-junit", version.ref = "kotlin" }
-kotlinx-datetime = { module = "org.jetbrains.kotlinx:kotlinx-datetime", version.ref = "kotlinx-datetime" }
+
+# Monetization
+purchases-core = { module = "com.revenuecat.purchases:purchases-kmp-core", version.ref = "purchases-kmp" }
+purchases-result = { module = "com.revenuecat.purchases:purchases-kmp-result", version.ref = "purchases-kmp" }
+purchases-ui = { module = "com.revenuecat.purchases:purchases-kmp-ui", version.ref = "purchases-kmp" }
+
+# Navigation
+decompose = { group = "com.arkivanov.decompose", name = "decompose", version.ref = "decompose" }
+decompose-extensions-compose = { group = "com.arkivanov.decompose", name = "extensions-compose", version.ref = "decompose" }
+
+# Networking
+coil-compose = { module = "io.coil-kt.coil3:coil-compose", version.ref = "coil3" }
+coil-compose-core = { module = "io.coil-kt.coil3:coil-compose-core", version.ref = "coil3" }
+coil-mp = { module = "io.coil-kt.coil3:coil", version.ref = "coil3" }
+coil-network-ktor = { module = "io.coil-kt.coil3:coil-network-ktor", version.ref = "coil3" }
 ktor-client-core = { group = "io.ktor", name = "ktor-client-core", version.ref = "ktor" }
 ktor-client-darwin = { module = "io.ktor:ktor-client-darwin", version.ref = "ktor" }
 ktor-client-okhttp = { module = "io.ktor:ktor-client-okhttp", version.ref = "ktor" }
 supabase-bom = { module = "io.github.jan-tennert.supabase:bom", version.ref = "supabase" }
 supabase-auth-kt = { module = "io.github.jan-tennert.supabase:compose-auth" }
 supabase-gotrue-kt = { module = "io.github.jan-tennert.supabase:gotrue-kt" }
-purchases-core = { module = "com.revenuecat.purchases:purchases-kmp-core", version.ref = "purchases-kmp" }
-purchases-result = { module = "com.revenuecat.purchases:purchases-kmp-result", version.ref = "purchases-kmp" }
-purchases-ui = { module = "com.revenuecat.purchases:purchases-kmp-ui", version.ref = "purchases-kmp" }
+
+
+[bundles]
+
+
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }
 androidLibrary = { id = "com.android.library", version.ref = "agp" }
+crashlyticsPlugin = { id = "com.google.firebase.crashlytics", version.ref = "crashlyticsPlugin" }
+firebasePlugin = { id = "com.google.gms.google-services", version.ref = "firebasePlugin" }
 jetbrainsCompose = { id = "org.jetbrains.compose", version.ref = "compose-plugin" }
 kotlinMultiplatform = { id = "org.jetbrains.kotlin.multiplatform", version.ref = "kotlin" }
 kotlinSerialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
-firebasePlugin = { id = "com.google.gms.google-services", version.ref = "firebasePlugin" }
-crashlyticsPlugin = { id = "com.google.firebase.crashlytics", version.ref = "crashlyticsPlugin" }
+ktlint = { id = "org.jlleitschuh.gradle.ktlint", version.ref = "ktlint" }

@@ -2,15 +2,15 @@ package ui.presentation.profile
 
 import com.arkivanov.decompose.ComponentContext
 import domain.auth.getAuthErrorDescription
-import domain.auth.supabase.use_case.SupabaseDeleteAccountUseCase
-import domain.auth.supabase.use_case.SupabaseSignOutUseCase
+import domain.auth.supabase.useCase.SupabaseDeleteAccountUseCase
+import domain.auth.supabase.useCase.SupabaseSignOutUseCase
 import domain.user.model.User
-import domain.user.use_case.DeleteUserUseCase
-import domain.user.use_case.ObserveUser
-import domain.user.use_case.GetProfilePicturesUseCase
-import domain.user.use_case.UpdateNameUseCase
-import domain.user.use_case.UpdateUserPictureUseCase
-import domain.user.use_case.UpdateVictoryMessageUseCase
+import domain.user.useCase.DeleteUserUseCase
+import domain.user.useCase.GetProfilePicturesUseCase
+import domain.user.useCase.ObserveUser
+import domain.user.useCase.UpdateNameUseCase
+import domain.user.useCase.UpdateUserPictureUseCase
+import domain.user.useCase.UpdateVictoryMessageUseCase
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -29,7 +29,7 @@ import themedbingo.composeapp.generated.resources.update_nickname_failure
 import themedbingo.composeapp.generated.resources.update_victory_failure
 import ui.presentation.profile.event.ProfileScreenEvent
 import ui.presentation.profile.state.ProfileScreenUIState
-import ui.presentation.util.dialog.dialog_state.mutableDialogStateOf
+import ui.presentation.util.dialog.dialogState.mutableDialogStateOf
 import util.componentCoroutineScope
 
 @OptIn(ExperimentalResourceApi::class)
@@ -37,7 +37,7 @@ class ProfileScreenComponent(
     componentContext: ComponentContext,
     private val user: Flow<User?>,
     private val onPopBack: () -> Unit,
-    private val onSignOut: () -> Unit,
+    private val onSignOut: () -> Unit
 ) : ComponentContext by componentContext, KoinComponent {
 
     /**
@@ -104,7 +104,7 @@ class ProfileScreenComponent(
                         isLoading = false,
                         user = collectedUser,
                         error = error,
-                        profilePictures = pics,
+                        profilePictures = pics
                     )
                 }.collect { state ->
                     _uiState.update { state }
@@ -154,7 +154,7 @@ class ProfileScreenComponent(
             uiState.value.user?.run {
                 updatePictureUseCase(
                     userId = id,
-                    pictureUri = newPictureUri,
+                    pictureUri = newPictureUri
                 ).onFailure { errorDialogState.showDialog(Res.string.unmapped_error) }
             }
         }

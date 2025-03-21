@@ -30,7 +30,7 @@ import ui.presentation.room.state.auxiliar.CardState
 fun CardSelectorThemed(
     cardState: CardState.Success,
     characters: List<Character>,
-    modifier: Modifier = Modifier,
+    modifier: Modifier = Modifier
 ) {
     var index = 0
     val card = cardState.items.map { id ->
@@ -40,12 +40,12 @@ fun CardSelectorThemed(
     Column(
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally,
-        modifier = modifier,
+        modifier = modifier
     ) {
         Card(modifier = Modifier.widthIn(400.dp)) {
             Surface(
                 color = MaterialTheme.colorScheme.primary,
-                contentColor = MaterialTheme.colorScheme.onPrimary,
+                contentColor = MaterialTheme.colorScheme.onPrimary
             ) {
                 Text(
                     text = stringResource(Res.string.themed_bingo).uppercase(),
@@ -54,7 +54,7 @@ fun CardSelectorThemed(
                     fontWeight = FontWeight.Bold,
                     modifier = Modifier
                         .padding(4.dp)
-                        .fillMaxWidth(),
+                        .fillMaxWidth()
                 )
             }
         }
@@ -64,20 +64,20 @@ fun CardSelectorThemed(
         Column(
             verticalArrangement = Arrangement.spacedBy(
                 space = 4.dp,
-                alignment = Alignment.CenterVertically,
+                alignment = Alignment.CenterVertically
             ),
-            horizontalAlignment = Alignment.CenterHorizontally,
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
             repeat(3) {
                 Row(
                     horizontalArrangement = Arrangement.spacedBy(8.dp),
                     verticalAlignment = Alignment.CenterVertically,
-                    modifier = Modifier.fillMaxWidth(),
+                    modifier = Modifier.fillMaxWidth()
                 ) {
                     repeat(3) {
                         CharacterCard(
                             character = card[index],
-                            modifier = Modifier.weight(1f),
+                            modifier = Modifier.weight(1f)
                         )
                         index++
                     }

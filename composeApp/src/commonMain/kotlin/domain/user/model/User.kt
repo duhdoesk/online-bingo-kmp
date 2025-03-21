@@ -24,9 +24,8 @@ class User(
             pictureUriLastUpdated = pictureUriLastUpdated,
             lastWinTimestamp = lastWinTimestamp,
             victoryMessage = victoryMessage,
-            victoryMessageLastUpdated = victoryMessageLastUpdated,
+            victoryMessageLastUpdated = victoryMessageLastUpdated
         )
-
 }
 
 fun mockUser() = User(
@@ -38,5 +37,5 @@ fun mockUser() = User(
     pictureUriLastUpdated = Timestamp.now(),
     lastWinTimestamp = Timestamp.now(),
     victoryMessage = "",
-    victoryMessageLastUpdated = Timestamp.now(),
+    victoryMessageLastUpdated = Timestamp.now()
 )

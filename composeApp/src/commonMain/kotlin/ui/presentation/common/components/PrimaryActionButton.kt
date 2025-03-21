@@ -18,7 +18,7 @@ fun PrimaryActionButton(
     enabled: Boolean = false,
     text: String,
     modifier: Modifier = Modifier,
-    onClick: () -> Unit,
+    onClick: () -> Unit
 ) {
     ElevatedButton(
         onClick = { onClick() },
@@ -27,16 +27,16 @@ fun PrimaryActionButton(
         shape = RoundedCornerShape(12.dp),
         colors = ButtonDefaults.buttonColors().copy(
             containerColor = MaterialTheme.colorScheme.tertiaryContainer,
-            contentColor = MaterialTheme.colorScheme.onTertiaryContainer,
+            contentColor = MaterialTheme.colorScheme.onTertiaryContainer
         )
     ) {
         Box(
             contentAlignment = Alignment.Center,
-            modifier = Modifier.height(32.dp),
+            modifier = Modifier.height(32.dp)
         ) {
             Text(
                 text = text.uppercase(),
-                fontWeight = FontWeight.Bold,
+                fontWeight = FontWeight.Bold
             )
         }
     }

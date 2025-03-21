@@ -39,23 +39,23 @@ fun HomeScreenTopBar(
     isSubscribed: Boolean,
     modifier: Modifier = Modifier,
     onClickSettings: () -> Unit,
-    userName: String,
+    userName: String
 ) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
-        modifier = modifier,
+        modifier = modifier
     ) {
         if (isSubscribed) {
             Card(
                 elevation = CardDefaults.cardElevation(4.dp),
-                modifier = Modifier.padding(start = 16.dp),
+                modifier = Modifier.padding(start = 16.dp)
             ) {
                 Box {
                     Image(
                         painter = painterResource(Res.drawable.hw_orange_bg),
                         contentScale = ContentScale.Crop,
                         contentDescription = "Background",
-                        modifier = Modifier.matchParentSize(),
+                        modifier = Modifier.matchParentSize()
                     )
 
                     Text(
@@ -64,7 +64,7 @@ fun HomeScreenTopBar(
                         fontWeight = FontWeight.SemiBold,
                         style = MaterialTheme.typography.titleLarge,
                         modifier = Modifier
-                            .padding(horizontal = 16.dp),
+                            .padding(horizontal = 16.dp)
                     )
                 }
             }
@@ -82,7 +82,7 @@ fun HomeScreenTopBar(
             style = MaterialTheme.typography.titleLarge,
             maxLines = 1,
             overflow = TextOverflow.Ellipsis,
-            modifier = Modifier.padding(horizontal = 8.dp).weight(1f),
+            modifier = Modifier.padding(horizontal = 8.dp).weight(1f)
         )
 
         Icon(
@@ -91,7 +91,7 @@ fun HomeScreenTopBar(
             modifier = Modifier
                 .padding(end = 16.dp)
                 .size(32.dp)
-                .clickable { onClickSettings() },
+                .clickable { onClickSettings() }
         )
     }
 }

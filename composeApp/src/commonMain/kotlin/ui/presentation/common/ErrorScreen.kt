@@ -39,7 +39,7 @@ import themedbingo.composeapp.generated.resources.sad_tiger
 fun ErrorScreen(
     retry: () -> Unit,
     popBack: () -> Unit,
-    message: StringResource,
+    message: StringResource
 ) {
     Column {
         Column(
@@ -47,12 +47,12 @@ fun ErrorScreen(
                 .fillMaxWidth()
                 .weight(1f),
             verticalArrangement = Arrangement.Center,
-            horizontalAlignment = Alignment.CenterHorizontally,
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Image(
                 painter = painterResource(Res.drawable.sad_tiger),
                 contentDescription = stringResource(Res.string.error),
-                modifier = Modifier.size(160.dp),
+                modifier = Modifier.size(160.dp)
             )
 
             Spacer(Modifier.height(32.dp))
@@ -62,7 +62,7 @@ fun ErrorScreen(
                 modifier = Modifier.padding(horizontal = 16.dp).fillMaxWidth(),
                 textAlign = TextAlign.Center,
                 style = MaterialTheme.typography.titleLarge,
-                fontWeight = FontWeight.Bold,
+                fontWeight = FontWeight.Bold
             )
 
             Text(

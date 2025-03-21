@@ -1,15 +1,15 @@
 package ui.presentation.room
 
 import com.arkivanov.decompose.ComponentContext
-import domain.card.use_case.FlowCardByRoomAndUserIDUseCase
-import domain.card.use_case.SetCardByRoomAndUserIDUseCase
+import domain.card.useCase.FlowCardByRoomAndUserIDUseCase
+import domain.card.useCase.SetCardByRoomAndUserIDUseCase
 import domain.room.model.BingoType
-import domain.room.use_case.CallBingoUseCase
-import domain.room.use_case.FlowRoomByIdUseCase
-import domain.room.use_case.GetBingoStyleUseCase
+import domain.room.useCase.CallBingoUseCase
+import domain.room.useCase.FlowRoomByIdUseCase
+import domain.room.useCase.GetBingoStyleUseCase
 import domain.user.model.User
-import domain.user.use_case.ObserveUser
-import domain.user.use_case.GetRoomPlayersUseCase
+import domain.user.useCase.GetRoomPlayersUseCase
+import domain.user.useCase.ObserveUser
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -24,14 +24,14 @@ import ui.presentation.room.state.RoomPlayerState
 import ui.presentation.room.state.auxiliar.BingoStyle
 import ui.presentation.room.state.auxiliar.CardState
 import ui.presentation.room.state.auxiliar.DataState
-import ui.presentation.util.dialog.dialog_state.mutableDialogStateOf
+import ui.presentation.util.dialog.dialogState.mutableDialogStateOf
 import util.componentCoroutineScope
 
 class RoomPlayerViewModel(
     private val componentContext: ComponentContext,
     private val user: Flow<User?>,
     private val roomId: String,
-    private val onPopBack: () -> Unit,
+    private val onPopBack: () -> Unit
 ) : ComponentContext by componentContext, KoinComponent {
 
     /**
@@ -97,31 +97,32 @@ class RoomPlayerViewModel(
             combine(
                 flowRoomByIdUseCase(roomId),
                 getRoomPlayersUseCase(roomId),
-                flowCardByRoomAndUserIDUseCase(roomId, userId),
+                flowCardByRoomAndUserIDUseCase(roomId, userId)
             ) { room, players, card ->
 
                 // Builds card state
                 val cardState = checkCardState(
                     items = card?.characters,
-                    bingoType = room.type,
+                    bingoType = room.type
                 )
 
                 // Checks if user can call bingo
                 val canCall = canCallBingo(
                     cardState = cardState,
                     raffledCharacters = room.raffled,
-                    winners = room.winners,
+                    winners = room.winners
                 )
 
                 // Checks bingo style
                 val bingoStyle = getBingoStyleUseCase(
                     bingoType = room.type,
-                    themeId = room.themeId,
+                    themeId = room.themeId
                 ).getOrNull()
 
                 // Informs the UI if there is an error with the data
-                if (bingoStyle == null)
+                if (bingoStyle == null) {
                     return@combine RoomPlayerState.INITIAL.copy(dataState = DataState.ERROR)
+                }
 
                 // Builds the list of winners
                 val winners =
@@ -144,7 +145,7 @@ class RoomPlayerViewModel(
                     raffledItems = room.raffled,
                     canCallBingo = canCall,
                     cardState = cardState,
-                    userId = userId,
+                    userId = userId
                 )
             }.collect { state ->
                 _screenState.update { state }
@@ -159,7 +160,7 @@ class RoomPlayerViewModel(
         coroutineScope.launch {
             callBingoUseCase(
                 roomId = roomId,
-                userId = screenState.value.userId.orEmpty(),
+                userId = screenState.value.userId.orEmpty()
             ).onFailure { exception -> errorDialogState.showDialog(exception.message) }
         }
     }
@@ -170,7 +171,7 @@ class RoomPlayerViewModel(
     private fun canCallBingo(
         cardState: CardState,
         raffledCharacters: List<String>,
-        winners: List<String>,
+        winners: List<String>
     ): Boolean {
         // Check if user is null, then returns false if true
         if (screenState.value.userId == null) return false
@@ -202,7 +203,7 @@ class RoomPlayerViewModel(
      */
     private fun checkCardState(
         items: List<String>?,
-        bingoType: BingoType,
+        bingoType: BingoType
     ): CardState {
         // Returns Error if there is no list of items
         if (items == null) return CardState.Error
@@ -243,7 +244,7 @@ class RoomPlayerViewModel(
             setCardByRoomAndUserIDUseCase(
                 roomId = roomId,
                 userId = screenState.value.userId.orEmpty(),
-                charactersIDs = newCard,
+                charactersIDs = newCard
             ).onFailure { exception -> errorDialogState.showDialog(exception.message) }
         }
     }

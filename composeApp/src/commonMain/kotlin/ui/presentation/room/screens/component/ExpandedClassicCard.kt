@@ -28,7 +28,7 @@ fun ExpandedClassicCard(
 
     Row(
         horizontalArrangement = Arrangement.spacedBy(8.dp),
-        modifier = modifier,
+        modifier = modifier
     ) {
         repeat(2) {
             Column(
@@ -72,7 +72,7 @@ fun ExpandedClassicCard(
                         .paint(
                             painter = painterResource(Res.drawable.hot_water_logo),
                             contentScale = ContentScale.Crop
-                        ),
+                        )
                 )
             }
 

@@ -18,7 +18,7 @@ import ui.presentation.room.state.auxiliar.BingoStyle
 fun RaffledAmount(
     raffled: Int,
     bingoStyle: BingoStyle,
-    modifier: Modifier = Modifier,
+    modifier: Modifier = Modifier
 ) {
     val total = when (bingoStyle) {
         is BingoStyle.Classic -> 75
@@ -30,6 +30,6 @@ fun RaffledAmount(
             append(stringResource(Res.string.raffled) + ": ")
             withStyle(SpanStyle(fontWeight = FontWeight.SemiBold)) { append("$raffled / $total") }
         },
-        modifier = modifier,
+        modifier = modifier
     )
 }

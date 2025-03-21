@@ -38,12 +38,12 @@ fun RaffledNumbersLazyRow(
     LazyRow(
         contentPadding = PaddingValues(horizontal = 16.dp),
         horizontalArrangement = Arrangement.spacedBy(8.dp),
-        modifier = modifier,
+        modifier = modifier
     ) {
         items(raffledNumbers) { number ->
             Box(
                 contentAlignment = Alignment.Center,
-                modifier = modifier,
+                modifier = modifier
             ) {
                 val painter = when (number) {
                     in 1..14 -> Res.drawable.blue_ball
@@ -56,14 +56,14 @@ fun RaffledNumbersLazyRow(
                 Image(
                     painter = painterResource(painter),
                     contentDescription = null,
-                    modifier = Modifier.size(100.dp),
+                    modifier = Modifier.size(100.dp)
                 )
 
                 Box(
                     modifier = Modifier
                         .clip(CircleShape)
                         .background(Color.Black.copy(alpha = 0.5f))
-                        .border(4.dp, Color.White, CircleShape),
+                        .border(4.dp, Color.White, CircleShape)
                 ) {
                     Text(
                         text = getFormattedNumber(number),

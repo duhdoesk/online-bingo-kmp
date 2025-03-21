@@ -33,7 +33,7 @@ fun RaffledNumber(
 ) {
     Box(
         contentAlignment = Alignment.Center,
-        modifier = modifier,
+        modifier = modifier
     ) {
         val painter = when (number) {
             in 1..14 -> Res.drawable.blue_ball
@@ -46,14 +46,14 @@ fun RaffledNumber(
         Image(
             painter = painterResource(painter),
             contentDescription = null,
-            modifier = Modifier.size(200.dp),
+            modifier = Modifier.size(200.dp)
         )
 
         Box(
             modifier = Modifier
                 .clip(CircleShape)
                 .background(Color.Black.copy(alpha = 0.5f))
-                .border(4.dp, Color.White, CircleShape),
+                .border(4.dp, Color.White, CircleShape)
         ) {
             Text(
                 text = getFormattedNumber(number),

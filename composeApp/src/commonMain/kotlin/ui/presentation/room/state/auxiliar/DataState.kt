@@ -14,5 +14,5 @@ enum class DataState {
     /**
      * Data was successfully fetched from the backend
      */
-    SUCCESS,
+    SUCCESS
 }

@@ -48,17 +48,17 @@ import themedbingo.composeapp.generated.resources.yellow_ball
 fun RaffledItemClassic(
     raffled: List<String>,
     isHost: Boolean = false,
-    modifier: Modifier = Modifier,
+    modifier: Modifier = Modifier
 ) {
     val item = raffled.lastOrNull()
 
     Column(
         modifier = modifier,
-        horizontalAlignment = Alignment.CenterHorizontally,
+        horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Box(
             contentAlignment = Alignment.Center,
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier.fillMaxWidth()
         ) {
             item?.let {
                 val painter = when (item.toInt()) {
@@ -72,14 +72,14 @@ fun RaffledItemClassic(
                 Image(
                     painter = painterResource(painter),
                     contentDescription = null,
-                    modifier = Modifier.size(140.dp),
+                    modifier = Modifier.size(140.dp)
                 )
 
                 Box(
                     modifier = Modifier
                         .clip(CircleShape)
                         .background(Color.Black.copy(alpha = 0.5f))
-                        .border(4.dp, Color.White, CircleShape),
+                        .border(4.dp, Color.White, CircleShape)
                 ) {
                     Text(
                         text = getFormattedNumber(item.toInt()),
@@ -87,7 +87,7 @@ fun RaffledItemClassic(
                         fontWeight = FontWeight.Bold,
                         color = Color.White,
                         modifier = Modifier.padding(24.dp),
-                        fontFamily = FontFamily.Monospace,
+                        fontFamily = FontFamily.Monospace
                     )
                 }
             }
@@ -101,7 +101,7 @@ fun RaffledItemClassic(
             modifier = Modifier
                 .padding(top = 8.dp)
                 .fillMaxWidth()
-                .heightIn(max = 600.dp),
+                .heightIn(max = 600.dp)
         ) {
             val numbers = (1..75).toList().map { it.toString() }
 
@@ -111,13 +111,13 @@ fun RaffledItemClassic(
                 Card(
                     border = BorderStroke(
                         width = 1.dp,
-                        color = MaterialTheme.colorScheme.secondaryContainer,
+                        color = MaterialTheme.colorScheme.secondaryContainer
                     ),
-                    modifier = Modifier.padding(2.dp).fillMaxSize(),
+                    modifier = Modifier.padding(2.dp).fillMaxSize()
                 ) {
                     Surface(
                         color = cardColors.containerColor,
-                        contentColor = cardColors.contentColor,
+                        contentColor = cardColors.contentColor
                     ) {
                         Text(
                             text = getFormattedNumber(str.toInt()),
@@ -128,7 +128,7 @@ fun RaffledItemClassic(
                             overflow = TextOverflow.Visible,
                             modifier = Modifier
                                 .padding(horizontal = 8.dp)
-                                .fillMaxWidth(),
+                                .fillMaxWidth()
                         )
                     }
                 }
@@ -139,12 +139,15 @@ fun RaffledItemClassic(
 
 @Composable
 private fun GetContainerColor(number: String, raffled: List<String>): CardColors {
-    return if (number in raffled) CardDefaults.cardColors().copy(
-        containerColor = MaterialTheme.colorScheme.secondaryContainer,
-        contentColor = MaterialTheme.colorScheme.onSecondaryContainer,
-    )
-    else CardDefaults.cardColors().copy(
-        containerColor = MaterialTheme.colorScheme.surface,
-        contentColor = MaterialTheme.colorScheme.onSurface,
-    )
+    return if (number in raffled) {
+        CardDefaults.cardColors().copy(
+            containerColor = MaterialTheme.colorScheme.secondaryContainer,
+            contentColor = MaterialTheme.colorScheme.onSecondaryContainer
+        )
+    } else {
+        CardDefaults.cardColors().copy(
+            containerColor = MaterialTheme.colorScheme.surface,
+            contentColor = MaterialTheme.colorScheme.onSurface
+        )
+    }
 }

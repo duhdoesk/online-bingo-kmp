@@ -38,7 +38,7 @@ class CardRepositoryImpl(
                 .let { documentSnapshot ->
                     CardDTO(
                         userId = documentSnapshot.id,
-                        characters = documentSnapshot.get("charactersIDs"),
+                        characters = documentSnapshot.get("charactersIDs")
                     ).toModel()
                 }
 

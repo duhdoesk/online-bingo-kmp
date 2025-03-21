@@ -1,7 +1,6 @@
 package ui.presentation.room.screens.component
 
 import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -22,21 +21,29 @@ fun CompactClassicCardIndividuals(
     modifier: Modifier = Modifier
 ) {
     val containerColor =
-        if (number == "-") MaterialTheme.colorScheme.surface
-        else if (hasBeenRaffled) MaterialTheme.colorScheme.secondaryContainer
-        else MaterialTheme.colorScheme.surface
+        if (number == "-") {
+            MaterialTheme.colorScheme.surface
+        } else if (hasBeenRaffled) {
+            MaterialTheme.colorScheme.secondaryContainer
+        } else {
+            MaterialTheme.colorScheme.surface
+        }
 
     val contentColor =
-        if (number == "-") MaterialTheme.colorScheme.onSurface
-        else if (hasBeenRaffled) MaterialTheme.colorScheme.onSecondaryContainer
-        else MaterialTheme.colorScheme.onSurface
+        if (number == "-") {
+            MaterialTheme.colorScheme.onSurface
+        } else if (hasBeenRaffled) {
+            MaterialTheme.colorScheme.onSecondaryContainer
+        } else {
+            MaterialTheme.colorScheme.onSurface
+        }
 
     Card(
         modifier = modifier,
         border = BorderStroke(1.dp, MaterialTheme.colorScheme.secondaryContainer),
         colors = CardDefaults.cardColors().copy(
             contentColor = contentColor,
-            containerColor = containerColor,
+            containerColor = containerColor
         )
     ) {
         Box(
@@ -47,7 +54,7 @@ fun CompactClassicCardIndividuals(
                 text = number,
                 style = MaterialTheme.typography.bodyMedium,
                 fontWeight = FontWeight.Bold,
-                modifier = Modifier.padding(vertical = 4.dp),
+                modifier = Modifier.padding(vertical = 4.dp)
             )
         }
     }

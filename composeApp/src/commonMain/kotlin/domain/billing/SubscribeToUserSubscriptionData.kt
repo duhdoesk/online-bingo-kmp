@@ -4,7 +4,6 @@ import com.revenuecat.purchases.kmp.CustomerInfo
 import com.revenuecat.purchases.kmp.Purchases
 import com.revenuecat.purchases.kmp.PurchasesDelegate
 import com.revenuecat.purchases.kmp.PurchasesError
-import com.revenuecat.purchases.kmp.ktx.awaitCustomerInfo
 import com.revenuecat.purchases.kmp.models.StoreProduct
 import com.revenuecat.purchases.kmp.models.StoreTransaction
 import domain.billing.model.UserSubscriptionData

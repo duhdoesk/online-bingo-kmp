@@ -42,7 +42,7 @@ fun CompactSelectedBingoCardThemed(
         Card {
             Surface(
                 color = MaterialTheme.colorScheme.primary,
-                contentColor = MaterialTheme.colorScheme.onPrimary,
+                contentColor = MaterialTheme.colorScheme.onPrimary
             ) {
                 Text(
                     text = stringResource(Res.string.my_card),
@@ -51,7 +51,7 @@ fun CompactSelectedBingoCardThemed(
                     textAlign = TextAlign.Center,
                     modifier = Modifier
                         .padding(4.dp)
-                        .fillMaxWidth(),
+                        .fillMaxWidth()
                 )
             }
         }

@@ -37,12 +37,12 @@ fun CompactSelectedBingoCardClassic(
 
     Column(
         modifier = modifier,
-        horizontalAlignment = Alignment.CenterHorizontally,
+        horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Card {
             Surface(
                 color = MaterialTheme.colorScheme.primary,
-                contentColor = MaterialTheme.colorScheme.onPrimary,
+                contentColor = MaterialTheme.colorScheme.onPrimary
             ) {
                 Text(
                     text = stringResource(BingoType.CLASSIC.stringResource).uppercase(),
@@ -51,7 +51,7 @@ fun CompactSelectedBingoCardClassic(
                     fontWeight = FontWeight.Bold,
                     modifier = Modifier
                         .padding(4.dp)
-                        .fillMaxWidth(),
+                        .fillMaxWidth()
                 )
             }
         }
@@ -60,7 +60,7 @@ fun CompactSelectedBingoCardClassic(
 
         Row(
             horizontalArrangement = Arrangement.spacedBy(4.dp),
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier.fillMaxWidth()
         ) {
             repeat(5) {
                 Column(
@@ -71,7 +71,7 @@ fun CompactSelectedBingoCardClassic(
                         CompactClassicCardIndividuals(
                             number = finalCard[index],
                             hasBeenRaffled = (finalCard[index] in raffled),
-                            modifier = Modifier.fillMaxWidth(),
+                            modifier = Modifier.fillMaxWidth()
                         )
                         index++
                     }

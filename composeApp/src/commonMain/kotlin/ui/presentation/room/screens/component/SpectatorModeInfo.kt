@@ -21,12 +21,12 @@ import themedbingo.composeapp.generated.resources.spectator_title
 fun SpectatorModeInfo(modifier: Modifier = Modifier) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
-        modifier = modifier,
+        modifier = modifier
     ) {
         Text(
             text = stringResource(Res.string.spectator_title),
             style = MaterialTheme.typography.titleMedium,
-            textAlign = TextAlign.Center,
+            textAlign = TextAlign.Center
         )
 
         Spacer(Modifier.height(4.dp))
@@ -34,7 +34,7 @@ fun SpectatorModeInfo(modifier: Modifier = Modifier) {
         Text(
             text = stringResource(Res.string.spectator_body),
             style = MaterialTheme.typography.bodyLarge,
-            textAlign = TextAlign.Center,
+            textAlign = TextAlign.Center
         )
     }
 }

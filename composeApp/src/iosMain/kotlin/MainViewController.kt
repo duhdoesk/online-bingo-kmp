@@ -7,7 +7,6 @@ import ui.navigation.RootComponent
 
 @ExperimentalResourceApi
 fun MainViewController() = ComposeUIViewController {
-
     val rootComponent = remember {
         RootComponent(DefaultComponentContext(LifecycleRegistry()))
     }

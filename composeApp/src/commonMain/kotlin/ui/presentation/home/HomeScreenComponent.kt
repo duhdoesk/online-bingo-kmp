@@ -45,14 +45,14 @@ class HomeScreenComponent(
                             userName = collectedUser.name,
                             userPicture = collectedUser.pictureUri,
                             isSubscribed = isSubscribed,
-                            error = false,
+                            error = false
                         )
                     }
                 } else {
                     _uiState.update {
                         it.copy(
                             loading = false,
-                            error = true,
+                            error = true
                         )
                     }
                 }

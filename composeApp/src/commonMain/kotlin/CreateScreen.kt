@@ -2,18 +2,18 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import ui.navigation.Child
-import ui.presentation.change_password.ChangePasswordScreen
-import ui.presentation.create_room.CreateRoomScreen
-import ui.presentation.create_user.CreateUserScreen
-import ui.presentation.forgot_password.ForgotPasswordScreen
+import ui.presentation.changePassword.ChangePasswordScreen
+import ui.presentation.createRoom.CreateRoomScreen
+import ui.presentation.createUser.CreateUserScreen
+import ui.presentation.forgotPassword.ForgotPasswordScreen
 import ui.presentation.home.HomeScreen
-import ui.presentation.join_room.JoinScreen
+import ui.presentation.joinRoom.JoinScreen
 import ui.presentation.paywall.PaywallScreen
 import ui.presentation.profile.ProfileScreen
 import ui.presentation.room.screens.host.HostScreen
 import ui.presentation.room.screens.player.PlayerScreen
-import ui.presentation.sign_in.SignInScreen
-import ui.presentation.sign_up.SignUpScreen
+import ui.presentation.signIn.SignInScreen
+import ui.presentation.signUp.SignUpScreen
 import ui.presentation.themes.ThemesScreen
 import ui.presentation.util.WindowInfo
 
@@ -22,7 +22,7 @@ import ui.presentation.util.WindowInfo
 @Composable
 fun CreateScreen(
     instance: Child,
-    windowInfo: WindowInfo,
+    windowInfo: WindowInfo
 ) {
     when (instance) {
         is Child.HomeScreen -> HomeScreen(
@@ -41,11 +41,11 @@ fun CreateScreen(
         )
 
         is Child.HostScreen -> HostScreen(
-            viewModel = instance.component,
+            viewModel = instance.component
         )
 
         is Child.PlayerScreen -> PlayerScreen(
-            viewModel = instance.component,
+            viewModel = instance.component
         )
 
         is Child.JoinScreen -> JoinScreen(
@@ -59,7 +59,7 @@ fun CreateScreen(
         )
 
         is Child.SignInScreen -> SignInScreen(
-            component = instance.component,
+            component = instance.component
         )
 
         is Child.SignUpScreen -> SignUpScreen(
@@ -78,7 +78,7 @@ fun CreateScreen(
         )
 
         is Child.PaywallScreen -> PaywallScreen(
-            viewModel = instance.component,
+            viewModel = instance.component
         )
 
         is Child.CreateUserScreen -> CreateUserScreen(

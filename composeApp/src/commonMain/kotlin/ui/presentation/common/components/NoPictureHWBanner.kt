@@ -19,7 +19,7 @@ import themedbingo.composeapp.generated.resources.mobile_apps_development
 fun NoPictureHWBanner(modifier: Modifier = Modifier) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
-        modifier = modifier,
+        modifier = modifier
     ) {
         Text(
             text = stringResource(resource = Res.string.hot_water_software),

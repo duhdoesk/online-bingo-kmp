@@ -34,7 +34,7 @@ import ui.presentation.util.dialog.GenericActionDialog
 fun HostScreenRunning(
     screenState: RoomHostState,
     event: (event: RoomHostEvent) -> Unit,
-    modifier: Modifier = Modifier,
+    modifier: Modifier = Modifier
 ) {
     var showFinishConfirmation by remember { mutableStateOf(false) }
     var showPopBackConfirmation by remember { mutableStateOf(false) }
@@ -47,7 +47,7 @@ fun HostScreenRunning(
                 event(RoomHostEvent.FinishRaffle)
             },
             title = Res.string.finish_dialog_title,
-            body = Res.string.finish_dialog_body,
+            body = Res.string.finish_dialog_body
         )
     }
 
@@ -59,7 +59,7 @@ fun HostScreenRunning(
                 event(RoomHostEvent.PopBack)
             },
             title = Res.string.pop_back_dialog_title,
-            body = Res.string.pop_back_dialog_body,
+            body = Res.string.pop_back_dialog_body
         )
     }
 
@@ -71,13 +71,13 @@ fun HostScreenRunning(
         RaffledAmount(
             raffled = screenState.raffledItems.size,
             bingoStyle = screenState.bingoStyle,
-            modifier = Modifier.padding(horizontal = 16.dp),
+            modifier = Modifier.padding(horizontal = 16.dp)
         )
 
         RaffledPresentation(
             bingoStyle = screenState.bingoStyle,
             raffled = screenState.raffledItems,
-            isHost = true,
+            isHost = true
         )
     }
 
@@ -85,7 +85,7 @@ fun HostScreenRunning(
         buttonState = screenState.raffleButtonState,
         onClick = { event(RoomHostEvent.RaffleNextItem) },
         modifier = Modifier
-            .padding(start = 16.dp, top = 8.dp, end =16.dp, bottom = 16.dp)
+            .padding(start = 16.dp, top = 8.dp, end = 16.dp, bottom = 16.dp)
             .fillMaxWidth()
     )
 

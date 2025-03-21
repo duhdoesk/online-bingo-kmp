@@ -43,7 +43,6 @@ fun ProfileScreenStringDataSection(
     onEdit: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-
     val futureInstant = lastEditTimestamp.toMilliseconds().toLong() + 259200000 // value that corresponds to 3 days
     val futureInstantMs = Instant.fromEpochMilliseconds(futureInstant)
     val dateTime = futureInstantMs.toLocalDateTime(TimeZone.currentSystemDefault())
@@ -60,7 +59,7 @@ fun ProfileScreenStringDataSection(
                     .padding(start = 16.dp),
                 style = MaterialTheme.typography.bodyLarge,
                 fontWeight = FontWeight.Bold,
-                color = MaterialTheme.colorScheme.onSurface,
+                color = MaterialTheme.colorScheme.onSurface
             )
 
             Text(
@@ -70,7 +69,7 @@ fun ProfileScreenStringDataSection(
                 overflow = TextOverflow.Ellipsis,
                 maxLines = 1,
                 style = MaterialTheme.typography.titleMedium,
-                color = MaterialTheme.colorScheme.onSurface,
+                color = MaterialTheme.colorScheme.onSurface
             )
         }
 
@@ -81,12 +80,12 @@ fun ProfileScreenStringDataSection(
                 .padding(end = 16.dp),
             colors = IconButtonDefaults.iconButtonColors().copy(
                 containerColor = MaterialTheme.colorScheme.primary,
-                contentColor = MaterialTheme.colorScheme.onPrimary,
+                contentColor = MaterialTheme.colorScheme.onPrimary
             ),
             content = {
                 Icon(
                     imageVector = Icons.Default.Edit,
-                    contentDescription = stringResource(Res.string.edit_button),
+                    contentDescription = stringResource(Res.string.edit_button)
                 )
             }
         )
@@ -107,7 +106,7 @@ fun ProfileScreenStringDataSection(
                 .fillMaxWidth(),
             overflow = TextOverflow.Ellipsis,
             maxLines = 1,
-            style = MaterialTheme.typography.bodyMedium,
+            style = MaterialTheme.typography.bodyMedium
         )
     }
 }

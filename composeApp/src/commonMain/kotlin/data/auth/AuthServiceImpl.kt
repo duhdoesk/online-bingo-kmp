@@ -2,13 +2,12 @@ package data.auth
 
 import dev.gitlive.firebase.auth.AuthCredential
 import dev.gitlive.firebase.auth.AuthResult
-import dev.gitlive.firebase.auth.EmailAuthProvider
 import dev.gitlive.firebase.auth.FirebaseAuth
 import dev.gitlive.firebase.auth.FirebaseUser
 import domain.auth.AuthService
 
 class AuthServiceImpl(
-    private val auth: FirebaseAuth,
+    private val auth: FirebaseAuth
 ) : AuthService {
 
     override val currentUser: FirebaseUser?

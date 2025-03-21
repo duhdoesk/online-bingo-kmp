@@ -37,20 +37,20 @@ fun DoubleButtonRow(
     rightClicked: () -> Unit,
     rightText: StringResource,
     rightButtonIcon: ImageVector? = Icons.AutoMirrored.Filled.KeyboardArrowRight,
-    modifier: Modifier = Modifier,
+    modifier: Modifier = Modifier
 ) {
     val interactionSource = remember { MutableInteractionSource() }
     val bottomPadding = WindowInsets.navigationBars.asPaddingValues().calculateBottomPadding()
 
     Surface(
         color = MaterialTheme.colorScheme.primaryContainer,
-        contentColor = MaterialTheme.colorScheme.onPrimaryContainer,
+        contentColor = MaterialTheme.colorScheme.onPrimaryContainer
     ) {
         Row(
             modifier = modifier
                 .padding(bottom = bottomPadding)
                 .padding(horizontal = 12.dp, vertical = 8.dp),
-            verticalAlignment = Alignment.CenterVertically,
+            verticalAlignment = Alignment.CenterVertically
         ) {
             Row(
                 verticalAlignment = Alignment.CenterVertically,
@@ -69,7 +69,7 @@ fun DoubleButtonRow(
                 Text(
                     text = stringResource(leftText),
                     style = MaterialTheme.typography.labelLarge,
-                    modifier = Modifier.padding(horizontal = 6.dp),
+                    modifier = Modifier.padding(horizontal = 6.dp)
                 )
             }
 
@@ -87,13 +87,13 @@ fun DoubleButtonRow(
                 Text(
                     text = stringResource(rightText),
                     style = MaterialTheme.typography.labelLarge,
-                    modifier = Modifier.padding(horizontal = 6.dp),
+                    modifier = Modifier.padding(horizontal = 6.dp)
                 )
 
                 if (rightButtonIcon != null) {
                     Icon(
                         imageVector = rightButtonIcon,
-                        contentDescription = stringResource(rightText),
+                        contentDescription = stringResource(rightText)
                     )
                 }
             }

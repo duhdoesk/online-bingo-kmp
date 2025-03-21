@@ -31,7 +31,7 @@ fun RoomInfoCard(
     Card(
         colors = CardDefaults.cardColors()
             .copy(containerColor = containerColor, contentColor = Color.Black),
-        modifier = modifier,
+        modifier = modifier
     ) {
         Text(
             text = buildAnnotatedString {

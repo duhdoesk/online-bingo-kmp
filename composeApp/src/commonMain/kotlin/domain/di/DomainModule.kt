@@ -9,50 +9,49 @@ import data.theme.repository.BingoThemeRepositoryImpl
 import data.user.repository.UserRepositoryImpl
 import domain.auth.AuthService
 import domain.auth.supabase.SupabaseAuthService
-import domain.auth.supabase.use_case.SignInWithGoogleUseCase
-import domain.auth.supabase.use_case.SupabaseDeleteAccountUseCase
-import domain.auth.supabase.use_case.SupabaseSignOutUseCase
-import domain.auth.use_case.ChangePasswordWithReAuthenticationUseCase
-import domain.auth.use_case.DeleteAccountUseCase
-import domain.auth.use_case.SignOutUseCase
+import domain.auth.supabase.useCase.SupabaseDeleteAccountUseCase
+import domain.auth.supabase.useCase.SupabaseSignOutUseCase
+import domain.auth.useCase.ChangePasswordWithReAuthenticationUseCase
+import domain.auth.useCase.DeleteAccountUseCase
+import domain.auth.useCase.SignOutUseCase
 import domain.billing.SubscribeToUserSubscriptionData
 import domain.card.repository.CardRepository
-import domain.card.use_case.FlowCardByRoomAndUserIDUseCase
-import domain.card.use_case.SetCardByRoomAndUserIDUseCase
+import domain.card.useCase.FlowCardByRoomAndUserIDUseCase
+import domain.card.useCase.SetCardByRoomAndUserIDUseCase
 import domain.character.repository.CharacterRepository
+import domain.character.useCase.GetRoomCharacters
+import domain.character.useCase.GetThemeCharacters
+import domain.character.useCase.ObserveThemeCharacters
 import domain.room.repository.BingoRoomRepository
-import domain.room.use_case.CallBingoUseCase
-import domain.room.use_case.CreateRoomUseCase
-import domain.room.use_case.FlowRoomByIdUseCase
-import domain.room.use_case.GetBingoStyleUseCase
-import domain.room.use_case.GetNotStartedRoomsUseCase
-import domain.room.use_case.GetRoomByIdUseCase
-import domain.room.use_case.GetRoomsUseCase
-import domain.room.use_case.GetRunningRoomsUseCase
-import domain.room.use_case.JoinRoomUseCase
-import domain.room.use_case.MapRoomDTOToModelUseCase
-import domain.room.use_case.RaffleNextItemUseCase
-import domain.room.use_case.UpdateRoomStateUseCase
+import domain.room.useCase.CallBingoUseCase
+import domain.room.useCase.CreateRoomUseCase
+import domain.room.useCase.FlowRoomByIdUseCase
+import domain.room.useCase.GetBingoStyleUseCase
+import domain.room.useCase.GetNotStartedRoomsUseCase
+import domain.room.useCase.GetRoomByIdUseCase
+import domain.room.useCase.GetRoomsUseCase
+import domain.room.useCase.GetRunningRoomsUseCase
+import domain.room.useCase.JoinRoomUseCase
+import domain.room.useCase.MapRoomDTOToModelUseCase
+import domain.room.useCase.RaffleNextItemUseCase
+import domain.room.useCase.UpdateRoomStateUseCase
 import domain.theme.repository.BingoThemeRepository
-import domain.theme.use_case.FlowThemeByIdUseCase
-import domain.theme.use_case.GetAllThemesUseCase
-import domain.character.use_case.ObserveThemeCharacters
-import domain.character.use_case.GetRoomCharacters
-import domain.theme.use_case.GetRoomThemeUseCase
-import domain.theme.use_case.GetThemeByIdUseCase
-import domain.character.use_case.GetThemeCharacters
-import domain.theme.use_case.ObserveAvailableThemes
+import domain.theme.useCase.FlowThemeByIdUseCase
+import domain.theme.useCase.GetAllThemesUseCase
+import domain.theme.useCase.GetRoomThemeUseCase
+import domain.theme.useCase.GetThemeByIdUseCase
+import domain.theme.useCase.ObserveAvailableThemes
 import domain.user.repository.UserRepository
-import domain.user.use_case.CheckIfIsNewUserUseCase
-import domain.user.use_case.CreateUserUseCase
-import domain.user.use_case.DeleteUserUseCase
-import domain.user.use_case.ObserveUser
-import domain.user.use_case.GetProfilePicturesUseCase
-import domain.user.use_case.GetRoomPlayersUseCase
-import domain.user.use_case.GetUserByIdUseCase
-import domain.user.use_case.UpdateNameUseCase
-import domain.user.use_case.UpdateUserPictureUseCase
-import domain.user.use_case.UpdateVictoryMessageUseCase
+import domain.user.useCase.CheckIfIsNewUserUseCase
+import domain.user.useCase.CreateUserUseCase
+import domain.user.useCase.DeleteUserUseCase
+import domain.user.useCase.GetProfilePicturesUseCase
+import domain.user.useCase.GetRoomPlayersUseCase
+import domain.user.useCase.GetUserByIdUseCase
+import domain.user.useCase.ObserveUser
+import domain.user.useCase.UpdateNameUseCase
+import domain.user.useCase.UpdateUserPictureUseCase
+import domain.user.useCase.UpdateVictoryMessageUseCase
 import org.koin.dsl.module
 
 val domainModule = module {
@@ -112,7 +111,6 @@ val domainModule = module {
 
 //    Supabase Auth
     single<SupabaseAuthService> { SupabaseAuthServiceImpl(get()) }
-    single<SignInWithGoogleUseCase> { SignInWithGoogleUseCase(get(), get()) }
     single<SupabaseSignOutUseCase> { SupabaseSignOutUseCase(get()) }
     single<SupabaseDeleteAccountUseCase> { SupabaseDeleteAccountUseCase(get()) }
 

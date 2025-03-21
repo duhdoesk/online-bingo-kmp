@@ -4,14 +4,11 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.asPaddingValues
-import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.sizeIn
 import androidx.compose.foundation.layout.systemBars
-import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -56,7 +53,7 @@ fun PlayerScreen(viewModel: RoomPlayerViewModel) {
      * Screen calling
      */
     Scaffold(
-        modifier = Modifier,
+        modifier = Modifier
     ) {
         Box(
             contentAlignment = Alignment.Center,
@@ -69,7 +66,7 @@ fun PlayerScreen(viewModel: RoomPlayerViewModel) {
                     players = screenState.players.reversed(),
                     winners = screenState.winners,
                     host = screenState.host,
-                    modifier = Modifier.fillMaxWidth(),
+                    modifier = Modifier.fillMaxWidth()
                 )
 
                 when (screenState.bingoState) {
@@ -81,12 +78,12 @@ fun PlayerScreen(viewModel: RoomPlayerViewModel) {
 
                     BingoState.NOT_STARTED -> PlayerScreenNotStarted(
                         screenState = screenState,
-                        event = { viewModel.uiEvent(it) },
+                        event = { viewModel.uiEvent(it) }
                     )
 
                     BingoState.RUNNING -> PlayerScreenRunning(
                         screenState = screenState,
-                        event = { viewModel.uiEvent(it) },
+                        event = { viewModel.uiEvent(it) }
                     )
                 }
             }
@@ -99,7 +96,7 @@ fun PlayerScreen(viewModel: RoomPlayerViewModel) {
     if (showErrorMessage) {
         GenericErrorDialog(
             onDismiss = { viewModel.errorDialogState.hideDialog() },
-            body = viewModel.errorDialogState.dialogData.value,
+            body = viewModel.errorDialogState.dialogData.value
         )
     }
 
@@ -112,7 +109,7 @@ fun PlayerScreen(viewModel: RoomPlayerViewModel) {
             },
             title = Res.string.pop_back_dialog_title,
             body = Res.string.pop_back_dialog_body,
-            permanentAction = false,
+            permanentAction = false
         )
     }
 }
