@@ -1,43 +1,92 @@
-name: CI
-run-name: CI & CD
-on: [push]
-jobs:
-  build:
-    runs-on: macos-latest
+name: Deploy CI
 
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  lint:
+    name: Run ktlint
+    runs-on: ubuntu-latest
     steps:
-      - name: Checkout Repository
+      - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Set up Ruby
-        uses: ruby/setup-ruby@v1
+      - name: Setup JDK
+        uses: actions/setup-java@v3
         with:
-          ruby-version: 3.0
+          distribution: 'temurin'
+          java-version: '17'
 
-      - name: Install Fastlane
-        run: gem install fastlane -NV
+      - name: Grant execute permission for gradlew
+        run: chmod +x gradlew
 
-      - name: Install Apple Certificate
-        env:
-          IOS_CERTIFICATE: ${{ secrets.IOS_CERTIFICATE }}
-          CERT_PASSWORD: ${{ secrets.CERT_PASSWORD }}
-        run: |
-          echo "$IOS_CERTIFICATE" | base64 --decode > certificate.p12
-          security import certificate.p12 -P "$CERT_PASSWORD" -k ~/Library/Keychains/login.keychain-db -T /usr/bin/codesign
+      - name: Run ktlintCheck
+        run: ./gradlew ktlintCheck
 
-      - name: Install Provisioning Profile
-        env:
-          IOS_PROFILE: ${{ secrets.IOS_PROFILE }}
-        run: |
-          echo "$IOS_PROFILE" | base64 --decode > profile.mobileprovision
-          mkdir -p ~/Library/MobileDevice/Provisioning\ Profiles
-          mv profile.mobileprovision ~/Library/MobileDevice/Provisioning\ Profiles/
+#  build-android:
+#    name: Build Android APK
+#    needs: lint
+#    runs-on: ubuntu-latest
+#    steps:
+#      - name: Checkout repository
+#        uses: actions/checkout@v4
+#
+#      - name: Setup JDK
+#        uses: actions/setup-java@v3
+#        with:
+#          distribution: 'temurin'
+#          java-version: '17'
+#
+#      - name: Grant execute permission for gradlew
+#        run: chmod +x gradlew
+#
+#      - name: Build APK
+#        run: ./gradlew assembleDebug
+#
+#      - name: Upload APK
+#        uses: actions/upload-artifact@v4
+#        with:
+#          name: android-apk
+#          path: composeApp/build/outputs/apk/debug/*.apk
 
-      - name: Build and Upload to TestFlight
-        env:
-          APP_STORE_CONNECT_API_KEY_ID: ${{ secrets.APP_STORE_CONNECT_API_KEY_ID }}
-          APP_STORE_CONNECT_ISSUER_ID: ${{ secrets.APP_STORE_CONNECT_ISSUER_ID }}
-          APP_STORE_CONNECT_API_KEY: ${{ secrets.APP_STORE_CONNECT_API_KEY }}
-        run: |
-          cd iosApp
-          fastlane beta --verbose
+#  build-iOS:
+#    runs-on: macos-latest
+#
+#    steps:
+#      - name: Checkout Repository
+#        uses: actions/checkout@v4
+#
+#      - name: Set up Ruby
+#        uses: ruby/setup-ruby@v1
+#        with:
+#          ruby-version: 3.0
+#
+#      - name: Install Fastlane
+#        run: gem install fastlane -NV
+#
+#      - name: Install Apple Certificate
+#        env:
+#          IOS_CERTIFICATE: ${{ secrets.IOS_CERTIFICATE }}
+#          CERT_PASSWORD: ${{ secrets.CERT_PASSWORD }}
+#        run: |
+#          echo "$IOS_CERTIFICATE" | base64 --decode > certificate.p12
+#          security import certificate.p12 -P "$CERT_PASSWORD" -k ~/Library/Keychains/login.keychain-db -T /usr/bin/codesign
+#
+#      - name: Install Provisioning Profile
+#        env:
+#          IOS_PROFILE: ${{ secrets.IOS_PROFILE }}
+#        run: |
+#          echo "$IOS_PROFILE" | base64 --decode > profile.mobileprovision
+#          mkdir -p ~/Library/MobileDevice/Provisioning\ Profiles
+#          mv profile.mobileprovision ~/Library/MobileDevice/Provisioning\ Profiles/
+#
+#      - name: Build and Upload to TestFlight
+#        env:
+#          APP_STORE_CONNECT_API_KEY_ID: ${{ secrets.APP_STORE_CONNECT_API_KEY_ID }}
+#          APP_STORE_CONNECT_ISSUER_ID: ${{ secrets.APP_STORE_CONNECT_ISSUER_ID }}
+#          APP_STORE_CONNECT_API_KEY: ${{ secrets.APP_STORE_CONNECT_API_KEY }}
+#        run: |
+#          cd iosApp
+#          fastlane beta --verbose
