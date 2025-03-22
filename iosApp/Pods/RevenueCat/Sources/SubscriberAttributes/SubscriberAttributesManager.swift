@@ -96,12 +96,24 @@ class SubscriberAttributesManager {
         setReservedAttribute(.cleverTapID, value: cleverTapID, appUserID: appUserID)
     }
 
+    func setKochavaDeviceID(_ kochavaDeviceID: String?, appUserID: String) {
+        setAttributionID(kochavaDeviceID, forNetworkID: .kochavaDeviceID, appUserID: appUserID)
+    }
+
     func setMixpanelDistinctID(_ mixpanelDistinctID: String?, appUserID: String) {
         setReservedAttribute(.mixpanelDistinctID, value: mixpanelDistinctID, appUserID: appUserID)
     }
 
     func setFirebaseAppInstanceID(_ firebaseAppInstanceID: String?, appUserID: String) {
         setReservedAttribute(.firebaseAppInstanceID, value: firebaseAppInstanceID, appUserID: appUserID)
+    }
+
+    func setTenjinAnalyticsInstallationID(_ tenjinAnalyticsInstallationID: String?, appUserID: String) {
+        setReservedAttribute(.tenjinAnalyticsInstallationID, value: tenjinAnalyticsInstallationID, appUserID: appUserID)
+    }
+
+    func setPostHogUserID(_ postHogUserID: String?, appUserID: String) {
+        setReservedAttribute(.postHogUserID, value: postHogUserID, appUserID: appUserID)
     }
 
     func setMediaSource(_ mediaSource: String?, appUserID: String) {
@@ -136,6 +148,7 @@ class SubscriberAttributesManager {
         setReservedAttribute(.idfa, value: identifierForAdvertisers, appUserID: appUserID)
         setReservedAttribute(.idfv, value: identifierForVendor, appUserID: appUserID)
         setReservedAttribute(.ip, value: "true", appUserID: appUserID)
+        setReservedAttribute(.deviceVersion, value: "true", appUserID: appUserID)
     }
 
     /// - Parameter syncedAttribute: will be called for every attribute that is updated

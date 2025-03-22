@@ -13,8 +13,6 @@
 //  Created by Cesar de la Vega on 28/5/24.
 //
 
-#if CUSTOMER_CENTER_ENABLED
-
 import Foundation
 import RevenueCat
 
@@ -22,7 +20,12 @@ enum CustomerCenterConfigTestData {
 
     @available(iOS 14.0, *)
     // swiftlint:disable:next function_body_length
-    static func customerCenterData(lastPublishedAppVersion: String?) -> CustomerCenterConfigData {
+    static func customerCenterData(
+        lastPublishedAppVersion: String?,
+        shouldWarnCustomerToUpdate: Bool = false,
+        displayPurchaseHistoryLink: Bool = false,
+        refundWindowDuration: CustomerCenterConfigData.HelpPath.RefundWindowDuration = .forever
+    ) -> CustomerCenterConfigData {
         CustomerCenterConfigData(
             screens: [.management:
                     .init(
@@ -33,29 +36,41 @@ enum CustomerCenterConfigTestData {
                             .init(
                                 id: "1",
                                 title: "Didn't receive purchase",
+                                url: nil,
+                                openMethod: nil,
                                 type: .missingPurchase,
-                                detail: nil
+                                detail: nil,
+                                refundWindowDuration: nil
                             ),
                             .init(
                                 id: "2",
                                 title: "Request a refund",
+                                url: nil,
+                                openMethod: nil,
                                 type: .refundRequest,
                                 detail: .promotionalOffer(CustomerCenterConfigData.HelpPath.PromotionalOffer(
                                     iosOfferId: "offer_id",
                                     eligible: true,
                                     title: "title",
-                                    subtitle: "subtitle"
-                                ))
+                                    subtitle: "subtitle",
+                                    productMapping: ["monthly": "offer_id"]
+                                )),
+                                refundWindowDuration: refundWindowDuration
                             ),
                             .init(
                                 id: "3",
                                 title: "Change plans",
+                                url: nil,
+                                openMethod: nil,
                                 type: .changePlans,
-                                detail: nil
+                                detail: nil,
+                                refundWindowDuration: nil
                             ),
                             .init(
                                 id: "4",
                                 title: "Cancel subscription",
+                                url: nil,
+                                openMethod: nil,
                                 type: .cancel,
                                 detail: .feedbackSurvey(.init(
                                     title: "Why are you cancelling?",
@@ -76,7 +91,8 @@ enum CustomerCenterConfigTestData {
                                             promotionalOffer: nil
                                         )
                                     ]
-                                ))
+                                )),
+                                refundWindowDuration: nil
                             )
                         ]
                     ),
@@ -88,8 +104,11 @@ enum CustomerCenterConfigTestData {
                             .init(
                                 id: "9q9719171o",
                                 title: "Check purchases",
+                                url: nil,
+                                openMethod: nil,
                                 type: .missingPurchase,
-                                detail: nil
+                                detail: nil,
+                                refundWindowDuration: nil
                             )
                         ]
                       )
@@ -102,7 +121,11 @@ enum CustomerCenterConfigTestData {
                     "back": "Back"
                 ]
             ),
-            support: .init(email: "test-support@revenuecat.com"),
+            support: .init(
+                email: "test-support@revenuecat.com",
+                shouldWarnCustomerToUpdate: shouldWarnCustomerToUpdate,
+                displayPurchaseHistoryLink: displayPurchaseHistoryLink
+            ),
             lastPublishedAppVersion: lastPublishedAppVersion,
             productId: 1
         )
@@ -119,26 +142,49 @@ enum CustomerCenterConfigTestData {
         buttonBackgroundColor: .init(light: "#287aff", dark: "#287aff")
     )
 
-    static let subscriptionInformationMonthlyRenewing: SubscriptionInformation = .init(
+    static let subscriptionInformationMonthlyRenewing: PurchaseInformation = .init(
         title: "Basic",
         durationTitle: "Monthly",
-        price: "$4.99",
-        expirationDateString: "June 1st, 2024",
-        willRenew: true,
+        explanation: .earliestRenewal,
+        price: .paid("$4.99"),
+        expirationOrRenewal: .init(label: .nextBillingDate,
+                                   date: .date("June 1st, 2024")),
         productIdentifier: "product_id",
-        active: true
+        store: .appStore,
+        isTrial: false,
+        isLifetime: false,
+        latestPurchaseDate: nil,
+        customerInfoRequestedDate: Date()
     )
 
-    static let subscriptionInformationYearlyExpiring: SubscriptionInformation = .init(
+    static let subscriptionInformationFree: PurchaseInformation = .init(
+        title: "Basic",
+        durationTitle: "Monthly",
+        explanation: .earliestRenewal,
+        price: .free,
+        expirationOrRenewal: .init(label: .nextBillingDate,
+                                   date: .date("June 1st, 2024")),
+        productIdentifier: "product_id",
+        store: .appStore,
+        isTrial: false,
+        isLifetime: false,
+        latestPurchaseDate: nil,
+        customerInfoRequestedDate: Date()
+    )
+
+    static let subscriptionInformationYearlyExpiring: PurchaseInformation = .init(
         title: "Basic",
         durationTitle: "Yearly",
-        price: "$49.99",
-        expirationDateString: "June 1st, 2024",
-        willRenew: false,
+        explanation: .earliestRenewal,
+        price: .paid("$49.99"),
+        expirationOrRenewal: .init(label: .expires,
+                                   date: .date("June 1st, 2024")),
         productIdentifier: "product_id",
-        active: true
+        store: .appStore,
+        isTrial: false,
+        isLifetime: false,
+        latestPurchaseDate: nil,
+        customerInfoRequestedDate: Date()
     )
 
 }
-
-#endif

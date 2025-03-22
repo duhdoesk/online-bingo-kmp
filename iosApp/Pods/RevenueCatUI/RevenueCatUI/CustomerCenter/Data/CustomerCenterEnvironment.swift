@@ -11,8 +11,6 @@
 //
 //  Created by Cesar de la Vega on 19/7/24.
 
-#if CUSTOMER_CENTER_ENABLED
-
 import Foundation
 import RevenueCat
 import SwiftUI
@@ -32,6 +30,12 @@ struct AppearanceKey: EnvironmentKey {
 struct SupportKey: EnvironmentKey {
 
     static let defaultValue: CustomerCenterConfigData.Support? = nil
+
+}
+
+struct CustomerCenterPresentationModeKey: EnvironmentKey {
+
+    static let defaultValue: CustomerCenterPresentationMode = .default
 
 }
 
@@ -55,6 +59,11 @@ extension CustomerCenterConfigData.Appearance {
 
 }
 
+struct CustomerCenterNavigationOptionsKey: EnvironmentKey {
+
+    static let defaultValue: CustomerCenterNavigationOptions = .default
+}
+
 extension EnvironmentValues {
 
     var localization: CustomerCenterConfigData.Localization {
@@ -72,6 +81,14 @@ extension EnvironmentValues {
         set { self[SupportKey.self] = newValue }
     }
 
-}
+    var customerCenterPresentationMode: CustomerCenterPresentationMode {
+        get { self[CustomerCenterPresentationModeKey.self] }
+        set { self[CustomerCenterPresentationModeKey.self] = newValue }
+    }
 
-#endif
+    var navigationOptions: CustomerCenterNavigationOptions {
+        get { self[CustomerCenterNavigationOptionsKey.self] }
+        set { self[CustomerCenterNavigationOptionsKey.self] = newValue }
+    }
+
+}

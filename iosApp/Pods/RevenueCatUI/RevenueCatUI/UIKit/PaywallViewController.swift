@@ -8,18 +8,20 @@
 //      https://opensource.org/licenses/MIT
 //
 //  PaywallViewController.swift
-//  
+//
 //  Created by Nacho Soto on 8/1/23.
 
 // swiftlint:disable file_length
 
+import SwiftUI
+
 #if canImport(UIKit) && !os(tvOS) && !os(watchOS)
 
 import RevenueCat
-import SwiftUI
+
 import UIKit
 
-/// A view controller for displaying `PaywallData` for an `Offering`.
+/// A view controller for displaying the paywall for an `Offering`.
 ///
 /// - Seealso: ``PaywallView`` for `SwiftUI`.
 @available(iOS 15.0, macOS 12.0, tvOS 15.0, *)
@@ -41,7 +43,7 @@ public class PaywallViewController: UIViewController {
     }
 
     /// Initialize a `PaywallViewController` with an optional `Offering`.
-    /// - Parameter offering: The `Offering` containing the desired `PaywallData` to display.
+    /// - Parameter offering: The `Offering` containing the desired paywall to display.
     /// `Offerings.current` will be used by default.
     /// - Parameter displayCloseButton: Set this to `true` to automatically include a close button.
     /// - Parameter shouldBlockTouchEvents: Whether to interecept all touch events propagated through this VC
@@ -64,7 +66,7 @@ public class PaywallViewController: UIViewController {
     }
 
     /// Initialize a `PaywallViewController` with an optional `Offering` and ``PaywallFontProvider``.
-    /// - Parameter offering: The `Offering` containing the desired `PaywallData` to display.
+    /// - Parameter offering: The `Offering` containing the desired paywall to display.
     /// `Offerings.current` will be used by default.
     /// - Parameter fonts: A ``PaywallFontProvider``.
     /// - Parameter displayCloseButton: Set this to `true` to automatically include a close button.
@@ -88,7 +90,7 @@ public class PaywallViewController: UIViewController {
     }
 
     /// Initialize a `PaywallViewController` with an offering identifier.
-    /// - Parameter offeringIdentifier: The identifier for the offering with `PaywallData` to display.
+    /// - Parameter offeringIdentifier: The identifier for the offering with paywall to display.
     /// - Parameter fonts: A ``PaywallFontProvider``.
     /// - Parameter displayCloseButton: Set this to `true` to automatically include a close button.
     /// - Parameter shouldBlockTouchEvents: Whether to interecept all touch events propagated through this VC
@@ -137,10 +139,12 @@ public class PaywallViewController: UIViewController {
         fatalError("init(coder:) has not been implemented")
     }
 
-    public override func loadView() {
-        super.loadView()
+    public override func viewDidLoad() {
+        super.viewDidLoad()
 
-        self.hostingController = self.createHostingController()
+        if self.hostingController == nil {
+            self.hostingController = self.createHostingController()
+        }
     }
 
     public override func viewDidDisappear(_ animated: Bool) {
@@ -209,17 +213,20 @@ public class PaywallViewController: UIViewController {
 
     private var hostingController: UIHostingController<PaywallContainerView>? {
         willSet {
-            guard let oldValue = self.hostingController else { return }
+            guard let oldController = self.hostingController else { return }
 
-            oldValue.willMove(toParent: nil)
-            oldValue.view.removeFromSuperview()
-            oldValue.removeFromParent()
+            oldController.willMove(toParent: nil)
+            oldController.view.removeFromSuperview()
+            oldController.removeFromParent()
         }
 
         didSet {
             guard let newController = self.hostingController else { return }
 
             self.addChild(newController)
+
+            self.view.subviews.forEach { $0.removeFromSuperview() }
+
             self.view.addSubview(newController.view)
             newController.didMove(toParent: self)
 
@@ -393,15 +400,16 @@ private struct PaywallContainerView: View {
             .onRestoreCompleted(self.restoreCompleted)
             .onRestoreFailure(self.restoreFailure)
             .onSizeChange(self.onSizeChange)
-            .applyIf(self.requestedDismissal != nil) {
-                $0.onRequestedDismissal(self.requestedDismissal!)
-            }
-
+            .applyIfLet(self.requestedDismissal, apply: { view, requestedDismissal in
+                view.onRequestedDismissal(requestedDismissal)
+            })
     }
 
 }
 
-@available(iOS 15.0, macOS 12.0, tvOS 15.0, *)
+#endif
+
+@available(iOS 15.0, macOS 12.0, tvOS 15.0, watchOS 8.0, *)
 extension View {
     @ViewBuilder func applyIf<Content: View>(_ condition: Bool, apply: (Self) -> Content) -> some View {
         if condition {
@@ -412,6 +420,15 @@ extension View {
     }
 }
 
-#endif
+@available(iOS 15.0, macOS 12.0, tvOS 15.0, watchOS 8.0, *)
+extension View {
+    @ViewBuilder func applyIfLet<T, Content: View>(_ value: T?, apply: (Self, T) -> Content) -> some View {
+        if let value = value {
+            apply(self, value)
+        } else {
+            self
+        }
+    }
+}
 
 // swiftlint:enable file_length

@@ -31,6 +31,20 @@ extension Package: VariableDataProvider {
         }
     }
 
+    func localizedPricePerDay(showZeroDecimalPlacePrices: Bool = false) -> String {
+        guard let price = self.storeProduct.localizedPricePerDay else {
+            Logger.warning(Strings.package_not_subscription(self))
+            return self.storeProduct.localizedPriceString
+        }
+
+        if showZeroDecimalPlacePrices && isPriceEndingIn00Cents(price) {
+            return formatAsZeroDecimalPlaces(price)
+        } else {
+            return price
+        }
+
+    }
+
     func localizedPricePerWeek(showZeroDecimalPlacePrices: Bool = false) -> String {
         guard let price = self.storeProduct.localizedPricePerWeek else {
             Logger.warning(Strings.package_not_subscription(self))
@@ -74,8 +88,34 @@ extension Package: VariableDataProvider {
         return self.storeProduct.localizedTitle
     }
 
+    func toPackageType(product: StoreProduct) -> PackageType? {
+        guard let period = product.subscriptionPeriod else {
+            return nil
+        }
+
+        switch (period.value, period.unit) {
+        case (_, .day):
+            return nil
+        case (1, .week):
+            return .weekly
+        case (1, .month):
+            return .monthly
+        case (2, .month):
+            return .twoMonth
+        case (3, .month):
+            return .threeMonth
+        case (6, .month):
+            return .sixMonth
+        case (1, .year):
+            return .annual
+        default:
+            return nil
+        }
+    }
+
     func periodNameOrIdentifier(_ locale: Locale) -> String {
-        return Localization.localized(packageType: self.packageType,
+        let packageType = toPackageType(product: self.storeProduct) ?? self.packageType
+        return Localization.localized(packageType: packageType,
                                       locale: locale) ?? self.identifier
     }
 

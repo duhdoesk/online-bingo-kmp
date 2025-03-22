@@ -281,6 +281,19 @@ public extension Attribution {
     }
 
     /**
+     * Subscriber attribute associated with the Kochava Device ID for the user.
+     * Recommended for the RevenueCat Kochava integration.
+     *
+     * #### Related Articles
+     * - [Kochava RevenueCat Integration](https://docs.revenuecat.com/docs/kochava)
+     *
+     * - Parameter kochavaDeviceID: Empty String or `nil` will delete the subscriber attribute.
+     */
+    @objc func setKochavaDeviceID(_ kochavaDeviceID: String?) {
+        self.subscriberAttributesManager.setKochavaDeviceID(kochavaDeviceID, appUserID: appUserID)
+    }
+
+    /**
      * Subscriber attribute associated with the Mixpanel Distinct ID for the user.
      * Optional for the RevenueCat Mixpanel integration.
      *
@@ -304,6 +317,27 @@ public extension Attribution {
      */
     @objc func setFirebaseAppInstanceID(_ firebaseAppInstanceID: String?) {
         self.subscriberAttributesManager.setFirebaseAppInstanceID(firebaseAppInstanceID, appUserID: appUserID)
+    }
+
+    /**
+     * Subscriber attribute associated with the Tenjin analytics installation ID for the user.
+     * Required for the RevenueCat Tenjin integration.
+     *
+     *- Parameter firebaseAppInstanceID: Empty String or `nil` will delete the subscriber attribute.
+     */
+    @objc func setTenjinAnalyticsInstallationID(_ tenjinAnalyticsInstallationID: String?) {
+        self.subscriberAttributesManager.setTenjinAnalyticsInstallationID(tenjinAnalyticsInstallationID,
+                                                                          appUserID: appUserID)
+    }
+
+    /**
+     * Subscriber attribute associated with the PostHog User ID for the user.
+     * Optional for the RevenueCat PostHog integration.
+     *
+     *- Parameter postHogUserID: Empty String or `nil` will delete the subscriber attribute.
+     */
+    @objc func setPostHogUserID(_ postHogUserID: String?) {
+        self.subscriberAttributesManager.setPostHogUserID(postHogUserID, appUserID: appUserID)
     }
 
     /**

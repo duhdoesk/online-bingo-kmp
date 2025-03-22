@@ -93,7 +93,7 @@ private fun UpdateBottomSheetContent(
         modifier = modifier,
         onDismissRequest = { onCancel() },
         sheetState = sheetState,
-        windowInsets = WindowInsets.ime
+        contentWindowInsets = { WindowInsets.ime }
     ) {
         Column {
             Text(

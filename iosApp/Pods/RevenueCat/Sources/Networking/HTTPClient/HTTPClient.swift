@@ -123,6 +123,7 @@ class HTTPClient {
             "X-Platform": SystemInfo.platformHeader,
             "X-Platform-Version": SystemInfo.systemVersion,
             "X-Platform-Flavor": self.systemInfo.platformFlavor,
+            "X-Platform-Device": SystemInfo.deviceVersion,
             "X-Client-Version": SystemInfo.appVersion,
             "X-Client-Build-Version": SystemInfo.buildVersion,
             "X-Client-Bundle-ID": SystemInfo.bundleIdentifier,
@@ -131,7 +132,8 @@ class HTTPClient {
             "X-StoreKit-Version": "\(self.systemInfo.storeKitVersion.effectiveVersion)",
             "X-Observer-Mode-Enabled": "\(self.systemInfo.observerMode)",
             RequestHeader.retryCount.rawValue: "0",
-            RequestHeader.sandbox.rawValue: "\(self.systemInfo.isSandbox)"
+            RequestHeader.sandbox.rawValue: "\(self.systemInfo.isSandbox)",
+            "X-Is-Debug-Build": "\(self.systemInfo.isDebugBuild)"
         ]
 
         if let storefront = self.systemInfo.storefront {
@@ -148,6 +150,10 @@ class HTTPClient {
 
         if self.systemInfo.dangerousSettings.customEntitlementComputation {
             headers["X-Custom-Entitlements-Computation"] = "\(true)"
+        }
+
+        if self.systemInfo.dangerousSettings.uiPreviewMode {
+            headers["X-UI-Preview-Mode"] = "\(true)"
         }
 
         return headers
@@ -581,29 +587,31 @@ private extension HTTPClient {
             guard let diagnosticsTracker = self.diagnosticsTracker, let result else { return }
             let responseTime = self.dateProvider.now().timeIntervalSince(requestStartTime)
             let requestPathName = request.httpRequest.path.name
-            Task(priority: .background) {
-                switch result {
-                case let .success(response):
-                    let httpStatusCode = response.httpStatusCode.rawValue
-                    let verificationResult = response.verificationResult
-                    await diagnosticsTracker.trackHttpRequestPerformed(endpointName: requestPathName,
-                                                                       responseTime: responseTime,
-                                                                       wasSuccessful: true,
-                                                                       responseCode: httpStatusCode,
-                                                                       resultOrigin: response.origin,
-                                                                       verificationResult: verificationResult)
-                case let .failure(error):
-                    var responseCode = -1
-                    if case let .errorResponse(_, code, _) = error {
-                        responseCode = code.rawValue
-                    }
-                    await diagnosticsTracker.trackHttpRequestPerformed(endpointName: requestPathName,
-                                                                       responseTime: responseTime,
-                                                                       wasSuccessful: false,
-                                                                       responseCode: responseCode,
-                                                                       resultOrigin: nil,
-                                                                       verificationResult: .notRequested)
+            switch result {
+            case let .success(response):
+                let httpStatusCode = response.httpStatusCode.rawValue
+                let verificationResult = response.verificationResult
+                diagnosticsTracker.trackHttpRequestPerformed(endpointName: requestPathName,
+                                                             responseTime: responseTime,
+                                                             wasSuccessful: true,
+                                                             responseCode: httpStatusCode,
+                                                             backendErrorCode: nil,
+                                                             resultOrigin: response.origin,
+                                                             verificationResult: verificationResult)
+            case let .failure(error):
+                var responseCode = -1
+                var backendErrorCode: Int?
+                if case let .errorResponse(errorResponse, code, _) = error {
+                    responseCode = code.rawValue
+                    backendErrorCode = errorResponse.code.rawValue
                 }
+                diagnosticsTracker.trackHttpRequestPerformed(endpointName: requestPathName,
+                                                             responseTime: responseTime,
+                                                             wasSuccessful: false,
+                                                             responseCode: responseCode,
+                                                             backendErrorCode: backendErrorCode,
+                                                             resultOrigin: nil,
+                                                             verificationResult: .notRequested)
             }
         }
     }

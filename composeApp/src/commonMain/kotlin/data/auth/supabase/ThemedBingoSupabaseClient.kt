@@ -1,10 +1,10 @@
 package data.auth.supabase
 
+import io.github.jan.supabase.auth.Auth
 import io.github.jan.supabase.compose.auth.ComposeAuth
 import io.github.jan.supabase.compose.auth.appleNativeLogin
 import io.github.jan.supabase.compose.auth.googleNativeLogin
 import io.github.jan.supabase.createSupabaseClient
-import io.github.jan.supabase.gotrue.Auth
 
 fun createThemeBingoSupabaseClient() = createSupabaseClient(
     supabaseUrl = SUPABASE_URL,

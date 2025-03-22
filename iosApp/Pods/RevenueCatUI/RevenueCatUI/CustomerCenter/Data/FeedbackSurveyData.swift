@@ -13,8 +13,6 @@
 //  Created by Cesar de la Vega on 14/6/24.
 //
 
-#if CUSTOMER_CENTER_ENABLED
-
 import Foundation
 import RevenueCat
 
@@ -24,19 +22,24 @@ import RevenueCat
 @available(macOS, unavailable)
 @available(tvOS, unavailable)
 @available(watchOS, unavailable)
-class FeedbackSurveyData: ObservableObject {
+class FeedbackSurveyData: ObservableObject, Equatable {
 
     var configuration: CustomerCenterConfigData.HelpPath.FeedbackSurvey
+    var path: CustomerCenterConfigData.HelpPath
     var onOptionSelected: (() -> Void)
 
     init(configuration: CustomerCenterConfigData.HelpPath.FeedbackSurvey,
+         path: CustomerCenterConfigData.HelpPath,
          onOptionSelected: @escaping (() -> Void)) {
         self.configuration = configuration
+        self.path = path
         self.onOptionSelected = onOptionSelected
     }
 
+    static func == (lhs: FeedbackSurveyData, rhs: FeedbackSurveyData) -> Bool {
+        return lhs.configuration == rhs.configuration &&
+               lhs.path == rhs.path
+    }
 }
-
-#endif
 
 #endif

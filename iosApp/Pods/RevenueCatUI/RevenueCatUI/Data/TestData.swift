@@ -9,7 +9,7 @@ import Foundation
 import RevenueCat
 import SwiftUI
 
-// swiftlint:disable type_body_length file_length
+// swiftlint:disable type_body_length file_length force_unwrapping
 
 @available(iOS 15.0, macOS 12.0, tvOS 15.0, watchOS 8.0, *)
 // @PublicForExternalTesting
@@ -236,6 +236,27 @@ enum TestData {
         discounts: [],
         locale: Self.locale
     )
+    static let productWithIntroOfferPayUpFront = TestStoreProduct(
+        localizedTitle: "PRO monthly",
+        price: 3.99,
+        localizedPriceString: "$3.99",
+        productIdentifier: "com.revenuecat.product_5",
+        productType: .autoRenewableSubscription,
+        localizedDescription: "PRO monthly",
+        subscriptionGroupIdentifier: "group",
+        subscriptionPeriod: .init(value: 1, unit: .month),
+        introductoryDiscount: .init(
+            identifier: "intro",
+            price: 1.99,
+            localizedPriceString: "$1.99",
+            paymentMode: .payUpFront,
+            subscriptionPeriod: .init(value: 1, unit: .week),
+            numberOfPeriods: 1,
+            type: .introductory
+        ),
+        discounts: [],
+        locale: Self.locale
+    )
     static let productWithNoIntroOffer = TestStoreProduct(
         localizedTitle: "PRO annual",
         price: 34.99,
@@ -267,6 +288,12 @@ enum TestData {
         identifier: PackageType.monthly.identifier,
         packageType: .monthly,
         storeProduct: productWithIntroOffer.toStoreProduct(),
+        offeringIdentifier: Self.offeringIdentifier
+    )
+    static let packageWithIntroOfferPayUpFront = Package(
+        identifier: PackageType.monthly.identifier,
+        packageType: .monthly,
+        storeProduct: productWithIntroOfferPayUpFront.toStoreProduct(),
         offeringIdentifier: Self.offeringIdentifier
     )
     static let packageWithNoIntroOffer = Package(

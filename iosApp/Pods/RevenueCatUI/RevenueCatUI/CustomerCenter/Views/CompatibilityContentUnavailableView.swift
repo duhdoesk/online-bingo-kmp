@@ -15,7 +15,6 @@
 
 import SwiftUI
 
-#if CUSTOMER_CENTER_ENABLED
 #if os(iOS)
 
 /// A SwiftUI view for displaying a message about unavailable content
@@ -24,6 +23,7 @@ import SwiftUI
 @available(tvOS, unavailable)
 @available(watchOS, unavailable)
 struct CompatibilityContentUnavailableView: View {
+
     let title: String
     let systemImage: String
     let description: Text?
@@ -38,18 +38,11 @@ struct CompatibilityContentUnavailableView: View {
 
         if #available(iOS 17.0, *) {
             #if swift(>=5.9)
-            if let description {
-                ContentUnavailableView(
-                    title,
-                    systemImage: systemImage,
-                    description: description
-                )
-            } else {
-                ContentUnavailableView(
-                    title,
-                    systemImage: systemImage
-                )
+            ContentUnavailableView {
+                Label { titleView }
+                icon: { iconView }
             }
+            description: { description }
 
             #else
                 // In Xcode 14, any references to ContentUnavailableView would fail to compile since that entity
@@ -60,16 +53,8 @@ struct CompatibilityContentUnavailableView: View {
             #endif
         } else {
             VStack {
-                Image(systemName: systemImage)
-                    .resizable()
-                    .scaledToFill()
-                    .frame(width: 48, height: 48)
-                    .foregroundStyle(.secondary)
-                    .padding()
-
-                Text(title)
-                    .font(.title2)
-                    .bold()
+                iconView
+                titleView
 
                 if let description {
                     description
@@ -80,7 +65,22 @@ struct CompatibilityContentUnavailableView: View {
         }
 
     }
+
+    private var titleView: some View {
+        Text(title)
+            .font(.title2)
+            .bold()
+            .fixedSize(horizontal: false, vertical: true)
+    }
+
+    private var iconView: some View {
+        Image(systemName: systemImage)
+            .resizable()
+            .scaledToFill()
+            .frame(width: 48, height: 48)
+            .foregroundStyle(.secondary)
+            .padding()
+    }
 }
 
-#endif
 #endif

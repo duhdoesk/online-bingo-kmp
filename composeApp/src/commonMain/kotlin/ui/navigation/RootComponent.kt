@@ -15,8 +15,8 @@ import domain.auth.supabase.SupabaseAuthService
 import domain.billing.SubscribeToUserSubscriptionData
 import domain.user.useCase.GetUserByIdUseCase
 import getPlatform
-import io.github.jan.supabase.gotrue.SessionStatus
-import io.github.jan.supabase.gotrue.auth
+import io.github.jan.supabase.auth.auth
+import io.github.jan.supabase.auth.status.SessionStatus
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.map

@@ -1,7 +1,11 @@
+import org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+
 plugins {
     alias(libs.plugins.hws.kotlinMultiplatform)
     alias(libs.plugins.androidApplication)
-    alias(libs.plugins.jetbrainsCompose)
+    alias(libs.plugins.composeMultiplatform)
+    alias(libs.plugins.composeCompiler)
     alias(libs.plugins.firebasePlugin) apply false
     alias(libs.plugins.crashlyticsPlugin) apply false
     alias(libs.plugins.kotlinSerialization)
@@ -20,16 +24,15 @@ ktlint {
 
 kotlin {
     androidTarget {
-        compilations.all {
-            kotlinOptions {
-                jvmTarget = "11"
-            }
+        @OptIn(ExperimentalKotlinGradlePluginApi::class)
+        compilerOptions {
+            jvmTarget.set(JvmTarget.JVM_11)
         }
     }
 
     sourceSets {
         androidMain.dependencies {
-            implementation(libs.compose.ui.tooling.preview)
+            implementation(compose.preview)
             implementation(libs.androidx.activity.compose)
 
 //            Ktor
@@ -37,11 +40,6 @@ kotlin {
 
 //            Firebase
             implementation(project.dependencies.platform("com.google.firebase:firebase-bom:30.0.1"))
-
-//            Koin
-            implementation(project.dependencies.platform(libs.koin.bom))
-            implementation(libs.koin.core)
-            implementation(libs.koin.android)
         }
 
         commonMain.dependencies {
@@ -51,6 +49,8 @@ kotlin {
             implementation(compose.components.resources)
             implementation(compose.components.uiToolingPreview)
             implementation(compose.material3)
+            implementation(libs.androidx.lifecycle.viewmodel)
+            implementation(libs.androidx.lifecycle.runtime.compose)
 
 //            Decompose
             implementation(libs.decompose)
@@ -60,10 +60,8 @@ kotlin {
             implementation(libs.ktor.client.core)
 
 //            Coil
-            implementation(libs.coil.compose.core)
             implementation(libs.coil.compose)
-            implementation(libs.coil.mp)
-            implementation(libs.coil.network.ktor)
+            implementation(libs.coil.ktor3)
 
 //            Koin
             implementation(project.dependencies.platform(libs.koin.bom))
@@ -83,8 +81,8 @@ kotlin {
 
 //            Supabase
             implementation(project.dependencies.platform(libs.supabase.bom.get()))
-            implementation(libs.supabase.auth.kt)
-            implementation(libs.supabase.gotrue.kt)
+            implementation(libs.supabase.auth.compose)
+            implementation(libs.supabase.realtime.kt)
 
 //            Revenue Cat
             implementation(libs.purchases.core)
@@ -111,9 +109,9 @@ android {
     namespace = "com.duscaranari.themedbingocardsgenerator"
     compileSdk = libs.versions.android.compileSdk.get().toInt()
 
-    sourceSets["main"].manifest.srcFile("src/androidMain/AndroidManifest.xml")
-    sourceSets["main"].res.srcDirs("src/androidMain/res")
-    sourceSets["main"].resources.srcDirs("src/commonMain/resources")
+//    sourceSets["main"].manifest.srcFile("src/androidMain/AndroidManifest.xml")
+//    sourceSets["main"].res.srcDirs("src/androidMain/res")
+//    sourceSets["main"].resources.srcDirs("src/commonMain/resources")
 
     defaultConfig {
         applicationId = "com.duscaranari.themedbingocardsgenerator"
@@ -136,11 +134,9 @@ android {
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11
     }
-    dependencies {
-        debugImplementation(libs.compose.ui.tooling)
-    }
 }
 
 dependencies {
+    debugImplementation(libs.androidx.ui.tooling)
     ktlintRuleset(libs.ktlintRuleset)
 }

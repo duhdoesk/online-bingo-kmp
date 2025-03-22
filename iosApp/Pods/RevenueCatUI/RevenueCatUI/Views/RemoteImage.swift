@@ -16,11 +16,16 @@ import SwiftUI
 @available(iOS 15.0, macOS 12.0, tvOS 15.0, watchOS 8.0, *)
 struct RemoteImage<Content: View>: View {
 
+    @Environment(\.colorScheme)
+    private var colorScheme
+
     let url: URL
     let lowResUrl: URL?
+    let darkUrl: URL?
+    let darkLowResUrl: URL?
     let aspectRatio: CGFloat?
     let maxWidth: CGFloat?
-    let content: (Image) -> Content
+    let content: (Image, CGSize) -> Content
 
     @StateObject
     private var highResLoader: ImageLoader = .init()
@@ -37,10 +42,14 @@ struct RemoteImage<Content: View>: View {
     init(
         url: URL,
         lowResUrl: URL? = nil,
-        @ViewBuilder content: @escaping (Image) -> Content
+        darkUrl: URL? = nil,
+        darkLowResUrl: URL? = nil,
+        @ViewBuilder content: @escaping (Image, CGSize) -> Content
     ) {
         self.url = url
         self.lowResUrl = lowResUrl
+        self.darkUrl = darkUrl
+        self.darkLowResUrl = darkLowResUrl
         self.content = content
         self.aspectRatio = nil
         self.maxWidth = nil
@@ -49,14 +58,18 @@ struct RemoteImage<Content: View>: View {
     init(
         url: URL,
         lowResUrl: URL? = nil,
+        darkUrl: URL? = nil,
+        darkLowResUrl: URL? = nil,
         aspectRatio: CGFloat? = nil,
         maxWidth: CGFloat? = nil
     ) where Content == AnyView {
         self.url = url
         self.lowResUrl = lowResUrl
+        self.darkUrl = darkUrl
+        self.darkLowResUrl = darkLowResUrl
         self.maxWidth = maxWidth
         self.aspectRatio = aspectRatio
-        self.content = { image in
+        self.content = { (image, _) in
             if let aspectRatio {
                 return AnyView(
                     image
@@ -76,10 +89,10 @@ struct RemoteImage<Content: View>: View {
 
     var body: some View {
         Group {
-            if case let .success(image) = highResLoader.result {
-                content(image)
-            } else if case let .success(image) = lowResLoader.result {
-                content(image)
+            if case let .success(result) = highResLoader.result {
+                content(result.image, result.size)
+            } else if case let .success(result) = lowResLoader.result {
+                content(result.image, result.size)
             } else if case let .failure(highResError) = highResLoader.result {
                 if !fetchLowRes {
                     emptyView(error: highResError)
@@ -94,11 +107,24 @@ struct RemoteImage<Content: View>: View {
         }
         .transition(self.transition)
         .task(id: self.url) { // This cancels the previous task when the URL changes.
-            await loadImages()
+            switch self.colorScheme {
+            case .dark:
+                await loadImages(
+                    url: self.darkUrl ?? self.url,
+                    lowResUrl: self.darkLowResUrl ?? self.lowResUrl
+                )
+            case .light:
+                fallthrough
+            @unknown default:
+                await loadImages(
+                    url: self.url,
+                    lowResUrl: self.lowResUrl
+                )
+            }
         }
     }
 
-    private func loadImages() async {
+    private func loadImages(url: URL, lowResUrl: URL?) async {
         if fetchLowRes, let lowResLoc = lowResUrl {
             async let lowResLoad: Void = lowResLoader.load(url: lowResLoc)
             async let highResLoad: Void = highResLoader.load(url: url)

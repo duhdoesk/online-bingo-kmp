@@ -6,8 +6,8 @@ target 'iosApp' do
   use_frameworks! :linkage => :static
 
   # Pods for Revenue Cat
-  pod 'PurchasesHybridCommon', '13.2.0'
-  pod 'RevenueCat', '5.3.1'
-  pod 'RevenueCatUI'
+  pod 'PurchasesHybridCommon', '13.25.0'
+  pod 'RevenueCat', '5.19.0'
+  pod 'RevenueCatUI', '5.19.0'
 
 end

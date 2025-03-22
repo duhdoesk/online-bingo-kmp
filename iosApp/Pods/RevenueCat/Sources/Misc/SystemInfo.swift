@@ -25,6 +25,7 @@ import AppKit
 
 class SystemInfo {
 
+    // swiftlint:disable:next force_unwrapping
     static let appleSubscriptionsURL = URL(string: "https://apps.apple.com/account/subscriptions")!
 
     static var forceUniversalAppStore: Bool {
@@ -66,6 +67,14 @@ class SystemInfo {
         return self._isSandbox
     }
 
+    var isDebugBuild: Bool {
+#if DEBUG
+        return true
+#else
+        return false
+#endif
+    }
+
     var storefront: StorefrontType? {
         return self.storefrontProvider.currentStorefront
     }
@@ -75,7 +84,7 @@ class SystemInfo {
     }
 
     static var frameworkVersion: String {
-        return "5.3.1"
+        return "5.19.0"
     }
 
     static var systemVersion: String {
@@ -96,6 +105,19 @@ class SystemInfo {
 
     static var platformHeader: String {
         return Self.forceUniversalAppStore ? "iOS" : self.platformHeaderConstant
+    }
+
+    static var deviceVersion: String {
+        var systemInfo = utsname()
+        uname(&systemInfo)
+
+        let machineMirror = Mirror(reflecting: systemInfo.machine)
+        let identifier = machineMirror.children.reduce("") { identifier, element in
+            guard let value = element.value as? Int8, value != 0 else { return identifier }
+            return identifier + String(UnicodeScalar(UInt8(value)))
+        }
+
+        return identifier
     }
 
     var identifierForVendor: String? {

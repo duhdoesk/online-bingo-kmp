@@ -13,8 +13,6 @@
 //  Created by Cesar de la Vega on 17/6/24.
 //
 
-#if CUSTOMER_CENTER_ENABLED
-
 import RevenueCat
 import StoreKit
 import SwiftUI
@@ -27,26 +25,38 @@ import SwiftUI
 @available(watchOS, unavailable)
 struct PromotionalOfferView: View {
 
-    @StateObject
-    private var viewModel: PromotionalOfferViewModel
-    @Environment(\.dismiss)
-    private var dismiss
-    @Environment(\.localization)
-    private var localization: CustomerCenterConfigData.Localization
     @Environment(\.appearance)
     private var appearance: CustomerCenterConfigData.Appearance
+
     @Environment(\.colorScheme)
     private var colorScheme
 
+    @Environment(\.localization)
+    private var localization: CustomerCenterConfigData.Localization
+
+    @State private var isLoading: Bool = false
+
+    @StateObject
+    private var viewModel: PromotionalOfferViewModel
+
+    private let onDismissPromotionalOfferView: (PromotionalOfferViewAction) -> Void
+
     init(promotionalOffer: PromotionalOffer,
          product: StoreProduct,
-         promoOfferDetails: CustomerCenterConfigData.HelpPath.PromotionalOffer) {
-        let promotionalOfferData = PromotionalOfferData(promotionalOffer: promotionalOffer,
-                                                        product: product,
-                                                        promoOfferDetails: promoOfferDetails)
-        let viewModel = PromotionalOfferViewModel(promotionalOfferData: promotionalOfferData)
-        self._viewModel = StateObject(wrappedValue: viewModel)
+         promoOfferDetails: CustomerCenterConfigData.HelpPath.PromotionalOffer,
+         onDismissPromotionalOfferView: @escaping (PromotionalOfferViewAction) -> Void
+    ) {
+        _viewModel = StateObject(wrappedValue: PromotionalOfferViewModel(
+            promotionalOfferData: PromotionalOfferData(
+                promotionalOffer: promotionalOffer,
+                product: product,
+                promoOfferDetails: promoOfferDetails
+            )
+        ))
+        self.onDismissPromotionalOfferView = onDismissPromotionalOfferView
     }
+
+    private let horizontalPadding: CGFloat = 20
 
     var body: some View {
         ZStack {
@@ -56,29 +66,77 @@ struct PromotionalOfferView: View {
 
             VStack {
                 if self.viewModel.error == nil {
+
+                    AppIconView()
+                        .padding(.top, 100)
+                        .padding(.bottom)
+                        .padding(.horizontal)
+
                     PromotionalOfferHeaderView(viewModel: self.viewModel)
 
                     Spacer()
 
-                    PromoOfferButtonView(viewModel: self.viewModel, appearance: self.appearance)
+                    PromoOfferButtonView(
+                        isLoading: $isLoading,
+                        viewModel: self.viewModel,
+                        appearance: self.appearance
+                    )
+                    .padding(.horizontal, horizontalPadding)
 
                     Button {
-                        dismiss()
+                        self.dismissPromotionalOfferView(.declinePromotionalOffer)
                     } label: {
-                        Text(self.localization.commonLocalizedString(for: .noThanks))
+                        Text(self.localization[.noThanks])
                     }
                     .padding()
                     .frame(maxWidth: .infinity)
-                } else {
-                    EmptyView()
-                        .onAppear {
-                            dismiss()
-                        }
                 }
             }
         }
+        .onAppear {
+            self.viewModel.onPromotionalOfferPurchaseFlowComplete = self.dismissPromotionalOfferView
+        }
     }
 
+    // Called when the promotional offer flow is purchased, successfully or not
+    private func dismissPromotionalOfferView(
+        _ action: PromotionalOfferViewAction
+    ) {
+        self.onDismissPromotionalOfferView(action) // Forward results to parent view
+    }
+
+    private struct AppIconView: View {
+
+        var body: some View {
+            if let appIcon = AppIconHelper.getAppIcon() {
+                Image(uiImage: appIcon)
+                    .resizable()
+                    .aspectRatio(contentMode: .fit)
+                    .frame(width: 70, height: 70)
+                    .clipShape(RoundedRectangle(cornerRadius: 10, style: .continuous))
+                    .shadow(radius: 10)
+            } else {
+                Color.clear
+                    // keep a size similar to what the image would have occuppied so layout looks correct
+                    .frame(width: 70, height: 50)
+            }
+        }
+
+    }
+
+    private enum AppIconHelper {
+
+        static func getAppIcon() -> UIImage? {
+            guard let iconsDictionary = Bundle.main.infoDictionary?["CFBundleIcons"] as? [String: Any],
+                  let primaryIcons = iconsDictionary["CFBundlePrimaryIcon"] as? [String: Any],
+                  let iconFiles = primaryIcons["CFBundleIconFiles"] as? [String],
+                  let lastIcon = iconFiles.last else {
+                return nil
+            }
+            return UIImage(named: lastIcon)
+        }
+
+    }
 }
 
 @available(iOS 15.0, macOS 12.0, tvOS 15.0, watchOS 8.0, *)
@@ -89,23 +147,32 @@ struct PromotionalOfferHeaderView: View {
 
     @Environment(\.appearance)
     private var appearance: CustomerCenterConfigData.Appearance
+
     @Environment(\.colorScheme)
     private var colorScheme
+
     @ObservedObject
     private(set) var viewModel: PromotionalOfferViewModel
+
+    private let spacing: CGFloat = 30
+    private let horizontalPadding: CGFloat = 40
 
     var body: some View {
         let textColor = Color.from(colorInformation: appearance.textColor, for: colorScheme)
         if let details = self.viewModel.promotionalOfferData?.promoOfferDetails {
-            VStack {
+            VStack(spacing: spacing) {
                 Text(details.title)
                     .font(.title)
-                    .padding()
+                    .fontWeight(.bold)
+                    .multilineTextAlignment(.center)
+                    .padding(.top)
 
                 Text(details.subtitle)
-                    .font(.title3)
-                    .padding()
-            }.applyIf(textColor != nil, apply: { $0.foregroundColor(textColor) })
+                    .font(.body)
+                    .multilineTextAlignment(.center)
+            }
+            .applyIf(textColor != nil, apply: { $0.foregroundColor(textColor) })
+            .padding(.horizontal, horizontalPadding)
         }
     }
 
@@ -116,6 +183,8 @@ struct PromotionalOfferHeaderView: View {
 @available(tvOS, unavailable)
 @available(watchOS, unavailable)
 struct PromoOfferButtonView: View {
+
+    @Binding var isLoading: Bool
 
     @Environment(\.locale)
     private var locale
@@ -131,93 +200,72 @@ struct PromoOfferButtonView: View {
             let mainTitle = discount.localizedPricePerPeriodByPaymentMode(.current)
             let localizedProductPricePerPeriod = product.localizedPricePerPeriod(.current)
 
-            Button(action: {
-                Task {
-                    await viewModel.purchasePromo()
+            AsyncButton {
+                withAnimation(.easeInOut(duration: 0.3)) {
+                    isLoading = true
                 }
-            }, label: {
-                VStack {
-                    Text(mainTitle)
-                        .font(.headline)
-
-                    let format = Localization.localizedBundle(self.locale)
-                        .localizedString(forKey: "then_price_per_period", value: "then %@", table: nil)
-
-                    Text(String(format: format, localizedProductPricePerPeriod))
-                        .font(.subheadline)
+                await viewModel.purchasePromo()
+                withAnimation(.easeInOut(duration: 0.3)) {
+                    isLoading = false
                 }
-            })
+            } label: {
+                if isLoading {
+                    TintedProgressView()
+                } else {
+                    VStack {
+                        Text(mainTitle)
+                            .font(.headline)
+
+                        let format = Localization.localizedBundle(self.locale)
+                            .localizedString(forKey: "then_price_per_period", value: "then %@", table: nil)
+
+                        Text(String(format: format, localizedProductPricePerPeriod))
+                            .font(.subheadline)
+                    }
+                }
+            }
             .buttonStyle(ProminentButtonStyle())
             .padding(.horizontal)
+            .disabled(isLoading)
+            .opacity(isLoading ? 0.5 : 1)
+            .animation(.easeInOut(duration: 0.3), value: isLoading)
         }
     }
 
 }
 
-private extension StoreProductDiscount {
+@available(iOS 15.0, macOS 12.0, tvOS 15.0, watchOS 8.0, *)
+@available(macOS, unavailable)
+@available(tvOS, unavailable)
+@available(watchOS, unavailable)
+/// An enum representing the possible actions that a user can take on the PromotionalOfferView
+enum PromotionalOfferViewAction {
+    /// The user clicked the "No Thanks" button and declined the offer
+    case declinePromotionalOffer
 
-    func localizedPricePerPeriodByPaymentMode(_ locale: Locale) -> String {
-        let period = self.subscriptionPeriod.periodTitle()
+    /// The user successfully redeemed the promotional offer
+    case successfullyRedeemedPromotionalOffer(PurchaseResultData)
 
-        switch self.paymentMode {
-        case .freeTrial:
-            // 3 months for free
-            return "\(period) for free"
-        case .payAsYouGo:
-            // $0.99/month for 3 months
-            return "\(localizedPricePerPeriod(locale)) for \(localizedNumberOfPeriods())"
-        case .payUpFront:
-            // 3 months for $0.99
-            return "\(period) for \(self.localizedPriceString)"
-        }
-    }
-
-    func localizedNumberOfPeriods() -> String {
-        let periodString = "\(self.numberOfPeriods) \(self.subscriptionPeriod.durationTitle)"
-        let pluralized = self.numberOfPeriods > 1 ?  periodString + "s" : periodString
-        return pluralized
-    }
-
-    func localizedPricePerPeriod(_ locale: Locale) -> String {
-        let unit = Localization.abbreviatedUnitLocalizedString(for: self.subscriptionPeriod, locale: locale)
-        return "\(self.localizedPriceString)/\(unit)"
-    }
-
+    // Promotional code redemption failed. Either the user attempted to redeem the promotional offer, and it failed,
+    // or the promotional offer was not loaded successfully.
+    case promotionalCodeRedemptionFailed(Error)
 }
 
-private extension StoreProduct {
+@available(iOS 15.0, macOS 12.0, tvOS 15.0, watchOS 8.0, *)
+@available(macOS, unavailable)
+@available(tvOS, unavailable)
+@available(watchOS, unavailable)
+extension PromotionalOfferViewAction {
 
-    func localizedPricePerPeriod(_ locale: Locale) -> String {
-        guard let period = self.subscriptionPeriod else {
-            return self.localizedPriceString
-        }
-
-        let unit = Localization.abbreviatedUnitLocalizedString(for: period, locale: locale)
-        return "\(self.localizedPriceString)/\(unit)"
-    }
-
-}
-
-private extension SubscriptionPeriod {
-
-    var durationTitle: String {
-        switch self.unit {
-        case .day: return "day"
-        case .week: return "week"
-        case .month: return "month"
-        case .year: return "year"
-        default: return "Unknown"
+    /// Whether the current path flow should be exited after the action is handled
+    var shouldTerminateCurrentPathFlow: Bool {
+        switch self {
+        case .declinePromotionalOffer, .promotionalCodeRedemptionFailed:
+            return false
+        case .successfullyRedeemedPromotionalOffer:
+            return true
         }
     }
-
-    func periodTitle() -> String {
-        let periodString = "\(self.value) \(self.durationTitle)"
-        let pluralized = self.value > 1 ?  periodString + "s" : periodString
-        return pluralized
-    }
-
 }
-
-#endif
 
 #endif

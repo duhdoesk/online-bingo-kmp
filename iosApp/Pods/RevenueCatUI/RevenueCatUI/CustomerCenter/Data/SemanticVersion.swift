@@ -11,9 +11,9 @@
 //
 //  Created by JayShortway on 08/08/2024.
 
-#if CUSTOMER_CENTER_ENABLED
-
 import Foundation
+
+// swiftlint:disable force_unwrapping
 
 struct SemanticVersion: Comparable {
     let major: UInt
@@ -69,5 +69,3 @@ enum SemanticVersionError: LocalizedError {
         }
     }
 }
-
-#endif

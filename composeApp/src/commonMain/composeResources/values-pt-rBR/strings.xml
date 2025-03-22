@@ -112,7 +112,6 @@
     <string name="dismiss_button">Cancelar</string>
     <string name="ok_button">Ok</string>
     <string name="auth_error">Erro de Autenticação</string>
-    <string name="success">Sucesso</string>
     <string name="password_reset_success">Nós te enviamos um e-mail contendo um link para redefinição de senha</string>
     <string name="email_info_text">Insira um endereço de e-mail válido e ao qual você tenha acesso</string>
     <string name="password_reset_info_text">Insira um endereço de e-mail válido e ao qual você tenha acesso. Nós te enviaremos um e-mail com um link para redefinição de senha.</string>
@@ -125,7 +124,6 @@
     <string name="sign_out_dialog_body">Você realmente deseja sair da sua conta?</string>
     <string name="account">Conta</string>
     <string name="delete_account">Apagar Conta</string>
-    <string name="change_password">Alterar Senha</string>
     <string name="user_avatar">Avatar do Usuário</string>
     <string name="can_change_in">Poderá mudar em</string>
     <string name="user_data_not_found">Não conseguimos encontrar os dados do usuário. Por favor, tente novamente mais tarde.</string>

@@ -2,7 +2,7 @@ package ui.presentation.signIn
 
 import com.arkivanov.decompose.ComponentContext
 import io.github.jan.supabase.SupabaseClient
-import io.github.jan.supabase.gotrue.SessionStatus
+import io.github.jan.supabase.auth.status.SessionStatus
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow

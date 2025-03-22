@@ -11,8 +11,6 @@
 //
 //  Created by JayShortway on 16/08/2024.
 
-#if CUSTOMER_CENTER_ENABLED
-
 import RevenueCat
 import SwiftUI
 
@@ -23,6 +21,16 @@ import SwiftUI
 @available(tvOS, unavailable)
 @available(watchOS, unavailable)
 struct AppUpdateWarningView: View {
+
+    @Environment(\.appearance)
+    private var appearance: CustomerCenterConfigData.Appearance
+
+    @Environment(\.colorScheme)
+    private var colorScheme
+
+    @Environment(\.localization)
+    private var localization: CustomerCenterConfigData.Localization
+
     let onUpdateAppClick: () -> Void
     let onContinueAnywayClick: () -> Void
 
@@ -31,67 +39,48 @@ struct AppUpdateWarningView: View {
         self.onContinueAnywayClick = onContinueAnywayClick
     }
 
-    init(productId: UInt, onContinueAnywayClick: @escaping () -> Void) {
-        self.init(
-            onUpdateAppClick: {
-                // productId is a positive integer, so it should be safe to construct a URL from it.
-                UIApplication.shared.open(URL(string: "https://itunes.apple.com/app/id\(productId)")!)
-            },
-            onContinueAnywayClick: onContinueAnywayClick
-        )
-    }
-
-    @Environment(\.localization)
-    private var localization: CustomerCenterConfigData.Localization
-    @Environment(\.appearance)
-    private var appearance: CustomerCenterConfigData.Appearance
-    @Environment(\.colorScheme)
-    private var colorScheme
-
-    @ViewBuilder
-    var content: some View {
-        ZStack {
-            List {
-                Section {
-                    CompatibilityContentUnavailableView(
-                        localization.commonLocalizedString(for: .updateWarningTitle),
-                        systemImage: "arrow.up.circle.fill",
-                        description: Text(localization.commonLocalizedString(for: .updateWarningDescription))
-                    )
-                }
-
-                Section {
-                    Button(localization.commonLocalizedString(for: .updateWarningUpdate)) {
-                        onUpdateAppClick()
-                    }
-                    .buttonStyle(ProminentButtonStyle())
-                    .padding(.top, 4)
-
-                    Button(localization.commonLocalizedString(for: .updateWarningIgnore)) {
-                        onContinueAnywayClick()
-                    }
-                    .buttonStyle(TextButtonStyle())
-                }
-                .listRowSeparator(.hidden)
-            }
-        }
-        .toolbar {
-            ToolbarItem(placement: .compatibleTopBarTrailing) {
-                DismissCircleButton()
-            }
-        }
-    }
-
     var body: some View {
-        if #available(iOS 16.0, *) {
-            NavigationStack {
-                content
+        Color(colorScheme == .light ? UIColor.secondarySystemBackground : UIColor.systemBackground)
+            .ignoresSafeArea()
+            .overlay {
+                VStack(alignment: .center, content: {
+                    CompatibilityContentUnavailableView(
+                        localization[.updateWarningTitle],
+                        systemImage: "arrow.up.circle.fill",
+                        description: Text(localization[.updateWarningDescription])
+                    )
+                    .padding(.horizontal, 16)
+                    .padding(.vertical, 24)
+                    .fixedSize(horizontal: false, vertical: true)
+                    .background(
+                        RoundedRectangle(cornerRadius: 8)
+                            .fill(
+                                Color(colorScheme == .light
+                                      ? UIColor.systemBackground
+                                      : UIColor.secondarySystemBackground)
+                            )
+                            .padding(.horizontal, 24)
+                            .padding(.top, 24)
+                    )
+
+                    Spacer()
+
+                    VStack(alignment: .center, spacing: 24) {
+                        Button(localization[.updateWarningUpdate]) {
+                            onUpdateAppClick()
+                        }
+                        .buttonStyle(ProminentButtonStyle())
+
+                        Button(localization[.updateWarningIgnore]) {
+                            onContinueAnywayClick()
+                        }
+                        .buttonStyle(TextButtonStyle())
+                    }
+                    .padding(.horizontal, 24)
+                })
+                .scrollableIfNecessary(.vertical)
             }
-        } else {
-            NavigationView {
-                content
-            }
-        }
+            .dismissCircleButtonToolbarIfNeeded()
     }
 }
 
@@ -120,21 +109,23 @@ private struct TextButtonStyle: PrimitiveButtonStyle {
 struct AppUpdateWarningView_Previews: PreviewProvider {
 
     static var previews: some View {
-        Group {
+        NavigationView {
             AppUpdateWarningView(
-                onUpdateAppClick: {
-
-                },
-                onContinueAnywayClick: {
-
-                }
+                onUpdateAppClick: { },
+                onContinueAnywayClick: { }
             )
+            .environment(\.colorScheme, .light)
+        }
+
+        NavigationView {
+            AppUpdateWarningView(
+                onUpdateAppClick: { },
+                onContinueAnywayClick: { }
+            )
+            .environment(\.colorScheme, .dark)
         }
     }
-
 }
-
-#endif
 
 #endif
 
