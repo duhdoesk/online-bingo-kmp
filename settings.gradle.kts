@@ -39,3 +39,4 @@ dependencyResolutionManagement {
 includeBuild("buildLogic")
 include(":composeApp")
 include(":core")
+include(":data")

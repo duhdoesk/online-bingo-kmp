@@ -73,13 +73,8 @@ kotlin {
             implementation(libs.gitlive.firebase.crashlytics)
             implementation(libs.gitlive.firebase.firestore)
             implementation(libs.dev.firebase.common)
-            implementation(libs.kotlinx.serialization)
-
-//            DateTime
-            implementation(libs.kotlinx.datetime)
 
 //            Supabase
-            implementation(project.dependencies.platform(libs.supabase.bom.get()))
             implementation(libs.supabase.auth.compose)
             implementation(libs.supabase.realtime.kt)
 

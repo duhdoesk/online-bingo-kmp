@@ -27,6 +27,9 @@ class KotlinMultiplatformConventionPlugin : Plugin<Project> {
                 when (name) {
                     "commonMain" -> dependencies {
                         implementation(libs.findLibrary("koin.core").get().get())
+                        libs.findBundle("kotlin").get().get().forEach {
+                            implementation(it)
+                        }
                     }
                 }
             }

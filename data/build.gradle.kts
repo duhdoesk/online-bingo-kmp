@@ -4,8 +4,6 @@ import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 plugins {
     alias(libs.plugins.hws.kotlinMultiplatform)
     alias(libs.plugins.hws.androidLibrary)
-    alias(libs.plugins.composeMultiplatform)
-    alias(libs.plugins.composeCompiler)
     alias(libs.plugins.kotlinSerialization)
 }
 
@@ -30,17 +28,23 @@ kotlin {
 
     sourceSets {
         commonMain.dependencies {
-            implementation(compose.runtime)
-            implementation(compose.foundation)
-            implementation(compose.ui)
-            implementation(compose.components.resources)
-            implementation(compose.components.uiToolingPreview)
-            implementation(compose.material3)
+            // Project
+            implementation(projects.core)
+            // todo(): add domain module
+
+            // Database
+            implementation(libs.bundles.datastore)
+
+            // Kotlin
+            implementation(libs.bundles.kotlin)
+
+            // Supabase
+            implementation(libs.supabase.auth.kt)
+            implementation(libs.supabase.realtime.kt)
         }
     }
 }
 
 dependencies {
-    debugImplementation(libs.androidx.ui.tooling)
     ktlintRuleset(libs.ktlintRuleset)
 }
