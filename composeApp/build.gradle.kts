@@ -6,8 +6,8 @@ plugins {
     alias(libs.plugins.androidApplication)
     alias(libs.plugins.composeMultiplatform)
     alias(libs.plugins.composeCompiler)
-    alias(libs.plugins.firebasePlugin) apply false
     alias(libs.plugins.crashlyticsPlugin) apply false
+    alias(libs.plugins.firebasePlugin) apply false
     alias(libs.plugins.kotlinSerialization)
 }
 
@@ -52,9 +52,10 @@ kotlin {
             implementation(libs.androidx.lifecycle.viewmodel)
             implementation(libs.androidx.lifecycle.runtime.compose)
 
-//            Decompose
+//            Navigation
             implementation(libs.decompose)
             implementation(libs.decompose.extensions.compose)
+            implementation(libs.jetpack.navigation)
 
 //            Ktor
             implementation(libs.ktor.client.core)
@@ -64,9 +65,7 @@ kotlin {
             implementation(libs.coil.ktor3)
 
 //            Koin
-            implementation(project.dependencies.platform(libs.koin.bom))
-            implementation(libs.koin.core)
-            implementation(libs.koin.compose)
+            implementation(libs.bundles.koin.compose)
 
 //            Firebase
             implementation(libs.gitlive.firebase.analytics)
@@ -74,7 +73,7 @@ kotlin {
             implementation(libs.gitlive.firebase.crashlytics)
             implementation(libs.gitlive.firebase.firestore)
             implementation(libs.dev.firebase.common)
-            implementation(libs.jetbrains.kotlinx.serialization.json)
+            implementation(libs.kotlinx.serialization)
 
 //            DateTime
             implementation(libs.kotlinx.datetime)
@@ -108,10 +107,6 @@ android {
 
     namespace = "com.duscaranari.themedbingocardsgenerator"
     compileSdk = libs.versions.android.compileSdk.get().toInt()
-
-//    sourceSets["main"].manifest.srcFile("src/androidMain/AndroidManifest.xml")
-//    sourceSets["main"].res.srcDirs("src/androidMain/res")
-//    sourceSets["main"].resources.srcDirs("src/commonMain/resources")
 
     defaultConfig {
         applicationId = "com.duscaranari.themedbingocardsgenerator"

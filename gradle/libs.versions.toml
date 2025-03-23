@@ -10,6 +10,7 @@ androidx-lifecycle = "2.8.4"
 # Compose
 compose-multiplatform = "1.7.3"
 uiTooling = "1.7.8"
+navigation = "2.8.0-alpha10"
 
 # Kotlin
 kotlin = "2.1.20"
@@ -49,22 +50,24 @@ androidx-lifecycle-viewmodel = { group = "org.jetbrains.androidx.lifecycle", nam
 androidx-lifecycle-runtime-compose = { group = "org.jetbrains.androidx.lifecycle", name = "lifecycle-runtime-compose", version.ref = "androidx-lifecycle" }
 
 # Kotlin
-jetbrains-kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinx-serialization" }
 kotlinx-datetime = { module = "org.jetbrains.kotlinx:kotlinx-datetime", version.ref = "kotlinx-datetime" }
 kotlin-gradle-plugin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
 android-gradle-plugin = { module = "com.android.tools.build:gradle", version.ref = "agp" }
+kotlinx-serialization = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinx-serialization" }
 
 # Compose
 androidx-ui-tooling = { group = "androidx.compose.ui", name = "ui-tooling", version.ref = "uiTooling" }
+jetpack-navigation = { module = "org.jetbrains.androidx.navigation:navigation-compose", version.ref = "navigation" }
 
 # Code Style
 ktlintRuleset = { module = "io.nlopez.compose.rules:ktlint", version.ref = "ktlintRuleset" }
 
 # Dependency Injection
-koin-android = { module = "io.insert-koin:koin-android" }
-koin-bom = { module = "io.insert-koin:koin-bom", version.ref = "koin" }
-koin-compose = { module = "io.insert-koin:koin-compose" }
-koin-core = { module = "io.insert-koin:koin-core" }
+koin-android = { module = "io.insert-koin:koin-android", version.ref = "koin" }
+koin-compose = { module = "io.insert-koin:koin-compose", version.ref = "koin" }
+koin-compose-viewmodel = { module = "io.insert-koin:koin-compose-viewmodel", version.ref = "koin" }
+koin-compose-viewmodel-navigation = { module = "io.insert-koin:koin-compose-viewmodel-navigation", version.ref = "koin" }
+koin-core = { module = "io.insert-koin:koin-core", version.ref = "koin" }
 
 # Firebase
 dev-firebase-common = { module = "dev.gitlive:firebase-common", version.ref = "gitliveFirebase" }
@@ -101,7 +104,11 @@ supabase-realtime-kt = { module = "io.github.jan-tennert.supabase:realtime-kt" }
 
 
 [bundles]
-
+koin-compose = [
+    "koin-compose",
+    "koin-compose-viewmodel",
+    "koin-compose-viewmodel-navigation"
+]
 
 
 [plugins]
