@@ -30,17 +30,9 @@ kotlin {
         commonMain.dependencies {
             // Project
             implementation(projects.core)
-            implementation(projects.domain)
-
-            // Database
-            implementation(libs.bundles.datastore)
 
             // Kotlin
             implementation(libs.bundles.kotlin)
-
-            // Supabase
-            implementation(libs.supabase.auth.kt)
-            implementation(libs.supabase.realtime.kt)
         }
     }
 }
