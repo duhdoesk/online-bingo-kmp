@@ -11,8 +11,6 @@
 //
 //  Created by Cesar de la Vega on 18/7/24.
 
-#if CUSTOMER_CENTER_ENABLED
-
 import Foundation
 import RevenueCat
 
@@ -22,8 +20,12 @@ import RevenueCat
 @available(watchOS, unavailable)
 protocol CustomerCenterPurchasesType: Sendable {
 
+    var isSandbox: Bool { get }
+
     @Sendable
-    func customerInfo() async throws -> CustomerInfo
+    func customerInfo(
+        fetchPolicy: CacheFetchPolicy
+    ) async throws -> CustomerInfo
 
     @Sendable
     func products(_ productIdentifiers: [String]) async -> [StoreProduct]
@@ -31,6 +33,15 @@ protocol CustomerCenterPurchasesType: Sendable {
     func promotionalOffer(forProductDiscount discount: StoreProductDiscount,
                           product: StoreProduct) async throws -> PromotionalOffer
 
-}
+    func purchase(
+        product: StoreProduct,
+        promotionalOffer: PromotionalOffer
+    ) async throws -> PurchaseResultData
 
-#endif
+    func track(customerCenterEvent: any CustomerCenterEventType)
+
+    func loadCustomerCenter() async throws -> CustomerCenterConfigData
+
+    func restorePurchases() async throws -> CustomerInfo
+
+}

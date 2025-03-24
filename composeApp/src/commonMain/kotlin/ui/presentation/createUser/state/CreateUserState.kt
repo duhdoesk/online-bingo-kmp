@@ -2,7 +2,7 @@ package ui.presentation.createUser.state
 
 import androidx.compose.ui.text.intl.Locale
 import domain.user.useCase.ProfilePictures
-import io.github.jan.supabase.gotrue.user.UserInfo
+import io.github.jan.supabase.auth.user.UserInfo
 
 data class CreateUserState(
     val processing: Boolean,

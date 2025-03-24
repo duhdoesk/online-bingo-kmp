@@ -4,7 +4,7 @@ import com.arkivanov.decompose.ComponentContext
 import domain.auth.supabase.useCase.SupabaseSignOutUseCase
 import domain.user.useCase.CreateUserUseCase
 import domain.user.useCase.GetProfilePicturesUseCase
-import io.github.jan.supabase.gotrue.SessionStatus
+import io.github.jan.supabase.auth.status.SessionStatus
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow

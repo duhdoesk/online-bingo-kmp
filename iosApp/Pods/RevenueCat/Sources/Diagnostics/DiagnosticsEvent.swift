@@ -13,7 +13,7 @@
 
 import Foundation
 
-struct DiagnosticsEvent: Codable, Equatable {
+struct DiagnosticsEvent: Codable {
 
     let version: Int = 1
     let eventType: DiagnosticsEvent.EventType
@@ -31,8 +31,10 @@ extension DiagnosticsEvent {
     enum EventType: String, Codable {
 
         case httpRequestPerformed
+        case appleProductsRequest
         case customerInfoVerificationResult
         case maxEventsStoredLimitReached
+        case applePurchaseAttempt
 
     }
 
@@ -41,21 +43,29 @@ extension DiagnosticsEvent {
         case verificationResultKey
         case endpointNameKey
         case responseTimeMillisKey
+        case storeKitVersion
         case successfulKey
         case responseCodeKey
+        case backendErrorCodeKey
+        case errorMessageKey
+        case errorCodeKey
+        case skErrorDescriptionKey
         case eTagHitKey
+        case requestedProductIdsKey
+        case notFoundProductIdsKey
+        case productIdKey
+        case promotionalOfferIdKey
+        case winBackOfferAppliedKey
+        case purchaseResultKey
 
     }
 
-}
-
-extension DiagnosticsEvent {
-
-    static func == (lhs: DiagnosticsEvent, rhs: DiagnosticsEvent) -> Bool {
-        return lhs.version == rhs.version &&
-               lhs.eventType == rhs.eventType &&
-               lhs.properties == rhs.properties &&
-               lhs.timestamp == rhs.timestamp
+    /// Value for `purchaseResultKey`.
+    enum PurchaseResult: String, Codable {
+        case verified = "verified"
+        case unverified = "unverified"
+        case userCancelled = "user_cancelled"
+        case pending = "pending"
     }
 
 }

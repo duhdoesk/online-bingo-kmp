@@ -13,8 +13,6 @@
 //  Created by Andrés Boedo on 5/3/24.
 //
 
-#if CUSTOMER_CENTER_ENABLED
-
 import Foundation
 import RevenueCat
 import SwiftUI
@@ -29,121 +27,91 @@ struct WrongPlatformView: View {
 
     @State
     private var store: Store?
+    @State
+    private var managementURL: URL?
+    @State
+    private var purchaseInformation: PurchaseInformation
+
+    @EnvironmentObject
+    private var customerCenterViewModel: CustomerCenterViewModel
+
+    private let screen: CustomerCenterConfigData.Screen?
+
+    @Environment(\.appearance)
+    private var appearance: CustomerCenterConfigData.Appearance
+
+    @Environment(\.colorScheme)
+    private var colorScheme
 
     @Environment(\.localization)
     private var localization: CustomerCenterConfigData.Localization
-    @Environment(\.appearance)
-    private var appearance: CustomerCenterConfigData.Appearance
-    @Environment(\.colorScheme)
-    private var colorScheme
+
     @Environment(\.supportInformation)
     private var supportInformation: CustomerCenterConfigData.Support?
+
     @Environment(\.openURL)
     private var openURL
 
     private var supportURL: URL? {
         guard let supportInformation = self.supportInformation else { return nil }
-        let subject = self.localization.commonLocalizedString(for: .defaultSubject)
-        let body = self.localization.commonLocalizedString(for: .defaultBody)
+        let subject = self.localization[.defaultSubject]
+        let body = supportInformation.calculateBody(self.localization)
         return URLUtilities.createMailURLIfPossible(email: supportInformation.email,
                                                     subject: subject,
                                                     body: body)
     }
 
-    init() {
+    init(screen: CustomerCenterConfigData.Screen? = nil,
+         purchaseInformation: PurchaseInformation) {
+        self.screen = screen
+        self._purchaseInformation = State(initialValue: purchaseInformation)
     }
 
-    fileprivate init(store: Store) {
+    fileprivate init(store: Store,
+                     managementURL: URL?,
+                     purchaseInformation: PurchaseInformation,
+                     screen: CustomerCenterConfigData.Screen) {
+        self.screen = screen
         self._store = State(initialValue: store)
+        self._managementURL = State(initialValue: managementURL)
+        self._purchaseInformation = State(initialValue: purchaseInformation)
     }
 
     var body: some View {
         List {
             Section {
-                let platformInstructions = self.humanReadableInstructions(for: store)
-
-                CompatibilityContentUnavailableView(
-                    platformInstructions.0,
-                    systemImage: "exclamationmark.triangle.fill",
-                    description: Text(platformInstructions.1)
-                )
+                SubscriptionDetailsView(purchaseInformation: purchaseInformation,
+                                        refundRequestStatus: nil)
+            }
+            if let managementURL = self.managementURL {
+                Section {
+                    AsyncButton {
+                        openURL(managementURL)
+                    } label: {
+                        Text(localization[.manageSubscription])
+                    }
+                }
             }
             if let url = supportURL {
                 Section {
                     AsyncButton {
                         openURL(url)
                     } label: {
-                        Text(localization.commonLocalizedString(for: .contactSupport))
+                        Text(localization[.contactSupport])
                     }
                 }
             }
-
         }
-        .toolbar {
-            ToolbarItem(placement: .compatibleTopBarTrailing) {
-                DismissCircleButton()
-            }
-        }
+        .dismissCircleButtonToolbarIfNeeded()
+        .applyIfLet(screen, apply: { view, screen in
+            view.navigationTitle(screen.title).navigationBarTitleDisplayMode(.inline)
+        })
         .task {
             if store == nil {
-                if let customerInfo = try? await Purchases.shared.customerInfo(),
-                   let firstEntitlement = customerInfo.entitlements.active.first {
-                    self.store = firstEntitlement.value.store
+                if let customerInfo = try? await Purchases.shared.customerInfo() {
+                    self.managementURL = customerInfo.managementURL
                 }
             }
-        }
-    }
-
-    private func humanReadablePlatformName(store: Store) -> String {
-        switch store {
-        case .appStore, .macAppStore:
-            return "Apple App Store"
-        case .playStore:
-            return "Google Play Store"
-        case .stripe,
-                .rcBilling,
-                .external:
-            return "Web"
-        case .promotional:
-            return "Free"
-        case .amazon:
-            return "Amazon Appstore"
-        case .unknownStore:
-            return "Unknown"
-        }
-    }
-
-    private func humanReadableInstructions(for store: Store?) -> (String, String) {
-        let defaultContactSupport = "Please contact support to manage your subscription."
-
-        if let store {
-            let platformName = humanReadablePlatformName(store: store)
-
-            switch store {
-            case .appStore, .macAppStore:
-                return (
-                    "You have an \(platformName) subscription.",
-                    "You can manage your subscription via the App Store app on an Apple device."
-                )
-            case .playStore:
-                return (
-                    "You have a \(platformName) subscription.",
-                    "You can manage your subscription via the Google Play app on an Android device."
-                )
-            case .stripe, .rcBilling, .external:
-                return ("Active \(platformName) Subscription", defaultContactSupport)
-            case .promotional:
-                return ("Active \(platformName) Subscription", defaultContactSupport)
-            case .amazon:
-                return (
-                    "You have an \(platformName) subscription.",
-                    "You can manage your subscription via the Amazon Appstore app."
-                )
-            case .unknownStore:
-                return ("Unknown Subscription", defaultContactSupport)
-            }
-        } else {
-            return ("Unknown Subscription", defaultContactSupport)
         }
     }
 
@@ -157,23 +125,67 @@ struct WrongPlatformView: View {
 @available(watchOS, unavailable)
 struct WrongPlatformView_Previews: PreviewProvider {
 
+    private struct PreviewData {
+        let store: Store
+        let managementURL: URL?
+        let customerInfo: CustomerInfo
+        let displayName: String
+    }
+
+    private static let previewCases: [PreviewData] = [
+        .init(store: .playStore,
+              managementURL: URL(string: "https://play.google.com/store/account/subscriptions"),
+              customerInfo: CustomerInfoFixtures.customerInfoWithGoogleSubscriptions,
+              displayName: "Play Store"),
+        .init(store: .rcBilling,
+              managementURL: URL(string: "https://api.revenuecat.com/rcbilling/v1/customerportal/1234/portal"),
+              customerInfo: CustomerInfoFixtures.customerInfoWithRCBillingSubscriptions,
+              displayName: "Web Billing"),
+        .init(store: .stripe,
+              managementURL: nil,
+              customerInfo: CustomerInfoFixtures.customerInfoWithStripeSubscriptions,
+              displayName: "Stripe"),
+        .init(store: .external,
+              managementURL: nil,
+              customerInfo: CustomerInfoFixtures.customerInfoWithStripeSubscriptions,
+              displayName: "External"),
+        .init(store: .promotional,
+              managementURL: nil,
+              customerInfo: CustomerInfoFixtures.customerInfoWithPromotional,
+              displayName: "Promotional"),
+        .init(store: .promotional,
+              managementURL: nil,
+              customerInfo: CustomerInfoFixtures.customerInfoWithLifetimePromotional,
+              displayName: "Promotional Lifetime"),
+        .init(store: .amazon,
+              managementURL: nil,
+              customerInfo: CustomerInfoFixtures.customerInfoWithAmazonSubscriptions,
+              displayName: "Amazon")
+    ]
+
+    // swiftlint:disable force_unwrapping
     static var previews: some View {
         Group {
-            WrongPlatformView(store: .appStore)
-                .previewDisplayName("App Store")
-
-            WrongPlatformView(store: .amazon)
-                .previewDisplayName("Amazon")
-
-            WrongPlatformView(store: .rcBilling)
-                .previewDisplayName("RCBilling")
+            ForEach(previewCases, id: \.displayName) { data in
+                WrongPlatformView(
+                    store: data.store,
+                    managementURL: data.managementURL,
+                    purchaseInformation: getPurchaseInformation(for: data.customerInfo),
+                    screen: CustomerCenterConfigTestData.customerCenterData.screens[.management]!
+                )
+                .previewDisplayName(data.displayName)
+            }
         }
+    }
 
+    private static func getPurchaseInformation(for customerInfo: CustomerInfo) -> PurchaseInformation {
+        return PurchaseInformation(
+            entitlement: customerInfo.entitlements.active.first!.value,
+            transaction: customerInfo.subscriptionsByProductIdentifier.values.first!,
+            customerInfoRequestedDate: customerInfo.requestDate)
     }
 
 }
-
-#endif
 
 #endif
 

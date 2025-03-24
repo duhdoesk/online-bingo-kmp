@@ -1,7 +1,7 @@
 package ui.navigation
 
 import domain.room.model.BingoType
-import io.github.jan.supabase.gotrue.user.UserInfo
+import io.github.jan.supabase.auth.user.UserInfo
 import kotlinx.serialization.Serializable
 
 @Serializable

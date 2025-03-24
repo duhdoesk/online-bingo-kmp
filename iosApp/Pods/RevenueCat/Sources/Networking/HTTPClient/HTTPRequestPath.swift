@@ -71,6 +71,7 @@ extension HTTPRequest {
         case health
         case getProductEntitlementMapping
         case getCustomerCenterConfig(appUserID: String)
+        case postRedeemWebPurchase
 
     }
 
@@ -90,6 +91,7 @@ extension HTTPRequest {
 
 extension HTTPRequest.Path: HTTPRequestPath {
 
+    // swiftlint:disable:next force_unwrapping
     static let serverHostURL = URL(string: "https://api.revenuecat.com")!
 
     var authenticated: Bool {
@@ -103,6 +105,7 @@ extension HTTPRequest.Path: HTTPRequestPath {
                 .postReceiptData,
                 .postSubscriberAttributes,
                 .postAdServicesToken,
+                .postRedeemWebPurchase,
                 .getProductEntitlementMapping,
                 .getCustomerCenterConfig:
             return true
@@ -123,6 +126,7 @@ extension HTTPRequest.Path: HTTPRequestPath {
                 .postReceiptData,
                 .postSubscriberAttributes,
                 .postAdServicesToken,
+                .postRedeemWebPurchase,
                 .getProductEntitlementMapping,
                 .getCustomerCenterConfig:
             return true
@@ -145,6 +149,7 @@ extension HTTPRequest.Path: HTTPRequestPath {
                 .postAttributionData,
                 .postAdServicesToken,
                 .postOfferForSigning,
+                .postRedeemWebPurchase,
                 .getCustomerCenterConfig:
             return false
         }
@@ -163,6 +168,7 @@ extension HTTPRequest.Path: HTTPRequestPath {
                 .postAttributionData,
                 .postAdServicesToken,
                 .postOfferForSigning,
+                .postRedeemWebPurchase,
                 .getProductEntitlementMapping,
                 .getCustomerCenterConfig:
             return false
@@ -207,6 +213,9 @@ extension HTTPRequest.Path: HTTPRequestPath {
         case let .getCustomerCenterConfig(appUserID):
             return "customercenter/\(Self.escape(appUserID))"
 
+        case .postRedeemWebPurchase:
+            return "subscribers/redeem_purchase"
+
         }
     }
 
@@ -247,6 +256,9 @@ extension HTTPRequest.Path: HTTPRequestPath {
 
         case .getCustomerCenterConfig:
             return "customer_center"
+
+        case .postRedeemWebPurchase:
+            return "post_redeem_web_purchase"
 
         }
     }

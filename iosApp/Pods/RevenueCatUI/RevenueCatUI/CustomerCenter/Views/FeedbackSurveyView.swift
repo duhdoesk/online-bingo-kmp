@@ -13,8 +13,6 @@
 //  Created by Cesar de la Vega on 12/6/24.
 //
 
-#if CUSTOMER_CENTER_ENABLED
-
 import RevenueCat
 import SwiftUI
 
@@ -26,44 +24,80 @@ import SwiftUI
 @available(watchOS, unavailable)
 struct FeedbackSurveyView: View {
 
-    @StateObject
-    private var viewModel: FeedbackSurveyViewModel
-    @Environment(\.localization)
-    private var localization: CustomerCenterConfigData.Localization
     @Environment(\.appearance)
     private var appearance: CustomerCenterConfigData.Appearance
+
     @Environment(\.colorScheme)
     private var colorScheme
 
-    init(feedbackSurveyData: FeedbackSurveyData) {
-        let viewModel = FeedbackSurveyViewModel(feedbackSurveyData: feedbackSurveyData)
-        self._viewModel = StateObject(wrappedValue: viewModel)
+    @Environment(\.localization)
+    private var localization: CustomerCenterConfigData.Localization
+
+    @Environment(\.customerCenterPresentationMode)
+    private var mode: CustomerCenterPresentationMode
+
+    @StateObject
+    private var viewModel: FeedbackSurveyViewModel
+
+    @Binding
+    private var isPresented: Bool
+
+    init(
+        feedbackSurveyData: FeedbackSurveyData,
+        customerCenterActionHandler: CustomerCenterActionHandler?,
+        isPresented: Binding<Bool>
+    ) {
+        self._viewModel = StateObject(wrappedValue: FeedbackSurveyViewModel(
+            feedbackSurveyData: feedbackSurveyData,
+            customerCenterActionHandler: customerCenterActionHandler
+        ))
+        self._isPresented = isPresented
     }
 
     var body: some View {
         ZStack {
-            if let background = Color.from(colorInformation: appearance.backgroundColor, for: colorScheme) {
-                background.edgesIgnoringSafeArea(.all)
-            }
-
             List {
-                FeedbackSurveyButtonsView(options: self.viewModel.feedbackSurveyData.configuration.options,
-                                          onOptionSelected: self.viewModel.handleAction(for:),
-                                          loadingState: self.$viewModel.loadingState)
+                FeedbackSurveyButtonsView(
+                    options: self.viewModel.feedbackSurveyData.configuration.options,
+                    onOptionSelected: { option in
+                        await self.viewModel.handleAction(
+                            for: option,
+                            darkMode: self.colorScheme == .dark,
+                            displayMode: self.mode,
+                            dismissView: self.dismissView
+                        )
+                    },
+                    loadingOption: self.$viewModel.loadingOption
+                )
             }
             .sheet(
                 item: self.$viewModel.promotionalOfferData,
-                onDismiss: { self.viewModel.handleSheetDismiss() },
                 content: { promotionalOfferData in
-                    PromotionalOfferView(promotionalOffer: promotionalOfferData.promotionalOffer,
-                                         product: promotionalOfferData.product,
-                                         promoOfferDetails: promotionalOfferData.promoOfferDetails)
+                    PromotionalOfferView(
+                        promotionalOffer: promotionalOfferData.promotionalOffer,
+                        product: promotionalOfferData.product,
+                        promoOfferDetails: promotionalOfferData.promoOfferDetails,
+                        onDismissPromotionalOfferView: { userAction in
+                            Task(priority: .userInitiated) {
+                                await viewModel.handleDismissPromotionalOfferView(
+                                    userAction,
+                                    dismissView: self.dismissView
+                                )
+                            }
+                        }
+                    )
+                    .interactiveDismissDisabled()
+                    .environment(\.appearance, appearance)
+                    .environment(\.localization, localization)
                 })
         }
         .navigationTitle(self.viewModel.feedbackSurveyData.configuration.title)
         .navigationBarTitleDisplayMode(.inline)
     }
 
+    private func dismissView() {
+        self.isPresented = false
+    }
 }
 
 @available(iOS 15.0, *)
@@ -78,26 +112,24 @@ struct FeedbackSurveyButtonsView: View {
     @Environment(\.appearance) private var appearance: CustomerCenterConfigData.Appearance
 
     @Binding
-    var loadingState: String?
+    var loadingOption: String?
 
     var body: some View {
         ForEach(options, id: \.id) { option in
             AsyncButton {
                 await self.onOptionSelected(option)
             } label: {
-                if self.loadingState == option.id {
+                if self.loadingOption == option.id {
                     TintedProgressView()
                 } else {
                     Text(option.title)
                 }
             }
-            .disabled(self.loadingState != nil)
+            .disabled(self.loadingOption != nil)
         }
 
     }
 
 }
-
-#endif
 
 #endif

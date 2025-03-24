@@ -46,7 +46,7 @@ fun ThemePickerBottomSheet(
     ModalBottomSheet(
         onDismissRequest = { onDismiss() },
         sheetState = sheetState,
-        windowInsets = WindowInsets.ime
+        contentWindowInsets = { WindowInsets.ime }
     ) {
         Column {
             Text(

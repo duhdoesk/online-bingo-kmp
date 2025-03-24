@@ -1,0 +1,77 @@
+[
+  {
+    "moduleId": "dev.gitlive:firebase-analytics:1.13.0",
+    "file": "/Users/eduardotessmer/StudioProjects/Themed Bingo Multiplatform/.kotlin/metadata/kotlinTransformedCInteropMetadataLibraries/dev.gitlive-firebase-analytics-1.13.0-iosMain-cinterop/dev.gitlive_firebase-analytics-cinterop-FirebaseAnalytics-LWJlrw.klib",
+    "sourceSetName": "iosMain"
+  },
+  {
+    "moduleId": "dev.gitlive:firebase-auth:1.13.0",
+    "file": "/Users/eduardotessmer/StudioProjects/Themed Bingo Multiplatform/.kotlin/metadata/kotlinTransformedCInteropMetadataLibraries/dev.gitlive-firebase-auth-1.13.0-iosMain-cinterop/dev.gitlive_firebase-auth-cinterop-FirebaseAuth-4DCnUA.klib",
+    "sourceSetName": "iosMain"
+  },
+  {
+    "moduleId": "dev.gitlive:firebase-crashlytics:1.13.0",
+    "file": "/Users/eduardotessmer/StudioProjects/Themed Bingo Multiplatform/.kotlin/metadata/kotlinTransformedCInteropMetadataLibraries/dev.gitlive-firebase-crashlytics-1.13.0-iosMain-cinterop/dev.gitlive_firebase-crashlytics-cinterop-FirebaseCrashlytics-O28xxA.klib",
+    "sourceSetName": "iosMain"
+  },
+  {
+    "moduleId": "dev.gitlive:firebase-firestore:1.13.0",
+    "file": "/Users/eduardotessmer/StudioProjects/Themed Bingo Multiplatform/.kotlin/metadata/kotlinTransformedCInteropMetadataLibraries/dev.gitlive-firebase-firestore-1.13.0-iosMain-cinterop/dev.gitlive_firebase-firestore-cinterop-FirebaseFirestoreInternal-zyEUgQ.klib",
+    "sourceSetName": "iosMain"
+  },
+  {
+    "moduleId": "dev.gitlive:firebase-firestore:1.13.0",
+    "file": "/Users/eduardotessmer/StudioProjects/Themed Bingo Multiplatform/.kotlin/metadata/kotlinTransformedCInteropMetadataLibraries/dev.gitlive-firebase-firestore-1.13.0-iosMain-cinterop/dev.gitlive_firebase-firestore-cinterop-FirebaseFirestore-zyEUgQ.klib",
+    "sourceSetName": "iosMain"
+  },
+  {
+    "moduleId": "com.revenuecat.purchases:purchases-kmp-core:1.7.1+13.25.0",
+    "file": "/Users/eduardotessmer/StudioProjects/Themed Bingo Multiplatform/.kotlin/metadata/kotlinTransformedCInteropMetadataLibraries/com.revenuecat.purchases-purchases-kmp-core-1.7.1+13.25.0-iosMain-cinterop/com.revenuecat.purchases_core-cinterop-PurchasesHybridCommon-TgHs3A.klib",
+    "sourceSetName": "iosMain"
+  },
+  {
+    "moduleId": "com.revenuecat.purchases:purchases-kmp-ui:1.7.1+13.25.0",
+    "file": "/Users/eduardotessmer/StudioProjects/Themed Bingo Multiplatform/.kotlin/metadata/kotlinTransformedCInteropMetadataLibraries/com.revenuecat.purchases-purchases-kmp-ui-1.7.1+13.25.0-iosMain-cinterop/com.revenuecat.purchases_revenuecatui-cinterop-PurchasesHybridCommonUI-HIin_g.klib",
+    "sourceSetName": "iosMain"
+  },
+  {
+    "moduleId": "org.jetbrains.kotlinx:atomicfu:0.27.0",
+    "file": "/Users/eduardotessmer/StudioProjects/Themed Bingo Multiplatform/.kotlin/metadata/kotlinTransformedCInteropMetadataLibraries/org.jetbrains.kotlinx-atomicfu-0.27.0-iosMain-cinterop/org.jetbrains.kotlinx_atomicfu-cinterop-interop-WOkCig.klib",
+    "sourceSetName": "iosMain"
+  },
+  {
+    "moduleId": "org.jetbrains.compose.ui:ui-uikit:1.7.3",
+    "file": "/Users/eduardotessmer/StudioProjects/Themed Bingo Multiplatform/.kotlin/metadata/kotlinTransformedCInteropMetadataLibraries/org.jetbrains.compose.ui-ui-uikit-1.7.3-uikitMain-cinterop/org.jetbrains.compose.ui_ui-uikit-cinterop-utils-aNVDjg.klib",
+    "sourceSetName": "uikitMain"
+  },
+  {
+    "moduleId": "dev.gitlive:firebase-app:1.13.0",
+    "file": "/Users/eduardotessmer/StudioProjects/Themed Bingo Multiplatform/.kotlin/metadata/kotlinTransformedCInteropMetadataLibraries/dev.gitlive-firebase-app-1.13.0-iosMain-cinterop/dev.gitlive_firebase-app-cinterop-FirebaseCore-yma3Rw.klib",
+    "sourceSetName": "iosMain"
+  },
+  {
+    "moduleId": "com.revenuecat.purchases:purchases-kmp-models:1.7.1+13.25.0",
+    "file": "/Users/eduardotessmer/StudioProjects/Themed Bingo Multiplatform/.kotlin/metadata/kotlinTransformedCInteropMetadataLibraries/com.revenuecat.purchases-purchases-kmp-models-1.7.1+13.25.0-iosMain-cinterop/com.revenuecat.purchases_models-cinterop-PurchasesHybridCommon-0s4jeg.klib",
+    "sourceSetName": "iosMain"
+  },
+  {
+    "moduleId": "com.revenuecat.purchases:purchases-kmp-mappings:1.7.1+13.25.0",
+    "file": "/Users/eduardotessmer/StudioProjects/Themed Bingo Multiplatform/.kotlin/metadata/kotlinTransformedCInteropMetadataLibraries/com.revenuecat.purchases-purchases-kmp-mappings-1.7.1+13.25.0-iosMain-cinterop/com.revenuecat.purchases_mappings-cinterop-PurchasesHybridCommon-hM3qtA.klib",
+    "sourceSetName": "iosMain"
+  },
+  {
+    "moduleId": "io.ktor:ktor-utils:3.1.1",
+    "file": "/Users/eduardotessmer/StudioProjects/Themed Bingo Multiplatform/.kotlin/metadata/kotlinTransformedCInteropMetadataLibraries/io.ktor-ktor-utils-3.1.1-iosMain-cinterop/io.ktor_ktor-utils-cinterop-threadUtils-KiCD0Q.klib",
+    "sourceSetName": "iosMain"
+  },
+  {
+    "moduleId": "io.ktor:ktor-io:3.1.1",
+    "file": "/Users/eduardotessmer/StudioProjects/Themed Bingo Multiplatform/.kotlin/metadata/kotlinTransformedCInteropMetadataLibraries/io.ktor-ktor-io-3.1.1-iosMain-cinterop/io.ktor_ktor-io-cinterop-mutex-VebtWA.klib",
+    "sourceSetName": "iosMain"
+  },
+  {
+    "moduleId": "co.touchlab:kermit-core:2.0.5",
+    "file": "/Users/eduardotessmer/StudioProjects/Themed Bingo Multiplatform/.kotlin/metadata/kotlinTransformedCInteropMetadataLibraries/co.touchlab-kermit-core-2.0.5-iosMain-cinterop/co.touchlab_kermit-core-cinterop-os_log-AinzRQ.klib",
+    "sourceSetName": "iosMain"
+  }
+]

@@ -13,14 +13,22 @@
 //  Created by Andrés Boedo on 5/3/24.
 //
 
-#if CUSTOMER_CENTER_ENABLED
-
 import RevenueCat
 import SwiftUI
 
 #if os(iOS)
 
-/// A SwiftUI view for displaying a customer support common tasks
+/// Use the Customer Center in your app to help your customers manage common support tasks.
+///
+/// Customer Center is a self-service UI that can be added to your app to help
+/// your customers manage their subscriptions on their own. With it, you can prevent
+/// churn with pre-emptive promotional offers, capture actionable customer data with
+/// exit feedback prompts, and lower support volumes for common inquiries — all
+/// without any help from your support team.
+///
+/// The `CustomerCenterView` can be used to integrate the Customer Center directly in your app with SwiftUI.
+///
+/// For more information, see the [Customer Center docs](https://www.revenuecat.com/docs/tools/customer-center).
 @available(iOS 15.0, *)
 @available(macOS, unavailable)
 @available(tvOS, unavailable)
@@ -32,46 +40,64 @@ public struct CustomerCenterView: View {
 
     @Environment(\.colorScheme)
     private var colorScheme
-    private var localization: CustomerCenterConfigData.Localization
-    private var appearance: CustomerCenterConfigData.Appearance
-    private var supportInformation: CustomerCenterConfigData.Support?
+
+    private let mode: CustomerCenterPresentationMode
+
+    private let navigationOptions: CustomerCenterNavigationOptions
 
     /// Create a view to handle common customer support tasks
-    public init(customerCenterActionHandler: CustomerCenterActionHandler? = nil,
-                localization: CustomerCenterConfigData.Localization = .default,
-                appearance: CustomerCenterConfigData.Appearance = .default) {
-        self._viewModel = .init(wrappedValue:
-                                    CustomerCenterViewModel(customerCenterActionHandler: customerCenterActionHandler))
-        self.localization = localization
-        self.appearance = appearance
+    /// - Parameters:
+    ///   - customerCenterActionHandler: An optional `CustomerCenterActionHandler` to handle actions
+    ///   from the Customer Center.
+    ///   - navigationOptions: Options to control the navigation behavior
+    public init(
+        customerCenterActionHandler: CustomerCenterActionHandler? = nil,
+        navigationOptions: CustomerCenterNavigationOptions = .default) {
+        self.init(
+            customerCenterActionHandler: customerCenterActionHandler,
+            mode: .default,
+            navigationOptions: navigationOptions
+        )
     }
 
-    fileprivate init(viewModel: CustomerCenterViewModel,
-                     localization: CustomerCenterConfigData.Localization = .default,
-                     appearance: CustomerCenterConfigData.Appearance = .default) {
+    /// Create a view to handle common customer support tasks
+    /// - Parameters:
+    ///   - customerCenterActionHandler: An optional `CustomerCenterActionHandler` to handle actions
+    ///   from the Customer Center.
+    ///   - mode: The presentation mode for the Customer Center
+    ///   - navigationOptions: Options to control the navigation behavior
+    init(
+        customerCenterActionHandler: CustomerCenterActionHandler? = nil,
+        mode: CustomerCenterPresentationMode,
+        navigationOptions: CustomerCenterNavigationOptions) {
+        self._viewModel = .init(wrappedValue:
+                                    CustomerCenterViewModel(customerCenterActionHandler: customerCenterActionHandler))
+        self.mode = mode
+        self.navigationOptions = navigationOptions
+    }
+
+    fileprivate init(
+        viewModel: CustomerCenterViewModel,
+        mode: CustomerCenterPresentationMode =  .default,
+        navigationOptions: CustomerCenterNavigationOptions = .default) {
         self._viewModel = .init(wrappedValue: viewModel)
-        self.localization = localization
-        self.appearance = appearance
+        self.mode = mode
+        self.navigationOptions = navigationOptions
     }
 
     // swiftlint:disable:next missing_docs
     public var body: some View {
-        Group {
-            if !self.viewModel.isLoaded {
-                TintedProgressView()
-            } else {
-                if let configuration = self.viewModel.configuration {
-                    destinationView(configuration: configuration)
-                        .environment(\.localization, configuration.localization)
-                        .environment(\.appearance, configuration.appearance)
-                        .environment(\.supportInformation, configuration.support)
-                }
+        navigationContent
+            .task {
+                await loadInformationIfNeeded()
             }
-        }
-        .task {
-            await loadInformationIfNeeded()
-        }
-        .environmentObject(self.viewModel)
+            .environmentObject(self.viewModel)
+            .onAppear {
+#if DEBUG
+                guard ProcessInfo.processInfo.environment["XCODE_RUNNING_FOR_PREVIEWS"] != "1" else { return }
+#endif
+                self.trackImpression()
+            }
     }
 
 }
@@ -82,21 +108,58 @@ public struct CustomerCenterView: View {
 @available(watchOS, unavailable)
 private extension CustomerCenterView {
 
+    @ViewBuilder
+    var content: some View {
+        switch self.viewModel.state {
+        case .error:
+            ErrorView()
+                .environment(\.customerCenterPresentationMode, self.mode)
+                .environment(\.navigationOptions, self.navigationOptions)
+                .dismissCircleButtonToolbarIfNeeded()
+
+        case .notLoaded:
+            TintedProgressView()
+
+        case .success:
+            if let configuration = self.viewModel.configuration {
+                destinationView(configuration: configuration)
+                    .environment(\.appearance, configuration.appearance)
+                    .environment(\.localization, configuration.localization)
+                    .environment(\.customerCenterPresentationMode, self.mode)
+                    .environment(\.navigationOptions, self.navigationOptions)
+                    .environment(\.supportInformation, configuration.support)
+            } else {
+                TintedProgressView()
+            }
+        }
+    }
+
+    @ViewBuilder
+    var navigationContent: some View {
+        if navigationOptions.usesExistingNavigation {
+            content
+        } else {
+            CompatibilityNavigationStack {
+                content
+            }
+        }
+    }
+
     func loadInformationIfNeeded() async {
-        if !viewModel.isLoaded {
-            await viewModel.loadHasSubscriptions()
-            await viewModel.loadCustomerCenterConfig()
+        if viewModel.state == .notLoaded {
+            await viewModel.loadScreen()
         }
     }
 
     @ViewBuilder
     func destinationContent(configuration: CustomerCenterConfigData) -> some View {
-        if viewModel.hasSubscriptions {
-            if viewModel.subscriptionsAreFromApple,
+        if let purchaseInformation = viewModel.purchaseInformation {
+            if purchaseInformation.store == .appStore,
                let screen = configuration.screens[.management] {
-                if let productId = configuration.productId, !ignoreAppUpdateWarning && !viewModel.appIsLatestVersion {
+                if let onUpdateAppClick = viewModel.onUpdateAppClick,
+                    !ignoreAppUpdateWarning && viewModel.shouldShowAppUpdateWarnings {
                     AppUpdateWarningView(
-                        productId: productId,
+                        onUpdateAppClick: onUpdateAppClick,
                         onContinueAnywayClick: {
                             withAnimation {
                                 ignoreAppUpdateWarning = true
@@ -105,24 +168,39 @@ private extension CustomerCenterView {
                     )
                 } else {
                     ManageSubscriptionsView(screen: screen,
+                                            purchaseInformation: purchaseInformation,
                                             customerCenterActionHandler: viewModel.customerCenterActionHandler)
                 }
+            } else if let screen = configuration.screens[.management] {
+                WrongPlatformView(screen: screen,
+                                  purchaseInformation: purchaseInformation)
             } else {
-                WrongPlatformView()
+                WrongPlatformView(purchaseInformation: purchaseInformation)
             }
         } else {
-            NoSubscriptionsView(configuration: configuration)
+            if let screen = configuration.screens[.noActive] {
+                ManageSubscriptionsView(screen: screen,
+                                        purchaseInformation: nil,
+                                        customerCenterActionHandler: viewModel.customerCenterActionHandler)
+            } else {
+                // Fallback with a restore button
+                NoSubscriptionsView(configuration: configuration)
+            }
         }
     }
 
     @ViewBuilder
     func destinationView(configuration: CustomerCenterConfigData) -> some View {
-        let accentColor = Color.from(colorInformation: self.appearance.accentColor, for: self.colorScheme)
+        let accentColor = Color.from(colorInformation: configuration.appearance.accentColor,
+                                     for: self.colorScheme)
 
-        CompatibilityNavigationStack {
-            destinationContent(configuration: configuration)
-        }
-        .applyIf(accentColor != nil, apply: { $0.tint(accentColor) })
+        destinationContent(configuration: configuration)
+            .applyIf(accentColor != nil, apply: { $0.tint(accentColor) })
+    }
+
+    func trackImpression() {
+        viewModel.trackImpression(darkMode: self.colorScheme == .dark,
+                                  displayMode: self.mode)
     }
 
 }
@@ -135,14 +213,16 @@ private extension CustomerCenterView {
 @available(watchOS, unavailable)
 struct CustomerCenterView_Previews: PreviewProvider {
 
-   static var previews: some View {
-       let viewModel = CustomerCenterViewModel(hasSubscriptions: false, areSubscriptionsFromApple: false)
-       CustomerCenterView(viewModel: viewModel)
-   }
+    static var previews: some View {
+        let purchaseInformationApple =
+        CustomerCenterConfigTestData.subscriptionInformationMonthlyRenewing
+        let viewModelApple = CustomerCenterViewModel(purchaseInformation: purchaseInformationApple,
+                                                     configuration: CustomerCenterConfigTestData.customerCenterData)
+        CustomerCenterView(viewModel: viewModelApple)
+            .previewDisplayName("Monthly Apple")
+    }
 
 }
-
-#endif
 
 #endif
 

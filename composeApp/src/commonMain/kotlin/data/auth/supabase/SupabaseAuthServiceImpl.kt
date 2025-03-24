@@ -2,9 +2,9 @@ package data.auth.supabase
 
 import domain.auth.supabase.SupabaseAuthService
 import io.github.jan.supabase.SupabaseClient
-import io.github.jan.supabase.gotrue.auth
-import io.github.jan.supabase.gotrue.providers.Google
-import io.github.jan.supabase.gotrue.user.UserInfo
+import io.github.jan.supabase.auth.auth
+import io.github.jan.supabase.auth.providers.Google
+import io.github.jan.supabase.auth.user.UserInfo
 
 class SupabaseAuthServiceImpl(
     override val supabaseClient: SupabaseClient

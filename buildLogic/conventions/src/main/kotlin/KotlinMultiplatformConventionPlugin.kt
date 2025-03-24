@@ -3,7 +3,7 @@ import org.gradle.api.Project
 import org.gradle.kotlin.dsl.configure
 import org.jetbrains.kotlin.gradle.dsl.KotlinMultiplatformExtension
 
-class KotlinMultiplatformConventionPlugin: Plugin<Project> {
+class KotlinMultiplatformConventionPlugin : Plugin<Project> {
 
     override fun apply(target: Project): Unit = with(target) {
         val libs = getLibs()
@@ -27,6 +27,9 @@ class KotlinMultiplatformConventionPlugin: Plugin<Project> {
                 when (name) {
                     "commonMain" -> dependencies {
                         implementation(libs.findLibrary("koin.core").get().get())
+                        libs.findBundle("kotlin").get().get().forEach {
+                            implementation(it)
+                        }
                     }
                 }
             }

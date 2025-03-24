@@ -30,6 +30,7 @@ enum ReservedSubscriberAttribute: String {
     case consentStatus = "$attConsentStatus"
 
     case ip = "$ip"
+    case deviceVersion = "$deviceVersion"
 
     case adjustID = "$adjustId"
     case appsFlyerID = "$appsflyerId"
@@ -39,8 +40,11 @@ enum ReservedSubscriberAttribute: String {
     case oneSignalUserID = "$onesignalUserId"
     case airshipChannelID = "$airshipChannelId"
     case cleverTapID = "$clevertapId"
+    case kochavaDeviceID = "$kochavaDeviceId"
     case mixpanelDistinctID = "$mixpanelDistinctId"
     case firebaseAppInstanceID = "$firebaseAppInstanceId"
+    case tenjinAnalyticsInstallationID = "$tenjinId"
+    case postHogUserID = "$posthogUserId"
 
     case mediaSource = "$mediaSource"
     case campaign = "$campaign"

@@ -13,45 +13,73 @@
 
 import Foundation
 
+// swiftlint:disable function_parameter_count
 protocol DiagnosticsTrackerType {
 
     @available(iOS 15.0, tvOS 15.0, macOS 12.0, watchOS 8.0, *)
-    func track(_ event: DiagnosticsEvent) async
+    func track(_ event: DiagnosticsEvent)
 
     @available(iOS 15.0, tvOS 15.0, macOS 12.0, watchOS 8.0, *)
-    func trackCustomerInfoVerificationResultIfNeeded(_ customerInfo: CustomerInfo) async
+    func trackCustomerInfoVerificationResultIfNeeded(_ customerInfo: CustomerInfo)
 
     @available(iOS 15.0, tvOS 15.0, macOS 12.0, watchOS 8.0, *)
-    // swiftlint:disable:next function_parameter_count
+    func trackProductsRequest(wasSuccessful: Bool,
+                              storeKitVersion: StoreKitVersion,
+                              errorMessage: String?,
+                              errorCode: Int?,
+                              storeKitErrorDescription: String?,
+                              requestedProductIds: [String],
+                              notFoundProductIds: [String],
+                              responseTime: TimeInterval)
+
+    @available(iOS 15.0, tvOS 15.0, macOS 12.0, watchOS 8.0, *)
     func trackHttpRequestPerformed(endpointName: String,
                                    responseTime: TimeInterval,
                                    wasSuccessful: Bool,
                                    responseCode: Int,
+                                   backendErrorCode: Int?,
                                    resultOrigin: HTTPResponseOrigin?,
-                                   verificationResult: VerificationResult) async
+                                   verificationResult: VerificationResult)
+
+    @available(iOS 15.0, tvOS 15.0, macOS 12.0, watchOS 8.0, *)
+    func trackPurchaseRequest(wasSuccessful: Bool,
+                              storeKitVersion: StoreKitVersion,
+                              errorMessage: String?,
+                              errorCode: Int?,
+                              storeKitErrorDescription: String?,
+                              productId: String,
+                              promotionalOfferId: String?,
+                              winBackOfferApplied: Bool,
+                              purchaseResult: DiagnosticsEvent.PurchaseResult?,
+                              responseTime: TimeInterval)
 
 }
 
 @available(iOS 15.0, tvOS 15.0, macOS 12.0, watchOS 8.0, *)
-final class DiagnosticsTracker: DiagnosticsTrackerType {
+final class DiagnosticsTracker: DiagnosticsTrackerType, Sendable {
 
     private let diagnosticsFileHandler: DiagnosticsFileHandlerType
+    private let diagnosticsDispatcher: OperationDispatcher
     private let dateProvider: DateProvider
 
     init(diagnosticsFileHandler: DiagnosticsFileHandlerType,
+         diagnosticsDispatcher: OperationDispatcher = .default,
          dateProvider: DateProvider = DateProvider()) {
         self.diagnosticsFileHandler = diagnosticsFileHandler
+        self.diagnosticsDispatcher = diagnosticsDispatcher
         self.dateProvider = dateProvider
     }
 
-    func track(_ event: DiagnosticsEvent) async {
-        await self.clearDiagnosticsFileIfTooBig()
-        await self.diagnosticsFileHandler.appendEvent(diagnosticsEvent: event)
+    func track(_ event: DiagnosticsEvent) {
+        self.diagnosticsDispatcher.dispatchOnWorkerThread {
+            await self.clearDiagnosticsFileIfTooBig()
+            await self.diagnosticsFileHandler.appendEvent(diagnosticsEvent: event)
+        }
     }
 
     func trackCustomerInfoVerificationResultIfNeeded(
         _ customerInfo: CustomerInfo
-    ) async {
+    ) {
         let verificationResult = customerInfo.entitlements.verification
         if verificationResult == .notRequested {
             return
@@ -62,29 +90,82 @@ final class DiagnosticsTracker: DiagnosticsTrackerType {
             properties: [.verificationResultKey: AnyEncodable(verificationResult.name)],
             timestamp: self.dateProvider.now()
         )
-        await track(event)
+        self.track(event)
     }
 
-    // swiftlint:disable:next function_parameter_count
+    func trackProductsRequest(wasSuccessful: Bool,
+                              storeKitVersion: StoreKitVersion,
+                              errorMessage: String?,
+                              errorCode: Int?,
+                              storeKitErrorDescription: String?,
+                              requestedProductIds: [String],
+                              notFoundProductIds: [String],
+                              responseTime: TimeInterval) {
+        self.track(
+            DiagnosticsEvent(eventType: .appleProductsRequest,
+                             properties: [
+                                .successfulKey: AnyEncodable(wasSuccessful),
+                                .storeKitVersion: AnyEncodable("store_kit_\(storeKitVersion.debugDescription)"),
+                                .errorMessageKey: AnyEncodable(errorMessage),
+                                .errorCodeKey: AnyEncodable(errorCode),
+                                .skErrorDescriptionKey: AnyEncodable(storeKitErrorDescription),
+                                .requestedProductIdsKey: AnyEncodable(requestedProductIds),
+                                .notFoundProductIdsKey: AnyEncodable(notFoundProductIds),
+                                .responseTimeMillisKey: AnyEncodable(Int(responseTime * 1000))
+                             ],
+                             timestamp: self.dateProvider.now())
+        )
+    }
+
     func trackHttpRequestPerformed(endpointName: String,
                                    responseTime: TimeInterval,
                                    wasSuccessful: Bool,
                                    responseCode: Int,
+                                   backendErrorCode: Int?,
                                    resultOrigin: HTTPResponseOrigin?,
-                                   verificationResult: VerificationResult) async {
-        await track(
+                                   verificationResult: VerificationResult) {
+        self.track(
             DiagnosticsEvent(
                 eventType: DiagnosticsEvent.EventType.httpRequestPerformed,
                 properties: [
                     .endpointNameKey: AnyEncodable(endpointName),
-                    .responseTimeMillisKey: AnyEncodable(responseTime * 1000),
+                    .responseTimeMillisKey: AnyEncodable(Int(responseTime * 1000)),
                     .successfulKey: AnyEncodable(wasSuccessful),
                     .responseCodeKey: AnyEncodable(responseCode),
+                    .backendErrorCodeKey: AnyEncodable(backendErrorCode),
                     .eTagHitKey: AnyEncodable(resultOrigin == .cache),
                     .verificationResultKey: AnyEncodable(verificationResult.name)
                 ],
                 timestamp: self.dateProvider.now()
             )
+        )
+    }
+
+    func trackPurchaseRequest(wasSuccessful: Bool,
+                              storeKitVersion: StoreKitVersion,
+                              errorMessage: String?,
+                              errorCode: Int?,
+                              storeKitErrorDescription: String?,
+                              productId: String,
+                              promotionalOfferId: String?,
+                              winBackOfferApplied: Bool,
+                              purchaseResult: DiagnosticsEvent.PurchaseResult?,
+                              responseTime: TimeInterval) {
+        self.track(
+            DiagnosticsEvent(eventType: .applePurchaseAttempt,
+                             properties: [
+                                .successfulKey: AnyEncodable(wasSuccessful),
+                                .storeKitVersion: AnyEncodable("store_kit_\(storeKitVersion.debugDescription)"),
+                                .errorMessageKey: AnyEncodable(errorMessage),
+                                .errorCodeKey: AnyEncodable(errorCode),
+                                .skErrorDescriptionKey: AnyEncodable(storeKitErrorDescription),
+                                .productIdKey: AnyEncodable(productId),
+                                .promotionalOfferIdKey: AnyEncodable(promotionalOfferId),
+                                .winBackOfferAppliedKey: AnyEncodable(winBackOfferApplied),
+                                .purchaseResultKey: AnyEncodable(purchaseResult),
+                                .responseTimeMillisKey: AnyEncodable(Int(responseTime * 1000))
+                             ],
+                             timestamp: self.dateProvider.now())
         )
     }
 
@@ -96,14 +177,11 @@ private extension DiagnosticsTracker {
     func clearDiagnosticsFileIfTooBig() async {
         if await self.diagnosticsFileHandler.isDiagnosticsFileTooBig() {
             await self.diagnosticsFileHandler.emptyDiagnosticsFile()
-            await self.trackMaxEventsStoredLimitReached()
+            let maxEventsStoredEvent = DiagnosticsEvent(eventType: .maxEventsStoredLimitReached,
+                                                        properties: [:],
+                                                        timestamp: self.dateProvider.now())
+            await self.diagnosticsFileHandler.appendEvent(diagnosticsEvent: maxEventsStoredEvent)
         }
-    }
-
-    func trackMaxEventsStoredLimitReached() async {
-        await self.track(.init(eventType: .maxEventsStoredLimitReached,
-                               properties: [:],
-                               timestamp: self.dateProvider.now()))
     }
 
 }

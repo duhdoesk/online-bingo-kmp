@@ -65,7 +65,7 @@ fun UpdatePictureBottomSheet(
     ModalBottomSheet(
         onDismissRequest = { onHide() },
         sheetState = sheetState,
-        windowInsets = WindowInsets.ime
+        contentWindowInsets = { WindowInsets.ime }
     ) {
         Column {
             EditProfilePictureCurrentUserData(

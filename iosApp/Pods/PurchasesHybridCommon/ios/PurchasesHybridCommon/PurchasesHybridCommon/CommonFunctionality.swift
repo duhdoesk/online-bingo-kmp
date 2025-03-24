@@ -85,6 +85,7 @@ import RevenueCat
     }
 
     private static var promoOffersByTimestamp: [String: PromotionalOffer] = [:]
+    private static var winBackOffersByID: [String: WinBackOffer] = [:]
 
     @available(*, deprecated, message: "Use the set<NetworkId> functions instead")
     @objc public static func setAllowSharingStoreAccount(_ allowSharingStoreAccount: Bool) {
@@ -196,6 +197,29 @@ import RevenueCat
 #endif
 
 }
+
+#if os(iOS) || os(macOS) || VISION_OS
+
+// MARK: Manage subscriptions
+@objc public extension CommonFunctionality {
+
+    @available(iOS 13.0, macOS 10.15, *)
+    @available(watchOS, unavailable)
+    @available(tvOS, unavailable)
+    @objc(showManageSubscriptions:)
+    static func showManageSubscriptions(completion: @escaping (ErrorContainer?) -> Void) {
+        _ = Task<Void, Never> {
+            do {
+                try await Self.sharedInstance.showManageSubscriptions()
+                completion(nil)
+            } catch {
+                completion(Self.createErrorContainer(error: error))
+            }
+        }
+    }
+}
+
+#endif
 
 // MARK: In app messages
 @objc public extension CommonFunctionality {
@@ -309,7 +333,6 @@ import RevenueCat
                                                  completion: hybridCompletion)
                     return
                 }
-
             }
 
             Self.sharedInstance.purchase(package: package, completion: hybridCompletion)
@@ -577,6 +600,12 @@ import RevenueCat
     @objc static func setFirebaseAppInstanceID(_ firebaseAppInstanceID: String?) {
         Self.sharedInstance.attribution.setFirebaseAppInstanceID(firebaseAppInstanceID)
     }
+    @objc static func setTenjinAnalyticsInstallationID(_ tenjinAnalyticsInstallationID: String?) {
+        Self.sharedInstance.attribution.setTenjinAnalyticsInstallationID(tenjinAnalyticsInstallationID)
+    }
+    @objc static func setKochavaDeviceID(_ kochavaDeviceID: String?) {
+        Self.sharedInstance.attribution.setKochavaDeviceID(kochavaDeviceID)
+    }
     @objc static func setOnesignalID(_ onesignalID: String?) {
         Self.sharedInstance.attribution.setOnesignalID(onesignalID)
     }
@@ -611,6 +640,198 @@ import RevenueCat
         Self.sharedInstance.attribution.setCreative(creative)
     }
 
+}
+
+// MARK: - Win-Back Offers
+@objc public extension CommonFunctionality {
+
+    /// Fetches and caches the eligible win-back offers for a given product identifier.
+    ///
+    /// - Parameters:
+    ///   - productIdentifier: The identifier of the product to fetch win-back offers for.
+    ///   - completion: A closure that receives an array of win-back offer dictionaries or an error container if something went wrong.
+    @objc(eligibleWinBackOffersForProductIdentifier:completionBlock:)
+    static func eligibleWinBackOffers(
+        for productIdentifier: String,
+        completion: @escaping ([[String: Any]]?, ErrorContainer?) -> Void
+    ) {
+        guard #available(iOS 18.0, macOS 15.0, tvOS 18.0, watchOS 11.0, visionOS 2.0, *) else {
+            completion(
+                nil,
+                Self.createErrorContainer(error: ErrorCode.unsupportedError)
+            )
+            return
+        }
+
+        // Fetch the product
+        product(with: productIdentifier) { storeProduct in
+            guard let storeProduct = storeProduct else {
+                completion(nil, productNotFoundError(description: "Couldn't find product", userCancelled: false))
+                return
+            }
+
+            // Fetch the eligible win-back offers for the product
+            Self.sharedInstance.eligibleWinBackOffers(forProduct: storeProduct) { eligibleWinBackOffers, error in
+                if let error = error {
+                    completion(
+                        nil,
+                        Self.createErrorContainer(error: error)
+                    )
+                    return
+                }
+
+                guard let eligibleWinBackOffers = eligibleWinBackOffers else {
+                    completion(
+                        [],
+                        nil
+                    )
+                    return
+                }
+
+                // Cache the win-back offers
+                for winBackOffer in eligibleWinBackOffers {
+                    if let winBackOfferIdentifier = winBackOffer.discount.offerIdentifier {
+                        self.winBackOffersByID[winBackOfferIdentifier] = winBackOffer
+                    }
+                }
+
+                // Return the win-back offers
+                let winBackDictionaries: [[String: Any]] = eligibleWinBackOffers.map { winBackOffer in
+                    winBackOffer.rc_dictionary  // Returns the discount dictionary
+                }
+
+                completion(winBackDictionaries, nil)
+            }
+        }
+    }
+
+    @objc(purchaseProduct:winBackOfferID:completionBlock:)
+    static func purchase(product productIdentifier: String,
+                         winBackOfferID: String,
+                         completion: @escaping ([String: Any]?, ErrorContainer?) -> Void) {
+        let hybridCompletion = Self.createPurchaseCompletionBlock(completion: completion)
+
+        self.product(with: productIdentifier) { storeProduct in
+            guard let storeProduct = storeProduct else {
+                completion(nil, productNotFoundError(description: "Couldn't find product.", userCancelled: false))
+                return
+            }
+
+            if #available(iOS 18.0, macOS 15.0, tvOS 18.0, watchOS 11.0, visionOS 2.0, *) {
+                guard let winBackOffer: WinBackOffer = self.winBackOffersByID[winBackOfferID] else {
+                    completion(
+                        nil,
+                        productNotFoundError(description: "Couldn't find win-back offer.", userCancelled: false)
+                    )
+                    return
+                }
+
+                let purchaseParams = PurchaseParams.Builder(product: storeProduct)
+                    .with(winBackOffer: winBackOffer)
+                    .build()
+
+                Self.sharedInstance.purchase(purchaseParams, completion: hybridCompletion)
+                return
+            }
+
+            Self.sharedInstance.purchase(product: storeProduct, completion: hybridCompletion)
+        }
+    }
+
+    @objc(purchasePackage:presentedOfferingContext:winBackOfferID:completionBlock:)
+    static func purchase(package packageIdentifier: String,
+                         presentedOfferingContext: [String: Any],
+                         winBackOfferID: String,
+                         completion: @escaping ([String: Any]?, ErrorContainer?) -> Void) {
+        let hybridCompletion = Self.createPurchaseCompletionBlock(completion: completion)
+
+        Self.package(
+            withIdentifier: packageIdentifier,
+            presentedOfferingContext: Self.toPresentedOfferingContext(presentedOfferingContext: presentedOfferingContext)
+        ) { package in
+            guard let package = package else {
+                let error = productNotFoundError(description: "Couldn't find package", userCancelled: false)
+                completion(nil, error)
+                return
+            }
+
+            if #available(iOS 18.0, macOS 15.0, tvOS 18.0, watchOS 11.0, visionOS 2.0, *) {
+                guard let winBackOffer: WinBackOffer = self.winBackOffersByID[winBackOfferID] else {
+                    completion(
+                        nil,
+                        productNotFoundError(description: "Couldn't find win-back offer.", userCancelled: false)
+                    )
+                    return
+                }
+
+                let purchaseParams = PurchaseParams.Builder(package: package)
+                    .with(winBackOffer: winBackOffer)
+                    .build()
+
+                Self.sharedInstance.purchase(purchaseParams, completion: hybridCompletion)
+                return
+            }
+
+            Self.sharedInstance.purchase(package: package, completion: hybridCompletion)
+        }
+    }
+}
+
+// MARK: - Redemption links
+@objc public extension CommonFunctionality {
+
+    @objc static func parseAsWebPurchaseRedemption(urlString: String) -> WebPurchaseRedemption? {
+        guard let url = URL(string: urlString) else {
+            return nil
+        }
+        return url.asWebPurchaseRedemption
+    }
+
+    @objc(isWebPurchaseRedemptionURL:)
+    static func isWebPurchaseRedemptionURL(urlString: String) -> Bool {
+        guard let url = URL(string: urlString) else { return false }
+
+        return url.asWebPurchaseRedemption != nil
+    }
+
+    @objc static func redeemWebPurchase(urlString: String,
+                                        completion: @escaping ([String: Any]?, ErrorContainer?) -> Void) {
+        guard let url = URL(string: urlString), let webPurchaseRedemption = url.asWebPurchaseRedemption else {
+            completion(nil, Self.createErrorContainer(error: ErrorCode.unsupportedError))
+            return
+        }
+
+        _ = Task<Void, Never> {
+            let result = await Self.sharedInstance.redeemWebPurchase(webPurchaseRedemption)
+            var resultMap: [String: Any] = ["result": result.resultName]
+            switch (result) {
+            case let .success(customerInfo):
+                resultMap["customerInfo"] = customerInfo.dictionary
+            case let .error(error):
+                resultMap["error"] = Self.createErrorContainer(error: error)
+            case let .expired(obfuscatedEmail):
+                resultMap["obfuscatedEmail"] = obfuscatedEmail
+            case .purchaseBelongsToOtherUser, .invalidToken:
+                // Do nothing
+                break
+            }
+            completion(resultMap, nil)
+        }
+    }
+
+}
+
+private extension WebPurchaseRedemptionResult {
+
+    var resultName: String {
+        switch self {
+        case .success: return "SUCCESS"
+        case .error: return "ERROR"
+        case .purchaseBelongsToOtherUser: return "PURCHASE_BELONGS_TO_OTHER_USER"
+        case .invalidToken: return "INVALID_TOKEN"
+        case .expired: return "EXPIRED"
+        }
+    }
 }
 
 private extension CommonFunctionality {

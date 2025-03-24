@@ -27,7 +27,7 @@ fun NotStartedPlayScreenHorizontalPager(
         state = pagerState,
         modifier = modifier,
         pageSpacing = 8.dp,
-        beyondBoundsPageCount = 2,
+        beyondViewportPageCount = 2,
         verticalAlignment = Alignment.Top
     ) { index ->
         when (index) {

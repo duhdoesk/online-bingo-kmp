@@ -11,12 +11,10 @@
 //
 //  Created by Cesar de la Vega on 17/7/24.
 
-#if CUSTOMER_CENTER_ENABLED
-
 import Foundation
 import RevenueCat
 
-struct PromotionalOfferData: Identifiable {
+struct PromotionalOfferData: Identifiable, Equatable {
 
     let id = UUID()
     let promotionalOffer: PromotionalOffer
@@ -24,5 +22,3 @@ struct PromotionalOfferData: Identifiable {
     let promoOfferDetails: CustomerCenterConfigData.HelpPath.PromotionalOffer
 
 }
-
-#endif
