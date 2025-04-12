@@ -191,5 +191,7 @@
     <string name="delete_account_body">Tem certeza de que deseja apagar sua conta? Esta ação é permanente e não poderá ser desfeita.</string>
     <string name="delete_account_success">Sua conta foi permanentemente apagada. Vamos redirecionar você à tela de login.</string>
 
+    <!--    Splash Screen -->
+    <string name="getting_things_done">Getting things done</string>
 
 </resources>

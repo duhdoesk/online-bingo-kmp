@@ -1,8 +1,6 @@
 package ui.presentation.signIn
 
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -15,8 +13,6 @@ import org.jetbrains.compose.resources.ExperimentalResourceApi
 import themedbingo.composeapp.generated.resources.Res
 import themedbingo.composeapp.generated.resources.auth_network_error
 import themedbingo.composeapp.generated.resources.unmapped_error
-import ui.presentation.common.LoadingScreen
-import ui.presentation.signIn.event.SignInScreenEvent
 import ui.presentation.signIn.screens.UniqueSignInScreen
 import ui.presentation.util.dialog.GenericErrorDialog
 
@@ -25,16 +21,6 @@ import ui.presentation.util.dialog.GenericErrorDialog
 fun SignInScreen(
     component: SignInScreenComponent
 ) {
-    /**
-     * UI State
-     */
-    val uiState by component.uiState.collectAsState()
-
-    /**
-     * Informs the component/view model that the UI is ready
-     */
-    LaunchedEffect(Unit) { component.uiEvent(SignInScreenEvent.UiLoaded) }
-
     /**
      * Modal visibility state holders
      */
@@ -52,7 +38,7 @@ fun SignInScreen(
     val googleSignIn = supabaseClient.composeAuth.rememberSignInWithGoogle(
         onResult = { result ->
             when (result) {
-                is NativeSignInResult.Success -> component.uiEvent(SignInScreenEvent.SignIn)
+                is NativeSignInResult.Success -> component.signIn()
 
                 is NativeSignInResult.NetworkError -> {
                     (result.message)
@@ -79,7 +65,7 @@ fun SignInScreen(
         onResult = { result ->
             when (result) {
                 is NativeSignInResult.Success -> {
-                    component.uiEvent(SignInScreenEvent.SignIn)
+                    component.signIn()
                 }
 
                 is NativeSignInResult.NetworkError -> {
@@ -99,14 +85,6 @@ fun SignInScreen(
             }
         }
     )
-
-    /**
-     * Displays Loading Screen if UI State is loading still
-     */
-    if (uiState.isLoading) {
-        LoadingScreen()
-        return
-    }
 
     /**
      * Displays Sign In screen if there is no user authenticted

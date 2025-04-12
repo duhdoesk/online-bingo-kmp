@@ -40,6 +40,9 @@ sealed class Configuration {
     data object SignUpScreen : Configuration()
 
     @Serializable
+    data object SplashScreen : Configuration()
+
+    @Serializable
     data object ForgotPasswordScreen : Configuration()
 
     @Serializable

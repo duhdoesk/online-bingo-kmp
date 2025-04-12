@@ -14,6 +14,7 @@ import ui.presentation.room.screens.host.HostScreen
 import ui.presentation.room.screens.player.PlayerScreen
 import ui.presentation.signIn.SignInScreen
 import ui.presentation.signUp.SignUpScreen
+import ui.presentation.splash.SplashScreen
 import ui.presentation.themes.ThemesScreen
 import ui.presentation.util.WindowInfo
 
@@ -83,6 +84,10 @@ fun CreateScreen(
 
         is Child.CreateUserScreen -> CreateUserScreen(
             viewModel = instance.component
+        )
+
+        is Child.SplashScreen -> SplashScreen(
+            component = instance.component
         )
     }
 }

@@ -12,20 +12,22 @@ import ui.presentation.room.RoomHostViewModel
 import ui.presentation.room.RoomPlayerViewModel
 import ui.presentation.signIn.SignInScreenComponent
 import ui.presentation.signUp.SignUpScreenComponent
+import ui.presentation.splash.SplashScreenComponent
 import ui.presentation.themes.ThemesScreenComponent
 
 sealed class Child {
-    data class HomeScreen(val component: HomeScreenComponent) : Child()
-    data class ThemesScreen(val component: ThemesScreenComponent) : Child()
+    data class ChangePasswordScreen(val component: ChangePasswordScreenComponent) : Child()
     data class CreateScreen(val component: CreateRoomScreenComponent) : Child()
-    data class JoinScreen(val component: JoinScreenComponent) : Child()
+    data class CreateUserScreen(val component: CreateUserViewModel) : Child()
+    data class ForgotPasswordScreen(val component: ForgotPasswordScreenComponent) : Child()
+    data class HomeScreen(val component: HomeScreenComponent) : Child()
     data class HostScreen(val component: RoomHostViewModel) : Child()
-    data class PlayerScreen(val component: RoomPlayerViewModel) : Child()
+    data class JoinScreen(val component: JoinScreenComponent) : Child()
     data class PaywallScreen(val component: PaywallScreenViewModel) : Child()
+    data class PlayerScreen(val component: RoomPlayerViewModel) : Child()
     data class ProfileScreen(val component: ProfileScreenComponent) : Child()
     data class SignInScreen(val component: SignInScreenComponent) : Child()
     data class SignUpScreen(val component: SignUpScreenComponent) : Child()
-    data class ForgotPasswordScreen(val component: ForgotPasswordScreenComponent) : Child()
-    data class ChangePasswordScreen(val component: ChangePasswordScreenComponent) : Child()
-    data class CreateUserScreen(val component: CreateUserViewModel) : Child()
+    data class SplashScreen(val component: SplashScreenComponent) : Child()
+    data class ThemesScreen(val component: ThemesScreenComponent) : Child()
 }

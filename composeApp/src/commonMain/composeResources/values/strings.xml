@@ -192,5 +192,7 @@
     <string name="delete_account_body">Are you sure you want to delete your account? This action is permanent and cannot be undone.</string>
     <string name="delete_account_success">Your account has been permanently deleted. We are redirecting you to the sign in screen.</string>
 
+    <!--    Splash Screen -->
+    <string name="getting_things_done">Getting things done</string>
 
 </resources>

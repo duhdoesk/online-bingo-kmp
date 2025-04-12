@@ -35,6 +35,7 @@ import ui.presentation.room.RoomHostViewModel
 import ui.presentation.room.RoomPlayerViewModel
 import ui.presentation.signIn.SignInScreenComponent
 import ui.presentation.signUp.SignUpScreenComponent
+import ui.presentation.splash.SplashScreenComponent
 import ui.presentation.themes.ThemesScreenComponent
 import util.componentCoroutineScope
 
@@ -86,7 +87,7 @@ class RootComponent(
     val childStack = childStack(
         source = navigation,
         serializer = Configuration.serializer(),
-        initialConfiguration = Configuration.SignInScreen,
+        initialConfiguration = Configuration.SplashScreen,
         handleBackButton = true,
         childFactory = ::createChild
     )
@@ -239,8 +240,7 @@ class RootComponent(
                 SignInScreenComponent(
                     componentContext = context,
                     onSignIn = { signIn() },
-                    supabaseClient = supabaseClient,
-                    sessionStatus = sessionStatus
+                    supabaseClient = supabaseClient
                 )
             )
 
@@ -279,6 +279,14 @@ class RootComponent(
                     sessionStatus = sessionStatus,
                     onSignOut = { navigation.replaceAll(Configuration.SignInScreen) },
                     onUserCreated = { navigation.pushNew(Configuration.HomeScreen) }
+                )
+            )
+
+            is Configuration.SplashScreen -> Child.SplashScreen(
+                SplashScreenComponent(
+                    componentContext = context,
+                    onNavigateToHome = { navigation.replaceAll(Configuration.HomeScreen) },
+                    onNavigateToSignIn = { navigation.replaceAll(Configuration.SignInScreen) }
                 )
             )
         }
