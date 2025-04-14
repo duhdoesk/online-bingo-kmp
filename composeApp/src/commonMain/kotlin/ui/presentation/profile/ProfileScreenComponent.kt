@@ -1,6 +1,7 @@
 package ui.presentation.profile
 
 import com.arkivanov.decompose.ComponentContext
+import domain.audio.AudioPlayer
 import domain.auth.getAuthErrorDescription
 import domain.auth.supabase.useCase.SupabaseDeleteAccountUseCase
 import domain.auth.supabase.useCase.SupabaseSignOutUseCase
@@ -39,6 +40,11 @@ class ProfileScreenComponent(
     private val onPopBack: () -> Unit,
     private val onSignOut: () -> Unit
 ) : ComponentContext by componentContext, KoinComponent {
+
+    /**
+     * Audio Player
+     */
+    private val audioPlayer: AudioPlayer by inject()
 
     /**
      * Single Coroutine Scope to handle suspend operations
@@ -121,7 +127,10 @@ class ProfileScreenComponent(
     private fun signOut() {
         coroutineScope.launch {
             signOutUseCase.invoke()
-                .onSuccess { onSignOut() }
+                .onSuccess {
+                    audioPlayer.stop()
+                    onSignOut()
+                }
                 .onFailure { errorDialogState.showDialog(Res.string.sign_out_error) }
         }
     }
@@ -132,6 +141,7 @@ class ProfileScreenComponent(
             val uid = uiState.value.user!!.id
             deleteAccountUseCase.invoke(uid)
                 .onSuccess {
+                    audioPlayer.stop()
                     deleteUserUseCase(uid)
                     onSignOut()
                 }
