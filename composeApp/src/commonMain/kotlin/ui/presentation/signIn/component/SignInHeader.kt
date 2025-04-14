@@ -1,4 +1,4 @@
-package ui.presentation.common.components
+package ui.presentation.signIn.component
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column
@@ -27,7 +27,7 @@ import themedbingo.composeapp.generated.resources.mobile_apps_development
 
 @OptIn(ExperimentalResourceApi::class)
 @Composable
-fun HomeScreenHeader(
+fun SignInHeader(
     modifier: Modifier = Modifier,
     maxPictureWidth: Dp = 240.dp
 ) {

@@ -239,8 +239,7 @@ class RootComponent(
             Configuration.SignInScreen -> Child.SignInScreen(
                 SignInScreenComponent(
                     componentContext = context,
-                    onSignIn = { signIn() },
-                    supabaseClient = supabaseClient
+                    onSignIn = { signIn() }
                 )
             )
 
