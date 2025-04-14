@@ -14,6 +14,7 @@ import com.arkivanov.decompose.extensions.compose.subscribeAsState
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.koin.compose.KoinContext
+import ui.navigation.CreateScreen
 import ui.navigation.RootComponent
 import ui.presentation.util.getAsyncImageLoader
 import ui.presentation.util.rememberWindowInfo

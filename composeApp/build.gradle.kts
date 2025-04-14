@@ -35,6 +35,9 @@ kotlin {
             implementation(compose.preview)
             implementation(libs.androidx.activity.compose)
 
+//            Audio
+            implementation(libs.exoPlayer)
+
 //            Ktor
             implementation(libs.ktor.client.okhttp)
 

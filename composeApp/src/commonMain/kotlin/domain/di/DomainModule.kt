@@ -103,6 +103,9 @@ val domainModule = module {
     single<DeleteUserUseCase> { DeleteUserUseCase(get()) }
     single<CheckIfIsNewUserUseCase> { CheckIfIsNewUserUseCase(get()) }
 
+//    Audio
+    includes(audioModule)
+
 //    Auth
     single<AuthService> { AuthServiceImpl(get()) }
     single<DeleteAccountUseCase> { DeleteAccountUseCase(get()) }
