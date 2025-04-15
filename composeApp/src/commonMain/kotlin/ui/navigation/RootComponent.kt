@@ -123,7 +123,7 @@ class RootComponent(
                     if (thisUser != null) {
                         navigation.replaceCurrent(Configuration.HomeScreen)
                     } else {
-                        navigation.replaceCurrent(Configuration.CreateUserScreen(status.session.user))
+                        navigation.replaceCurrent(Configuration.CreateUserScreen)
                     }
                 }
 
@@ -149,10 +149,9 @@ class RootComponent(
             Configuration.HomeScreen -> Child.HomeScreen(
                 HomeScreenComponent(
                     componentContext = context,
-                    user = _user,
-                    onNavigate = { receivedConfig ->
-                        navigation.pushNew(configuration = receivedConfig)
-                    }
+                    onNavigate = { config -> navigation.pushNew(configuration = config) },
+                    onUserNotAuthenticated = { navigation.replaceAll(Configuration.SignInScreen) },
+                    onUserNotCreated = { navigation.replaceAll(Configuration.CreateUserScreen) }
                 )
             )
 
@@ -275,7 +274,6 @@ class RootComponent(
             is Configuration.CreateUserScreen -> Child.CreateUserScreen(
                 CreateUserViewModel(
                     componentContext = context,
-                    sessionStatus = sessionStatus,
                     onSignOut = { navigation.replaceAll(Configuration.SignInScreen) },
                     onUserCreated = { navigation.pushNew(Configuration.HomeScreen) }
                 )

@@ -4,8 +4,9 @@ import com.arkivanov.decompose.ComponentContext
 import domain.auth.supabase.useCase.SupabaseSignOutUseCase
 import domain.user.useCase.CreateUserUseCase
 import domain.user.useCase.GetProfilePicturesUseCase
+import io.github.jan.supabase.SupabaseClient
+import io.github.jan.supabase.auth.auth
 import io.github.jan.supabase.auth.status.SessionStatus
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.collect
@@ -21,7 +22,6 @@ import util.componentCoroutineScope
 
 class CreateUserViewModel(
     componentContext: ComponentContext,
-    private val sessionStatus: Flow<SessionStatus>,
     private val onSignOut: () -> Unit,
     private val onUserCreated: () -> Unit
 ) : ComponentContext by componentContext, KoinComponent {
@@ -30,6 +30,9 @@ class CreateUserViewModel(
      * Coroutine Scope to handle suspend operations
      */
     private val coroutineScope = componentCoroutineScope()
+
+    private val supabaseClient: SupabaseClient by inject()
+    private val sessionStatus = supabaseClient.auth.sessionStatus
 
     /**
      * Use Cases

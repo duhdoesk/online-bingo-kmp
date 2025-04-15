@@ -8,7 +8,7 @@ import domain.auth.supabase.useCase.SupabaseSignOutUseCase
 import domain.user.model.User
 import domain.user.useCase.DeleteUserUseCase
 import domain.user.useCase.GetProfilePicturesUseCase
-import domain.user.useCase.ObserveUser
+import domain.user.useCase.ObserveUserUseCase
 import domain.user.useCase.UpdateNameUseCase
 import domain.user.useCase.UpdateUserPictureUseCase
 import domain.user.useCase.UpdateVictoryMessageUseCase
@@ -64,7 +64,7 @@ class ProfileScreenComponent(
     /**
      * UI State Use Cases
      */
-    private val observeUser: ObserveUser by inject()
+    private val observeUser: ObserveUserUseCase by inject()
     private val getProfilePicturesUseCase: GetProfilePicturesUseCase by inject()
 
     /**

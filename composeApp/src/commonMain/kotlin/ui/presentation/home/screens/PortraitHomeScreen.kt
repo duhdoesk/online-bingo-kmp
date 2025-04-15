@@ -42,16 +42,15 @@ import themedbingo.composeapp.generated.resources.vip_description
 import themedbingo.composeapp.generated.resources.vip_pass
 import ui.navigation.Configuration
 import ui.presentation.common.components.NoPictureHWBanner
-import ui.presentation.home.event.HomeScreenEvent
+import ui.presentation.home.HomeScreenUIState
 import ui.presentation.home.screens.component.BingoTypeCard
 import ui.presentation.home.screens.component.HomeScreenTopBar
-import ui.presentation.home.state.HomeScreenUIState
 
 @OptIn(ExperimentalResourceApi::class)
 @Composable
 fun PortraitHomeScreen(
     uiState: HomeScreenUIState,
-    event: (event: HomeScreenEvent) -> Unit
+    onNavigate: (configuration: Configuration) -> Unit
 ) {
     Scaffold(modifier = Modifier.imePadding()) { innerPadding ->
         Box(
@@ -65,7 +64,7 @@ fun PortraitHomeScreen(
             Column(modifier = Modifier.sizeIn(maxWidth = 600.dp, maxHeight = 1000.dp)) {
                 HomeScreenTopBar(
                     isSubscribed = uiState.isSubscribed,
-                    onClickSettings = { event(HomeScreenEvent.Navigate(Configuration.ProfileScreen)) },
+                    onClickSettings = { onNavigate(Configuration.ProfileScreen) },
                     modifier = Modifier
                         .padding(vertical = 12.dp)
                         .fillMaxWidth(),
@@ -94,15 +93,7 @@ fun PortraitHomeScreen(
                         icon = Res.drawable.smiling_squirrel,
                         title = Res.string.themed_bingo,
                         body = Res.string.themed_bingo_desc,
-                        onClick = {
-                            event(
-                                HomeScreenEvent.Navigate(
-                                    Configuration.JoinScreen(
-                                        BingoType.THEMED
-                                    )
-                                )
-                            )
-                        },
+                        onClick = { onNavigate(Configuration.JoinScreen(BingoType.THEMED)) },
                         modifier = Modifier.padding(horizontal = 16.dp)
                     )
 
@@ -113,15 +104,7 @@ fun PortraitHomeScreen(
                         icon = Res.drawable.bingo_balls,
                         title = Res.string.classic_bingo,
                         body = Res.string.classic_bingo_desc,
-                        onClick = {
-                            event(
-                                HomeScreenEvent.Navigate(
-                                    Configuration.JoinScreen(
-                                        BingoType.CLASSIC
-                                    )
-                                )
-                            )
-                        },
+                        onClick = { onNavigate(Configuration.JoinScreen(BingoType.CLASSIC)) },
                         modifier = Modifier.padding(horizontal = 16.dp)
                     )
 
@@ -144,7 +127,7 @@ fun PortraitHomeScreen(
                             icon = Res.drawable.premium_crown,
                             title = Res.string.vip_pass,
                             body = Res.string.vip_description,
-                            onClick = { event(HomeScreenEvent.Navigate(Configuration.PaywallScreen)) },
+                            onClick = { onNavigate(Configuration.PaywallScreen) },
                             modifier = Modifier.padding(horizontal = 16.dp)
                         )
                     }

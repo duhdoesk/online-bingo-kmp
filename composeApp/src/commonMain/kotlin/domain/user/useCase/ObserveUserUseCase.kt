@@ -1,0 +1,11 @@
+package domain.user.useCase
+
+import domain.user.model.User
+import domain.user.repository.UserRepository
+import kotlinx.coroutines.flow.Flow
+
+class ObserveUserUseCase(private val userRepository: UserRepository) {
+    operator fun invoke(id: String): Flow<User?> {
+        return userRepository.observeUser(id)
+    }
+}

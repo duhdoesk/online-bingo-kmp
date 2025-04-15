@@ -9,7 +9,7 @@ import domain.room.useCase.FlowRoomByIdUseCase
 import domain.room.useCase.GetBingoStyleUseCase
 import domain.user.model.User
 import domain.user.useCase.GetRoomPlayersUseCase
-import domain.user.useCase.ObserveUser
+import domain.user.useCase.ObserveUserUseCase
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -52,7 +52,7 @@ class RoomPlayerViewModel(
     private val getRoomPlayersUseCase by inject<GetRoomPlayersUseCase>()
     private val flowCardByRoomAndUserIDUseCase by inject<FlowCardByRoomAndUserIDUseCase>()
     private val getBingoStyleUseCase: GetBingoStyleUseCase by inject()
-    private val observeUser: ObserveUser by inject()
+    private val observeUser: ObserveUserUseCase by inject()
 
     /**
      * Action Use Cases
