@@ -4,6 +4,8 @@ import com.arkivanov.decompose.ComponentContext
 import domain.audio.AudioPlayer
 import domain.audio.OCEAN
 import io.github.jan.supabase.SupabaseClient
+import io.github.jan.supabase.auth.auth
+import io.github.jan.supabase.auth.status.SessionStatus
 import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.koin.core.component.KoinComponent
@@ -14,7 +16,7 @@ import util.componentCoroutineScope
 @OptIn(ExperimentalResourceApi::class)
 class SignInScreenComponent(
     componentContext: ComponentContext,
-    private val onSignIn: () -> Unit
+    private val onSignIn: (userId: String?) -> Unit
 ) : ComponentContext by componentContext, KoinComponent {
 
     private val coroutineScope = componentCoroutineScope()
@@ -28,13 +30,24 @@ class SignInScreenComponent(
         }
     }
 
-    /**
-     * Function to navigate when sign in is successful
-     */
+    /** Fetches user id then navigates passing it */
     fun signIn() {
         coroutineScope.launch {
-            audioPlayer.stop()
-            onSignIn()
+            supabaseClient
+                .auth
+                .sessionStatus
+                .collect { sessionStatus ->
+                    when (sessionStatus) {
+                        is SessionStatus.Authenticated -> {
+                            audioPlayer.stop()
+                            onSignIn(sessionStatus.session.user?.id)
+                        }
+
+                        else -> {
+                            return@collect
+                        }
+                    }
+                }
         }
     }
 }

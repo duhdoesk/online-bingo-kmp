@@ -36,20 +36,14 @@ import util.Log
 @OptIn(ExperimentalResourceApi::class)
 @Composable
 fun SignInScreen(component: SignInScreenComponent) {
-    /**
-     * Modal visibility state holders
-     */
+    /** Modal visibility state holders */
     var showNetworkErrorModal by remember { mutableStateOf(false) }
     var showUnmappedErrorModal by remember { mutableStateOf(false) }
 
-    /**
-     * Supabase Client instance to handle sign in attempts
-     */
+    /** Supabase Client instance to handle sign in attempts */
     val supabaseClient = component.supabaseClient
 
-    /**
-     * Handles Google Sign In
-     */
+    /** Handles Google Sign In */
     val googleSignIn = supabaseClient
         .composeAuth
         .rememberSignInWithGoogle(
@@ -72,9 +66,7 @@ fun SignInScreen(component: SignInScreenComponent) {
             }
         )
 
-    /**
-     * Handles Apple Sign In
-     */
+    /** Handles Apple Sign In */
     val appleSignIn = supabaseClient
         .composeAuth
         .rememberSignInWithApple(
@@ -97,17 +89,13 @@ fun SignInScreen(component: SignInScreenComponent) {
             }
         )
 
-    /**
-     * Displays Sign In screen if there is no user authenticated
-     */
+    /** Displays Sign In screen if there is no user authenticated  */
     SignInScreen(
         onStartGoogleAuth = { googleSignIn.startFlow() },
         onStartAppleAuth = { appleSignIn.startFlow() }
     )
 
-    /**
-     * Shows error modal
-     */
+    /** Shows error modal */
     if (showUnmappedErrorModal) {
         GenericErrorDialog(
             onDismiss = { showUnmappedErrorModal = false },
@@ -115,9 +103,7 @@ fun SignInScreen(component: SignInScreenComponent) {
         )
     }
 
-    /**
-     * Shows network error modal
-     */
+    /** Shows network error modal */
     if (showNetworkErrorModal) {
         GenericErrorDialog(
             onDismiss = { showNetworkErrorModal = false },

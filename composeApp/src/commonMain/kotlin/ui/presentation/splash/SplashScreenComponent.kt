@@ -20,8 +20,8 @@ import util.componentCoroutineScope
 @OptIn(ExperimentalResourceApi::class)
 class SplashScreenComponent(
     componentContext: ComponentContext,
-    private val onNavigateToHome: () -> Unit,
-    private val onNavigateToSignIn: () -> Unit
+    private val onNotSignedIn: () -> Unit,
+    private val onSignedIn: (userId: String?) -> Unit
 ) : ComponentContext by componentContext, KoinComponent {
 
     private val coroutineScope = componentCoroutineScope()
@@ -35,22 +35,23 @@ class SplashScreenComponent(
         coroutineScope.launch {
             delay(1000)
             audioPlayer.playNew(Res.getUri(OCEAN))
-            checkSessionStatus()
+            checkAuthentication()
         }
     }
 
-    private suspend fun checkSessionStatus() {
-        supabaseClient.auth.sessionStatus.collect {
+    private suspend fun checkAuthentication() {
+        supabaseClient.auth.sessionStatus.collect { sessionStatus ->
             _progress.update { 1f }
             delay(2000)
 
-            when (it) {
+            when (sessionStatus) {
                 is SessionStatus.Authenticated -> {
                     audioPlayer.stop()
-                    onNavigateToHome()
+                    onSignedIn(sessionStatus.session.user?.id)
                 }
+
                 else -> {
-                    onNavigateToSignIn()
+                    onNotSignedIn()
                 }
             }
         }

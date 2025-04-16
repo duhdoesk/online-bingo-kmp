@@ -11,7 +11,6 @@ import ui.presentation.profile.ProfileScreenComponent
 import ui.presentation.room.RoomHostViewModel
 import ui.presentation.room.RoomPlayerViewModel
 import ui.presentation.signIn.SignInScreenComponent
-import ui.presentation.signUp.SignUpScreenComponent
 import ui.presentation.splash.SplashScreenComponent
 import ui.presentation.themes.ThemesScreenComponent
 
@@ -27,7 +26,6 @@ sealed class Child {
     data class PlayerScreen(val component: RoomPlayerViewModel) : Child()
     data class ProfileScreen(val component: ProfileScreenComponent) : Child()
     data class SignInScreen(val component: SignInScreenComponent) : Child()
-    data class SignUpScreen(val component: SignUpScreenComponent) : Child()
     data class SplashScreen(val component: SplashScreenComponent) : Child()
     data class ThemesScreen(val component: ThemesScreenComponent) : Child()
 }

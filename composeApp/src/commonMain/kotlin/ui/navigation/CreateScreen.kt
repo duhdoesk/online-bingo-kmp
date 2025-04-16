@@ -14,7 +14,6 @@ import ui.presentation.profile.ProfileScreen
 import ui.presentation.room.screens.host.HostScreen
 import ui.presentation.room.screens.player.PlayerScreen
 import ui.presentation.signIn.SignInScreen
-import ui.presentation.signUp.SignUpScreen
 import ui.presentation.splash.SplashScreen
 import ui.presentation.themes.ThemesScreen
 import ui.presentation.util.WindowInfo
@@ -62,11 +61,6 @@ fun CreateScreen(
 
         is Child.SignInScreen -> SignInScreen(
             component = instance.component
-        )
-
-        is Child.SignUpScreen -> SignUpScreen(
-            component = instance.component,
-            windowInfo = windowInfo
         )
 
         is Child.ForgotPasswordScreen -> ForgotPasswordScreen(
