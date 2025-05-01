@@ -5,18 +5,16 @@ import domain.audio.AudioPlayer
 import domain.auth.getAuthErrorDescription
 import domain.auth.supabase.useCase.SupabaseDeleteAccountUseCase
 import domain.auth.supabase.useCase.SupabaseSignOutUseCase
-import domain.user.model.User
 import domain.user.useCase.DeleteUserUseCase
 import domain.user.useCase.GetProfilePicturesUseCase
-import domain.user.useCase.ObserveUserUseCase
+import domain.user.useCase.GetSignedInUserUseCase
 import domain.user.useCase.UpdateNameUseCase
 import domain.user.useCase.UpdateUserPictureUseCase
 import domain.user.useCase.UpdateVictoryMessageUseCase
-import kotlinx.coroutines.flow.Flow
+import domain.util.resource.Resource
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.combine
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.ExperimentalResourceApi
@@ -28,15 +26,14 @@ import themedbingo.composeapp.generated.resources.sign_out_error
 import themedbingo.composeapp.generated.resources.unmapped_error
 import themedbingo.composeapp.generated.resources.update_nickname_failure
 import themedbingo.composeapp.generated.resources.update_victory_failure
+import ui.presentation.core.dialog.dialogState.mutableDialogStateOf
 import ui.presentation.profile.event.ProfileScreenEvent
 import ui.presentation.profile.state.ProfileScreenUIState
-import ui.presentation.util.dialog.dialogState.mutableDialogStateOf
 import util.componentCoroutineScope
 
 @OptIn(ExperimentalResourceApi::class)
 class ProfileScreenComponent(
     componentContext: ComponentContext,
-    private val user: Flow<User?>,
     private val onPopBack: () -> Unit,
     private val onSignOut: () -> Unit
 ) : ComponentContext by componentContext, KoinComponent {
@@ -54,6 +51,7 @@ class ProfileScreenComponent(
     /**
      * Action Use Cases
      */
+    private val getSignedInUserUseCase by inject<GetSignedInUserUseCase>()
     private val signOutUseCase by inject<SupabaseSignOutUseCase>()
     private val deleteAccountUseCase by inject<SupabaseDeleteAccountUseCase>()
     private val updateNameUseCase by inject<UpdateNameUseCase>()
@@ -64,7 +62,6 @@ class ProfileScreenComponent(
     /**
      * UI State Use Cases
      */
-    private val observeUser: ObserveUserUseCase by inject()
     private val getProfilePicturesUseCase: GetProfilePicturesUseCase by inject()
 
     /**
@@ -100,21 +97,28 @@ class ProfileScreenComponent(
      */
     private fun uiLoaded() {
         coroutineScope.launch {
-            val userId = user.first()?.id
+            combine(getSignedInUserUseCase(), getProfilePicturesUseCase()) { collectedUser, pics ->
+                val uiState = when (collectedUser) {
+                    is Resource.Success -> {
+                        ProfileScreenUIState(
+                            isLoading = false,
+                            user = collectedUser.data,
+                            error = false,
+                            profilePictures = pics
+                        )
+                    }
 
-            userId?.let {
-                combine(observeUser(userId), getProfilePicturesUseCase()) { collectedUser, pics ->
-                    val error = (collectedUser == null)
-
-                    ProfileScreenUIState(
-                        isLoading = false,
-                        user = collectedUser,
-                        error = error,
-                        profilePictures = pics
-                    )
-                }.collect { state ->
-                    _uiState.update { state }
+                    is Resource.Failure -> {
+                        ProfileScreenUIState(
+                            isLoading = false,
+                            user = null,
+                            error = true,
+                            profilePictures = pics
+                        )
+                    }
                 }
+
+                _uiState.update { uiState }
             }
         }
     }

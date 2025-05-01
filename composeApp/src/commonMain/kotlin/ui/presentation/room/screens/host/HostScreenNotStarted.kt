@@ -18,11 +18,11 @@ import themedbingo.composeapp.generated.resources.Res
 import themedbingo.composeapp.generated.resources.pop_back_dialog_body
 import themedbingo.composeapp.generated.resources.pop_back_dialog_title
 import themedbingo.composeapp.generated.resources.start_button
-import ui.presentation.common.components.DoubleButtonRow
+import ui.presentation.core.DoubleButtonRow
+import ui.presentation.core.dialog.GenericActionDialog
 import ui.presentation.room.event.RoomHostEvent
 import ui.presentation.room.screens.component.RoomInfo
 import ui.presentation.room.state.RoomHostState
-import ui.presentation.util.dialog.GenericActionDialog
 
 @OptIn(ExperimentalResourceApi::class)
 @Composable

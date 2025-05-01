@@ -28,9 +28,9 @@ import themedbingo.composeapp.generated.resources.Res
 import themedbingo.composeapp.generated.resources.auth_network_error
 import themedbingo.composeapp.generated.resources.bg_splash
 import themedbingo.composeapp.generated.resources.unmapped_error
+import ui.presentation.core.dialog.GenericErrorDialog
 import ui.presentation.signIn.component.SignInButton
 import ui.presentation.signIn.component.SignInHeader
-import ui.presentation.util.dialog.GenericErrorDialog
 import util.Log
 
 @OptIn(ExperimentalResourceApi::class)

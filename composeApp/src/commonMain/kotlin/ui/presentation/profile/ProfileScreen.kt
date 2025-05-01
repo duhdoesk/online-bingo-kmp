@@ -7,13 +7,13 @@ import androidx.compose.runtime.getValue
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import themedbingo.composeapp.generated.resources.Res
 import themedbingo.composeapp.generated.resources.unmapped_error
-import ui.presentation.common.ErrorScreen
-import ui.presentation.common.LoadingScreen
+import ui.presentation.core.ErrorScreen
+import ui.presentation.core.LoadingScreen
+import ui.presentation.core.dialog.GenericErrorDialog
+import ui.presentation.core.dialog.GenericSuccessDialog
 import ui.presentation.profile.event.ProfileScreenEvent
 import ui.presentation.profile.screens.PortraitProfileScreen
 import ui.presentation.util.WindowInfo
-import ui.presentation.util.dialog.GenericErrorDialog
-import ui.presentation.util.dialog.GenericSuccessDialog
 
 @OptIn(ExperimentalResourceApi::class)
 @Composable

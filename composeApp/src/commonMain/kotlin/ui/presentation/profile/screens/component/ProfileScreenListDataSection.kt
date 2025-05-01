@@ -28,8 +28,8 @@ import themedbingo.composeapp.generated.resources.delete_account_title
 import themedbingo.composeapp.generated.resources.exit_button
 import themedbingo.composeapp.generated.resources.sign_out_dialog_body
 import themedbingo.composeapp.generated.resources.sign_out_dialog_title
+import ui.presentation.core.dialog.GenericActionDialog
 import ui.presentation.profile.event.ProfileScreenEvent
-import ui.presentation.util.dialog.GenericActionDialog
 
 @OptIn(ExperimentalResourceApi::class)
 @Composable

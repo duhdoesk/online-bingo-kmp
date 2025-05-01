@@ -25,9 +25,9 @@ import themedbingo.composeapp.generated.resources.Res
 import themedbingo.composeapp.generated.resources.create_button
 import themedbingo.composeapp.generated.resources.create_classic_room_title
 import themedbingo.composeapp.generated.resources.name_textField
-import ui.presentation.common.components.CreateRoomHeader
-import ui.presentation.common.components.PrimaryActionButton
-import ui.presentation.common.components.SingleButtonRow
+import ui.presentation.core.CreateRoomHeader
+import ui.presentation.core.PrimaryActionButton
+import ui.presentation.core.SingleButtonRow
 import ui.presentation.createRoom.event.CreateScreenEvent
 import ui.presentation.createRoom.screens.components.CreateRoomEditMaxWinners
 import ui.presentation.createRoom.screens.components.CreateRoomEditPassword

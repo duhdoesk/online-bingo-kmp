@@ -43,12 +43,12 @@ import themedbingo.composeapp.generated.resources.search
 import themedbingo.composeapp.generated.resources.subscription_dialog_body
 import themedbingo.composeapp.generated.resources.subscription_dialog_title
 import ui.navigation.Configuration
-import ui.presentation.common.components.DoubleButtonRow
+import ui.presentation.core.DoubleButtonRow
+import ui.presentation.core.dialog.GenericActionDialog
 import ui.presentation.joinRoom.event.JoinRoomUIEvent
 import ui.presentation.joinRoom.screens.component.JoinScreenLazyColumn
 import ui.presentation.joinRoom.screens.component.JoinScreenNoRoomsComponent
 import ui.presentation.joinRoom.state.JoinRoomUIState
-import ui.presentation.util.dialog.GenericActionDialog
 
 @OptIn(ExperimentalResourceApi::class)
 @Composable

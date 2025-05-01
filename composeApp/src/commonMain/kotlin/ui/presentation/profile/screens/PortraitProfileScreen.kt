@@ -37,8 +37,8 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
+import domain.profilePictures.ProfilePictures
 import domain.user.model.User
-import domain.user.useCase.ProfilePictures
 import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.stringResource
@@ -55,13 +55,13 @@ import themedbingo.composeapp.generated.resources.update_victory_body
 import themedbingo.composeapp.generated.resources.update_victory_title
 import themedbingo.composeapp.generated.resources.user_avatar
 import themedbingo.composeapp.generated.resources.victory_message
-import ui.presentation.common.components.SingleButtonRow
+import ui.presentation.core.SingleButtonRow
+import ui.presentation.core.bottomSheet.UpdateBottomSheet
+import ui.presentation.core.bottomSheet.UpdatePictureBottomSheet
+import ui.presentation.core.dialog.GenericActionDialog
 import ui.presentation.profile.event.ProfileScreenEvent
 import ui.presentation.profile.screens.component.ProfileScreenListDataSection
 import ui.presentation.profile.screens.component.ProfileScreenStringDataSection
-import ui.presentation.util.bottomSheet.UpdateBottomSheet
-import ui.presentation.util.bottomSheet.UpdatePictureBottomSheet
-import ui.presentation.util.dialog.GenericActionDialog
 
 @OptIn(ExperimentalResourceApi::class, ExperimentalMaterial3Api::class)
 @Composable
@@ -205,7 +205,7 @@ fun PortraitProfileScreen(
                     event(ProfileScreenEvent.UpdateName(it))
                 }
             },
-            currentData = user.name,
+            currentValue = user.name,
             title = Res.string.update_nickname_title,
             body = Res.string.update_nickname_body,
             label = Res.string.nickname,
@@ -223,7 +223,7 @@ fun PortraitProfileScreen(
                     event(ProfileScreenEvent.UpdateMessage(it))
                 }
             },
-            currentData = user.victoryMessage,
+            currentValue = user.victoryMessage,
             title = Res.string.update_victory_title,
             body = Res.string.update_victory_body,
             label = Res.string.victory_message,

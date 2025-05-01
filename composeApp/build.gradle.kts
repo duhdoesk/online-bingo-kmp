@@ -38,6 +38,9 @@ kotlin {
 //            Audio
             implementation(libs.exoPlayer)
 
+//          Dependency Injection
+            implementation(libs.koin.android)
+
 //            Ktor
             implementation(libs.ktor.client.okhttp)
 

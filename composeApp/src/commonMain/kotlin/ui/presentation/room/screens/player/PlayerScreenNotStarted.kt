@@ -18,7 +18,7 @@ import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import themedbingo.composeapp.generated.resources.Res
 import themedbingo.composeapp.generated.resources.new_card_button
-import ui.presentation.common.components.DoubleButtonRow
+import ui.presentation.core.DoubleButtonRow
 import ui.presentation.room.event.RoomPlayerEvent
 import ui.presentation.room.screens.component.HorizontalPagerIndicator
 import ui.presentation.room.screens.component.NotStartedPlayScreenHorizontalPager

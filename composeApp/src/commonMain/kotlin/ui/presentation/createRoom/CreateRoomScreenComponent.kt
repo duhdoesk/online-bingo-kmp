@@ -5,8 +5,7 @@ import domain.room.model.BingoType
 import domain.room.useCase.CreateRoomUseCase
 import domain.theme.model.BingoTheme
 import domain.theme.useCase.ObserveAvailableThemes
-import domain.user.model.User
-import kotlinx.coroutines.flow.Flow
+import domain.user.useCase.GetSignedInUserUseCase
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.asStateFlow
@@ -22,16 +21,15 @@ import themedbingo.composeapp.generated.resources.Res
 import themedbingo.composeapp.generated.resources.name_length_error
 import themedbingo.composeapp.generated.resources.password_length_error
 import ui.navigation.Configuration
+import ui.presentation.core.dialog.dialogState.mutableDialogStateOf
 import ui.presentation.createRoom.event.CreateScreenEvent
 import ui.presentation.createRoom.state.CreateScreenUiState
-import ui.presentation.util.dialog.dialogState.mutableDialogStateOf
 import util.componentCoroutineScope
 
 @OptIn(ExperimentalResourceApi::class)
 class CreateRoomScreenComponent(
     componentContext: ComponentContext,
     private val bingoType: BingoType,
-    private val user: Flow<User?>,
     private val onPopBack: () -> Unit,
     private val onCreateRoom: (configuration: Configuration) -> Unit
 ) : ComponentContext by componentContext, KoinComponent {
@@ -46,6 +44,7 @@ class CreateRoomScreenComponent(
      */
     private val createRoomUseCase by inject<CreateRoomUseCase>()
     private val observeAvailableThemes: ObserveAvailableThemes by inject()
+    private val getSignedInUserUseCase: GetSignedInUserUseCase by inject()
 
     /**
      * Modal visibility holders
@@ -204,10 +203,10 @@ class CreateRoomScreenComponent(
 
     private fun createRoom() {
         coroutineScope.launch {
-            user.collect { collectedUser ->
+            getSignedInUserUseCase().collect { collectedUser ->
                 uiState.value.run {
                     createRoomUseCase(
-                        hostId = collectedUser?.id ?: "",
+                        hostId = collectedUser.getOrNull()?.id ?: "",
                         name = name,
                         locked = locked,
                         password = password,

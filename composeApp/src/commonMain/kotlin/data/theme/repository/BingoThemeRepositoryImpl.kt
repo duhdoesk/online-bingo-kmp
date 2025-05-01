@@ -1,14 +1,16 @@
 package data.theme.repository
 
+import data.network.apiCall
 import data.theme.model.BingoThemeDTO
 import dev.gitlive.firebase.firestore.DocumentSnapshot
 import dev.gitlive.firebase.firestore.FirebaseFirestore
 import domain.theme.repository.BingoThemeRepository
+import domain.util.resource.Resource
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
 class BingoThemeRepositoryImpl(
-    firestore: FirebaseFirestore
+    private val firestore: FirebaseFirestore
 ) : BingoThemeRepository {
 
     private val collection = firestore
@@ -58,12 +60,33 @@ class BingoThemeRepositoryImpl(
             }
     }
 
+    override fun uploadNewTheme(
+        name: String,
+        nameEnglish: String,
+        nameSpanish: String,
+        picture: String,
+        available: Boolean
+    ): Flow<Resource<String>> {
+        return apiCall {
+            collection.add(
+                data = hashMapOf(
+                    "name" to name,
+                    "name_en" to nameEnglish,
+                    "name_sp" to nameSpanish,
+                    "picture" to picture,
+                    "available" to available
+                )
+            ).id
+        }.map { apiResult -> apiResult.toResource { it } }
+    }
+
     private fun buildBingoThemeDTO(documentSnapshot: DocumentSnapshot): BingoThemeDTO {
         return BingoThemeDTO(
             id = documentSnapshot.id,
             name = documentSnapshot.get("name"),
             picture = documentSnapshot.get("picture"),
-            nameEnglish = documentSnapshot.get("name_en")
+            nameEnglish = documentSnapshot.get("name_en"),
+            nameSpanish = documentSnapshot.get("name_sp")
         )
     }
 }

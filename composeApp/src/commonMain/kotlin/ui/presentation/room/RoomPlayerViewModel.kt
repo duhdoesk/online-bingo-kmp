@@ -9,27 +9,22 @@ import domain.room.useCase.FlowRoomByIdUseCase
 import domain.room.useCase.GetBingoStyleUseCase
 import domain.user.model.User
 import domain.user.useCase.GetRoomPlayersUseCase
-import domain.user.useCase.ObserveUserUseCase
-import kotlinx.coroutines.flow.Flow
+import domain.user.useCase.GetSignedInUserUseCase
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.combine
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
+import ui.presentation.core.dialog.dialogState.mutableDialogStateOf
 import ui.presentation.room.event.RoomPlayerEvent
 import ui.presentation.room.state.RoomPlayerState
 import ui.presentation.room.state.auxiliar.BingoStyle
 import ui.presentation.room.state.auxiliar.CardState
-import ui.presentation.room.state.auxiliar.DataState
-import ui.presentation.util.dialog.dialogState.mutableDialogStateOf
 import util.componentCoroutineScope
 
 class RoomPlayerViewModel(
     private val componentContext: ComponentContext,
-    private val user: Flow<User?>,
     private val roomId: String,
     private val onPopBack: () -> Unit
 ) : ComponentContext by componentContext, KoinComponent {
@@ -52,7 +47,7 @@ class RoomPlayerViewModel(
     private val getRoomPlayersUseCase by inject<GetRoomPlayersUseCase>()
     private val flowCardByRoomAndUserIDUseCase by inject<FlowCardByRoomAndUserIDUseCase>()
     private val getBingoStyleUseCase: GetBingoStyleUseCase by inject()
-    private val observeUser: ObserveUserUseCase by inject()
+    private val getSignedInUserUseCase: GetSignedInUserUseCase by inject()
 
     /**
      * Action Use Cases
@@ -83,74 +78,74 @@ class RoomPlayerViewModel(
      * Loads and manages UI State
      */
     private fun uiLoaded() {
-        coroutineScope.launch {
-            // Informs the UI that data is being updated
-            _screenState.update { it.copy(dataState = DataState.LOADING) }
-
-            // Checks if user is null, informing UI of an error if true
-            val userId = user.first()?.id
-            if (userId == null) {
-                _screenState.update { it.copy(dataState = DataState.ERROR) }
-                return@launch
-            }
-
-            combine(
-                flowRoomByIdUseCase(roomId),
-                getRoomPlayersUseCase(roomId),
-                flowCardByRoomAndUserIDUseCase(roomId, userId)
-            ) { room, players, card ->
-
-                // Builds card state
-                val cardState = checkCardState(
-                    items = card?.characters,
-                    bingoType = room.type
-                )
-
-                // Checks if user can call bingo
-                val canCall = canCallBingo(
-                    cardState = cardState,
-                    raffledCharacters = room.raffled,
-                    winners = room.winners
-                )
-
-                // Checks bingo style
-                val bingoStyle = getBingoStyleUseCase(
-                    bingoType = room.type,
-                    themeId = room.themeId
-                ).getOrNull()
-
-                // Informs the UI if there is an error with the data
-                if (bingoStyle == null) {
-                    return@combine RoomPlayerState.INITIAL.copy(dataState = DataState.ERROR)
-                }
-
-                // Builds the list of winners
-                val winners =
-                    getWinners(ids = room.winners, players = players)
-
-                // Returns the host of the room
-                val host =
-                    observeUser(room.hostId).first()
-
-                // Builds the UI State
-                RoomPlayerState(
-                    dataState = DataState.SUCCESS,
-                    bingoStyle = bingoStyle,
-                    bingoState = room.state,
-                    roomName = room.name,
-                    host = host,
-                    players = players,
-                    winners = winners,
-                    maxWinners = room.maxWinners,
-                    raffledItems = room.raffled,
-                    canCallBingo = canCall,
-                    cardState = cardState,
-                    userId = userId
-                )
-            }.collect { state ->
-                _screenState.update { state }
-            }
-        }
+//        coroutineScope.launch {
+//            // Informs the UI that data is being updated
+//            _screenState.update { it.copy(dataState = DataState.LOADING) }
+//
+//            // Checks if user is null, informing UI of an error if true
+//            val userId = observeUser.invoke().getOrNull()
+//            if (userId == null) {
+//                _screenState.update { it.copy(dataState = DataState.ERROR) }
+//                return@launch
+//            }
+//
+//            combine(
+//                flowRoomByIdUseCase(roomId),
+//                getRoomPlayersUseCase(roomId),
+//                flowCardByRoomAndUserIDUseCase(roomId, userId)
+//            ) { room, players, card ->
+//
+//                // Builds card state
+//                val cardState = checkCardState(
+//                    items = card?.characters,
+//                    bingoType = room.type
+//                )
+//
+//                // Checks if user can call bingo
+//                val canCall = canCallBingo(
+//                    cardState = cardState,
+//                    raffledCharacters = room.raffled,
+//                    winners = room.winners
+//                )
+//
+//                // Checks bingo style
+//                val bingoStyle = getBingoStyleUseCase(
+//                    bingoType = room.type,
+//                    themeId = room.themeId
+//                ).getOrNull()
+//
+//                // Informs the UI if there is an error with the data
+//                if (bingoStyle == null) {
+//                    return@combine RoomPlayerState.INITIAL.copy(dataState = DataState.ERROR)
+//                }
+//
+//                // Builds the list of winners
+//                val winners =
+//                    getWinners(ids = room.winners, players = players)
+//
+//                // Returns the host of the room
+//                val host =
+//                    observeUser(room.hostId).first()
+//
+//                // Builds the UI State
+//                RoomPlayerState(
+//                    dataState = DataState.SUCCESS,
+//                    bingoStyle = bingoStyle,
+//                    bingoState = room.state,
+//                    roomName = room.name,
+//                    host = host,
+//                    players = players,
+//                    winners = winners,
+//                    maxWinners = room.maxWinners,
+//                    raffledItems = room.raffled,
+//                    canCallBingo = canCall,
+//                    cardState = cardState,
+//                    userId = userId
+//                )
+//            }.collect { state ->
+//                _screenState.update { state }
+//            }
+//        }
     }
 
     /**

@@ -1,18 +1,19 @@
 package data.user.model
 
+import dev.gitlive.firebase.firestore.DocumentSnapshot
 import dev.gitlive.firebase.firestore.Timestamp
 import domain.user.model.User
 
-class UserDTO(
-    private val id: String,
-    private val email: String?,
-    private val name: String?,
-    private val nameLastUpdated: Timestamp?,
-    private val pictureUri: String?,
-    private val pictureUriLastUpdated: Timestamp?,
-    private val lastWinTimestamp: Timestamp?,
-    private val victoryMessage: String?,
-    private val victoryMessageLastUpdated: Timestamp?
+data class UserDTO(
+    val id: String,
+    val email: String?,
+    val name: String?,
+    val nameLastUpdated: Timestamp?,
+    val pictureUri: String?,
+    val pictureUriLastUpdated: Timestamp?,
+    val lastWinTimestamp: Timestamp?,
+    val victoryMessage: String?,
+    val victoryMessageLastUpdated: Timestamp?
 ) {
     fun toModel(): User =
         User(
@@ -26,4 +27,18 @@ class UserDTO(
             victoryMessage = victoryMessage ?: "",
             victoryMessageLastUpdated = victoryMessageLastUpdated ?: Timestamp(0, 0)
         )
+}
+
+fun DocumentSnapshot.toUserDTO(): UserDTO {
+    return UserDTO(
+        id = id,
+        name = this.get("name"),
+        email = this.get("email"),
+        pictureUri = this.get("pictureUri"),
+        nameLastUpdated = this.get("nameLastUpdated"),
+        pictureUriLastUpdated = this.get("pictureUriLastUpdated"),
+        lastWinTimestamp = this.get("lastWinTimestamp"),
+        victoryMessage = this.get("victoryMessage"),
+        victoryMessageLastUpdated = this.get("victoryMessageLastUpdated")
+    )
 }

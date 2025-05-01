@@ -21,12 +21,12 @@ import org.jetbrains.compose.resources.ExperimentalResourceApi
 import themedbingo.composeapp.generated.resources.Res
 import themedbingo.composeapp.generated.resources.pop_back_dialog_body
 import themedbingo.composeapp.generated.resources.pop_back_dialog_title
+import ui.presentation.core.dialog.GenericActionDialog
+import ui.presentation.core.dialog.GenericErrorDialog
 import ui.presentation.room.RoomPlayerViewModel
 import ui.presentation.room.event.RoomPlayerEvent
 import ui.presentation.room.screens.component.PlayersLazyRow
 import ui.presentation.room.state.auxiliar.BingoState
-import ui.presentation.util.dialog.GenericActionDialog
-import ui.presentation.util.dialog.GenericErrorDialog
 
 @OptIn(ExperimentalResourceApi::class)
 @Composable

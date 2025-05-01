@@ -7,16 +7,19 @@ class CharacterDTO(
     val id: String,
     val name: String,
     val nameInEnglish: String?,
+    val nameInSpanish: String?,
     val pictureUri: String
 ) {
     fun toModel(): Character {
         val localization = Locale.current.language
 
         val localizedName =
-            if (nameInEnglish == null || localization.contains("pt")) {
+            if (localization.contains("pt")) {
                 name
+            } else if (localization.contains("es")) {
+                nameInSpanish ?: name
             } else {
-                nameInEnglish
+                nameInEnglish ?: name
             }
 
         return Character(id = id, name = localizedName, pictureUri = pictureUri)

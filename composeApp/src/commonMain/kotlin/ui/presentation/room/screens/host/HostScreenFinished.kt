@@ -25,10 +25,10 @@ import themedbingo.composeapp.generated.resources.Res
 import themedbingo.composeapp.generated.resources.pop_back_dialog_body
 import themedbingo.composeapp.generated.resources.pop_back_dialog_title
 import themedbingo.composeapp.generated.resources.winners
-import ui.presentation.common.components.SingleButtonRow
+import ui.presentation.core.SingleButtonRow
+import ui.presentation.core.dialog.GenericActionDialog
 import ui.presentation.room.event.RoomHostEvent
 import ui.presentation.room.screens.component.WinnerCard
-import ui.presentation.util.dialog.GenericActionDialog
 import ui.presentation.util.getRandomLightColor
 
 @OptIn(ExperimentalResourceApi::class, ExperimentalFoundationApi::class)

@@ -39,12 +39,6 @@ sealed class Configuration {
     data object SplashScreen : Configuration()
 
     @Serializable
-    data object ForgotPasswordScreen : Configuration()
-
-    @Serializable
-    data object ChangePasswordScreen : Configuration()
-
-    @Serializable
     data object PaywallScreen : Configuration()
 
     @Serializable

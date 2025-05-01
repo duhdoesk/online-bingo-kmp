@@ -1,10 +1,12 @@
 package data.character.repository
 
 import data.character.model.CharacterDTO
+import data.network.apiCall
 import dev.gitlive.firebase.firestore.DocumentSnapshot
 import dev.gitlive.firebase.firestore.FirebaseFirestore
 import dev.gitlive.firebase.firestore.QuerySnapshot
 import domain.character.repository.CharacterRepository
+import domain.util.resource.Resource
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
@@ -43,11 +45,34 @@ class CharacterRepositoryImpl(
         }
     }
 
+    override fun uploadNewCharacter(
+        themeId: String,
+        name: String,
+        nameEnglish: String,
+        nameSpanish: String,
+        picture: String
+    ): Flow<Resource<Unit>> {
+        return apiCall {
+            collection
+                .document(themeId)
+                .collection("characters")
+                .add(
+                    data = hashMapOf(
+                        "name" to name,
+                        "name_en" to nameEnglish,
+                        "name_sp" to nameSpanish,
+                        "picture" to picture
+                    )
+                )
+        }.map { apiResult -> apiResult.toResource { } }
+    }
+
     private fun buildCharacterDTO(documentSnapshot: DocumentSnapshot): CharacterDTO {
         return CharacterDTO(
             id = documentSnapshot.id,
             name = documentSnapshot.get("name"),
             nameInEnglish = documentSnapshot.get("name_en"),
+            nameInSpanish = documentSnapshot.get("name_sp"),
             pictureUri = documentSnapshot.get("picture")
         )
     }

@@ -1,21 +1,23 @@
 package domain.user.useCase
 
 import domain.user.repository.UserRepository
+import domain.util.resource.Resource
+import kotlinx.coroutines.flow.Flow
 
 class CreateUserUseCase(private val userRepository: UserRepository) {
-    suspend operator fun invoke(
+    operator fun invoke(
         id: String,
         email: String,
         name: String,
         pictureUri: String,
         victoryMessage: String
-    ): Result<Unit> {
+    ): Flow<Resource<Unit>> {
         return userRepository.createUser(
             id = id,
             email = email,
             name = name,
             pictureUri = pictureUri,
-            victoryMessage = victoryMessage
+            message = victoryMessage
         )
     }
 }

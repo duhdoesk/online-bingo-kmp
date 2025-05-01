@@ -1,7 +1,7 @@
 package ui.presentation.profile.state
 
+import domain.profilePictures.ProfilePictures
 import domain.user.model.User
-import domain.user.useCase.ProfilePictures
 
 data class ProfileScreenUIState(
     val isLoading: Boolean,

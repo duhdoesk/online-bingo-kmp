@@ -19,14 +19,14 @@ import themedbingo.composeapp.generated.resources.name_body
 import themedbingo.composeapp.generated.resources.name_textField
 import themedbingo.composeapp.generated.resources.password_body
 import themedbingo.composeapp.generated.resources.password_textField
-import ui.presentation.common.RotateScreen
+import ui.presentation.core.RotateScreen
+import ui.presentation.core.bottomSheet.ThemePickerBottomSheet
+import ui.presentation.core.bottomSheet.UpdateBottomSheet
+import ui.presentation.core.dialog.GenericErrorDialog
 import ui.presentation.createRoom.event.CreateScreenEvent
 import ui.presentation.createRoom.screens.CreateClassicRoomScreen
 import ui.presentation.createRoom.screens.CreateThemedRoomScreen
 import ui.presentation.util.WindowInfo
-import ui.presentation.util.bottomSheet.ThemePickerBottomSheet
-import ui.presentation.util.bottomSheet.UpdateBottomSheet
-import ui.presentation.util.dialog.GenericErrorDialog
 
 @OptIn(ExperimentalResourceApi::class, ExperimentalMaterial3Api::class)
 @Composable
@@ -122,7 +122,7 @@ fun CreateRoomScreen(
                     showNameBottomSheet = false
                 }
             },
-            currentData = uiState.name,
+            currentValue = uiState.name,
             title = Res.string.name_textField,
             body = Res.string.name_body,
             label = Res.string.name_textField
@@ -141,7 +141,7 @@ fun CreateRoomScreen(
                     showPasswordBottomSheet = false
                 }
             },
-            currentData = uiState.password,
+            currentValue = uiState.password,
             title = Res.string.password_textField,
             body = Res.string.password_body,
             label = Res.string.password_textField,

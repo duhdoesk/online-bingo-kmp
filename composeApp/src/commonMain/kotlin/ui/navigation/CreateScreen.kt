@@ -3,10 +3,8 @@ package ui.navigation
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
 import org.jetbrains.compose.resources.ExperimentalResourceApi
-import ui.presentation.changePassword.ChangePasswordScreen
 import ui.presentation.createRoom.CreateRoomScreen
 import ui.presentation.createUser.CreateUserScreen
-import ui.presentation.forgotPassword.ForgotPasswordScreen
 import ui.presentation.home.HomeScreen
 import ui.presentation.joinRoom.JoinScreen
 import ui.presentation.paywall.PaywallScreen
@@ -61,16 +59,6 @@ fun CreateScreen(
 
         is Child.SignInScreen -> SignInScreen(
             component = instance.component
-        )
-
-        is Child.ForgotPasswordScreen -> ForgotPasswordScreen(
-            component = instance.component,
-            windowInfo = windowInfo
-        )
-
-        is Child.ChangePasswordScreen -> ChangePasswordScreen(
-            component = instance.component,
-            windowInfo = windowInfo
         )
 
         is Child.PaywallScreen -> PaywallScreen(

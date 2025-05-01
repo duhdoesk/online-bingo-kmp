@@ -4,7 +4,8 @@ import com.arkivanov.decompose.ComponentContext
 import domain.audio.AudioPlayer
 import domain.audio.SPLASHING_AROUND
 import domain.billing.hasActiveEntitlements
-import domain.user.useCase.ObserveUserUseCase
+import domain.user.useCase.GetSignedInUserUseCase
+import domain.util.resource.Resource
 import io.github.jan.supabase.SupabaseClient
 import io.github.jan.supabase.auth.auth
 import io.github.jan.supabase.auth.status.SessionStatus
@@ -13,8 +14,7 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.flatMapLatest
-import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
@@ -36,7 +36,7 @@ class HomeScreenComponent(
     private val coroutineScope = componentCoroutineScope()
     private val audioPlayer: AudioPlayer by inject()
     private val supabaseClient: SupabaseClient by inject()
-    private val observeUserUseCase: ObserveUserUseCase by inject()
+    private val getSignedInUser: GetSignedInUserUseCase by inject()
 
     private val _userInfo = supabaseClient
         .auth
@@ -49,28 +49,25 @@ class HomeScreenComponent(
         }
 
     @OptIn(ExperimentalCoroutinesApi::class)
-    val uiState: StateFlow<HomeScreenUIState> = _userInfo
-        .flatMapLatest { userInfo ->
-            if (userInfo == null) {
-                onUserNotAuthenticated()
-                return@flatMapLatest flow { emit(HomeScreenUIState(loading = false)) }
-            }
+    val uiState: StateFlow<HomeScreenUIState> = getSignedInUser()
+        .map { user ->
+            when (user) {
+                is Resource.Success -> {
+                    val isSubscribed = hasActiveEntitlements()
 
-            observeUserUseCase(userInfo.id)
-                .map { user ->
-                    if (user == null) {
-                        onUserNotCreated(userInfo)
-                        HomeScreenUIState(loading = false)
-                    } else {
-                        val isSubscribed = hasActiveEntitlements()
-                        HomeScreenUIState(
-                            loading = false,
-                            userName = user.name,
-                            userPicture = user.pictureUri,
-                            isSubscribed = isSubscribed
-                        )
-                    }
+                    HomeScreenUIState(
+                        loading = false,
+                        userName = user.data.name,
+                        userPicture = user.data.pictureUri,
+                        isSubscribed = isSubscribed
+                    )
                 }
+
+                is Resource.Failure -> {
+                    onUserNotCreated(_userInfo.first())
+                    HomeScreenUIState(loading = false)
+                }
+            }
         }
         .stateIn(
             scope = coroutineScope,

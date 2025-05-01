@@ -5,11 +5,11 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import org.jetbrains.compose.resources.ExperimentalResourceApi
+import ui.presentation.core.dialog.GenericErrorDialog
 import ui.presentation.joinRoom.event.JoinRoomUIEvent
 import ui.presentation.joinRoom.screens.PortraitJoinScreen
 import ui.presentation.joinRoom.screens.component.JoinRoomBottomSheet
 import ui.presentation.util.WindowInfo
-import ui.presentation.util.dialog.GenericErrorDialog
 
 @OptIn(ExperimentalResourceApi::class)
 @Composable

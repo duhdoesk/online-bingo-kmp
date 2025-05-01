@@ -1,6 +1,7 @@
 package domain.user.useCase
 
 import domain.character.useCase.ObserveThemeCharacters
+import domain.profilePictures.ProfilePictures
 import domain.theme.useCase.ObserveAvailableThemes
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
@@ -30,13 +31,4 @@ class GetProfilePicturesUseCase(
                 .map { ProfilePictures(it) }
         }
     }
-}
-
-data class ProfilePictures(
-    val categories: List<Category>
-) {
-    data class Category(
-        val name: String,
-        val pictures: List<String>
-    )
 }

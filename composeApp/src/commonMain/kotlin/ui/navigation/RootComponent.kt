@@ -1,3 +1,5 @@
+@file:OptIn(ExperimentalCoroutinesApi::class)
+
 package ui.navigation
 
 import com.arkivanov.decompose.ComponentContext
@@ -11,22 +13,17 @@ import com.revenuecat.purchases.kmp.CustomerInfo
 import com.revenuecat.purchases.kmp.LogLevel
 import com.revenuecat.purchases.kmp.Purchases
 import com.revenuecat.purchases.kmp.configure
-import domain.auth.supabase.SupabaseAuthService
 import domain.billing.SubscribeToUserSubscriptionData
-import domain.user.useCase.GetUserByIdUseCase
-import domain.user.useCase.ObserveUserUseCase
+import domain.user.useCase.GetSignedInUserUseCase
+import domain.util.resource.Resource
 import getPlatform
-import io.github.jan.supabase.auth.auth
-import io.github.jan.supabase.auth.status.SessionStatus
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.filterNotNull
-import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
-import ui.navigation.Child.ChangePasswordScreen
 import ui.navigation.Child.CreateUserScreen
-import ui.navigation.Child.ForgotPasswordScreen
 import ui.navigation.Child.HomeScreen
 import ui.navigation.Child.HostScreen
 import ui.navigation.Child.JoinScreen
@@ -36,10 +33,8 @@ import ui.navigation.Child.ProfileScreen
 import ui.navigation.Child.SignInScreen
 import ui.navigation.Child.SplashScreen
 import ui.navigation.Child.ThemesScreen
-import ui.presentation.changePassword.ChangePasswordScreenComponent
 import ui.presentation.createRoom.CreateRoomScreenComponent
-import ui.presentation.createUser.CreateUserViewModel
-import ui.presentation.forgotPassword.ForgotPasswordScreenComponent
+import ui.presentation.createUser.CreateUserComponent
 import ui.presentation.home.HomeScreenComponent
 import ui.presentation.joinRoom.JoinScreenComponent
 import ui.presentation.paywall.PaywallScreenViewModel
@@ -58,28 +53,12 @@ class RootComponent(
     private val coroutineScope = componentContext.componentCoroutineScope()
 
     /** Use Cases */
-    private val supabaseAuthService by inject<SupabaseAuthService>()
-    private val getUserByIdUseCase by inject<GetUserByIdUseCase>()
+    private val getSignedInUserUseCase by inject<GetSignedInUserUseCase>()
     private val subscribeToUserSubscriptionData by inject<SubscribeToUserSubscriptionData>()
-    private val observeUserUseCase by inject<ObserveUserUseCase>()
-
-    /** Supabase Client */
-    private val _supabaseClient = supabaseAuthService.supabaseClient
-
-    /** Session Status Flow */
-    private val _sessionStatus = _supabaseClient.auth.sessionStatus
+    private val getSignedInUser by inject<GetSignedInUserUseCase>()
 
     /** Current signed in user */
-    private val _user = _sessionStatus.map { status ->
-        when (status) {
-            is SessionStatus.Authenticated -> {
-                val authInfo = status.session.user
-                getUserByIdUseCase(authInfo?.id.orEmpty()).getOrNull()
-            }
-
-            else -> null
-        }
-    }
+    private val _user = getSignedInUserUseCase()
 
     /** Decompose Navigation Manager */
     private val navigation = StackNavigation<Configuration>()
@@ -94,32 +73,32 @@ class RootComponent(
     )
 
     init {
-        /** RevenueCat Setup */
         coroutineScope.launch {
+            /** RevenueCat Setup */
             Purchases.logLevel = LogLevel.DEBUG
             Purchases.configure(apiKey = getPlatform().revCatApiKey)
             subscribeToUserSubscriptionData.setupDelegate()
 
-            _user.filterNotNull().distinctUntilChanged().collect { collectedUser ->
-                Purchases.sharedInstance.logIn(
-                    newAppUserID = collectedUser.id,
-                    onError = {},
-                    onSuccess = { customerInfo: CustomerInfo, b: Boolean -> }
-                )
+            _user.filterNotNull().distinctUntilChanged().collect { resource ->
+                if (resource is Resource.Success) {
+                    Purchases.sharedInstance.logIn(
+                        newAppUserID = resource.data.id,
+                        onError = {},
+                        onSuccess = { customerInfo: CustomerInfo, b: Boolean -> }
+                    )
+                }
             }
         }
     }
 
     /** Globally handles navigation for Sign In and Sign Out authentication methods */
-    private fun navigateAfterSignIn(userId: String?) {
+    private fun navigateAfterSignIn() {
         coroutineScope.launch {
-            userId?.let {
-                observeUserUseCase(it).collect { user ->
-                    if (user == null) {
-                        navigation.replaceCurrent(Configuration.CreateUserScreen)
-                    } else {
-                        navigation.replaceCurrent(Configuration.HomeScreen)
-                    }
+            getSignedInUser().collect { user ->
+                if (user == null) {
+                    navigation.replaceCurrent(Configuration.CreateUserScreen)
+                } else {
+                    navigation.replaceCurrent(Configuration.HomeScreen)
                 }
             }
         }
@@ -154,7 +133,6 @@ class RootComponent(
             is Configuration.CreateScreen -> Child.CreateScreen(
                 CreateRoomScreenComponent(
                     componentContext = context,
-                    user = _user,
                     bingoType = configuration.bingoType,
                     onPopBack = { navigation.pop() },
                     onCreateRoom = { receivedConfig ->
@@ -183,8 +161,7 @@ class RootComponent(
                 RoomPlayerViewModel(
                     componentContext = context,
                     onPopBack = { navigation.pop() },
-                    roomId = configuration.roomId,
-                    user = _user
+                    roomId = configuration.roomId
                 )
             )
 
@@ -192,15 +169,13 @@ class RootComponent(
                 RoomPlayerViewModel(
                     componentContext = context,
                     roomId = configuration.roomId,
-                    onPopBack = { navigation.pop() },
-                    user = _user
+                    onPopBack = { navigation.pop() }
                 )
             )
 
             is Configuration.JoinScreen -> JoinScreen(
                 JoinScreenComponent(
                     componentContext = context,
-                    user = _user,
                     bingoType = configuration.bingoType,
                     onPopBack = { navigation.pop() },
                     onJoinRoom = { config -> navigation.replaceCurrent(configuration = config) },
@@ -218,7 +193,6 @@ class RootComponent(
             Configuration.ProfileScreen -> ProfileScreen(
                 ProfileScreenComponent(
                     componentContext = context,
-                    user = _user,
                     onPopBack = { navigation.pop() },
                     onSignOut = { navigateAfterSignOut() }
                 )
@@ -227,21 +201,7 @@ class RootComponent(
             Configuration.SignInScreen -> SignInScreen(
                 SignInScreenComponent(
                     componentContext = context,
-                    onSignIn = { userId -> navigateAfterSignIn(userId) }
-                )
-            )
-
-            Configuration.ForgotPasswordScreen -> ForgotPasswordScreen(
-                ForgotPasswordScreenComponent(
-                    componentContext = context,
-                    onPopBack = { navigation.pop() }
-                )
-            )
-
-            Configuration.ChangePasswordScreen -> ChangePasswordScreen(
-                ChangePasswordScreenComponent(
-                    componentContext = context,
-                    onPopBack = { navigation.pop() }
+                    onSignIn = { userId -> navigateAfterSignIn() }
                 )
             )
 
@@ -253,7 +213,7 @@ class RootComponent(
             )
 
             is Configuration.CreateUserScreen -> CreateUserScreen(
-                CreateUserViewModel(
+                CreateUserComponent(
                     componentContext = context,
                     onSignOut = { navigation.replaceAll(Configuration.SignInScreen) },
                     onUserCreated = { navigation.pushNew(Configuration.HomeScreen) }
@@ -263,7 +223,7 @@ class RootComponent(
             is Configuration.SplashScreen -> SplashScreen(
                 SplashScreenComponent(
                     componentContext = context,
-                    onSignedIn = { userId -> navigateAfterSignIn(userId) },
+                    onSignedIn = { navigateAfterSignIn() },
                     onNotSignedIn = { navigation.replaceAll(Configuration.SignInScreen) }
                 )
             )

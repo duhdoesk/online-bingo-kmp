@@ -41,7 +41,7 @@ import themedbingo.composeapp.generated.resources.themed_bingo_desc
 import themedbingo.composeapp.generated.resources.vip_description
 import themedbingo.composeapp.generated.resources.vip_pass
 import ui.navigation.Configuration
-import ui.presentation.common.components.NoPictureHWBanner
+import ui.presentation.core.NoPictureHWBanner
 import ui.presentation.home.HomeScreenUIState
 import ui.presentation.home.screens.component.BingoTypeCard
 import ui.presentation.home.screens.component.HomeScreenTopBar

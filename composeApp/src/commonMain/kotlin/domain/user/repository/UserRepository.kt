@@ -1,20 +1,20 @@
 package domain.user.repository
 
 import domain.user.model.User
+import domain.util.resource.Resource
 import kotlinx.coroutines.flow.Flow
 
 interface UserRepository {
-    suspend fun createUser(
+    fun createUser(
         id: String,
         email: String,
         name: String,
         pictureUri: String,
-        victoryMessage: String
-    ): Result<Unit>
+        message: String
+    ): Flow<Resource<Unit>>
 
-    suspend fun getUserById(id: String): Result<User?>
-
-    fun observeUser(id: String): Flow<User?>
+    fun getSignedInUser(): Flow<Resource<User>>
+    fun getUserById(id: String): Flow<Resource<User>>
     fun getListOfUsers(ids: List<String>): Flow<List<User>>
 
     suspend fun setUser(id: String, user: User)

@@ -21,7 +21,7 @@ import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.stringResource
 import themedbingo.composeapp.generated.resources.Res
 import themedbingo.composeapp.generated.resources.winners
-import ui.presentation.common.components.SingleButtonRow
+import ui.presentation.core.SingleButtonRow
 import ui.presentation.room.event.RoomPlayerEvent
 import ui.presentation.room.screens.component.WinnerCard
 import ui.presentation.util.getRandomLightColor

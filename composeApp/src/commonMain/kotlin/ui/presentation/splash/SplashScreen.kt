@@ -21,8 +21,8 @@ import org.jetbrains.compose.ui.tooling.preview.Preview
 import themedbingo.composeapp.generated.resources.Res
 import themedbingo.composeapp.generated.resources.bg_splash
 import themedbingo.composeapp.generated.resources.getting_things_done
+import ui.presentation.core.text.OutlinedShadowedText
 import ui.presentation.splash.component.LoadingBar
-import ui.presentation.util.OutlinedShadowedText
 import ui.theme.AppTheme
 
 @Composable
