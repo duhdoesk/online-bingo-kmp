@@ -37,8 +37,8 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
+import domain.feature.user.model.User
 import domain.profilePictures.ProfilePictures
-import domain.user.model.User
 import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.stringResource
@@ -159,7 +159,7 @@ fun PortraitProfileScreen(
                 ProfileScreenStringDataSection(
                     label = Res.string.nickname,
                     data = user.name,
-                    lastEditTimestamp = user.nameLastUpdated,
+                    lastEditTimestamp = user.nameUpdatedAt,
                     editable = true, // todo(): boolean logic datetime
                     onEdit = { updateNameVisible = true },
                     modifier = Modifier.fillMaxWidth()
@@ -170,7 +170,7 @@ fun PortraitProfileScreen(
                 ProfileScreenStringDataSection(
                     label = Res.string.victory_message,
                     data = user.victoryMessage,
-                    lastEditTimestamp = user.victoryMessageLastUpdated,
+                    lastEditTimestamp = user.victoryMessageUpdatedAt,
                     editable = true, // todo(): boolean logic datetime
                     onEdit = { updateMessageVisible = true },
                     modifier = Modifier.fillMaxWidth()

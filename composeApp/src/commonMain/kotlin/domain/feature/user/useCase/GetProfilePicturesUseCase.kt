@@ -1,4 +1,4 @@
-package domain.user.useCase
+package domain.feature.user.useCase
 
 import domain.character.useCase.ObserveThemeCharacters
 import domain.profilePictures.ProfilePictures

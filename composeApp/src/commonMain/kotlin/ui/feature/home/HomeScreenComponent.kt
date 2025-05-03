@@ -4,7 +4,7 @@ import com.arkivanov.decompose.ComponentContext
 import domain.audio.AudioPlayer
 import domain.audio.SPLASHING_AROUND
 import domain.billing.hasActiveEntitlements
-import domain.user.useCase.GetSignedInUserUseCase
+import domain.feature.user.useCase.GetCurrentUserUseCase
 import domain.util.resource.Resource
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.delay
@@ -29,7 +29,7 @@ class HomeScreenComponent(
 
     private val coroutineScope = componentCoroutineScope()
     private val audioPlayer: AudioPlayer by inject()
-    private val getSignedInUser: GetSignedInUserUseCase by inject()
+    private val getSignedInUser: GetCurrentUserUseCase by inject()
 
     @OptIn(ExperimentalCoroutinesApi::class)
     val uiState: StateFlow<HomeScreenUIState> = getSignedInUser()

@@ -1,6 +1,6 @@
 package data.theme.repository
 
-import data.network.apiCall
+import data.firebase.firebaseSuspendCall
 import data.theme.model.BingoThemeDTO
 import dev.gitlive.firebase.firestore.DocumentSnapshot
 import dev.gitlive.firebase.firestore.FirebaseFirestore
@@ -67,7 +67,7 @@ class BingoThemeRepositoryImpl(
         picture: String,
         available: Boolean
     ): Flow<Resource<String>> {
-        return apiCall {
+        return firebaseSuspendCall {
             collection.add(
                 data = hashMapOf(
                     "name" to name,

@@ -1,10 +1,12 @@
 package ui.feature.createUser
 
-import androidx.compose.ui.text.intl.Locale
 import com.arkivanov.decompose.ComponentContext
 import domain.feature.auth.useCase.SignOutUseCase
-import domain.user.useCase.CreateUserUseCase
-import domain.user.useCase.GetProfilePicturesUseCase
+import domain.feature.user.model.getLocalizedMessage
+import domain.feature.user.model.getLocalizedName
+import domain.feature.user.model.getRandomPictureUri
+import domain.feature.user.useCase.CreateUserUseCase
+import domain.feature.user.useCase.GetProfilePicturesUseCase
 import domain.util.resource.Resource
 import io.github.jan.supabase.SupabaseClient
 import io.github.jan.supabase.auth.auth
@@ -159,38 +161,5 @@ class CreateUserComponent(
     private fun canProceed(name: String, message: String): Boolean {
         val lengths = listOf(name.length, message.length)
         return (lengths.min() >= 3)
-    }
-
-    private fun getLocalizedName(): String {
-        return if (Locale.current.language.contains("pt")) {
-            "Amigo Temático"
-        } else {
-            "Bingo Friend"
-        }
-    }
-
-    private fun getLocalizedMessage(): String {
-        return if (Locale.current.language.contains("pt")) {
-            "O Bingo Temático é demais!"
-        } else {
-            "Themed Bingo is awesome!"
-        }
-    }
-
-    private fun getRandomPictureUri(): String {
-        val possibilities = listOf(
-            "https://i.imgur.com/LGISH8Q.jpg", // hypo
-            "https://i.imgur.com/zkYnGof.jpg", // koala
-            "https://i.imgur.com/hbEhtXV.jpg", // jellyfish
-            "https://i.imgur.com/K71gi6P.jpg", // fox
-            "https://i.imgur.com/OzLeMBg.jpg", // penguin
-            "https://i.imgur.com/c5H2Pqx.jpg", // lion
-            "https://i.imgur.com/x1FA3r1.jpg", // flamingo
-            "https://i.imgur.com/DujcYDE.jpg", // tigress
-            "https://i.imgur.com/2W2zDVt.jpg", // owl
-            "https://i.imgur.com/3iHYtJJ.jpg" // horse
-        )
-
-        return possibilities.shuffled().first()
     }
 }

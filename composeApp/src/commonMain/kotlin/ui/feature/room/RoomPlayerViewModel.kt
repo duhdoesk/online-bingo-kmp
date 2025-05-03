@@ -3,13 +3,13 @@ package ui.feature.room
 import com.arkivanov.decompose.ComponentContext
 import domain.card.useCase.FlowCardByRoomAndUserIDUseCase
 import domain.card.useCase.SetCardByRoomAndUserIDUseCase
+import domain.feature.user.model.User
+import domain.feature.user.useCase.GetCurrentUserUseCase
+import domain.feature.user.useCase.GetRoomPlayersUseCase
 import domain.room.model.BingoType
 import domain.room.useCase.CallBingoUseCase
 import domain.room.useCase.FlowRoomByIdUseCase
 import domain.room.useCase.GetBingoStyleUseCase
-import domain.user.model.User
-import domain.user.useCase.GetRoomPlayersUseCase
-import domain.user.useCase.GetSignedInUserUseCase
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
@@ -47,7 +47,7 @@ class RoomPlayerViewModel(
     private val getRoomPlayersUseCase by inject<GetRoomPlayersUseCase>()
     private val flowCardByRoomAndUserIDUseCase by inject<FlowCardByRoomAndUserIDUseCase>()
     private val getBingoStyleUseCase: GetBingoStyleUseCase by inject()
-    private val getSignedInUserUseCase: GetSignedInUserUseCase by inject()
+    private val getCurrentUserUseCase: GetCurrentUserUseCase by inject()
 
     /**
      * Action Use Cases

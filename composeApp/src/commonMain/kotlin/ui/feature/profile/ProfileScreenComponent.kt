@@ -3,12 +3,12 @@ package ui.feature.profile
 import com.arkivanov.decompose.ComponentContext
 import domain.audio.AudioPlayer
 import domain.feature.auth.useCase.SignOutUseCase
-import domain.user.useCase.DeleteUserUseCase
-import domain.user.useCase.GetProfilePicturesUseCase
-import domain.user.useCase.GetSignedInUserUseCase
-import domain.user.useCase.UpdateNameUseCase
-import domain.user.useCase.UpdateUserPictureUseCase
-import domain.user.useCase.UpdateVictoryMessageUseCase
+import domain.feature.user.useCase.DeleteUserUseCase
+import domain.feature.user.useCase.GetCurrentUserUseCase
+import domain.feature.user.useCase.GetProfilePicturesUseCase
+import domain.feature.user.useCase.UpdateUserNameUseCase
+import domain.feature.user.useCase.UpdateUserPictureUseCase
+import domain.feature.user.useCase.UpdateUserVictoryMessageUseCase
 import domain.util.resource.Resource
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -49,12 +49,12 @@ class ProfileScreenComponent(
     /**
      * Action Use Cases
      */
-    private val getSignedInUserUseCase by inject<GetSignedInUserUseCase>()
+    private val getCurrentUserUseCase by inject<GetCurrentUserUseCase>()
     private val signOutUseCase by inject<SignOutUseCase>()
-    private val updateNameUseCase by inject<UpdateNameUseCase>()
-    private val updateVictoryMessageUseCase by inject<UpdateVictoryMessageUseCase>()
+    private val updateUserNameUseCase by inject<UpdateUserNameUseCase>()
+    private val updateUserVictoryMessageUseCase by inject<UpdateUserVictoryMessageUseCase>()
     private val deleteUserUseCase by inject<DeleteUserUseCase>()
-    private val updatePictureUseCase: UpdateUserPictureUseCase by inject()
+    private val updateUserPictureUseCase: UpdateUserPictureUseCase by inject()
 
     /**
      * UI State Use Cases
@@ -94,7 +94,7 @@ class ProfileScreenComponent(
      */
     private fun uiLoaded() {
         coroutineScope.launch {
-            combine(getSignedInUserUseCase(), getProfilePicturesUseCase()) { collectedUser, pics ->
+            combine(getCurrentUserUseCase(), getProfilePicturesUseCase()) { collectedUser, pics ->
                 val uiState = when (collectedUser) {
                     is Resource.Success -> {
                         ProfileScreenUIState(
@@ -170,7 +170,7 @@ class ProfileScreenComponent(
             if (currentPictureUri == newPictureUri) return@launch
 
             uiState.value.user?.run {
-                updatePictureUseCase(
+                updateUserPictureUseCase(
                     userId = id,
                     pictureUri = newPictureUri
                 ).onFailure { errorDialogState.showDialog(Res.string.unmapped_error) }
@@ -182,7 +182,7 @@ class ProfileScreenComponent(
     private fun updateName(newName: String) {
         uiState.value.user?.run {
             coroutineScope.launch {
-                updateNameUseCase.invoke(
+                updateUserNameUseCase.invoke(
                     userId = id,
                     newName = newName
                 ).onFailure { errorDialogState.showDialog(Res.string.update_nickname_failure) }
@@ -194,7 +194,7 @@ class ProfileScreenComponent(
     private fun updateMessage(newVictoryMessage: String) {
         uiState.value.user?.run {
             coroutineScope.launch {
-                updateVictoryMessageUseCase.invoke(
+                updateUserVictoryMessageUseCase.invoke(
                     userId = id,
                     newVictoryMessage = newVictoryMessage
                 ).onFailure { errorDialogState.showDialog(Res.string.update_victory_failure) }

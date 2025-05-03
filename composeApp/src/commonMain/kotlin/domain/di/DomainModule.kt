@@ -2,9 +2,9 @@ package domain.di
 
 import data.card.repository.CardRepositoryImpl
 import data.character.repository.CharacterRepositoryImpl
+import data.feature.user.UserRepositoryImpl
 import data.room.repository.BingoRoomRepositoryImpl
 import data.theme.repository.BingoThemeRepositoryImpl
-import data.user.repository.UserRepositoryImpl
 import domain.billing.SubscribeToUserSubscriptionData
 import domain.card.repository.CardRepository
 import domain.card.useCase.FlowCardByRoomAndUserIDUseCase
@@ -16,6 +16,16 @@ import domain.character.useCase.ObserveThemeCharacters
 import domain.feature.auth.useCase.GetSessionInfoUseCase
 import domain.feature.auth.useCase.GetSessionStatusUseCase
 import domain.feature.auth.useCase.SignOutUseCase
+import domain.feature.user.UserRepository
+import domain.feature.user.useCase.CreateUserUseCase
+import domain.feature.user.useCase.DeleteUserUseCase
+import domain.feature.user.useCase.GetCurrentUserUseCase
+import domain.feature.user.useCase.GetProfilePicturesUseCase
+import domain.feature.user.useCase.GetRoomPlayersUseCase
+import domain.feature.user.useCase.GetUserByIdUseCase
+import domain.feature.user.useCase.UpdateUserNameUseCase
+import domain.feature.user.useCase.UpdateUserPictureUseCase
+import domain.feature.user.useCase.UpdateUserVictoryMessageUseCase
 import domain.room.repository.BingoRoomRepository
 import domain.room.useCase.CallBingoUseCase
 import domain.room.useCase.CreateRoomUseCase
@@ -35,17 +45,6 @@ import domain.theme.useCase.GetAllThemesUseCase
 import domain.theme.useCase.GetRoomThemeUseCase
 import domain.theme.useCase.GetThemeByIdUseCase
 import domain.theme.useCase.ObserveAvailableThemes
-import domain.user.repository.UserRepository
-import domain.user.useCase.CheckIfIsNewUserUseCase
-import domain.user.useCase.CreateUserUseCase
-import domain.user.useCase.DeleteUserUseCase
-import domain.user.useCase.GetProfilePicturesUseCase
-import domain.user.useCase.GetRoomPlayersUseCase
-import domain.user.useCase.GetSignedInUserUseCase
-import domain.user.useCase.GetUserByIdUseCase
-import domain.user.useCase.UpdateNameUseCase
-import domain.user.useCase.UpdateUserPictureUseCase
-import domain.user.useCase.UpdateVictoryMessageUseCase
 import org.koin.dsl.module
 
 val domainModule = module {
@@ -91,16 +90,15 @@ val domainModule = module {
 
 //    User
     single<UserRepository> { UserRepositoryImpl(get(), get()) }
-    single<GetSignedInUserUseCase> { GetSignedInUserUseCase(get()) }
+    single<GetCurrentUserUseCase> { GetCurrentUserUseCase(get()) }
     single<GetUserByIdUseCase> { GetUserByIdUseCase(get()) }
-    single<UpdateNameUseCase> { UpdateNameUseCase(get()) }
-    single<UpdateVictoryMessageUseCase> { UpdateVictoryMessageUseCase(get()) }
+    single<UpdateUserNameUseCase> { UpdateUserNameUseCase(get()) }
+    single<UpdateUserVictoryMessageUseCase> { UpdateUserVictoryMessageUseCase(get()) }
     single<UpdateUserPictureUseCase> { UpdateUserPictureUseCase(get()) }
     single<GetProfilePicturesUseCase> { GetProfilePicturesUseCase(get(), get()) }
     single<GetRoomPlayersUseCase> { GetRoomPlayersUseCase(get(), get()) }
     single<CreateUserUseCase> { CreateUserUseCase(get()) }
     single<DeleteUserUseCase> { DeleteUserUseCase(get()) }
-    single<CheckIfIsNewUserUseCase> { CheckIfIsNewUserUseCase(get()) }
 
 //    Audio
     includes(audioModule)

@@ -1,14 +1,14 @@
 package ui.feature.room
 
 import com.arkivanov.decompose.ComponentContext
+import domain.feature.user.model.User
+import domain.feature.user.useCase.GetRoomPlayersUseCase
+import domain.feature.user.useCase.GetUserByIdUseCase
 import domain.room.model.RoomState
 import domain.room.useCase.FlowRoomByIdUseCase
 import domain.room.useCase.GetBingoStyleUseCase
 import domain.room.useCase.RaffleNextItemUseCase
 import domain.room.useCase.UpdateRoomStateUseCase
-import domain.user.model.User
-import domain.user.useCase.GetRoomPlayersUseCase
-import domain.user.useCase.GetUserByIdUseCase
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow

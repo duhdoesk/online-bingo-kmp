@@ -1,7 +1,7 @@
 package data.character.repository
 
 import data.character.model.CharacterDTO
-import data.network.apiCall
+import data.firebase.firebaseSuspendCall
 import dev.gitlive.firebase.firestore.DocumentSnapshot
 import dev.gitlive.firebase.firestore.FirebaseFirestore
 import dev.gitlive.firebase.firestore.QuerySnapshot
@@ -52,7 +52,7 @@ class CharacterRepositoryImpl(
         nameSpanish: String,
         picture: String
     ): Flow<Resource<Unit>> {
-        return apiCall {
+        return firebaseSuspendCall {
             collection
                 .document(themeId)
                 .collection("characters")

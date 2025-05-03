@@ -14,7 +14,7 @@ import com.revenuecat.purchases.kmp.LogLevel
 import com.revenuecat.purchases.kmp.Purchases
 import com.revenuecat.purchases.kmp.configure
 import domain.billing.SubscribeToUserSubscriptionData
-import domain.user.useCase.GetSignedInUserUseCase
+import domain.feature.user.useCase.GetCurrentUserUseCase
 import domain.util.resource.Resource
 import getPlatform
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -53,12 +53,12 @@ class RootComponent(
     private val coroutineScope = componentContext.componentCoroutineScope()
 
     /** Use Cases */
-    private val getSignedInUserUseCase by inject<GetSignedInUserUseCase>()
+    private val getCurrentUserUseCase by inject<GetCurrentUserUseCase>()
     private val subscribeToUserSubscriptionData by inject<SubscribeToUserSubscriptionData>()
-    private val getSignedInUser by inject<GetSignedInUserUseCase>()
+    private val getSignedInUser by inject<GetCurrentUserUseCase>()
 
     /** Current signed in user */
-    private val _user = getSignedInUserUseCase()
+    private val _user = getCurrentUserUseCase()
 
     /** Decompose Navigation Manager */
     private val navigation = StackNavigation<Configuration>()

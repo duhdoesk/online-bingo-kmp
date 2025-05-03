@@ -1,6 +1,6 @@
-package domain.user.useCase
+package domain.feature.user.useCase
 
-import domain.user.repository.UserRepository
+import domain.feature.user.UserRepository
 import domain.util.resource.Resource
 import kotlinx.coroutines.flow.Flow
 

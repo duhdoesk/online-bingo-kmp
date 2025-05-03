@@ -1,11 +1,11 @@
 package ui.feature.createRoom
 
 import com.arkivanov.decompose.ComponentContext
+import domain.feature.user.useCase.GetCurrentUserUseCase
 import domain.room.model.BingoType
 import domain.room.useCase.CreateRoomUseCase
 import domain.theme.model.BingoTheme
 import domain.theme.useCase.ObserveAvailableThemes
-import domain.user.useCase.GetSignedInUserUseCase
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.asStateFlow
@@ -44,7 +44,7 @@ class CreateRoomScreenComponent(
      */
     private val createRoomUseCase by inject<CreateRoomUseCase>()
     private val observeAvailableThemes: ObserveAvailableThemes by inject()
-    private val getSignedInUserUseCase: GetSignedInUserUseCase by inject()
+    private val getCurrentUserUseCase: GetCurrentUserUseCase by inject()
 
     /**
      * Modal visibility holders
@@ -203,7 +203,7 @@ class CreateRoomScreenComponent(
 
     private fun createRoom() {
         coroutineScope.launch {
-            getSignedInUserUseCase().collect { collectedUser ->
+            getCurrentUserUseCase().collect { collectedUser ->
                 uiState.value.run {
                     createRoomUseCase(
                         hostId = collectedUser.getOrNull()?.id ?: "",

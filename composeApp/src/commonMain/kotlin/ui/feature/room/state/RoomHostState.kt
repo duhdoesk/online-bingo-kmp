@@ -1,6 +1,6 @@
 package ui.feature.room.state
 
-import domain.user.model.User
+import domain.feature.user.model.User
 import ui.feature.room.state.auxiliar.BingoState
 import ui.feature.room.state.auxiliar.BingoStyle
 import ui.feature.room.state.auxiliar.DataState
