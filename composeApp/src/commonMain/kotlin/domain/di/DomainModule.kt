@@ -1,19 +1,10 @@
 package domain.di
 
-import data.auth.AuthServiceImpl
-import data.auth.supabase.SupabaseAuthServiceImpl
 import data.card.repository.CardRepositoryImpl
 import data.character.repository.CharacterRepositoryImpl
 import data.room.repository.BingoRoomRepositoryImpl
 import data.theme.repository.BingoThemeRepositoryImpl
 import data.user.repository.UserRepositoryImpl
-import domain.auth.AuthService
-import domain.auth.supabase.SupabaseAuthService
-import domain.auth.supabase.useCase.SupabaseDeleteAccountUseCase
-import domain.auth.supabase.useCase.SupabaseSignOutUseCase
-import domain.auth.useCase.ChangePasswordWithReAuthenticationUseCase
-import domain.auth.useCase.DeleteAccountUseCase
-import domain.auth.useCase.SignOutUseCase
 import domain.billing.SubscribeToUserSubscriptionData
 import domain.card.repository.CardRepository
 import domain.card.useCase.FlowCardByRoomAndUserIDUseCase
@@ -22,6 +13,9 @@ import domain.character.repository.CharacterRepository
 import domain.character.useCase.GetRoomCharacters
 import domain.character.useCase.GetThemeCharacters
 import domain.character.useCase.ObserveThemeCharacters
+import domain.feature.auth.useCase.GetSessionInfoUseCase
+import domain.feature.auth.useCase.GetSessionStatusUseCase
+import domain.feature.auth.useCase.SignOutUseCase
 import domain.room.repository.BingoRoomRepository
 import domain.room.useCase.CallBingoUseCase
 import domain.room.useCase.CreateRoomUseCase
@@ -55,6 +49,11 @@ import domain.user.useCase.UpdateVictoryMessageUseCase
 import org.koin.dsl.module
 
 val domainModule = module {
+
+    /** Authentication */
+    factory { GetSessionInfoUseCase(get()) }
+    factory { GetSessionStatusUseCase(get()) }
+    factory { SignOutUseCase(get()) }
 
 //    Card
     single<CardRepository> { CardRepositoryImpl(get()) }
@@ -105,17 +104,6 @@ val domainModule = module {
 
 //    Audio
     includes(audioModule)
-
-//    Auth
-    single<AuthService> { AuthServiceImpl(get()) }
-    single<DeleteAccountUseCase> { DeleteAccountUseCase(get()) }
-    single<SignOutUseCase> { SignOutUseCase(get()) }
-    single<ChangePasswordWithReAuthenticationUseCase> { ChangePasswordWithReAuthenticationUseCase(get()) }
-
-//    Supabase Auth
-    single<SupabaseAuthService> { SupabaseAuthServiceImpl(get()) }
-    single<SupabaseSignOutUseCase> { SupabaseSignOutUseCase(get()) }
-    single<SupabaseDeleteAccountUseCase> { SupabaseDeleteAccountUseCase(get()) }
 
 //    Billing
     single<SubscribeToUserSubscriptionData> { SubscribeToUserSubscriptionData() }

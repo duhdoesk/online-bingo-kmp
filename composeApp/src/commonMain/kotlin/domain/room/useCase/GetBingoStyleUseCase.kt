@@ -3,7 +3,7 @@ package domain.room.useCase
 import domain.character.useCase.GetThemeCharacters
 import domain.room.model.BingoType
 import domain.theme.useCase.GetThemeByIdUseCase
-import ui.presentation.room.state.auxiliar.BingoStyle
+import ui.feature.room.state.auxiliar.BingoStyle
 
 class GetBingoStyleUseCase(
     private val getThemeByIdUseCase: GetThemeByIdUseCase,

@@ -60,13 +60,13 @@
     "sourceSetName": "iosMain"
   },
   {
-    "moduleId": "io.ktor:ktor-utils:3.1.1",
-    "file": "/Users/eduardotessmer/StudioProjects/Themed Bingo Multiplatform/.kotlin/metadata/kotlinTransformedCInteropMetadataLibraries/io.ktor-ktor-utils-3.1.1-iosMain-cinterop/io.ktor_ktor-utils-cinterop-threadUtils-KiCD0Q.klib",
+    "moduleId": "io.ktor:ktor-utils:3.1.2",
+    "file": "/Users/eduardotessmer/StudioProjects/Themed Bingo Multiplatform/.kotlin/metadata/kotlinTransformedCInteropMetadataLibraries/io.ktor-ktor-utils-3.1.2-iosMain-cinterop/io.ktor_ktor-utils-cinterop-threadUtils-2o6n3Q.klib",
     "sourceSetName": "iosMain"
   },
   {
-    "moduleId": "io.ktor:ktor-io:3.1.1",
-    "file": "/Users/eduardotessmer/StudioProjects/Themed Bingo Multiplatform/.kotlin/metadata/kotlinTransformedCInteropMetadataLibraries/io.ktor-ktor-io-3.1.1-iosMain-cinterop/io.ktor_ktor-io-cinterop-mutex-VebtWA.klib",
+    "moduleId": "io.ktor:ktor-io:3.1.2",
+    "file": "/Users/eduardotessmer/StudioProjects/Themed Bingo Multiplatform/.kotlin/metadata/kotlinTransformedCInteropMetadataLibraries/io.ktor-ktor-io-3.1.2-iosMain-cinterop/io.ktor_ktor-io-cinterop-mutex-2zP3yA.klib",
     "sourceSetName": "iosMain"
   },
   {

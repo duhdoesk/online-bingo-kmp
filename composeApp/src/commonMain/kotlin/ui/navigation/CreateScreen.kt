@@ -3,18 +3,18 @@ package ui.navigation
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
 import org.jetbrains.compose.resources.ExperimentalResourceApi
-import ui.presentation.createRoom.CreateRoomScreen
-import ui.presentation.createUser.CreateUserScreen
-import ui.presentation.home.HomeScreen
-import ui.presentation.joinRoom.JoinScreen
-import ui.presentation.paywall.PaywallScreen
-import ui.presentation.profile.ProfileScreen
-import ui.presentation.room.screens.host.HostScreen
-import ui.presentation.room.screens.player.PlayerScreen
-import ui.presentation.signIn.SignInScreen
-import ui.presentation.splash.SplashScreen
-import ui.presentation.themes.ThemesScreen
-import ui.presentation.util.WindowInfo
+import ui.feature.createRoom.CreateRoomScreen
+import ui.feature.createUser.CreateUserScreen
+import ui.feature.home.HomeScreen
+import ui.feature.joinRoom.JoinScreen
+import ui.feature.paywall.PaywallScreen
+import ui.feature.profile.ProfileScreen
+import ui.feature.room.screens.host.HostScreen
+import ui.feature.room.screens.player.PlayerScreen
+import ui.feature.signIn.SignInScreen
+import ui.feature.splash.SplashScreen
+import ui.feature.themes.ThemesScreen
+import ui.util.WindowInfo
 
 @ExperimentalResourceApi
 @OptIn(ExperimentalMaterial3Api::class)

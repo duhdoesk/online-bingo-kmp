@@ -23,6 +23,17 @@ import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.launch
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
+import ui.feature.createRoom.CreateRoomScreenComponent
+import ui.feature.createUser.CreateUserComponent
+import ui.feature.home.HomeScreenComponent
+import ui.feature.joinRoom.JoinScreenComponent
+import ui.feature.paywall.PaywallScreenViewModel
+import ui.feature.profile.ProfileScreenComponent
+import ui.feature.room.RoomHostViewModel
+import ui.feature.room.RoomPlayerViewModel
+import ui.feature.signIn.SignInScreenComponent
+import ui.feature.splash.SplashScreenComponent
+import ui.feature.themes.ThemesScreenComponent
 import ui.navigation.Child.CreateUserScreen
 import ui.navigation.Child.HomeScreen
 import ui.navigation.Child.HostScreen
@@ -33,17 +44,6 @@ import ui.navigation.Child.ProfileScreen
 import ui.navigation.Child.SignInScreen
 import ui.navigation.Child.SplashScreen
 import ui.navigation.Child.ThemesScreen
-import ui.presentation.createRoom.CreateRoomScreenComponent
-import ui.presentation.createUser.CreateUserComponent
-import ui.presentation.home.HomeScreenComponent
-import ui.presentation.joinRoom.JoinScreenComponent
-import ui.presentation.paywall.PaywallScreenViewModel
-import ui.presentation.profile.ProfileScreenComponent
-import ui.presentation.room.RoomHostViewModel
-import ui.presentation.room.RoomPlayerViewModel
-import ui.presentation.signIn.SignInScreenComponent
-import ui.presentation.splash.SplashScreenComponent
-import ui.presentation.themes.ThemesScreenComponent
 import util.componentCoroutineScope
 
 class RootComponent(
@@ -118,7 +118,6 @@ class RootComponent(
                 HomeScreenComponent(
                     componentContext = context,
                     onNavigate = { config -> navigation.pushNew(configuration = config) },
-                    onUserNotAuthenticated = { navigation.replaceAll(Configuration.SignInScreen) },
                     onUserNotCreated = { navigation.replaceAll(Configuration.CreateUserScreen) }
                 )
             )

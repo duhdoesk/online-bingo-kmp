@@ -1,16 +1,16 @@
 package ui.navigation
 
-import ui.presentation.createRoom.CreateRoomScreenComponent
-import ui.presentation.createUser.CreateUserComponent
-import ui.presentation.home.HomeScreenComponent
-import ui.presentation.joinRoom.JoinScreenComponent
-import ui.presentation.paywall.PaywallScreenViewModel
-import ui.presentation.profile.ProfileScreenComponent
-import ui.presentation.room.RoomHostViewModel
-import ui.presentation.room.RoomPlayerViewModel
-import ui.presentation.signIn.SignInScreenComponent
-import ui.presentation.splash.SplashScreenComponent
-import ui.presentation.themes.ThemesScreenComponent
+import ui.feature.createRoom.CreateRoomScreenComponent
+import ui.feature.createUser.CreateUserComponent
+import ui.feature.home.HomeScreenComponent
+import ui.feature.joinRoom.JoinScreenComponent
+import ui.feature.paywall.PaywallScreenViewModel
+import ui.feature.profile.ProfileScreenComponent
+import ui.feature.room.RoomHostViewModel
+import ui.feature.room.RoomPlayerViewModel
+import ui.feature.signIn.SignInScreenComponent
+import ui.feature.splash.SplashScreenComponent
+import ui.feature.themes.ThemesScreenComponent
 
 sealed class Child {
     data class CreateScreen(val component: CreateRoomScreenComponent) : Child()

@@ -9,13 +9,11 @@ import data.user.model.UserDTO
 import data.user.model.toUserDTO
 import dev.gitlive.firebase.firestore.FirebaseFirestore
 import dev.gitlive.firebase.firestore.Timestamp
-import domain.auth.supabase.SupabaseAuthService
+import domain.feature.auth.useCase.GetSessionInfoUseCase
 import domain.user.model.User
 import domain.user.repository.UserRepository
 import domain.util.resource.Cause
 import domain.util.resource.Resource
-import io.github.jan.supabase.auth.auth
-import io.github.jan.supabase.auth.status.SessionStatus
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flatMapLatest
@@ -24,29 +22,26 @@ import kotlinx.coroutines.flow.map
 
 class UserRepositoryImpl(
     firestore: FirebaseFirestore,
-    supabaseAuthService: SupabaseAuthService
+    private val getSessionInfoUseCase: GetSessionInfoUseCase
 ) : UserRepository {
 
     private val collection = firestore.collection("users")
-    private val supabaseClient = supabaseAuthService.supabaseClient
 
     override fun getSignedInUser(): Flow<Resource<User>> {
-        return supabaseClient
-            .auth
-            .sessionStatus
-            .flatMapLatest { sessionStatus ->
-                when (sessionStatus) {
-                    is SessionStatus.Authenticated -> {
+        return getSessionInfoUseCase()
+            .flatMapLatest { resource ->
+                when (resource) {
+                    is Resource.Success -> {
                         flowApiCall {
                             collection
-                                .document(sessionStatus.session.user?.id.orEmpty())
+                                .document(resource.data.id)
                                 .snapshots
                                 .map { it.toUserDTO().toModel() }
                         }
                             .map { it.toResource { it } }
                     }
 
-                    else -> {
+                    is Resource.Failure -> {
                         flowOf<ApiResult<User>>(
                             ApiResult.Failure(Cause.USER_NOT_AUTHENTICATED, null)
                         ).map { it.toResource { it } }
