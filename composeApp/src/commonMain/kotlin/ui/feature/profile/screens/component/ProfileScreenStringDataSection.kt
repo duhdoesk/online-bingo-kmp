@@ -19,13 +19,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import dev.gitlive.firebase.firestore.Timestamp
-import dev.gitlive.firebase.firestore.toMilliseconds
-import domain.util.datetime.formatDateTime
-import kotlinx.datetime.Instant
-import kotlinx.datetime.TimeZone
-import kotlinx.datetime.format
-import kotlinx.datetime.toLocalDateTime
+import kotlinx.datetime.LocalDateTime
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.StringResource
 import org.jetbrains.compose.resources.stringResource
@@ -38,14 +32,14 @@ import themedbingo.composeapp.generated.resources.edit_button
 fun ProfileScreenStringDataSection(
     label: StringResource,
     data: String,
-    lastEditTimestamp: Timestamp,
+    lastEditTimestamp: LocalDateTime,
     editable: Boolean,
     onEdit: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    val futureInstant = lastEditTimestamp.toMilliseconds().toLong() + 259200000 // value that corresponds to 3 days
-    val futureInstantMs = Instant.fromEpochMilliseconds(futureInstant)
-    val dateTime = futureInstantMs.toLocalDateTime(TimeZone.currentSystemDefault())
+//    val futureInstant = lastEditTimestamp.toMilliseconds().toLong() + 259200000 // value that corresponds to 3 days
+//    val futureInstantMs = Instant.fromEpochMilliseconds(futureInstant)
+//    val dateTime = futureInstantMs.toLocalDateTime(TimeZone.currentSystemDefault())
 
     Row(
         verticalAlignment = Alignment.Bottom,
@@ -100,7 +94,7 @@ fun ProfileScreenStringDataSection(
 
     if (!editable) {
         Text(
-            text = "${stringResource(Res.string.can_change_in)} ${dateTime.format(formatDateTime())}",
+            text = "${stringResource(Res.string.can_change_in)}", // ${dateTime.format(formatDateTime())}",
             modifier = Modifier
                 .padding(start = 16.dp, top = 4.dp)
                 .fillMaxWidth(),

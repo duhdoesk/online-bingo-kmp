@@ -3,17 +3,12 @@ package ui.feature.profile
 import com.arkivanov.decompose.ComponentContext
 import domain.audio.AudioPlayer
 import domain.feature.auth.useCase.SignOutUseCase
-import domain.feature.user.useCase.DeleteUserUseCase
 import domain.feature.user.useCase.GetCurrentUserUseCase
 import domain.feature.user.useCase.GetProfilePicturesUseCase
-import domain.feature.user.useCase.UpdateUserNameUseCase
-import domain.feature.user.useCase.UpdateUserPictureUseCase
-import domain.feature.user.useCase.UpdateUserVictoryMessageUseCase
 import domain.util.resource.Resource
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.combine
-import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.StringResource
@@ -21,9 +16,6 @@ import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 import themedbingo.composeapp.generated.resources.Res
 import themedbingo.composeapp.generated.resources.sign_out_error
-import themedbingo.composeapp.generated.resources.unmapped_error
-import themedbingo.composeapp.generated.resources.update_nickname_failure
-import themedbingo.composeapp.generated.resources.update_victory_failure
 import ui.feature.core.dialog.dialogState.mutableDialogStateOf
 import ui.feature.profile.event.ProfileScreenEvent
 import ui.feature.profile.state.ProfileScreenUIState
@@ -51,10 +43,6 @@ class ProfileScreenComponent(
      */
     private val getCurrentUserUseCase by inject<GetCurrentUserUseCase>()
     private val signOutUseCase by inject<SignOutUseCase>()
-    private val updateUserNameUseCase by inject<UpdateUserNameUseCase>()
-    private val updateUserVictoryMessageUseCase by inject<UpdateUserVictoryMessageUseCase>()
-    private val deleteUserUseCase by inject<DeleteUserUseCase>()
-    private val updateUserPictureUseCase: UpdateUserPictureUseCase by inject()
 
     /**
      * UI State Use Cases
@@ -64,8 +52,34 @@ class ProfileScreenComponent(
     /**
      * UI State holder
      */
-    private val _uiState = MutableStateFlow(ProfileScreenUIState.INITIAL)
-    val uiState = _uiState.asStateFlow()
+    private val _uiState =
+        combine(getCurrentUserUseCase(), getProfilePicturesUseCase()) { collectedUser, pics ->
+            when (collectedUser) {
+                is Resource.Success -> {
+                    ProfileScreenUIState(
+                        isLoading = false,
+                        user = collectedUser.data,
+                        error = false,
+                        profilePictures = pics
+                    )
+                }
+
+                is Resource.Failure -> {
+                    ProfileScreenUIState(
+                        isLoading = false,
+                        user = null,
+                        error = true,
+                        profilePictures = pics
+                    )
+                }
+            }
+        }
+
+    val uiState = _uiState.stateIn(
+        coroutineScope,
+        SharingStarted.WhileSubscribed(5_000),
+        ProfileScreenUIState.INITIAL
+    )
 
     /**
      * Result Modals visibility holders
@@ -81,7 +95,6 @@ class ProfileScreenComponent(
             ProfileScreenEvent.DeleteAccount -> deleteAccount()
             ProfileScreenEvent.PopBack -> popBack()
             ProfileScreenEvent.SignOut -> signOut()
-            ProfileScreenEvent.UILoaded -> uiLoaded()
 
             is ProfileScreenEvent.UpdatePicture -> updatePicture(event.newPictureUri)
             is ProfileScreenEvent.UpdateName -> updateName(event.newName)
@@ -92,34 +105,6 @@ class ProfileScreenComponent(
     /**
      * Functions to handle each UI Event
      */
-    private fun uiLoaded() {
-        coroutineScope.launch {
-            combine(getCurrentUserUseCase(), getProfilePicturesUseCase()) { collectedUser, pics ->
-                val uiState = when (collectedUser) {
-                    is Resource.Success -> {
-                        ProfileScreenUIState(
-                            isLoading = false,
-                            user = collectedUser.data,
-                            error = false,
-                            profilePictures = pics
-                        )
-                    }
-
-                    is Resource.Failure -> {
-                        ProfileScreenUIState(
-                            isLoading = false,
-                            user = null,
-                            error = true,
-                            profilePictures = pics
-                        )
-                    }
-                }
-
-                _uiState.update { uiState }
-            }
-        }
-    }
-
     private fun popBack() {
         onPopBack()
     }
@@ -163,42 +148,42 @@ class ProfileScreenComponent(
     }
 
     private fun updatePicture(newPictureUri: String) {
-        coroutineScope.launch {
-            if (newPictureUri.isEmpty()) return@launch
-
-            val currentPictureUri = uiState.value.user?.pictureUri.orEmpty()
-            if (currentPictureUri == newPictureUri) return@launch
-
-            uiState.value.user?.run {
-                updateUserPictureUseCase(
-                    userId = id,
-                    pictureUri = newPictureUri
-                ).onFailure { errorDialogState.showDialog(Res.string.unmapped_error) }
-            }
-        }
+//        coroutineScope.launch {
+//            if (newPictureUri.isEmpty()) return@launch
+//
+//            val currentPictureUri = uiState.value.user?.pictureUri.orEmpty()
+//            if (currentPictureUri == newPictureUri) return@launch
+//
+//            uiState.value.user?.run {
+//                updateUserPictureUseCase(
+//                    userId = id,
+//                    pictureUri = newPictureUri
+//                ).onFailure { errorDialogState.showDialog(Res.string.unmapped_error) }
+//            }
+//        }
     }
 
     @OptIn(ExperimentalResourceApi::class)
     private fun updateName(newName: String) {
-        uiState.value.user?.run {
-            coroutineScope.launch {
-                updateUserNameUseCase.invoke(
-                    userId = id,
-                    newName = newName
-                ).onFailure { errorDialogState.showDialog(Res.string.update_nickname_failure) }
-            }
-        }
+//        uiState.value.user?.run {
+//            coroutineScope.launch {
+//                updateUserNameUseCase.invoke(
+//                    userId = id,
+//                    newName = newName
+//                ).onFailure { errorDialogState.showDialog(Res.string.update_nickname_failure) }
+//            }
+//        }
     }
 
     @OptIn(ExperimentalResourceApi::class)
     private fun updateMessage(newVictoryMessage: String) {
-        uiState.value.user?.run {
-            coroutineScope.launch {
-                updateUserVictoryMessageUseCase.invoke(
-                    userId = id,
-                    newVictoryMessage = newVictoryMessage
-                ).onFailure { errorDialogState.showDialog(Res.string.update_victory_failure) }
-            }
-        }
+//        uiState.value.user?.run {
+//            coroutineScope.launch {
+//                updateUserVictoryMessageUseCase.invoke(
+//                    userId = id,
+//                    newVictoryMessage = newVictoryMessage
+//                ).onFailure { errorDialogState.showDialog(Res.string.update_victory_failure) }
+//            }
+//        }
     }
 }

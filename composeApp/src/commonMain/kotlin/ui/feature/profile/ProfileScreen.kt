@@ -1,9 +1,8 @@
 package ui.feature.profile
 
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import themedbingo.composeapp.generated.resources.Res
 import themedbingo.composeapp.generated.resources.unmapped_error
@@ -22,14 +21,9 @@ fun ProfileScreen(
     windowInfo: WindowInfo
 ) {
     /**
-     * Build the UI State when the UI is ready
-     */
-    LaunchedEffect(Unit) { component.uiEvent(ProfileScreenEvent.UILoaded) }
-
-    /**
      * UI State
      */
-    val uiState by component.uiState.collectAsState()
+    val uiState by component.uiState.collectAsStateWithLifecycle()
 
     /**
      * Result dialogs, held by the viewmodel / component
@@ -47,7 +41,7 @@ fun ProfileScreen(
 
     if (uiState.error) {
         ErrorScreen(
-            retry = { component.uiEvent(ProfileScreenEvent.UILoaded) },
+            retry = { },
             popBack = { component.uiEvent(ProfileScreenEvent.PopBack) },
             message = Res.string.unmapped_error
         )
