@@ -18,7 +18,7 @@ import util.componentCoroutineScope
 class SplashScreenComponent(
     componentContext: ComponentContext,
     private val onNotSignedIn: () -> Unit,
-    private val onSignedIn: (userId: String?) -> Unit
+    private val onSignedIn: () -> Unit
 ) : ComponentContext by componentContext, KoinComponent {
 
     private val coroutineScope = componentCoroutineScope()
@@ -42,7 +42,7 @@ class SplashScreenComponent(
             when (resource) {
                 is Resource.Success -> {
                     if (resource.data is SessionStatus.Authenticated) {
-                        onSignedIn(resource.data.session.user?.id)
+                        onSignedIn()
                     } else {
                         onNotSignedIn()
                     }

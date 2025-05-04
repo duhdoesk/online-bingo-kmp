@@ -49,11 +49,6 @@ kotlin {
         }
 
         commonMain.dependencies {
-            // Projects
-            implementation(projects.core)
-            implementation(projects.data)
-            implementation(projects.domain)
-
             implementation(compose.runtime)
             implementation(compose.foundation)
             implementation(compose.ui)

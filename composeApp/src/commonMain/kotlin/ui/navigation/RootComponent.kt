@@ -20,9 +20,9 @@ import domain.util.resource.Cause
 import domain.util.resource.Resource
 import getPlatform
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.filterNotNull
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
@@ -94,19 +94,19 @@ class RootComponent(
     /** Globally handles navigation for Sign In and Sign Out authentication methods */
     private fun navigateAfterSignIn() {
         coroutineScope.launch {
-            val userResource = getCurrentUserUseCase().first()
-
-            when (userResource) {
-                is Resource.Success -> {
-                    navigation.replaceAll(Configuration.HomeScreen)
-                }
-                is Resource.Failure -> {
-                    when (userResource.cause) {
-                        Cause.USER_NOT_AUTHENTICATED -> {
-                            navigation.replaceAll(Configuration.SignInScreen)
-                        }
-                        else -> {
-                            navigation.replaceAll(Configuration.CreateUserScreen)
+            getCurrentUserUseCase().collect { userResource ->
+                when (userResource) {
+                    is Resource.Success -> {
+                        navigation.replaceAll(Configuration.HomeScreen)
+                    }
+                    is Resource.Failure -> {
+                        when (userResource.cause) {
+                            Cause.USER_NOT_AUTHENTICATED -> {
+                                navigation.replaceAll(Configuration.SignInScreen)
+                            }
+                            else -> {
+                                navigation.replaceAll(Configuration.CreateUserScreen)
+                            }
                         }
                     }
                 }
@@ -210,7 +210,7 @@ class RootComponent(
             Configuration.SignInScreen -> SignInScreen(
                 SignInScreenComponent(
                     componentContext = context,
-                    onSignIn = { userId -> navigateAfterSignIn() }
+                    onSignIn = { navigateAfterSignIn() }
                 )
             )
 
