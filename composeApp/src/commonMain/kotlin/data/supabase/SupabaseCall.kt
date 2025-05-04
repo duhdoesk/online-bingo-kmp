@@ -12,7 +12,7 @@ import kotlinx.coroutines.flow.retryWhen
 import util.Log
 
 internal inline fun <reified T> supabaseSuspendCall(crossinline apiCall: suspend () -> T): Flow<Resource<T>> =
-    flow {
+    flow<Resource<T>> {
         val result = apiCall()
         emit(Resource.Success(result))
     }
@@ -40,7 +40,7 @@ internal inline fun <reified T> supabaseSuspendCall(crossinline apiCall: suspend
                 else -> Cause.UNKNOWN
             }
 
-            Resource.Failure(cause)
+            emit(Resource.Failure(cause))
         }
 
 internal inline fun <reified T> supabaseCall(crossinline apiCall: () -> Flow<T>): Flow<Resource<T>> {
@@ -56,7 +56,7 @@ internal inline fun <reified T> supabaseCall(crossinline apiCall: () -> Flow<T>)
                 false
             }
         }
-        .map { Resource.Success(it) }
+        .map<T, Resource<T>> { Resource.Success(it) }
         .catch { exception ->
             Log.e(
                 message = "Supabase call failed",
@@ -70,6 +70,6 @@ internal inline fun <reified T> supabaseCall(crossinline apiCall: () -> Flow<T>)
                 else -> Cause.UNKNOWN
             }
 
-            Resource.Failure(cause)
+            emit(Resource.Failure(cause))
         }
 }

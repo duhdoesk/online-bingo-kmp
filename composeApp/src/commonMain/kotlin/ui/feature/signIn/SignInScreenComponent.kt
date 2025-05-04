@@ -13,25 +13,25 @@ import util.componentCoroutineScope
 @OptIn(ExperimentalResourceApi::class)
 class SignInScreenComponent(
     componentContext: ComponentContext,
-    private val onSignIn: (userId: String?) -> Unit
+    private val onSignIn: () -> Unit
 ) : ComponentContext by componentContext, KoinComponent {
 
     private val coroutineScope = componentCoroutineScope()
     private val getSessionStatusUseCase: GetSessionStatusUseCase by inject()
     val supabaseClient: SupabaseClient by inject()
 
-    /** Fetches user id then navigates passing it */
-    fun signIn() {
+    init {
         coroutineScope.launch {
             getSessionStatusUseCase().collect { resource ->
-                when (val status = resource.getOrNull()) {
-                    is SessionStatus.Authenticated -> {
-                        onSignIn(status.session.user?.id)
-                    }
-
-                    else -> return@collect
+                if (resource.getOrNull() is SessionStatus.Authenticated) {
+                    onSignIn()
                 }
             }
         }
+    }
+
+    /** Fetches user id then navigates passing it */
+    fun signIn() {
+        onSignIn()
     }
 }
