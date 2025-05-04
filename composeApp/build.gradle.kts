@@ -86,8 +86,7 @@ kotlin {
             implementation(libs.dev.firebase.common)
 
 //            Supabase
-            implementation(libs.supabase.auth.compose)
-            implementation(libs.supabase.realtime.kt)
+            implementation(libs.bundles.supabase)
 
 //            Revenue Cat
             implementation(libs.purchases.core)

@@ -159,7 +159,7 @@ fun PortraitProfileScreen(
                 ProfileScreenStringDataSection(
                     label = Res.string.nickname,
                     data = user.name,
-                    lastEditTimestamp = user.nameUpdatedAt,
+                    lastEditTimestamp = user.updatedAt ?: user.createdAt,
                     editable = true, // todo(): boolean logic datetime
                     onEdit = { updateNameVisible = true },
                     modifier = Modifier.fillMaxWidth()
@@ -170,7 +170,7 @@ fun PortraitProfileScreen(
                 ProfileScreenStringDataSection(
                     label = Res.string.victory_message,
                     data = user.victoryMessage,
-                    lastEditTimestamp = user.victoryMessageUpdatedAt,
+                    lastEditTimestamp = user.updatedAt ?: user.createdAt,
                     editable = true, // todo(): boolean logic datetime
                     onEdit = { updateMessageVisible = true },
                     modifier = Modifier.fillMaxWidth()

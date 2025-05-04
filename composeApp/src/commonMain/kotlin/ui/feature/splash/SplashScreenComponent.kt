@@ -1,8 +1,6 @@
 package ui.feature.splash
 
 import com.arkivanov.decompose.ComponentContext
-import domain.audio.AudioPlayer
-import domain.audio.OCEAN
 import domain.feature.auth.useCase.GetSessionStatusUseCase
 import domain.util.resource.Resource
 import io.github.jan.supabase.auth.status.SessionStatus
@@ -14,7 +12,6 @@ import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
-import themedbingo.composeapp.generated.resources.Res
 import util.componentCoroutineScope
 
 @OptIn(ExperimentalResourceApi::class)
@@ -25,7 +22,6 @@ class SplashScreenComponent(
 ) : ComponentContext by componentContext, KoinComponent {
 
     private val coroutineScope = componentCoroutineScope()
-    private val audioPlayer by inject<AudioPlayer>()
     private val getSessionStatusUseCase: GetSessionStatusUseCase by inject()
 
     private val _progress = MutableStateFlow<Float>(0f)
@@ -34,7 +30,6 @@ class SplashScreenComponent(
     init {
         coroutineScope.launch {
             delay(1000)
-            audioPlayer.playNew(Res.getUri(OCEAN))
             checkAuthentication()
         }
     }
@@ -47,7 +42,6 @@ class SplashScreenComponent(
             when (resource) {
                 is Resource.Success -> {
                     if (resource.data is SessionStatus.Authenticated) {
-                        audioPlayer.stop()
                         onSignedIn(resource.data.session.user?.id)
                     } else {
                         onNotSignedIn()

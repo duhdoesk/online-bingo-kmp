@@ -1,6 +1,7 @@
 package data.feature.user.mapper
 
 import dev.gitlive.firebase.firestore.DocumentSnapshot
+import domain.feature.user.model.Tier
 import domain.feature.user.model.User
 import domain.feature.user.model.getLocalizedMessage
 import domain.feature.user.model.getLocalizedName
@@ -15,9 +16,7 @@ fun DocumentSnapshot.toUserModel(): User {
         name = this.get("name") ?: getLocalizedName(),
         pictureUri = this.get("pictureUri") ?: getRandomPictureUri(),
         victoryMessage = this.get("victoryMessage") ?: getLocalizedMessage(),
-        lastWinAt = this.get("lastWinAt") ?: getDateTimeZero(),
-        nameUpdatedAt = this.get("nameUpdatedAt") ?: getDateTimeZero(),
-        pictureUriUpdatedAt = this.get("pictureUriUpdatedAt") ?: getDateTimeZero(),
-        victoryMessageUpdatedAt = this.get("victoryMessageUpdatedAt") ?: getDateTimeZero()
+        updatedAt = this.get("updatedAt") ?: getDateTimeZero(),
+        tier = Tier.entries.find { it.name == this.get("tier") } ?: Tier.FREE
     )
 }

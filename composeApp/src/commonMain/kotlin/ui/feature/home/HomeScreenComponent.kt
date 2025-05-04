@@ -1,22 +1,17 @@
 package ui.feature.home
 
 import com.arkivanov.decompose.ComponentContext
-import domain.audio.AudioPlayer
-import domain.audio.SPLASHING_AROUND
 import domain.billing.hasActiveEntitlements
 import domain.feature.user.useCase.GetCurrentUserUseCase
 import domain.util.resource.Resource
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
-import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
-import themedbingo.composeapp.generated.resources.Res
 import ui.navigation.Configuration
 import util.componentCoroutineScope
 
@@ -28,7 +23,6 @@ class HomeScreenComponent(
 ) : ComponentContext by componentContext, KoinComponent {
 
     private val coroutineScope = componentCoroutineScope()
-    private val audioPlayer: AudioPlayer by inject()
     private val getSignedInUser: GetCurrentUserUseCase by inject()
 
     @OptIn(ExperimentalCoroutinesApi::class)
@@ -57,15 +51,6 @@ class HomeScreenComponent(
             started = SharingStarted.WhileSubscribed(5000),
             initialValue = HomeScreenUIState()
         )
-
-    init {
-        coroutineScope.launch {
-            if (!audioPlayer.isPlaying) {
-                delay(1000)
-                audioPlayer.playNew(Res.getUri(SPLASHING_AROUND))
-            }
-        }
-    }
 
     fun navigate(configuration: Configuration) {
         onNavigate(configuration)

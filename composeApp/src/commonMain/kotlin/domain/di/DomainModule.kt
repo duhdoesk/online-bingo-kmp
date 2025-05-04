@@ -89,7 +89,7 @@ val domainModule = module {
     single { ObserveAvailableThemes(get()) }
 
 //    User
-    single<UserRepository> { UserRepositoryImpl(get(), get()) }
+    single<UserRepository> { UserRepositoryImpl(get(), get(), get()) }
     single<GetCurrentUserUseCase> { GetCurrentUserUseCase(get()) }
     single<GetUserByIdUseCase> { GetUserByIdUseCase(get()) }
     single<UpdateUserNameUseCase> { UpdateUserNameUseCase(get()) }

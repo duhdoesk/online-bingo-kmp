@@ -1,29 +1,40 @@
-@file:OptIn(ExperimentalCoroutinesApi::class)
+@file:OptIn(ExperimentalCoroutinesApi::class, SupabaseExperimental::class)
 
 package data.feature.user
 
-import data.feature.user.mapper.toUserModel
-import data.firebase.firebaseCall
-import data.firebase.firebaseSuspendCall
-import dev.gitlive.firebase.firestore.FirebaseFirestore
+import data.dispatcher.DispatcherProvider
+import data.feature.user.model.UserDto
+import data.supabase.supabaseCall
+import data.supabase.supabaseSuspendCall
 import domain.feature.auth.AuthRepository
 import domain.feature.user.UserRepository
+import domain.feature.user.model.Tier
 import domain.feature.user.model.User
 import domain.util.resource.Cause
 import domain.util.resource.Resource
+import domain.util.resource.asUnit
+import io.github.jan.supabase.SupabaseClient
+import io.github.jan.supabase.annotations.SupabaseExperimental
+import io.github.jan.supabase.postgrest.from
+import io.github.jan.supabase.postgrest.query.filter.FilterOperation
+import io.github.jan.supabase.postgrest.query.filter.FilterOperator
+import io.github.jan.supabase.realtime.selectAsFlow
+import io.github.jan.supabase.realtime.selectSingleValueAsFlow
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
 import util.getLocalDateTimeNow
 
 class UserRepositoryImpl(
-    firestore: FirebaseFirestore,
-    private val authRepository: AuthRepository
+    private val authRepository: AuthRepository,
+    private val dispatcherProvider: DispatcherProvider,
+    supabase: SupabaseClient
 ) : UserRepository {
 
-    private val collection = firestore.collection("users")
+    private val usersTable = supabase.from("users")
 
     override fun createUser(
         id: String,
@@ -32,39 +43,28 @@ class UserRepositoryImpl(
         pictureUri: String,
         message: String
     ): Flow<Resource<Unit>> {
-        val now = getLocalDateTimeNow().toString()
+        val user = UserDto(
+            id = id,
+            email = email,
+            createdAt = getLocalDateTimeNow().toString(),
+            updatedAt = null,
+            name = name,
+            message = message,
+            pictureUrl = pictureUri,
+            tier = Tier.FREE.name
+        )
 
-        return firebaseSuspendCall {
-            collection
-                .document(id)
-                .set(
-                    data = hashMapOf(
-                        "createdAt" to now,
-                        "name" to name,
-                        "nameUpdatedAt" to now,
-                        "email" to email,
-                        "pictureUri" to pictureUri,
-                        "pictureUriUpdatedAt" to now,
-                        "victoryMessage" to message,
-                        "victoryMessageUpdatedAt" to now,
-                        "lastWinAt" to null
-                    )
-                )
-        }.map { it.toResource { it } }
+        return supabaseSuspendCall { usersTable.insert(user) }
+            .asUnit()
+            .flowOn(dispatcherProvider.io)
     }
 
     override fun getCurrentUser(): Flow<Resource<User>> =
-        authRepository
-            .getSessionInfo()
+        authRepository.getSessionInfo()
             .flatMapLatest { authResource ->
                 when (authResource) {
                     is Resource.Success -> {
-                        firebaseCall {
-                            collection
-                                .document(authResource.data.id)
-                                .snapshots
-                                .map { it.toUserModel() }
-                        }.map { it.toResource { it } }
+                        getUserById(authResource.data.id)
                     }
 
                     is Resource.Failure -> {
@@ -74,72 +74,55 @@ class UserRepositoryImpl(
             }
 
     override fun getUserById(id: String): Flow<Resource<User>> =
-        firebaseCall {
-            collection
-                .document(id)
-                .snapshots
-                .map { it.toUserModel() }
-        }.map { it.toResource { it } }
+        supabaseCall {
+            usersTable.selectSingleValueAsFlow(UserDto::id) { eq("id", id) }.map { it.toModel() }
+        }.flowOn(dispatcherProvider.io)
 
     override fun getListOfUsers(ids: List<String>): Flow<Resource<List<User>>> =
-        firebaseCall {
-            collection
-                .snapshots
-                .map { querySnapshot ->
-                    querySnapshot
-                        .documents
-                        .filter { documentSnapshot -> ids.contains(documentSnapshot.id) }
-                        .map { it.toUserModel() }
-                }
-        }.map { it.toResource { it } }
+        supabaseCall {
+            usersTable.selectAsFlow(
+                UserDto::id,
+                filter = FilterOperation("id", FilterOperator.IN, ids)
+            ).map { it.map { it.toModel() } }
+        }
 
     override fun updateUserName(id: String, name: String): Flow<Resource<Unit>> =
-        firebaseSuspendCall {
-            collection
-                .document(id)
-                .update(
-                    data = hashMapOf(
-                        "name" to name,
-                        "nameUpdatedAt" to getLocalDateTimeNow().toString()
-                    )
-                )
-        }.map { it.toResource { it } }
+        supabaseSuspendCall {
+            usersTable.update(
+                {
+                    UserDto::name setTo name
+                    UserDto::updatedAt setTo getLocalDateTimeNow().toString()
+                }
+            ) { filter { UserDto::id eq id } }
+        }
 
     override fun updateUserPictureUri(id: String, pictureUri: String): Flow<Resource<Unit>> =
-        firebaseSuspendCall {
-            collection
-                .document(id)
-                .update(
-                    data = hashMapOf(
-                        "pictureUri" to pictureUri,
-                        "pictureUriUpdatedAt" to getLocalDateTimeNow().toString()
-                    )
-                )
-        }.map { it.toResource { it } }
+        supabaseSuspendCall {
+            usersTable.update(
+                {
+                    UserDto::pictureUrl setTo pictureUri
+                    UserDto::updatedAt setTo getLocalDateTimeNow().toString()
+                }
+            ) { filter { UserDto::id eq id } }
+        }
 
     override fun updateVictoryMessage(id: String, victoryMessage: String): Flow<Resource<Unit>> =
-        firebaseSuspendCall {
-            collection
-                .document(id)
-                .update(
-                    data = hashMapOf(
-                        "victoryMessage" to victoryMessage,
-                        "victoryMessageUpdatedAt" to getLocalDateTimeNow().toString()
-                    )
-                )
-        }.map { it.toResource { it } }
+        supabaseSuspendCall {
+            usersTable.update(
+                {
+                    UserDto::message setTo victoryMessage
+                    UserDto::updatedAt setTo getLocalDateTimeNow().toString()
+                }
+            ) { filter { UserDto::id eq id } }
+        }
 
     override fun deleteUser(id: String): Flow<Resource<Unit>> =
-        authRepository
-            .deleteAccount(id)
+        authRepository.deleteAccount(id)
             .flatMapLatest { resource ->
                 when (resource) {
                     is Resource.Success -> {
-                        firebaseSuspendCall {
-                            collection
-                                .document(id)
-                                .delete()
-                        }.map { it.toResource { it } }
+                        supabaseSuspendCall { usersTable.delete { filter { UserDto::id eq id } } }
+                            .asUnit()
                     }
 
                     is Resource.Failure -> {

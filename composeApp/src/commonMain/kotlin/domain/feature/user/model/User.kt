@@ -6,14 +6,12 @@ import kotlinx.datetime.LocalDateTime
 data class User(
     val id: String,
     val createdAt: LocalDateTime,
+    val updatedAt: LocalDateTime?,
     val email: String,
     val name: String,
-    val nameUpdatedAt: LocalDateTime,
-    val lastWinAt: LocalDateTime,
     val victoryMessage: String,
-    val victoryMessageUpdatedAt: LocalDateTime,
     val pictureUri: String,
-    val pictureUriUpdatedAt: LocalDateTime
+    val tier: Tier
 )
 
 fun getLocalizedName(): String {

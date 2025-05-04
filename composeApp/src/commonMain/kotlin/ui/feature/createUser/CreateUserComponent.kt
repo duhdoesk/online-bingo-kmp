@@ -112,7 +112,7 @@ class CreateUserComponent(
                     name = name,
                     pictureUri = pictureUri,
                     victoryMessage = message
-                ).map { resource ->
+                ).collect { resource ->
                     when (resource) {
                         is Resource.Success -> {
                             onUserCreated()

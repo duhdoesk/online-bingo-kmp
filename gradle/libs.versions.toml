@@ -133,6 +133,11 @@ kotlin = [
     "kotlinx-datetime",
     "kotlinx-serialization"
 ]
+supabase = [
+    "supabase-auth-compose",
+    "supabase-auth-kt",
+    "supabase-realtime-kt"
+]
 
 
 [plugins]
