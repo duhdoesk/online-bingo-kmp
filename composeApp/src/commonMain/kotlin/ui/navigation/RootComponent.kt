@@ -16,6 +16,7 @@ import com.revenuecat.purchases.kmp.configure
 import domain.billing.SubscribeToUserSubscriptionData
 import domain.feature.auth.useCase.GetSessionInfoUseCase
 import domain.feature.user.useCase.GetCurrentUserUseCase
+import domain.util.resource.Cause
 import domain.util.resource.Resource
 import getPlatform
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -93,10 +94,23 @@ class RootComponent(
     /** Globally handles navigation for Sign In and Sign Out authentication methods */
     private fun navigateAfterSignIn() {
         coroutineScope.launch {
-            getCurrentUserUseCase().first().getOrNull()?.let {
-                navigation.replaceAll(Configuration.HomeScreen)
-                return@launch
-            } ?: navigation.replaceCurrent(Configuration.CreateUserScreen)
+            val userResource = getCurrentUserUseCase().first()
+
+            when (userResource) {
+                is Resource.Success -> {
+                    navigation.replaceAll(Configuration.HomeScreen)
+                }
+                is Resource.Failure -> {
+                    when (userResource.cause) {
+                        Cause.USER_NOT_AUTHENTICATED -> {
+                            navigation.replaceAll(Configuration.SignInScreen)
+                        }
+                        else -> {
+                            navigation.replaceAll(Configuration.CreateUserScreen)
+                        }
+                    }
+                }
+            }
         }
     }
 

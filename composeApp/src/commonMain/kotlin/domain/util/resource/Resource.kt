@@ -35,6 +35,6 @@ fun <T> Flow<Resource<T>>.asUnit(): Flow<Resource<Unit>> =
     map { resource ->
         when (resource) {
             is Resource.Success -> Resource.Success(Unit)
-            is Resource.Failure -> resource
+            is Resource.Failure -> Resource.Failure(resource.cause) as Resource<Unit>
         }
     }
