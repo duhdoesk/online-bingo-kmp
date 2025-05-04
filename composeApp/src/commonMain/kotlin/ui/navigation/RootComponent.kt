@@ -14,12 +14,14 @@ import com.revenuecat.purchases.kmp.LogLevel
 import com.revenuecat.purchases.kmp.Purchases
 import com.revenuecat.purchases.kmp.configure
 import domain.billing.SubscribeToUserSubscriptionData
+import domain.feature.auth.useCase.GetSessionInfoUseCase
 import domain.feature.user.useCase.GetCurrentUserUseCase
 import domain.util.resource.Resource
 import getPlatform
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.filterNotNull
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
@@ -54,11 +56,8 @@ class RootComponent(
 
     /** Use Cases */
     private val getCurrentUserUseCase by inject<GetCurrentUserUseCase>()
+    private val getSessionInfoUseCase by inject<GetSessionInfoUseCase>()
     private val subscribeToUserSubscriptionData by inject<SubscribeToUserSubscriptionData>()
-    private val getSignedInUser by inject<GetCurrentUserUseCase>()
-
-    /** Current signed in user */
-    private val _user = getCurrentUserUseCase()
 
     /** Decompose Navigation Manager */
     private val navigation = StackNavigation<Configuration>()
@@ -79,7 +78,7 @@ class RootComponent(
             Purchases.configure(apiKey = getPlatform().revCatApiKey)
             subscribeToUserSubscriptionData.setupDelegate()
 
-            _user.filterNotNull().distinctUntilChanged().collect { resource ->
+            getSessionInfoUseCase().filterNotNull().distinctUntilChanged().collect { resource ->
                 if (resource is Resource.Success) {
                     Purchases.sharedInstance.logIn(
                         newAppUserID = resource.data.id,
@@ -94,13 +93,10 @@ class RootComponent(
     /** Globally handles navigation for Sign In and Sign Out authentication methods */
     private fun navigateAfterSignIn() {
         coroutineScope.launch {
-            getSignedInUser().collect { user ->
-                if (user == null) {
-                    navigation.replaceCurrent(Configuration.CreateUserScreen)
-                } else {
-                    navigation.replaceCurrent(Configuration.HomeScreen)
-                }
-            }
+            getCurrentUserUseCase().first().getOrNull()?.let {
+                navigation.replaceAll(Configuration.HomeScreen)
+                return@launch
+            } ?: navigation.replaceCurrent(Configuration.CreateUserScreen)
         }
     }
 
