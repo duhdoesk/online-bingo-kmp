@@ -1,6 +1,6 @@
 package domain.room.model
 
-import ui.presentation.room.state.auxiliar.BingoState
+import ui.feature.room.state.auxiliar.BingoState
 
 data class BingoRoom(
     val id: String,

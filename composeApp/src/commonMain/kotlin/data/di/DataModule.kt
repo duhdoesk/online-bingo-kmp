@@ -1,16 +1,25 @@
 package data.di
 
-import data.auth.supabase.createThemeBingoSupabaseClient
+import data.dispatcher.DispatcherProvider
+import data.feature.auth.AuthRepositoryImpl
+import data.supabase.createThemeBingoSupabaseClient
 import dev.gitlive.firebase.Firebase
-import dev.gitlive.firebase.auth.FirebaseAuth
-import dev.gitlive.firebase.auth.auth
 import dev.gitlive.firebase.firestore.FirebaseFirestore
 import dev.gitlive.firebase.firestore.firestore
+import domain.feature.auth.AuthRepository
 import io.github.jan.supabase.SupabaseClient
 import org.koin.dsl.module
 
 val dataModule = module {
-    single<SupabaseClient> { createThemeBingoSupabaseClient() }
+    /** Dispatcher Provider */
+    single { DispatcherProvider() }
+
+    /** Firebase */
     single<FirebaseFirestore> { Firebase.firestore }
-    single<FirebaseAuth> { Firebase.auth }
+
+    /** Supabase */
+    single<SupabaseClient> { createThemeBingoSupabaseClient() }
+
+    /** Authentication */
+    factory<AuthRepository> { AuthRepositoryImpl(get(), get()) }
 }

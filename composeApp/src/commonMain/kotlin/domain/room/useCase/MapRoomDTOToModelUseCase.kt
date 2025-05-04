@@ -3,7 +3,7 @@ package domain.room.useCase
 import data.room.model.BingoRoomDTO
 import domain.room.model.BingoRoom
 import domain.room.model.BingoType
-import ui.presentation.room.state.auxiliar.BingoState
+import ui.feature.room.state.auxiliar.BingoState
 
 class MapRoomDTOToModelUseCase {
     operator fun invoke(dto: BingoRoomDTO): BingoRoom {

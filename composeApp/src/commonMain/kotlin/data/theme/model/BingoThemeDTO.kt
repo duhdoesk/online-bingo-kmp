@@ -9,11 +9,21 @@ class BingoThemeDTO(
     val id: String,
     val name: String,
     val nameEnglish: String,
+    val nameSpanish: String?,
     val picture: String
 ) {
     fun toModel(): BingoTheme {
         val localization = Locale.current.language
-        val localizedName = if (localization.contains("pt")) name else nameEnglish
+
+        val localizedName =
+            if (localization.contains("pt")) {
+                name
+            } else if (localization.contains("es")) {
+                nameSpanish ?: nameEnglish
+            } else {
+                nameEnglish
+            }
+
         return BingoTheme(id = id, name = localizedName, pictureUri = picture)
     }
 }

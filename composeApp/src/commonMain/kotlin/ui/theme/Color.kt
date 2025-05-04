@@ -27,3 +27,8 @@ val error = Color(0xFFD32F2F) // (Vermelho forte para indicar erros)
 val onError = Color(0xFFFFFFFF) // (Branco para boa legibilidade)
 val errorContainer = Color(0xFFF9BDBB) // (Vermelho claro para menos agressividade visual)
 val onErrorContainer = Color(0xFF7D0000) // (Vermelho escuro para contraste)
+
+/** Create User Screen */
+val createUserPrimaryColor = Color(0xFF015CC5)
+val createUserSecondaryColor = Color(0xFFFC58C1)
+val createUserOnColor = Color.White

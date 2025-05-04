@@ -1,3 +1,5 @@
+@file:OptIn(ExperimentalCoroutinesApi::class)
+
 package ui.navigation
 
 import com.arkivanov.decompose.ComponentContext
@@ -11,31 +13,40 @@ import com.revenuecat.purchases.kmp.CustomerInfo
 import com.revenuecat.purchases.kmp.LogLevel
 import com.revenuecat.purchases.kmp.Purchases
 import com.revenuecat.purchases.kmp.configure
-import domain.auth.supabase.SupabaseAuthService
 import domain.billing.SubscribeToUserSubscriptionData
-import domain.user.useCase.GetUserByIdUseCase
+import domain.feature.auth.useCase.GetSessionInfoUseCase
+import domain.feature.user.useCase.GetCurrentUserUseCase
+import domain.util.resource.Cause
+import domain.util.resource.Resource
 import getPlatform
-import io.github.jan.supabase.auth.auth
-import io.github.jan.supabase.auth.status.SessionStatus
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.filterNotNull
-import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
-import ui.presentation.changePassword.ChangePasswordScreenComponent
-import ui.presentation.createRoom.CreateRoomScreenComponent
-import ui.presentation.createUser.CreateUserViewModel
-import ui.presentation.forgotPassword.ForgotPasswordScreenComponent
-import ui.presentation.home.HomeScreenComponent
-import ui.presentation.joinRoom.JoinScreenComponent
-import ui.presentation.paywall.PaywallScreenViewModel
-import ui.presentation.profile.ProfileScreenComponent
-import ui.presentation.room.RoomHostViewModel
-import ui.presentation.room.RoomPlayerViewModel
-import ui.presentation.signIn.SignInScreenComponent
-import ui.presentation.signUp.SignUpScreenComponent
-import ui.presentation.themes.ThemesScreenComponent
+import ui.feature.createRoom.CreateRoomScreenComponent
+import ui.feature.createUser.CreateUserComponent
+import ui.feature.home.HomeScreenComponent
+import ui.feature.joinRoom.JoinScreenComponent
+import ui.feature.paywall.PaywallScreenViewModel
+import ui.feature.profile.ProfileScreenComponent
+import ui.feature.room.RoomHostViewModel
+import ui.feature.room.RoomPlayerViewModel
+import ui.feature.signIn.SignInScreenComponent
+import ui.feature.splash.SplashScreenComponent
+import ui.feature.themes.ThemesScreenComponent
+import ui.navigation.Child.CreateUserScreen
+import ui.navigation.Child.HomeScreen
+import ui.navigation.Child.HostScreen
+import ui.navigation.Child.JoinScreen
+import ui.navigation.Child.PaywallScreen
+import ui.navigation.Child.PlayerScreen
+import ui.navigation.Child.ProfileScreen
+import ui.navigation.Child.SignInScreen
+import ui.navigation.Child.SplashScreen
+import ui.navigation.Child.ThemesScreen
 import util.componentCoroutineScope
 
 class RootComponent(
@@ -44,118 +55,84 @@ class RootComponent(
 
     private val coroutineScope = componentContext.componentCoroutineScope()
 
-    /**
-     * Use Cases
-     */
-    private val supabaseAuthService by inject<SupabaseAuthService>()
-    private val getUserByIdUseCase by inject<GetUserByIdUseCase>()
+    /** Use Cases */
+    private val getCurrentUserUseCase by inject<GetCurrentUserUseCase>()
+    private val getSessionInfoUseCase by inject<GetSessionInfoUseCase>()
     private val subscribeToUserSubscriptionData by inject<SubscribeToUserSubscriptionData>()
 
-    /**
-     * Supabase Client
-     */
-    private val supabaseClient = supabaseAuthService.supabaseClient
-
-    /**
-     * Session Status Flow
-     */
-    private val sessionStatus = supabaseClient.auth.sessionStatus
-
-    /**
-     * Current signed in user
-     */
-    private val _user = sessionStatus.map { status ->
-        when (status) {
-            is SessionStatus.Authenticated -> {
-                val authInfo = status.session.user
-                getUserByIdUseCase(authInfo?.id.orEmpty()).getOrNull()
-            }
-
-            else -> null
-        }
-    }
-
-    /**
-     * Decompose Navigation Manager
-     */
+    /** Decompose Navigation Manager */
     private val navigation = StackNavigation<Configuration>()
 
-    /**
-     * Child stack responsible for initializing and managing a stack of components.
-     */
+    /** Child stack responsible for initializing and managing a stack of components. */
     val childStack = childStack(
         source = navigation,
         serializer = Configuration.serializer(),
-        initialConfiguration = Configuration.SignInScreen,
+        initialConfiguration = Configuration.SplashScreen,
         handleBackButton = true,
         childFactory = ::createChild
     )
 
     init {
-        /**
-         * RevenueCat Setup
-         */
         coroutineScope.launch {
+            /** RevenueCat Setup */
             Purchases.logLevel = LogLevel.DEBUG
             Purchases.configure(apiKey = getPlatform().revCatApiKey)
             subscribeToUserSubscriptionData.setupDelegate()
 
-            _user.filterNotNull().distinctUntilChanged().collect { collectedUser ->
-                Purchases.sharedInstance.logIn(
-                    newAppUserID = collectedUser.id,
-                    onError = {},
-                    onSuccess = { customerInfo: CustomerInfo, b: Boolean -> }
-                )
+            getSessionInfoUseCase().filterNotNull().distinctUntilChanged().collect { resource ->
+                if (resource is Resource.Success) {
+                    Purchases.sharedInstance.logIn(
+                        newAppUserID = resource.data.id,
+                        onError = {},
+                        onSuccess = { customerInfo: CustomerInfo, b: Boolean -> }
+                    )
+                }
             }
         }
     }
 
-    /**
-     * UI representation of auth methods
-     */
-    private fun signIn() {
+    /** Globally handles navigation for Sign In and Sign Out authentication methods */
+    private fun navigateAfterSignIn() {
         coroutineScope.launch {
-            when (val status = sessionStatus.value) {
-                is SessionStatus.Authenticated -> {
-                    val thisUser = getUserByIdUseCase(status.session.user?.id.orEmpty()).getOrNull()
+            val userResource = getCurrentUserUseCase().first()
 
-                    if (thisUser != null) {
-                        navigation.replaceCurrent(Configuration.HomeScreen)
-                    } else {
-                        navigation.replaceCurrent(Configuration.CreateUserScreen(status.session.user))
+            when (userResource) {
+                is Resource.Success -> {
+                    navigation.replaceAll(Configuration.HomeScreen)
+                }
+                is Resource.Failure -> {
+                    when (userResource.cause) {
+                        Cause.USER_NOT_AUTHENTICATED -> {
+                            navigation.replaceAll(Configuration.SignInScreen)
+                        }
+                        else -> {
+                            navigation.replaceAll(Configuration.CreateUserScreen)
+                        }
                     }
                 }
-
-                else -> {
-                    return@launch
-                }
             }
         }
     }
 
-    private fun signOut() {
+    private fun navigateAfterSignOut() {
         navigation.replaceAll(Configuration.SignInScreen)
     }
 
-    /**
-     * Logic to navigate to each screen
-     */
+    /** Nav host */
     private fun createChild(
         configuration: Configuration,
         context: ComponentContext
     ): Child {
         return when (configuration) {
-            Configuration.HomeScreen -> Child.HomeScreen(
+            Configuration.HomeScreen -> HomeScreen(
                 HomeScreenComponent(
                     componentContext = context,
-                    user = _user,
-                    onNavigate = { receivedConfig ->
-                        navigation.pushNew(configuration = receivedConfig)
-                    }
+                    onNavigate = { config -> navigation.pushNew(configuration = config) },
+                    onUserNotCreated = { navigation.replaceAll(Configuration.CreateUserScreen) }
                 )
             )
 
-            Configuration.ThemesScreen -> Child.ThemesScreen(
+            Configuration.ThemesScreen -> ThemesScreen(
                 ThemesScreenComponent(
                     componentContext = context,
                     onPopBack = { navigation.pop() }
@@ -165,7 +142,6 @@ class RootComponent(
             is Configuration.CreateScreen -> Child.CreateScreen(
                 CreateRoomScreenComponent(
                     componentContext = context,
-                    user = _user,
                     bingoType = configuration.bingoType,
                     onPopBack = { navigation.pop() },
                     onCreateRoom = { receivedConfig ->
@@ -174,7 +150,7 @@ class RootComponent(
                 )
             )
 
-            is Configuration.HostScreenThemed -> Child.HostScreen(
+            is Configuration.HostScreenThemed -> HostScreen(
                 RoomHostViewModel(
                     componentContext = context,
                     onPopBack = { navigation.pop() },
@@ -182,7 +158,7 @@ class RootComponent(
                 )
             )
 
-            is Configuration.HostScreenClassic -> Child.HostScreen(
+            is Configuration.HostScreenClassic -> HostScreen(
                 RoomHostViewModel(
                     componentContext = context,
                     roomId = configuration.roomId,
@@ -190,28 +166,25 @@ class RootComponent(
                 )
             )
 
-            is Configuration.PlayerScreenThemed -> Child.PlayerScreen(
+            is Configuration.PlayerScreenThemed -> PlayerScreen(
                 RoomPlayerViewModel(
                     componentContext = context,
                     onPopBack = { navigation.pop() },
-                    roomId = configuration.roomId,
-                    user = _user
+                    roomId = configuration.roomId
                 )
             )
 
-            is Configuration.PlayerScreenClassic -> Child.PlayerScreen(
+            is Configuration.PlayerScreenClassic -> PlayerScreen(
                 RoomPlayerViewModel(
                     componentContext = context,
                     roomId = configuration.roomId,
-                    onPopBack = { navigation.pop() },
-                    user = _user
+                    onPopBack = { navigation.pop() }
                 )
             )
 
-            is Configuration.JoinScreen -> Child.JoinScreen(
+            is Configuration.JoinScreen -> JoinScreen(
                 JoinScreenComponent(
                     componentContext = context,
-                    user = _user,
                     bingoType = configuration.bingoType,
                     onPopBack = { navigation.pop() },
                     onJoinRoom = { config -> navigation.replaceCurrent(configuration = config) },
@@ -226,59 +199,41 @@ class RootComponent(
                 )
             )
 
-            Configuration.ProfileScreen -> Child.ProfileScreen(
+            Configuration.ProfileScreen -> ProfileScreen(
                 ProfileScreenComponent(
                     componentContext = context,
-                    user = _user,
                     onPopBack = { navigation.pop() },
-                    onSignOut = { signOut() }
+                    onSignOut = { navigateAfterSignOut() }
                 )
             )
 
-            Configuration.SignInScreen -> Child.SignInScreen(
+            Configuration.SignInScreen -> SignInScreen(
                 SignInScreenComponent(
                     componentContext = context,
-                    onSignIn = { signIn() },
-                    supabaseClient = supabaseClient,
-                    sessionStatus = sessionStatus
+                    onSignIn = { userId -> navigateAfterSignIn() }
                 )
             )
 
-            Configuration.SignUpScreen -> Child.SignUpScreen(
-                SignUpScreenComponent(
-                    componentContext = context,
-                    onSignUp = { signIn() },
-                    onPopBack = { navigation.pop() }
-                )
-            )
-
-            Configuration.ForgotPasswordScreen -> Child.ForgotPasswordScreen(
-                ForgotPasswordScreenComponent(
-                    componentContext = context,
-                    onPopBack = { navigation.pop() }
-                )
-            )
-
-            Configuration.ChangePasswordScreen -> Child.ChangePasswordScreen(
-                ChangePasswordScreenComponent(
-                    componentContext = context,
-                    onPopBack = { navigation.pop() }
-                )
-            )
-
-            Configuration.PaywallScreen -> Child.PaywallScreen(
+            Configuration.PaywallScreen -> PaywallScreen(
                 PaywallScreenViewModel(
                     componentContext = context,
                     onDismiss = { navigation.pop() }
                 )
             )
 
-            is Configuration.CreateUserScreen -> Child.CreateUserScreen(
-                CreateUserViewModel(
+            is Configuration.CreateUserScreen -> CreateUserScreen(
+                CreateUserComponent(
                     componentContext = context,
-                    sessionStatus = sessionStatus,
                     onSignOut = { navigation.replaceAll(Configuration.SignInScreen) },
                     onUserCreated = { navigation.pushNew(Configuration.HomeScreen) }
+                )
+            )
+
+            is Configuration.SplashScreen -> SplashScreen(
+                SplashScreenComponent(
+                    componentContext = context,
+                    onSignedIn = { navigateAfterSignIn() },
+                    onNotSignedIn = { navigation.replaceAll(Configuration.SignInScreen) }
                 )
             )
         }

@@ -1,19 +1,10 @@
 package domain.di
 
-import data.auth.AuthServiceImpl
-import data.auth.supabase.SupabaseAuthServiceImpl
 import data.card.repository.CardRepositoryImpl
 import data.character.repository.CharacterRepositoryImpl
+import data.feature.user.UserRepositoryImpl
 import data.room.repository.BingoRoomRepositoryImpl
 import data.theme.repository.BingoThemeRepositoryImpl
-import data.user.repository.UserRepositoryImpl
-import domain.auth.AuthService
-import domain.auth.supabase.SupabaseAuthService
-import domain.auth.supabase.useCase.SupabaseDeleteAccountUseCase
-import domain.auth.supabase.useCase.SupabaseSignOutUseCase
-import domain.auth.useCase.ChangePasswordWithReAuthenticationUseCase
-import domain.auth.useCase.DeleteAccountUseCase
-import domain.auth.useCase.SignOutUseCase
 import domain.billing.SubscribeToUserSubscriptionData
 import domain.card.repository.CardRepository
 import domain.card.useCase.FlowCardByRoomAndUserIDUseCase
@@ -22,6 +13,19 @@ import domain.character.repository.CharacterRepository
 import domain.character.useCase.GetRoomCharacters
 import domain.character.useCase.GetThemeCharacters
 import domain.character.useCase.ObserveThemeCharacters
+import domain.feature.auth.useCase.GetSessionInfoUseCase
+import domain.feature.auth.useCase.GetSessionStatusUseCase
+import domain.feature.auth.useCase.SignOutUseCase
+import domain.feature.user.UserRepository
+import domain.feature.user.useCase.CreateUserUseCase
+import domain.feature.user.useCase.DeleteUserUseCase
+import domain.feature.user.useCase.GetCurrentUserUseCase
+import domain.feature.user.useCase.GetProfilePicturesUseCase
+import domain.feature.user.useCase.GetRoomPlayersUseCase
+import domain.feature.user.useCase.GetUserByIdUseCase
+import domain.feature.user.useCase.UpdateUserNameUseCase
+import domain.feature.user.useCase.UpdateUserPictureUseCase
+import domain.feature.user.useCase.UpdateUserVictoryMessageUseCase
 import domain.room.repository.BingoRoomRepository
 import domain.room.useCase.CallBingoUseCase
 import domain.room.useCase.CreateRoomUseCase
@@ -41,20 +45,14 @@ import domain.theme.useCase.GetAllThemesUseCase
 import domain.theme.useCase.GetRoomThemeUseCase
 import domain.theme.useCase.GetThemeByIdUseCase
 import domain.theme.useCase.ObserveAvailableThemes
-import domain.user.repository.UserRepository
-import domain.user.useCase.CheckIfIsNewUserUseCase
-import domain.user.useCase.CreateUserUseCase
-import domain.user.useCase.DeleteUserUseCase
-import domain.user.useCase.GetProfilePicturesUseCase
-import domain.user.useCase.GetRoomPlayersUseCase
-import domain.user.useCase.GetUserByIdUseCase
-import domain.user.useCase.ObserveUser
-import domain.user.useCase.UpdateNameUseCase
-import domain.user.useCase.UpdateUserPictureUseCase
-import domain.user.useCase.UpdateVictoryMessageUseCase
 import org.koin.dsl.module
 
 val domainModule = module {
+
+    /** Authentication */
+    factory { GetSessionInfoUseCase(get()) }
+    factory { GetSessionStatusUseCase(get()) }
+    factory { SignOutUseCase(get()) }
 
 //    Card
     single<CardRepository> { CardRepositoryImpl(get()) }
@@ -91,28 +89,19 @@ val domainModule = module {
     single { ObserveAvailableThemes(get()) }
 
 //    User
-    single<UserRepository> { UserRepositoryImpl(get()) }
+    single<UserRepository> { UserRepositoryImpl(get(), get(), get()) }
+    single<GetCurrentUserUseCase> { GetCurrentUserUseCase(get()) }
     single<GetUserByIdUseCase> { GetUserByIdUseCase(get()) }
-    single<ObserveUser> { ObserveUser(get()) }
-    single<UpdateNameUseCase> { UpdateNameUseCase(get()) }
-    single<UpdateVictoryMessageUseCase> { UpdateVictoryMessageUseCase(get()) }
+    single<UpdateUserNameUseCase> { UpdateUserNameUseCase(get()) }
+    single<UpdateUserVictoryMessageUseCase> { UpdateUserVictoryMessageUseCase(get()) }
     single<UpdateUserPictureUseCase> { UpdateUserPictureUseCase(get()) }
     single<GetProfilePicturesUseCase> { GetProfilePicturesUseCase(get(), get()) }
     single<GetRoomPlayersUseCase> { GetRoomPlayersUseCase(get(), get()) }
     single<CreateUserUseCase> { CreateUserUseCase(get()) }
     single<DeleteUserUseCase> { DeleteUserUseCase(get()) }
-    single<CheckIfIsNewUserUseCase> { CheckIfIsNewUserUseCase(get()) }
 
-//    Auth
-    single<AuthService> { AuthServiceImpl(get()) }
-    single<DeleteAccountUseCase> { DeleteAccountUseCase(get()) }
-    single<SignOutUseCase> { SignOutUseCase(get()) }
-    single<ChangePasswordWithReAuthenticationUseCase> { ChangePasswordWithReAuthenticationUseCase(get()) }
-
-//    Supabase Auth
-    single<SupabaseAuthService> { SupabaseAuthServiceImpl(get()) }
-    single<SupabaseSignOutUseCase> { SupabaseSignOutUseCase(get()) }
-    single<SupabaseDeleteAccountUseCase> { SupabaseDeleteAccountUseCase(get()) }
+//    Audio
+    includes(audioModule)
 
 //    Billing
     single<SubscribeToUserSubscriptionData> { SubscribeToUserSubscriptionData() }

@@ -35,6 +35,12 @@ kotlin {
             implementation(compose.preview)
             implementation(libs.androidx.activity.compose)
 
+//            Audio
+            implementation(libs.exoPlayer)
+
+//          Dependency Injection
+            implementation(libs.koin.android)
+
 //            Ktor
             implementation(libs.ktor.client.okhttp)
 
@@ -80,8 +86,7 @@ kotlin {
             implementation(libs.dev.firebase.common)
 
 //            Supabase
-            implementation(libs.supabase.auth.compose)
-            implementation(libs.supabase.realtime.kt)
+            implementation(libs.bundles.supabase)
 
 //            Revenue Cat
             implementation(libs.purchases.core)
