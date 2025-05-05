@@ -35,5 +35,5 @@ val createUserOnColor = Color.White
 
 /** Home Screen */
 val homePrimaryColor = Color(0xFF0A4482)
-val homeSecondaryColor = Color(0xFFFF5045)
+val homeSecondaryColor = Color(0xFF54352D)
 val homeOnColor = Color.White

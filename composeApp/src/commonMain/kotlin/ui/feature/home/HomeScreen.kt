@@ -23,9 +23,12 @@ import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import themedbingo.composeapp.generated.resources.Res
 import themedbingo.composeapp.generated.resources.bg_waterfall
+import ui.feature.core.text.OutlinedShadowedText
 import ui.feature.home.component.HomeHeader
 import ui.navigation.Configuration
 import ui.theme.AppTheme
+import ui.theme.homeOnColor
+import ui.theme.homeSecondaryColor
 
 @Composable
 fun HomeScreen(
@@ -48,6 +51,18 @@ private fun HomeScreen(
     modifier: Modifier = Modifier
 ) {
     Scaffold(
+        bottomBar = {
+            OutlinedShadowedText(
+                text = "Hot Water Games",
+                fontSize = 16,
+                strokeWidth = 2f,
+                fontColor = homeOnColor,
+                strokeColor = homeSecondaryColor,
+                modifier = Modifier
+                    .padding(top = 16.dp, bottom = 32.dp)
+                    .fillMaxWidth()
+            )
+        },
         contentWindowInsets = WindowInsets.safeDrawing,
         modifier = modifier
     ) { innerPadding ->
