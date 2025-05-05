@@ -1,4 +1,4 @@
-package ui.feature.home.screens.component
+package ui.feature.home.component
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable

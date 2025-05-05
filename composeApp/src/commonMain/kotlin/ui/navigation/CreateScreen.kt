@@ -25,8 +25,7 @@ fun CreateScreen(
 ) {
     when (instance) {
         is Child.HomeScreen -> HomeScreen(
-            component = instance.component,
-            windowInfo = windowInfo
+            component = instance.component
         )
 
         is Child.ThemesScreen -> ThemesScreen(

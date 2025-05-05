@@ -6,9 +6,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.Shadow
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextAlign
@@ -24,7 +22,8 @@ fun OutlinedText(
     fontColor: Color,
     strokeColor: Color,
     modifier: Modifier = Modifier,
-    textAlign: TextAlign = TextAlign.Center
+    textAlign: TextAlign = TextAlign.Center,
+    maxLines: Int = 1
 ) {
     Box(
         modifier = modifier.offset(y = (4).dp),
@@ -36,13 +35,9 @@ fun OutlinedText(
                 color = fontColor,
                 fontSize = fontSize.sp,
                 fontFamily = LuckiestGuyFontFamily(),
-                textAlign = textAlign,
-                shadow = Shadow(
-                    color = Color.Black.copy(alpha = 0.60f),
-                    offset = Offset(x = 0f, y = 4f),
-                    blurRadius = 4f
-                )
-            )
+                textAlign = textAlign
+            ),
+            maxLines = maxLines
         )
 
         Text(
@@ -53,7 +48,8 @@ fun OutlinedText(
                 fontSize = fontSize.sp,
                 fontFamily = LuckiestGuyFontFamily(),
                 textAlign = textAlign
-            )
+            ),
+            maxLines = maxLines
         )
     }
 }

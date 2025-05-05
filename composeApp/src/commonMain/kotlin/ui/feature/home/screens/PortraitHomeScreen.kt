@@ -42,8 +42,8 @@ import themedbingo.composeapp.generated.resources.vip_description
 import themedbingo.composeapp.generated.resources.vip_pass
 import ui.feature.core.NoPictureHWBanner
 import ui.feature.home.HomeScreenUIState
-import ui.feature.home.screens.component.BingoTypeCard
-import ui.feature.home.screens.component.HomeScreenTopBar
+import ui.feature.home.component.BingoTypeCard
+import ui.feature.home.component.HomeScreenTopBar
 import ui.navigation.Configuration
 
 @OptIn(ExperimentalResourceApi::class)

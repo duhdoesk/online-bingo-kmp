@@ -32,3 +32,8 @@ val onErrorContainer = Color(0xFF7D0000) // (Vermelho escuro para contraste)
 val createUserPrimaryColor = Color(0xFF015CC5)
 val createUserSecondaryColor = Color(0xFFFC58C1)
 val createUserOnColor = Color.White
+
+/** Home Screen */
+val homePrimaryColor = Color(0xFF0A4482)
+val homeSecondaryColor = Color(0xFFFF5045)
+val homeOnColor = Color.White
