@@ -14,7 +14,6 @@ import androidx.compose.foundation.layout.windowInsetsBottomHeight
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
@@ -40,7 +39,6 @@ import themedbingo.composeapp.generated.resources.Res
 import themedbingo.composeapp.generated.resources.cancel_button
 import themedbingo.composeapp.generated.resources.confirm_button
 import themedbingo.composeapp.generated.resources.join_locked_room_body
-import themedbingo.composeapp.generated.resources.join_room
 import themedbingo.composeapp.generated.resources.join_unlocked_room_body
 import themedbingo.composeapp.generated.resources.password
 
@@ -61,12 +59,12 @@ fun JoinRoomBottomSheet(
         contentWindowInsets = { WindowInsets.ime }
     ) {
         Column {
-            Text(
-                text = stringResource(Res.string.join_room),
-                style = MaterialTheme.typography.titleLarge,
-                fontWeight = FontWeight.Bold,
-                modifier = Modifier.padding(top = 16.dp, start = 16.dp)
-            )
+//            Text(
+//                text = stringResource(Res.string.join_room),
+//                style = MaterialTheme.typography.titleLarge,
+//                fontWeight = FontWeight.Bold,
+//                modifier = Modifier.padding(top = 16.dp, start = 16.dp)
+//            )
 
             Spacer(Modifier.height(4.dp))
 

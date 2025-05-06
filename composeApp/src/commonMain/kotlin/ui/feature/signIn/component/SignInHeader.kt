@@ -13,17 +13,14 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.text.font.FontStyle
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 import themedbingo.composeapp.generated.resources.Res
+import themedbingo.composeapp.generated.resources.home_hot_water_games
 import themedbingo.composeapp.generated.resources.hot_water_logo
-import themedbingo.composeapp.generated.resources.hot_water_software
-import themedbingo.composeapp.generated.resources.mobile_apps_development
 
 @OptIn(ExperimentalResourceApi::class)
 @Composable
@@ -52,15 +49,8 @@ fun SignInHeader(
         Spacer(modifier = Modifier.height(12.dp))
 
         Text(
-            text = stringResource(resource = Res.string.hot_water_software),
+            text = stringResource(resource = Res.string.home_hot_water_games),
             style = MaterialTheme.typography.titleMedium
-        )
-
-        Text(
-            text = stringResource(resource = Res.string.mobile_apps_development),
-            style = MaterialTheme.typography.bodyMedium,
-            fontWeight = FontWeight.Light,
-            fontStyle = FontStyle.Italic
         )
     }
 }
