@@ -7,20 +7,14 @@ import com.revenuecat.purchases.kmp.ui.revenuecatui.Paywall
 import com.revenuecat.purchases.kmp.ui.revenuecatui.PaywallOptions
 
 @Composable
-fun PaywallScreen(
-    viewModel: PaywallScreenViewModel
-) {
-    /**
-     * Paywall State, Options and Visibility
-     */
+fun PaywallScreen(viewModel: PaywallScreenViewModel) {
+    /** Paywall State, Options and Visibility */
     val paywallOptions = remember {
         PaywallOptions(dismissRequest = { viewModel.dismissPaywall() }) {
             shouldDisplayDismissButton = true
         }
     }
 
-    /**
-     * Paywall Call
-     */
+    /** Paywall Call */
     Box { Paywall(paywallOptions) }
 }

@@ -23,7 +23,7 @@ import RevenueCat
 @available(tvOS, unavailable)
 @available(watchOS, unavailable)
 @MainActor
-class FeedbackSurveyViewModel: ObservableObject {
+final class FeedbackSurveyViewModel: ObservableObject {
 
     var feedbackSurveyData: FeedbackSurveyData
 
@@ -33,26 +33,27 @@ class FeedbackSurveyViewModel: ObservableObject {
     @Published
     var promotionalOfferData: PromotionalOfferData?
 
-    private var purchasesProvider: CustomerCenterPurchasesType
+    private(set) var purchasesProvider: CustomerCenterPurchasesType
     private let loadPromotionalOfferUseCase: LoadPromotionalOfferUseCaseType
-    private let customerCenterActionHandler: CustomerCenterActionHandler?
+    private let actionWrapper: CustomerCenterActionWrapper
 
     convenience init(feedbackSurveyData: FeedbackSurveyData,
-                     customerCenterActionHandler: CustomerCenterActionHandler?) {
+                     purchasesProvider: CustomerCenterPurchasesType,
+                     actionWrapper: CustomerCenterActionWrapper) {
         self.init(feedbackSurveyData: feedbackSurveyData,
-                  purchasesProvider: CustomerCenterPurchases(),
-                  loadPromotionalOfferUseCase: LoadPromotionalOfferUseCase(),
-                  customerCenterActionHandler: customerCenterActionHandler)
+                  purchasesProvider: purchasesProvider,
+                  loadPromotionalOfferUseCase: LoadPromotionalOfferUseCase(purchasesProvider: purchasesProvider),
+                  actionWrapper: actionWrapper)
     }
 
     init(feedbackSurveyData: FeedbackSurveyData,
          purchasesProvider: CustomerCenterPurchasesType,
          loadPromotionalOfferUseCase: LoadPromotionalOfferUseCaseType,
-         customerCenterActionHandler: CustomerCenterActionHandler?) {
+         actionWrapper: CustomerCenterActionWrapper) {
         self.feedbackSurveyData = feedbackSurveyData
         self.purchasesProvider = purchasesProvider
         self.loadPromotionalOfferUseCase = loadPromotionalOfferUseCase
-        self.customerCenterActionHandler = customerCenterActionHandler
+        self.actionWrapper = actionWrapper
     }
 
     func handleAction(
@@ -64,7 +65,7 @@ class FeedbackSurveyViewModel: ObservableObject {
     ) async {
         trackSurveyAnswerSubmitted(option: option, darkMode: darkMode, displayMode: displayMode, locale: locale)
 
-        self.customerCenterActionHandler?(.feedbackSurveyCompleted(option.id))
+        self.actionWrapper.handleAction(.feedbackSurveyCompleted(option.id))
 
         if let promotionalOffer = option.promotionalOffer,
            promotionalOffer.eligible {
@@ -75,6 +76,7 @@ class FeedbackSurveyViewModel: ObservableObject {
                 self.promotionalOfferData = promotionalOfferData
             case .failure:
                 self.feedbackSurveyData.onOptionSelected()
+                dismissView()
                 self.loadingOption = nil
             }
         } else {
@@ -127,7 +129,6 @@ private extension FeedbackSurveyViewModel {
                                                                        path: feedbackSurveyData.path.type,
                                                                        url: feedbackSurveyData.path.url,
                                                                        surveyOptionID: option.id,
-                                                                       surveyOptionTitleKey: option.title,
                                                                        additionalContext: nil,
                                                                        revisionID: 0)
         let event = CustomerCenterAnswerSubmittedEvent.answerSubmitted(CustomerCenterEventCreationData(),

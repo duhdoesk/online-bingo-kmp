@@ -69,7 +69,7 @@ private fun HomeScreen(
                 fontColor = homeOnColor,
                 strokeColor = homeSecondaryColor,
                 modifier = Modifier
-                    .padding(top = 16.dp, bottom = 32.dp)
+                    .padding(bottom = 32.dp)
                     .fillMaxWidth()
             )
         },
