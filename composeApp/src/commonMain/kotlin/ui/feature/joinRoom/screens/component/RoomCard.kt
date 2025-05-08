@@ -30,7 +30,7 @@ import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 import themedbingo.composeapp.generated.resources.Res
-import themedbingo.composeapp.generated.resources.bingo_balls
+import themedbingo.composeapp.generated.resources.img_bingo_balls
 import themedbingo.composeapp.generated.resources.locked
 import themedbingo.composeapp.generated.resources.players_card
 import themedbingo.composeapp.generated.resources.theme_picture
@@ -63,7 +63,7 @@ fun RoomCard(
                 when (bingoType) {
                     BingoType.CLASSIC ->
                         Image(
-                            painter = painterResource(Res.drawable.bingo_balls),
+                            painter = painterResource(Res.drawable.img_bingo_balls),
                             contentDescription = null,
                             modifier = Modifier
                                 .padding(16.dp)

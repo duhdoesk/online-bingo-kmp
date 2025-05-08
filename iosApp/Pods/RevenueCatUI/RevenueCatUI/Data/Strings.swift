@@ -60,6 +60,10 @@ enum Strings {
     case paywall_could_not_find_any_packages
     case paywall_invalid_url(String)
     case no_in_app_browser_tvos
+    case failed_to_open_url_external_browser(String)
+    case successfully_opened_url_external_browser(String)
+    case failed_to_open_url_deep_link(String)
+    case successfully_opened_url_deep_link(String)
 
     // Customer Center
     case could_not_find_subscription_information
@@ -70,6 +74,7 @@ enum Strings {
     case could_not_determine_type_of_custom_url
     case active_product_is_not_apple_loading_without_product_information(Store)
     case could_not_find_product_loading_without_product_information(String)
+    case promo_offer_not_eligible_for_product(String, String)
 
 }
 
@@ -220,6 +225,23 @@ extension Strings: CustomStringConvertible {
         case .could_not_find_product_loading_without_product_information(let product):
             return "Could not find product with id \(product). Loading without product information."
 
+        case let .promo_offer_not_eligible_for_product(promoOfferId, productId):
+            return """
+                User not eligible for promo with id '\(promoOfferId)'. Check eligibility configuration in the dashboard,
+                and make sure the user has an active/expired subscription for the product with id '\(productId)'."
+            """
+
+        case .failed_to_open_url_external_browser(let url):
+            return "Failed to open URL in external browser: \(url)"
+
+        case .successfully_opened_url_external_browser(let url):
+            return "Successfully opened URL in external browser: \(url)"
+
+        case .failed_to_open_url_deep_link(let url):
+            return "Failed to open URL as deep link: \(url)"
+
+        case .successfully_opened_url_deep_link(let url):
+            return "Successfully opened URL as deep link: \(url)"
         }
     }
 

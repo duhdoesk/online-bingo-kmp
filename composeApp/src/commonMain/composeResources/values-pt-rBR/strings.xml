@@ -29,6 +29,7 @@
     <string name="premium">Premium</string>
     <string name="vip">VIP</string>
     <string name="vip_pass">Passe VIP</string>
+    <string name="vip_full_access">Acesso Total</string>
     <string name="vip_description">Aproveite as vantagens do VIP, como evitar anúncios e criar suas próprias salas de bingo.</string>
 
 
@@ -43,20 +44,12 @@
 
 
     <!--    Home Screen -->
-    <string name="hot_water_software">Hot Water Software</string>
-    <string name="mobile_apps_development">Mobile Apps Development</string>
-    <string name="new_room">Nova Sala</string>
-    <string name="join_room">Entrar na Sala</string>
-    <string name="profile">Perfil</string>
-    <string name="classic_bingo">Bingo Clássico</string>
-    <string name="themed_bingo">Bingo Temático</string>
-    <string name="classic_bingo_desc">Jogue o bingo tradicional, numérico, com cartelas de 24 números.</string>
-    <string name="themed_bingo_desc">Jogue um bingo diferente, com temas originais e cartelas de 9 personagens.</string>
-    <string name="hello">Olá</string>
-    <string name="choose_your_game">O que vamos jogar agora?</string>
-    <string name="home_screen">Início</string>
-    <string name="game_modes">Modos de Jogo</string>
-    <string name="full_exp">Experiência Completa</string>
+    <string name="home_play">Jogar</string>
+    <string name="home_themed_bingo_desc">Uma experiência diferente do bingo tradicional, com temas divertidos.</string>
+    <string name="home_classic_bingo_desc">O formato tradicional, que nós conhecemos e amamos.</string>
+    <string name="home_vip_pass">Passe VIP</string>
+    <string name="home_vip_description">Aproveite as vantagens do VIP, como evitar anúncios e criar suas próprias salas de bingo.</string>
+    <string name="home_hot_water_games">Hot Water Games</string>
 
 
     <!--    Create Room Screen -->

@@ -22,7 +22,7 @@ import domain.character.model.Character
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.stringResource
 import themedbingo.composeapp.generated.resources.Res
-import themedbingo.composeapp.generated.resources.themed_bingo
+import themedbingo.composeapp.generated.resources.themed_bingo_type
 import ui.feature.room.state.auxiliar.CardState
 
 @OptIn(ExperimentalResourceApi::class)
@@ -48,7 +48,7 @@ fun CardSelectorThemed(
                 contentColor = MaterialTheme.colorScheme.onPrimary
             ) {
                 Text(
-                    text = stringResource(Res.string.themed_bingo).uppercase(),
+                    text = stringResource(Res.string.themed_bingo_type).uppercase(),
                     textAlign = TextAlign.Center,
                     style = MaterialTheme.typography.headlineSmall,
                     fontWeight = FontWeight.Bold,

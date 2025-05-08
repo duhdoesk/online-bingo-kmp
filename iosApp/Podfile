@@ -1,13 +1,13 @@
 # Uncomment the next line to define a global platform for your project
-# platform :ios, '9.0'
+ platform :ios, '16.0'
 
 target 'iosApp' do
   # Comment the next line if you don't want to use dynamic frameworks
   use_frameworks! :linkage => :static
 
   # Pods for Revenue Cat
-  pod 'PurchasesHybridCommon', '13.25.0'
-  pod 'RevenueCat', '5.19.0'
-  pod 'RevenueCatUI', '5.19.0'
+  pod 'PurchasesHybridCommon', '13.29.1'
+  pod 'RevenueCat', '5.22.2'
+  pod 'RevenueCatUI', '5.22.2'
 
 end

@@ -128,7 +128,7 @@ class RootComponent(
                 HomeScreenComponent(
                     componentContext = context,
                     onNavigate = { config -> navigation.pushNew(configuration = config) },
-                    onUserNotCreated = { navigation.replaceAll(Configuration.CreateUserScreen) }
+                    onUserNotFound = { navigation.replaceAll(Configuration.SignInScreen) }
                 )
             )
 

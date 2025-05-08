@@ -18,7 +18,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -30,7 +29,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import domain.theme.model.BingoTheme
@@ -38,7 +36,6 @@ import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.stringResource
 import themedbingo.composeapp.generated.resources.Res
 import themedbingo.composeapp.generated.resources.create_button
-import themedbingo.composeapp.generated.resources.join_room
 import themedbingo.composeapp.generated.resources.search
 import themedbingo.composeapp.generated.resources.subscription_dialog_body
 import themedbingo.composeapp.generated.resources.subscription_dialog_title
@@ -82,12 +79,12 @@ fun PortraitJoinScreen(
                         .fillMaxWidth()
                         .weight(1f)
                 ) {
-                    Text(
-                        text = stringResource(Res.string.join_room),
-                        style = MaterialTheme.typography.headlineSmall,
-                        fontWeight = FontWeight.Bold,
-                        modifier = Modifier.padding(top = 16.dp, start = 16.dp)
-                    )
+//                    Text(
+//                        text = stringResource(Res.string.join_room),
+//                        style = MaterialTheme.typography.headlineSmall,
+//                        fontWeight = FontWeight.Bold,
+//                        modifier = Modifier.padding(top = 16.dp, start = 16.dp)
+//                    )
 
                     OutlinedTextField(
                         value = uiState.query,

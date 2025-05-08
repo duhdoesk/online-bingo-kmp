@@ -28,7 +28,22 @@ val onError = Color(0xFFFFFFFF) // (Branco para boa legibilidade)
 val errorContainer = Color(0xFFF9BDBB) // (Vermelho claro para menos agressividade visual)
 val onErrorContainer = Color(0xFF7D0000) // (Vermelho escuro para contraste)
 
+/** VIP */
+val vipPrimaryColor = Color(0xFFFF5045)
+val vipOnColor = Color.White
+
+/** Bingo Types */
+val themedBingoPrimaryColor = Color(0xFF0A4482)
+val themedBingoOnColor = Color.White
+val classicBingoPrimaryColor = Color(0xFF2B6027)
+val classicBingoOnColor = Color.White
+
 /** Create User Screen */
 val createUserPrimaryColor = Color(0xFF015CC5)
 val createUserSecondaryColor = Color(0xFFFC58C1)
 val createUserOnColor = Color.White
+
+/** Home Screen */
+val homePrimaryColor = Color(0xFF0A4482)
+val homeSecondaryColor = Color(0xFF54352D)
+val homeOnColor = Color.White

@@ -1,10 +1,8 @@
 package ui.feature.home
 
 import com.arkivanov.decompose.ComponentContext
-import domain.billing.hasActiveEntitlements
 import domain.feature.user.useCase.GetCurrentUserUseCase
 import domain.util.resource.Resource
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.map
@@ -19,37 +17,35 @@ import util.componentCoroutineScope
 class HomeScreenComponent(
     componentContext: ComponentContext,
     private val onNavigate: (configuration: Configuration) -> Unit,
-    private val onUserNotCreated: () -> Unit
+    private val onUserNotFound: () -> Unit
 ) : ComponentContext by componentContext, KoinComponent {
 
     private val coroutineScope = componentCoroutineScope()
-    private val getSignedInUser: GetCurrentUserUseCase by inject()
+    private val getCurrentUserUseCase: GetCurrentUserUseCase by inject()
 
-    @OptIn(ExperimentalCoroutinesApi::class)
-    val uiState: StateFlow<HomeScreenUIState> = getSignedInUser()
-        .map { user ->
-            when (user) {
+    val uiState: StateFlow<HomeUiState> = getCurrentUserUseCase.invoke()
+        .map { resource ->
+            when (resource) {
                 is Resource.Success -> {
-                    val isSubscribed = hasActiveEntitlements()
-
-                    HomeScreenUIState(
-                        loading = false,
-                        userName = user.data.name,
-                        userPicture = user.data.pictureUri,
-                        isSubscribed = isSubscribed
+                    HomeUiState(
+                        isLoading = false,
+                        username = resource.data.name,
+                        message = resource.data.victoryMessage,
+                        pictureUrl = resource.data.pictureUri,
+                        tier = resource.data.tier
                     )
                 }
 
                 is Resource.Failure -> {
-                    onUserNotCreated()
-                    HomeScreenUIState(loading = false)
+                    onUserNotFound()
+                    HomeUiState(isLoading = false)
                 }
             }
         }
         .stateIn(
             scope = coroutineScope,
-            started = SharingStarted.WhileSubscribed(5000),
-            initialValue = HomeScreenUIState()
+            started = SharingStarted.Companion.WhileSubscribed(5_000),
+            initialValue = HomeUiState(isLoading = false)
         )
 
     fun navigate(configuration: Configuration) {
