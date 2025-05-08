@@ -16,7 +16,8 @@ import util.componentCoroutineScope
 @OptIn(ExperimentalResourceApi::class)
 class HomeScreenComponent(
     componentContext: ComponentContext,
-    private val onNavigate: (configuration: Configuration) -> Unit
+    private val onNavigate: (configuration: Configuration) -> Unit,
+    private val onUserNotFound: () -> Unit
 ) : ComponentContext by componentContext, KoinComponent {
 
     private val coroutineScope = componentCoroutineScope()
@@ -36,14 +37,15 @@ class HomeScreenComponent(
                 }
 
                 is Resource.Failure -> {
-                    HomeUiState()
+                    onUserNotFound()
+                    HomeUiState(isLoading = false)
                 }
             }
         }
         .stateIn(
             scope = coroutineScope,
             started = SharingStarted.Companion.WhileSubscribed(5_000),
-            initialValue = HomeUiState()
+            initialValue = HomeUiState(isLoading = false)
         )
 
     fun navigate(configuration: Configuration) {
