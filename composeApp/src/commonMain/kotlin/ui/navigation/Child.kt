@@ -11,6 +11,7 @@ import ui.feature.room.RoomPlayerViewModel
 import ui.feature.signIn.SignInScreenComponent
 import ui.feature.splash.SplashScreenComponent
 import ui.feature.themes.ThemesScreenComponent
+import ui.feature.update.UpdateScreenComponent
 
 sealed class Child {
     data class CreateScreen(val component: CreateRoomScreenComponent) : Child()
@@ -24,4 +25,5 @@ sealed class Child {
     data class SignInScreen(val component: SignInScreenComponent) : Child()
     data class SplashScreen(val component: SplashScreenComponent) : Child()
     data class ThemesScreen(val component: ThemesScreenComponent) : Child()
+    data class UpdateScreen(val component: UpdateScreenComponent) : Child()
 }

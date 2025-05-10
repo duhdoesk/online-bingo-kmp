@@ -188,4 +188,10 @@
     <!--    Splash Screen -->
     <string name="getting_things_done">Getting things done</string>
 
+
+    <!--    Update Screen -->
+    <string name="update_screen_title">Update available</string>
+    <string name="update_screen_body">There is a new version of the app available. We need you to download it to proceed. The button below will get you there.</string>
+    <string name="update_screen_button">Go to store</string>
+
 </resources>

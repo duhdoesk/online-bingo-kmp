@@ -187,4 +187,10 @@
     <!--    Splash Screen -->
     <string name="getting_things_done">Getting things done</string>
 
+
+    <!--    Update Screen -->
+    <string name="update_screen_title">Atualização disponível</string>
+    <string name="update_screen_body">Temos uma nova versão disponível para você, e será necessário atualizar para continuar. O botão abaixo vai te levar até ela.</string>
+    <string name="update_screen_button">Ir para a loja</string>
+
 </resources>

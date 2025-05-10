@@ -37,6 +37,7 @@ import ui.feature.room.RoomPlayerViewModel
 import ui.feature.signIn.SignInScreenComponent
 import ui.feature.splash.SplashScreenComponent
 import ui.feature.themes.ThemesScreenComponent
+import ui.feature.update.UpdateScreenComponent
 import ui.navigation.Child.CreateUserScreen
 import ui.navigation.Child.HomeScreen
 import ui.navigation.Child.HostScreen
@@ -47,6 +48,7 @@ import ui.navigation.Child.ProfileScreen
 import ui.navigation.Child.SignInScreen
 import ui.navigation.Child.SplashScreen
 import ui.navigation.Child.ThemesScreen
+import ui.navigation.Child.UpdateScreen
 import util.componentCoroutineScope
 
 class RootComponent(
@@ -233,7 +235,15 @@ class RootComponent(
                 SplashScreenComponent(
                     componentContext = context,
                     onSignedIn = { navigateAfterSignIn() },
-                    onNotSignedIn = { navigation.replaceAll(Configuration.SignInScreen) }
+                    onNotSignedIn = { navigation.replaceAll(Configuration.SignInScreen) },
+                    onUpdateRequired = { navigation.replaceAll(Configuration.UpdateScreen(it)) }
+                )
+            )
+
+            is Configuration.UpdateScreen -> UpdateScreen(
+                UpdateScreenComponent(
+                    componentContext = context,
+                    updateUrl = configuration.updateUrl
                 )
             )
         }
