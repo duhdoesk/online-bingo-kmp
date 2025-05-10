@@ -14,6 +14,7 @@ import ui.feature.room.screens.player.PlayerScreen
 import ui.feature.signIn.SignInScreen
 import ui.feature.splash.SplashScreen
 import ui.feature.themes.ThemesScreen
+import ui.feature.update.UpdateScreen
 import ui.util.WindowInfo
 
 @ExperimentalResourceApi
@@ -24,31 +25,34 @@ fun CreateScreen(
     windowInfo: WindowInfo
 ) {
     when (instance) {
-        is Child.HomeScreen -> HomeScreen(
-            component = instance.component
-        )
-
-        is Child.ThemesScreen -> ThemesScreen(
-            component = instance.component,
-            windowInfo = windowInfo
-        )
-
         is Child.CreateScreen -> CreateRoomScreen(
             component = instance.component,
             windowInfo = windowInfo
+        )
+
+        is Child.CreateUserScreen -> CreateUserScreen(
+            viewModel = instance.component
+        )
+
+        is Child.HomeScreen -> HomeScreen(
+            component = instance.component
         )
 
         is Child.HostScreen -> HostScreen(
             viewModel = instance.component
         )
 
-        is Child.PlayerScreen -> PlayerScreen(
-            viewModel = instance.component
-        )
-
         is Child.JoinScreen -> JoinScreen(
             component = instance.component,
             windowInfo = windowInfo
+        )
+
+        is Child.PaywallScreen -> PaywallScreen(
+            viewModel = instance.component
+        )
+
+        is Child.PlayerScreen -> PlayerScreen(
+            viewModel = instance.component
         )
 
         is Child.ProfileScreen -> ProfileScreen(
@@ -60,15 +64,16 @@ fun CreateScreen(
             component = instance.component
         )
 
-        is Child.PaywallScreen -> PaywallScreen(
-            viewModel = instance.component
-        )
-
-        is Child.CreateUserScreen -> CreateUserScreen(
-            viewModel = instance.component
-        )
-
         is Child.SplashScreen -> SplashScreen(
+            component = instance.component
+        )
+
+        is Child.ThemesScreen -> ThemesScreen(
+            component = instance.component,
+            windowInfo = windowInfo
+        )
+
+        is Child.UpdateScreen -> UpdateScreen(
             component = instance.component
         )
     }

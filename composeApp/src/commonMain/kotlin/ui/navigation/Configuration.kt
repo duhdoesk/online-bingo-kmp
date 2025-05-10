@@ -5,17 +5,15 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 sealed class Configuration {
-    @Serializable
-    data object HomeScreen : Configuration()
-
-    @Serializable
-    data object ThemesScreen : Configuration()
 
     @Serializable
     data class CreateScreen(val bingoType: BingoType) : Configuration()
 
     @Serializable
-    data class JoinScreen(val bingoType: BingoType) : Configuration()
+    data object CreateUserScreen : Configuration()
+
+    @Serializable
+    data object HomeScreen : Configuration()
 
     @Serializable
     data class HostScreenThemed(val roomId: String) : Configuration()
@@ -24,10 +22,16 @@ sealed class Configuration {
     data class HostScreenClassic(val roomId: String) : Configuration()
 
     @Serializable
-    data class PlayerScreenThemed(val roomId: String) : Configuration()
+    data class JoinScreen(val bingoType: BingoType) : Configuration()
+
+    @Serializable
+    data object PaywallScreen : Configuration()
 
     @Serializable
     data class PlayerScreenClassic(val roomId: String) : Configuration()
+
+    @Serializable
+    data class PlayerScreenThemed(val roomId: String) : Configuration()
 
     @Serializable
     data object ProfileScreen : Configuration()
@@ -39,8 +43,8 @@ sealed class Configuration {
     data object SplashScreen : Configuration()
 
     @Serializable
-    data object PaywallScreen : Configuration()
+    data object ThemesScreen : Configuration()
 
     @Serializable
-    data object CreateUserScreen : Configuration()
+    data class UpdateScreen(val updateUrl: String) : Configuration()
 }

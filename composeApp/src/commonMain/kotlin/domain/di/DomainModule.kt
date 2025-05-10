@@ -13,6 +13,8 @@ import domain.character.repository.CharacterRepository
 import domain.character.useCase.GetRoomCharacters
 import domain.character.useCase.GetThemeCharacters
 import domain.character.useCase.ObserveThemeCharacters
+import domain.feature.appVersion.useCase.CheckForUpdatesUseCase
+import domain.feature.appVersion.useCase.GetInstalledVersionUseCase
 import domain.feature.auth.useCase.GetSessionInfoUseCase
 import domain.feature.auth.useCase.GetSessionStatusUseCase
 import domain.feature.auth.useCase.SignOutUseCase
@@ -49,10 +51,20 @@ import org.koin.dsl.module
 
 val domainModule = module {
 
+    /** App Version */
+    factory { CheckForUpdatesUseCase(get()) }
+    factory { GetInstalledVersionUseCase(get()) }
+
+    /** Audio */
+    includes(audioModule)
+
     /** Authentication */
     factory { GetSessionInfoUseCase(get()) }
     factory { GetSessionStatusUseCase(get()) }
     factory { SignOutUseCase(get()) }
+
+    /** Billing */
+    single<SubscribeToUserSubscriptionData> { SubscribeToUserSubscriptionData() }
 
 //    Card
     single<CardRepository> { CardRepositoryImpl(get()) }
@@ -99,10 +111,4 @@ val domainModule = module {
     single<GetRoomPlayersUseCase> { GetRoomPlayersUseCase(get(), get()) }
     single<CreateUserUseCase> { CreateUserUseCase(get()) }
     single<DeleteUserUseCase> { DeleteUserUseCase(get()) }
-
-//    Audio
-    includes(audioModule)
-
-//    Billing
-    single<SubscribeToUserSubscriptionData> { SubscribeToUserSubscriptionData() }
 }
