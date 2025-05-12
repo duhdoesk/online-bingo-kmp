@@ -9,12 +9,9 @@ import domain.util.resource.Resource
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
-class BingoThemeRepositoryImpl(
-    private val firestore: FirebaseFirestore
-) : BingoThemeRepository {
+class BingoThemeRepositoryImpl(firestore: FirebaseFirestore) : BingoThemeRepository {
 
-    private val collection = firestore
-        .collection("themes")
+    private val collection = firestore.collection("themes")
 
     override suspend fun getThemeById(id: String): Result<BingoThemeDTO> {
         try {
@@ -77,7 +74,7 @@ class BingoThemeRepositoryImpl(
                     "available" to available
                 )
             ).id
-        }.map { apiResult -> apiResult.toResource { it } }
+        }
     }
 
     private fun buildBingoThemeDTO(documentSnapshot: DocumentSnapshot): BingoThemeDTO {
