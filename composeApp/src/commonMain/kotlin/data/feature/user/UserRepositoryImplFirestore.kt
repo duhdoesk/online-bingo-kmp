@@ -21,6 +21,7 @@ import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.mapNotNull
+import kotlinx.coroutines.flow.take
 
 class UserRepositoryImplFirestore(
     firestore: FirebaseFirestore,
@@ -54,6 +55,7 @@ class UserRepositoryImplFirestore(
 
     override fun getCurrentUser(): Flow<Resource<User>> {
         return authRepository.getSessionInfo()
+            .take(1)
             .flatMapLatest { authResource ->
                 when (authResource) {
                     is Resource.Success -> {
@@ -90,56 +92,84 @@ class UserRepositoryImplFirestore(
         }.flowOn(dispatcherProvider.io)
     }
 
-    override fun updateUserName(
-        id: String,
-        name: String
-    ): Flow<Resource<Unit>> {
-        return firebaseSuspendCall {
-            collection
-                .document(id)
-                .set(
-                    mapOf(
-                        "name" to name,
-                        "updatedAt" to Timestamp.now()
-                    )
-                )
-        }.flowOn(dispatcherProvider.io)
+    override fun updateUserName(name: String): Flow<Resource<Unit>> {
+        return getCurrentUser()
+            .take(1)
+            .flatMapLatest { userResource ->
+                when (userResource) {
+                    is Resource.Success -> {
+                        firebaseSuspendCall {
+                            collection
+                                .document(userResource.data.id)
+                                .set(
+                                    mapOf(
+                                        "name" to name,
+                                        "updatedAt" to Timestamp.now()
+                                    )
+                                )
+                        }
+                    }
+
+                    is Resource.Failure -> {
+                        flowOf(userResource)
+                    }
+                }
+            }.flowOn(dispatcherProvider.io)
     }
 
-    override fun updateUserPictureUri(
-        id: String,
-        pictureUri: String
-    ): Flow<Resource<Unit>> {
-        return firebaseSuspendCall {
-            collection
-                .document(id)
-                .set(
-                    mapOf(
-                        "pictureUri" to pictureUri,
-                        "updatedAt" to Timestamp.now()
-                    )
-                )
-        }.flowOn(dispatcherProvider.io)
+    override fun updateUserPictureUri(pictureUri: String): Flow<Resource<Unit>> {
+        return getCurrentUser()
+            .take(1)
+            .flatMapLatest { userResource ->
+                when (userResource) {
+                    is Resource.Success -> {
+                        firebaseSuspendCall {
+                            collection
+                                .document(userResource.data.id)
+                                .set(
+                                    mapOf(
+                                        "pictureUri" to pictureUri,
+                                        "updatedAt" to Timestamp.now()
+                                    )
+                                )
+                        }
+                    }
+
+                    is Resource.Failure -> {
+                        flowOf(userResource)
+                    }
+                }
+            }.flowOn(dispatcherProvider.io)
     }
 
-    override fun updateVictoryMessage(
-        id: String,
-        victoryMessage: String
-    ): Flow<Resource<Unit>> {
-        return firebaseSuspendCall {
-            collection
-                .document(id)
-                .set(
-                    mapOf(
-                        "victoryMessage" to victoryMessage,
-                        "updatedAt" to Timestamp.now()
-                    )
-                )
-        }.flowOn(dispatcherProvider.io)
+    override fun updateVictoryMessage(victoryMessage: String): Flow<Resource<Unit>> {
+        return getCurrentUser()
+            .take(1)
+            .flatMapLatest { userResource ->
+                when (userResource) {
+                    is Resource.Success -> {
+                        firebaseSuspendCall {
+                            collection
+                                .document(userResource.data.id)
+                                .set(
+                                    mapOf(
+                                        "victoryMessage" to victoryMessage,
+                                        "updatedAt" to Timestamp.now()
+                                    )
+                                )
+                        }
+                    }
+
+                    is Resource.Failure -> {
+                        flowOf(userResource)
+                    }
+                }.flowOn(dispatcherProvider.io)
+            }
     }
 
     override fun deleteUser(id: String): Flow<Resource<Unit>> {
         return authRepository.deleteAccount(id)
+            .take(1)
             .flatMapLatest { resource ->
                 when (resource) {
                     is Resource.Success -> {

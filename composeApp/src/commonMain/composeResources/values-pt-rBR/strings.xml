@@ -10,6 +10,7 @@
     <string name="cancel_button">Cancelar</string>
     <string name="edit_button">Editar</string>
     <string name="exit_button">Sair</string>
+    <string name="retry_button">Repetir</string>
     <string name="create_button">Criar</string>
     <string name="start_button">Começar</string>
     <string name="finish_button">Encerrar</string>
@@ -113,13 +114,23 @@
 
 
     <!--    Profile Screen -->
+    <string name="profile_screen">Perfil</string>
+    <string name="profile_my_data">Meus dados</string>
+    <string name="profile_nickname">Apelido</string>
+    <string name="profile_victory_message">Grito de Vitória</string>
+    <string name="profile_user_id">ID do usuário</string>
+    <string name="profile_email">E-mail</string>
+    <string name="profile_my_account">Minha Conta</string>
+    <string name="profile_sign_out">Sair</string>
+    <string name="profile_delete_account">Apagar Conta</string>
+    <string name="profile_error">Não conseguimos encontrar os dados do usuário. Por favor, tente novamente mais tarde.</string>
+    <string name="profile_change_picture_title">Mudar avatar</string>
+    <string name="profile_change_picture_body">Escolha seu novo avatar entre as opções disponíveis e clique no botão confirmar.</string>
+    <string name="profile_change_picture_failure">Não foi possível atualizar seu avatar.</string>
+    <string name="profile_change_username_failure">Não foi possível atualizar seu apelido.</string>
+    <string name="profile_change_victory_message_failure">Não foi possível atualizar seu grito de vitória.</string>
     <string name="sign_out_dialog_title">Sair</string>
     <string name="sign_out_dialog_body">Você realmente deseja sair da sua conta?</string>
-    <string name="account">Conta</string>
-    <string name="delete_account">Apagar Conta</string>
-    <string name="user_avatar">Avatar do Usuário</string>
-    <string name="can_change_in">Poderá mudar em</string>
-    <string name="user_data_not_found">Não conseguimos encontrar os dados do usuário. Por favor, tente novamente mais tarde.</string>
 
 
     <!--    Host / Play Screen -->

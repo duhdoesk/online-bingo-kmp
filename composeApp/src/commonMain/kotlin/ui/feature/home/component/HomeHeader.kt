@@ -13,7 +13,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
@@ -64,9 +63,9 @@ fun HomeHeader(
                 name = uiState.username,
                 message = uiState.message,
                 modifier = Modifier
-                    .padding(end = 12.dp)
+                    .padding(end = 48.dp)
                     .padding(vertical = 8.dp)
-                    .width(maxWidth * 0.88f)
+                    .fillMaxWidth()
                     .height(80.dp)
             )
 

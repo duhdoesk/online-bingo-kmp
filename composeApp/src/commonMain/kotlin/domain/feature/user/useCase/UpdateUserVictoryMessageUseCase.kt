@@ -6,7 +6,7 @@ import kotlinx.coroutines.flow.Flow
 
 class UpdateUserVictoryMessageUseCase(private val userRepository: UserRepository) {
 
-    operator fun invoke(userId: String, newVictoryMessage: String): Flow<Resource<Unit>> {
-        return userRepository.updateVictoryMessage(id = userId, victoryMessage = newVictoryMessage)
+    operator fun invoke(newVictoryMessage: String): Flow<Resource<Unit>> {
+        return userRepository.updateVictoryMessage(victoryMessage = newVictoryMessage)
     }
 }

@@ -1,24 +1,28 @@
+@file:OptIn(FlowPreview::class)
+
 package data.firebase
 
 import domain.util.resource.Cause
 import domain.util.resource.Resource
 import io.github.jan.supabase.exceptions.HttpRequestException
 import io.github.jan.supabase.exceptions.RestException
+import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.retryWhen
-import kotlinx.coroutines.withTimeout
+import kotlinx.coroutines.flow.timeout
 import kotlinx.io.IOException
 import util.Log
 import kotlin.time.Duration.Companion.seconds
 
 internal inline fun <reified T> firebaseSuspendCall(crossinline apiCall: suspend () -> T): Flow<Resource<T>> =
     flow<Resource<T>> {
-        val response = withTimeout(15.seconds) { apiCall() }
+        val response = apiCall()
         emit(Resource.Success(response))
     }
+        .timeout(15.seconds)
         .retryWhen { cause, attempt ->
             if (cause is IOException && attempt <= 1) {
                 Log.d(

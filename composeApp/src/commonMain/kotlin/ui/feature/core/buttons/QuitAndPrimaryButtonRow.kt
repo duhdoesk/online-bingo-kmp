@@ -3,6 +3,7 @@ package ui.feature.core.buttons
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.material3.ButtonColors
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -18,6 +19,16 @@ import ui.theme.createUserSecondaryColor
 
 @Composable
 fun QuitAndPrimaryButtonRow(
+    primaryButtonColors: ButtonColors = ButtonDefaults.buttonColors(
+        containerColor = createUserPrimaryColor,
+        contentColor = createUserOnColor,
+        disabledContainerColor = Color.LightGray
+    ),
+    iconButtonColors: ButtonColors = ButtonDefaults.buttonColors(
+        containerColor = createUserSecondaryColor,
+        contentColor = createUserOnColor
+    ),
+    primaryText: String = stringResource(Res.string.create_button),
     primaryEnabled: Boolean = true,
     quitEnabled: Boolean = true,
     onPrimaryClick: () -> Unit,
@@ -30,22 +41,15 @@ fun QuitAndPrimaryButtonRow(
         modifier = modifier
     ) {
         CustomIconButton(
-            colors = ButtonDefaults.buttonColors(
-                containerColor = createUserSecondaryColor,
-                contentColor = createUserOnColor
-            ),
+            colors = iconButtonColors,
             onClick = onQuitClick,
             buttonSize = 60.dp,
             enabled = quitEnabled
         )
 
         CustomPrimaryButton(
-            text = stringResource(Res.string.create_button),
-            colors = ButtonDefaults.buttonColors(
-                containerColor = createUserPrimaryColor,
-                contentColor = createUserOnColor,
-                disabledContainerColor = Color.LightGray
-            ),
+            text = primaryText,
+            colors = primaryButtonColors,
             onClick = onPrimaryClick,
             height = 60.dp,
             enabled = primaryEnabled,

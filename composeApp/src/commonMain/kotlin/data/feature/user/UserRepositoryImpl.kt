@@ -26,6 +26,7 @@ import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.take
 import util.getLocalDateTimeNow
 
 class UserRepositoryImpl(
@@ -61,6 +62,7 @@ class UserRepositoryImpl(
 
     override fun getCurrentUser(): Flow<Resource<User>> =
         authRepository.getSessionInfo()
+            .take(1)
             .flatMapLatest { authResource ->
                 when (authResource) {
                     is Resource.Success -> {
@@ -86,38 +88,78 @@ class UserRepositoryImpl(
             ).map { it.map { it.toModel() } }
         }
 
-    override fun updateUserName(id: String, name: String): Flow<Resource<Unit>> =
-        supabaseSuspendCall {
-            usersTable.update(
-                {
-                    UserDto::name setTo name
-                    UserDto::updatedAt setTo getLocalDateTimeNow().toString()
-                }
-            ) { filter { UserDto::id eq id } }
-        }
+    override fun updateUserName(name: String): Flow<Resource<Unit>> {
+        return getCurrentUser()
+            .take(1)
+            .flatMapLatest { userResource ->
+                when (userResource) {
+                    is Resource.Success -> {
+                        supabaseSuspendCall<Unit> {
+                            usersTable.update(
+                                {
+                                    UserDto::name setTo name
+                                    UserDto::updatedAt setTo getLocalDateTimeNow().toString()
+                                }
+                            ) { filter { UserDto::id eq userResource.data.id } }
+                        }
+                    }
 
-    override fun updateUserPictureUri(id: String, pictureUri: String): Flow<Resource<Unit>> =
-        supabaseSuspendCall {
-            usersTable.update(
-                {
-                    UserDto::pictureUrl setTo pictureUri
-                    UserDto::updatedAt setTo getLocalDateTimeNow().toString()
+                    is Resource.Failure -> {
+                        flowOf(userResource)
+                    }
                 }
-            ) { filter { UserDto::id eq id } }
-        }
+            }.flowOn(dispatcherProvider.io)
+    }
 
-    override fun updateVictoryMessage(id: String, victoryMessage: String): Flow<Resource<Unit>> =
-        supabaseSuspendCall {
-            usersTable.update(
-                {
-                    UserDto::message setTo victoryMessage
-                    UserDto::updatedAt setTo getLocalDateTimeNow().toString()
+    override fun updateUserPictureUri(pictureUri: String): Flow<Resource<Unit>> {
+        return getCurrentUser()
+            .take(1)
+            .flatMapLatest { userResource ->
+                when (userResource) {
+                    is Resource.Success -> {
+                        supabaseSuspendCall<Unit> {
+                            usersTable.update(
+                                {
+                                    UserDto::pictureUrl setTo pictureUri
+                                    UserDto::updatedAt setTo getLocalDateTimeNow().toString()
+                                }
+                            ) { filter { UserDto::id eq userResource.data.id } }
+                        }
+                    }
+
+                    is Resource.Failure -> {
+                        flowOf(userResource)
+                    }
                 }
-            ) { filter { UserDto::id eq id } }
-        }
+            }.flowOn(dispatcherProvider.io)
+    }
+
+    override fun updateVictoryMessage(victoryMessage: String): Flow<Resource<Unit>> {
+        return getCurrentUser()
+            .take(1)
+            .flatMapLatest { userResource ->
+                when (userResource) {
+                    is Resource.Success -> {
+                        supabaseSuspendCall<Unit> {
+                            usersTable.update(
+                                {
+                                    UserDto::message setTo victoryMessage
+                                    UserDto::updatedAt setTo getLocalDateTimeNow().toString()
+                                }
+                            ) { filter { UserDto::id eq userResource.data.id } }
+                        }
+                    }
+
+                    is Resource.Failure -> {
+                        flowOf(userResource)
+                    }
+                }
+            }
+    }
 
     override fun deleteUser(id: String): Flow<Resource<Unit>> =
         authRepository.deleteAccount(id)
+            .take(1)
             .flatMapLatest { resource ->
                 when (resource) {
                     is Resource.Success -> {

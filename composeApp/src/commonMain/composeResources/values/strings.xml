@@ -114,13 +114,23 @@
 
 
     <!--    Profile Screen -->
+    <string name="profile_screen">Profile</string>
+    <string name="profile_my_data">My data</string>
+    <string name="profile_nickname">Nickname</string>
+    <string name="profile_victory_message">Victory Message</string>
+    <string name="profile_user_id">User ID</string>
+    <string name="profile_email">E-mail</string>
+    <string name="profile_my_account">My Account</string>
+    <string name="profile_sign_out">Sign out</string>
+    <string name="profile_delete_account">Delete Account</string>
+    <string name="profile_error">We were not able to find the user info. Please, try again later.</string>
+    <string name="profile_change_picture_title">Change Avatar</string>
+    <string name="profile_change_picture_body">Pick a new picture to be used as your avatar and then click the confirm button.</string>
+    <string name="profile_change_picture_failure">We could not update your avatar.</string>
+    <string name="profile_change_username_failure">We could not update your username.</string>
+    <string name="profile_change_victory_message_failure">We could not update your victory message.</string>
     <string name="sign_out_dialog_title">Sign Out</string>
     <string name="sign_out_dialog_body">Do you really want to sign out?</string>
-    <string name="account">Account</string>
-    <string name="delete_account">Delete Account</string>
-    <string name="user_avatar">User Avatar</string>
-    <string name="can_change_in">Can change in</string>
-    <string name="user_data_not_found">We were not able to find the user info. Please, try again later.</string>
 
 
     <!--    Host / Play Screen -->
