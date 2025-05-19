@@ -3,16 +3,20 @@
 package ui.feature.profile
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeDrawing
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SheetValue
@@ -28,6 +32,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import domain.feature.user.model.Tier
@@ -38,15 +43,31 @@ import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import themedbingo.composeapp.generated.resources.Res
 import themedbingo.composeapp.generated.resources.bg_waterfall
+import themedbingo.composeapp.generated.resources.ic_copy
+import themedbingo.composeapp.generated.resources.ic_edit
+import themedbingo.composeapp.generated.resources.ic_exit
+import themedbingo.composeapp.generated.resources.ic_trash
+import themedbingo.composeapp.generated.resources.profile_delete_account
+import themedbingo.composeapp.generated.resources.profile_email
+import themedbingo.composeapp.generated.resources.profile_my_account
+import themedbingo.composeapp.generated.resources.profile_my_data
+import themedbingo.composeapp.generated.resources.profile_nickname
 import themedbingo.composeapp.generated.resources.profile_screen
+import themedbingo.composeapp.generated.resources.profile_sign_out
+import themedbingo.composeapp.generated.resources.profile_user_id
+import themedbingo.composeapp.generated.resources.profile_victory_message
 import ui.feature.core.CustomTopBar
 import ui.feature.core.ErrorScreen
 import ui.feature.core.LoadingScreen
+import ui.feature.core.text.OutlinedShadowedText
+import ui.feature.profile.component.ProfileActionCard
 import ui.feature.profile.component.picture.ChangePictureBottomSheet
 import ui.feature.profile.component.picture.ProfileScreenUserPicture
 import ui.theme.AppTheme
+import ui.theme.error
 import ui.theme.homeOnColor
 import ui.theme.homeSecondaryColor
+import ui.theme.onError
 import ui.util.collectInLaunchedEffect
 import util.getLocalDateTimeNow
 
@@ -94,11 +115,15 @@ private fun ProfileScreen(
     modifier: Modifier = Modifier
 ) {
     val coroutineScope = rememberCoroutineScope()
+
     val bottomSheetState = rememberModalBottomSheetState(
         skipPartiallyExpanded = true,
         confirmValueChange = { newValue -> newValue != SheetValue.Hidden }
     )
+
     var showPicturesBottomSheet by remember { mutableStateOf(false) }
+    var showUserNameBottomSheet by remember { mutableStateOf(false) }
+    var showVictoryMessageBottomSheet by remember { mutableStateOf(false) }
 
     Scaffold(
         modifier = modifier,
@@ -130,12 +155,124 @@ private fun ProfileScreen(
                     .padding(innerPadding)
                     .fillMaxHeight()
                     .widthIn(max = 600.dp)
-                    .verticalScroll(rememberScrollState())
+                    .fillMaxWidth()
             ) {
                 ProfileScreenUserPicture(
                     pictureUri = uiState.user.pictureUri,
                     onPictureChange = { showPicturesBottomSheet = true }
                 )
+
+                Box(
+                    modifier = Modifier
+                        .padding(horizontal = 20.dp)
+                        .padding(top = 16.dp)
+                        .height(1.dp)
+                        .fillMaxWidth()
+                        .background(homeOnColor)
+                )
+
+                Column(
+                    modifier = Modifier
+                        .padding(bottom = 16.dp)
+                        .fillMaxWidth()
+                        .verticalScroll(rememberScrollState())
+                ) {
+                    OutlinedShadowedText(
+                        text = stringResource(Res.string.profile_my_data),
+                        fontSize = 24,
+                        strokeWidth = 2f,
+                        fontColor = homeOnColor,
+                        strokeColor = homeSecondaryColor,
+                        textAlign = TextAlign.Start,
+                        modifier = Modifier.padding(start = 20.dp, top = 16.dp)
+                    )
+
+                    ProfileActionCard(
+                        label = stringResource(Res.string.profile_nickname),
+                        value = uiState.user.name,
+                        icon = painterResource(Res.drawable.ic_edit),
+                        onClick = { showUserNameBottomSheet = true },
+                        modifier = Modifier
+                            .padding(horizontal = 20.dp)
+                            .padding(top = 12.dp)
+                            .fillMaxWidth()
+                    )
+
+                    ProfileActionCard(
+                        label = stringResource(Res.string.profile_victory_message),
+                        value = uiState.user.victoryMessage,
+                        icon = painterResource(Res.drawable.ic_edit),
+                        onClick = { showVictoryMessageBottomSheet = true },
+                        modifier = Modifier
+                            .padding(horizontal = 20.dp)
+                            .padding(top = 12.dp)
+                            .fillMaxWidth()
+                    )
+
+                    ProfileActionCard(
+                        label = stringResource(Res.string.profile_user_id),
+                        value = uiState.user.id,
+                        icon = painterResource(Res.drawable.ic_copy),
+                        onClick = {
+                            // todo(): copy to clipboard
+                        },
+                        modifier = Modifier
+                            .padding(horizontal = 20.dp)
+                            .padding(top = 12.dp)
+                            .fillMaxWidth()
+                    )
+
+                    ProfileActionCard(
+                        label = stringResource(Res.string.profile_email),
+                        value = uiState.user.email,
+                        icon = painterResource(Res.drawable.ic_copy),
+                        onClick = {
+                            // todo(): copy to clipboard
+                        },
+                        modifier = Modifier
+                            .padding(horizontal = 20.dp)
+                            .padding(top = 12.dp)
+                            .fillMaxWidth()
+                    )
+
+                    OutlinedShadowedText(
+                        text = stringResource(Res.string.profile_my_account),
+                        fontSize = 24,
+                        strokeWidth = 2f,
+                        fontColor = homeOnColor,
+                        strokeColor = homeSecondaryColor,
+                        textAlign = TextAlign.Start,
+                        modifier = Modifier.padding(start = 20.dp, top = 32.dp)
+                    )
+
+                    ProfileActionCard(
+                        value = stringResource(Res.string.profile_sign_out),
+                        icon = painterResource(Res.drawable.ic_exit),
+                        onClick = {
+                            // todo(): show confirmation dialog
+                        },
+                        modifier = Modifier
+                            .padding(horizontal = 20.dp)
+                            .padding(top = 12.dp)
+                            .fillMaxWidth()
+                    )
+
+                    ProfileActionCard(
+                        value = stringResource(Res.string.profile_delete_account),
+                        icon = painterResource(Res.drawable.ic_trash),
+                        onClick = {
+                            // todo(): show confirmation dialog
+                        },
+                        colors = CardDefaults.cardColors(
+                            containerColor = error,
+                            contentColor = onError
+                        ),
+                        modifier = Modifier
+                            .padding(horizontal = 20.dp)
+                            .padding(top = 12.dp)
+                            .fillMaxWidth()
+                    )
+                }
             }
         }
     }
