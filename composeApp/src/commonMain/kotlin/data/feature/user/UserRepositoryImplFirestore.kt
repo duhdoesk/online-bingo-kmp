@@ -75,7 +75,7 @@ class UserRepositoryImplFirestore(
             collection
                 .document(id)
                 .snapshots
-                .map { it.toUserModel() }
+                .map { it.toUserModel() ?: throw NoSuchElementException() }
         }.flowOn(dispatcherProvider.io)
     }
 
@@ -102,10 +102,11 @@ class UserRepositoryImplFirestore(
                             collection
                                 .document(userResource.data.id)
                                 .set(
-                                    mapOf(
+                                    data = mapOf(
                                         "name" to name,
                                         "updatedAt" to Timestamp.now()
-                                    )
+                                    ),
+                                    merge = true
                                 )
                         }
                     }
@@ -127,10 +128,11 @@ class UserRepositoryImplFirestore(
                             collection
                                 .document(userResource.data.id)
                                 .set(
-                                    mapOf(
+                                    data = mapOf(
                                         "pictureUri" to pictureUri,
                                         "updatedAt" to Timestamp.now()
-                                    )
+                                    ),
+                                    merge = true
                                 )
                         }
                     }
@@ -152,10 +154,11 @@ class UserRepositoryImplFirestore(
                             collection
                                 .document(userResource.data.id)
                                 .set(
-                                    mapOf(
+                                    data = mapOf(
                                         "victoryMessage" to victoryMessage,
                                         "updatedAt" to Timestamp.now()
-                                    )
+                                    ),
+                                    merge = true
                                 )
                         }
                     }

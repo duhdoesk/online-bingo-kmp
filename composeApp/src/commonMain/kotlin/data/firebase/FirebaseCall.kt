@@ -74,6 +74,7 @@ internal inline fun <reified T> firebaseCall(crossinline apiCall: () -> Flow<T>)
             val cause = when (exception) {
                 is HttpRequestException -> Cause.NETWORK_ERROR
                 is RestException -> Cause.API_ERROR
+                is NoSuchElementException -> Cause.ELEMENT_NOT_FOUND
                 else -> Cause.UNKNOWN
             }
 

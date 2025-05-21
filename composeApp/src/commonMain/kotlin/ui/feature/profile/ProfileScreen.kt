@@ -59,6 +59,7 @@ import themedbingo.composeapp.generated.resources.profile_victory_message
 import ui.feature.core.CustomTopBar
 import ui.feature.core.ErrorScreen
 import ui.feature.core.LoadingScreen
+import ui.feature.core.bottomSheet.UpdateBottomSheet
 import ui.feature.core.text.OutlinedShadowedText
 import ui.feature.profile.component.ProfileActionCard
 import ui.feature.profile.component.picture.ChangePictureBottomSheet
@@ -290,6 +291,25 @@ private fun ProfileScreen(
                 coroutineScope.launch { bottomSheetState.hide() }
                     .invokeOnCompletion { showPicturesBottomSheet = false }
             }
+        )
+    }
+
+    if (showUserNameBottomSheet) {
+        UpdateBottomSheet(
+            onDismiss = {
+                coroutineScope.launch { bottomSheetState.hide() }
+                    .invokeOnCompletion { showUserNameBottomSheet = false }
+            },
+            onConfirm = { newNickname ->
+                onUiEvent(ProfileScreenUiEvent.UpdateName(newNickname))
+                coroutineScope.launch { bottomSheetState.hide() }
+                    .invokeOnCompletion { showUserNameBottomSheet = false }
+            },
+            currentValue = uiState.user.name,
+            title = Res.string.profile_nickname,
+            body = Res.string.profile_nickname,
+            label = Res.string.profile_nickname,
+            needsTrim = true
         )
     }
 }
