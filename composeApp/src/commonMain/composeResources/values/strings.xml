@@ -172,13 +172,13 @@
     <string name="sign_out_error">We could not sign you out at this moment. Please, check your internet connection or try again later.</string>
 
 
-    <!--    Update Nickname Dialog -->
-    <string name="update_nickname_advice">You wont be able to change your Nickname again for the next 3 days</string>
+    <!--    Update Nickname Bottom Sheet -->
+    <string name="update_nickname_advice">You wont be able to change your nickname again for the next 3 days</string>
     <string name="update_nickname_title">Change Nickname</string>
-    <string name="update_nickname_body">Your Nickname must have at least 3 characters. You wont be able to change your Nickname again for the next 3 days.</string>
+    <string name="update_nickname_body">Your nickname must be min 3 and max 20 characters long.</string>
     <string name="nickname">Nickname</string>
-    <string name="update_nickname_success">Your Nickname have been successfully updated.</string>
-    <string name="update_nickname_failure">We could not update your Nickname at the moment. Please, try again in a few moments.</string>
+    <string name="update_nickname_success">Your nickname have been successfully updated.</string>
+    <string name="update_nickname_failure">We could not update your nickname at the moment. Please, try again in a few moments.</string>
 
 
     <!--    Update Victory Message Dialog -->

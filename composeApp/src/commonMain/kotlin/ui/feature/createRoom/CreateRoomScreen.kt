@@ -144,8 +144,7 @@ fun CreateRoomScreen(
             currentValue = uiState.password,
             title = Res.string.password_textField,
             body = Res.string.password_body,
-            label = Res.string.password_textField,
-            needsTrim = true
+            label = Res.string.password_textField
         )
     }
 

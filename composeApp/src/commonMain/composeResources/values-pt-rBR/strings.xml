@@ -173,12 +173,12 @@
 
 
     <!--    Update Nickname Dialog -->
-    <string name="update_nickname_advice">Você não poderá alterar seu Apelido novamente pelos próximos três dias</string>
+    <string name="update_nickname_advice">Você não poderá alterar seu apelido novamente pelos próximos três dias</string>
     <string name="update_nickname_title">Alterar seu Apelido</string>
-    <string name="update_nickname_body">Seu Apelido deve conter, ao menos, 3 caracteres. Você não poderá alterar seu Apelido novamente pelos próximos três dias.</string>
+    <string name="update_nickname_body">Seu apelido deve conter entre 3 e 20 caracteres.</string>
     <string name="nickname">Apelido</string>
-    <string name="update_nickname_success">Seu Apelido foi atualizado com sucesso.</string>
-    <string name="update_nickname_failure">Não conseguimos atualizar seu Apelido neste momento. Por favor, tente novamente em alguns instantes.</string>
+    <string name="update_nickname_success">Seu apelido foi atualizado com sucesso.</string>
+    <string name="update_nickname_failure">Não conseguimos atualizar seu apelido neste momento. Por favor, tente novamente em alguns instantes.</string>
 
 
     <!--    Update Victory Message Dialog -->

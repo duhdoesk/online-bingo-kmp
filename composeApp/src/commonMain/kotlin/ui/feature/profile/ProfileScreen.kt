@@ -47,6 +47,7 @@ import themedbingo.composeapp.generated.resources.ic_copy
 import themedbingo.composeapp.generated.resources.ic_edit
 import themedbingo.composeapp.generated.resources.ic_exit
 import themedbingo.composeapp.generated.resources.ic_trash
+import themedbingo.composeapp.generated.resources.nickname
 import themedbingo.composeapp.generated.resources.profile_delete_account
 import themedbingo.composeapp.generated.resources.profile_email
 import themedbingo.composeapp.generated.resources.profile_my_account
@@ -56,6 +57,8 @@ import themedbingo.composeapp.generated.resources.profile_screen
 import themedbingo.composeapp.generated.resources.profile_sign_out
 import themedbingo.composeapp.generated.resources.profile_user_id
 import themedbingo.composeapp.generated.resources.profile_victory_message
+import themedbingo.composeapp.generated.resources.update_nickname_body
+import themedbingo.composeapp.generated.resources.update_nickname_title
 import ui.feature.core.CustomTopBar
 import ui.feature.core.ErrorScreen
 import ui.feature.core.LoadingScreen
@@ -305,11 +308,11 @@ private fun ProfileScreen(
                 coroutineScope.launch { bottomSheetState.hide() }
                     .invokeOnCompletion { showUserNameBottomSheet = false }
             },
-            currentValue = uiState.user.name,
-            title = Res.string.profile_nickname,
-            body = Res.string.profile_nickname,
-            label = Res.string.profile_nickname,
-            needsTrim = true
+            currentValue = uiState.user.name.let { if (it.length <= 20) it else it.take(20) },
+            title = Res.string.update_nickname_title,
+            body = Res.string.update_nickname_body,
+            label = Res.string.nickname,
+            maxLength = 20
         )
     }
 }

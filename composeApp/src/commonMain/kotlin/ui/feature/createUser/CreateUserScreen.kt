@@ -121,7 +121,8 @@ fun CreateUserScreen(viewModel: CreateUserComponent) {
             title = Res.string.update_nickname_title,
             body = Res.string.update_nickname_body,
             label = Res.string.nickname,
-            sheetState = bottomSheetState
+            sheetState = bottomSheetState,
+            maxLength = 20
         )
     }
 
