@@ -55,7 +55,15 @@ fun UpdateBottomSheet(
     minLength: Int = 3
 ) {
     val keyboardController = LocalSoftwareKeyboardController.current
-    var data by remember { mutableStateOf(TextFieldValue(currentValue)) }
+    var data by remember {
+        mutableStateOf(
+            TextFieldValue(
+                currentValue.let {
+                    if (it.length < maxLength) it else it.take(maxLength - 1)
+                }
+            )
+        )
+    }
     val isValid = data.text.length >= minLength && data.text != currentValue
 
     UpdateBottomSheetContent(

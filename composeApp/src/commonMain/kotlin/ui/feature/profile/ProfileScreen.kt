@@ -59,6 +59,9 @@ import themedbingo.composeapp.generated.resources.profile_user_id
 import themedbingo.composeapp.generated.resources.profile_victory_message
 import themedbingo.composeapp.generated.resources.update_nickname_body
 import themedbingo.composeapp.generated.resources.update_nickname_title
+import themedbingo.composeapp.generated.resources.update_victory_body
+import themedbingo.composeapp.generated.resources.update_victory_title
+import themedbingo.composeapp.generated.resources.victory_message
 import ui.feature.core.CustomTopBar
 import ui.feature.core.ErrorScreen
 import ui.feature.core.LoadingScreen
@@ -308,11 +311,30 @@ private fun ProfileScreen(
                 coroutineScope.launch { bottomSheetState.hide() }
                     .invokeOnCompletion { showUserNameBottomSheet = false }
             },
-            currentValue = uiState.user.name.let { if (it.length <= 20) it else it.take(20) },
+            currentValue = uiState.user.name,
             title = Res.string.update_nickname_title,
             body = Res.string.update_nickname_body,
             label = Res.string.nickname,
             maxLength = 20
+        )
+    }
+
+    if (showVictoryMessageBottomSheet) {
+        UpdateBottomSheet(
+            onDismiss = {
+                coroutineScope.launch { bottomSheetState.hide() }
+                    .invokeOnCompletion { showVictoryMessageBottomSheet = false }
+            },
+            onConfirm = { newMessage ->
+                onUiEvent(ProfileScreenUiEvent.UpdateMessage(newMessage))
+                coroutineScope.launch { bottomSheetState.hide() }
+                    .invokeOnCompletion { showVictoryMessageBottomSheet = false }
+            },
+            currentValue = uiState.user.victoryMessage,
+            title = Res.string.update_victory_title,
+            body = Res.string.update_victory_body,
+            label = Res.string.victory_message,
+            maxLength = 80
         )
     }
 }
