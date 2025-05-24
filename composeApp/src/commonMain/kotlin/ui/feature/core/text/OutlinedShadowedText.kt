@@ -27,7 +27,7 @@ fun OutlinedShadowedText(
     modifier: Modifier = Modifier,
     textAlign: TextAlign = TextAlign.Center,
     overflow: TextOverflow = TextOverflow.Ellipsis,
-    maxLines: Int = 1
+    maxLines: Int = Int.MAX_VALUE
 ) {
     Box(
         modifier = modifier.offset(y = (4).dp),
