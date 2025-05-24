@@ -21,6 +21,7 @@
 
 
     <!--    Generic Labels -->
+    <string name="copied_to_clipboard">Copiado para a área de transferência</string>"
     <string name="error">Erro</string>
     <string name="success">Sucesso</string>
     <string name="action">Ação</string>
