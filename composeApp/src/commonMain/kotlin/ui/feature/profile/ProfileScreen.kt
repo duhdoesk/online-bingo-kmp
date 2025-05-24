@@ -43,6 +43,8 @@ import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import themedbingo.composeapp.generated.resources.Res
 import themedbingo.composeapp.generated.resources.bg_waterfall
+import themedbingo.composeapp.generated.resources.delete_account_body
+import themedbingo.composeapp.generated.resources.delete_account_title
 import themedbingo.composeapp.generated.resources.ic_copy
 import themedbingo.composeapp.generated.resources.ic_edit
 import themedbingo.composeapp.generated.resources.ic_exit
@@ -57,6 +59,8 @@ import themedbingo.composeapp.generated.resources.profile_screen
 import themedbingo.composeapp.generated.resources.profile_sign_out
 import themedbingo.composeapp.generated.resources.profile_user_id
 import themedbingo.composeapp.generated.resources.profile_victory_message
+import themedbingo.composeapp.generated.resources.sign_out_dialog_body
+import themedbingo.composeapp.generated.resources.sign_out_dialog_title
 import themedbingo.composeapp.generated.resources.update_nickname_body
 import themedbingo.composeapp.generated.resources.update_nickname_title
 import themedbingo.composeapp.generated.resources.update_victory_body
@@ -66,6 +70,7 @@ import ui.feature.core.CustomTopBar
 import ui.feature.core.ErrorScreen
 import ui.feature.core.LoadingScreen
 import ui.feature.core.bottomSheet.UpdateBottomSheet
+import ui.feature.core.dialog.GenericActionDialog
 import ui.feature.core.text.OutlinedShadowedText
 import ui.feature.profile.component.ProfileActionCard
 import ui.feature.profile.component.picture.ChangePictureBottomSheet
@@ -131,6 +136,8 @@ private fun ProfileScreen(
     var showPicturesBottomSheet by remember { mutableStateOf(false) }
     var showUserNameBottomSheet by remember { mutableStateOf(false) }
     var showVictoryMessageBottomSheet by remember { mutableStateOf(false) }
+    var showSignOutDialog by remember { mutableStateOf(false) }
+    var showDeleteAccountDialog by remember { mutableStateOf(false) }
 
     Scaffold(
         modifier = modifier,
@@ -255,9 +262,7 @@ private fun ProfileScreen(
                     ProfileActionCard(
                         value = stringResource(Res.string.profile_sign_out),
                         icon = painterResource(Res.drawable.ic_exit),
-                        onClick = {
-                            // todo(): show confirmation dialog
-                        },
+                        onClick = { showSignOutDialog = true },
                         modifier = Modifier
                             .padding(horizontal = 20.dp)
                             .padding(top = 12.dp)
@@ -267,9 +272,7 @@ private fun ProfileScreen(
                     ProfileActionCard(
                         value = stringResource(Res.string.profile_delete_account),
                         icon = painterResource(Res.drawable.ic_trash),
-                        onClick = {
-                            // todo(): show confirmation dialog
-                        },
+                        onClick = { showDeleteAccountDialog = true },
                         colors = CardDefaults.cardColors(
                             containerColor = error,
                             contentColor = onError
@@ -335,6 +338,31 @@ private fun ProfileScreen(
             body = Res.string.update_victory_body,
             label = Res.string.victory_message,
             maxLength = 80
+        )
+    }
+
+    if (showSignOutDialog) {
+        GenericActionDialog(
+            onDismiss = { showSignOutDialog = false },
+            onConfirm = {
+                showSignOutDialog = false
+                onUiEvent(ProfileScreenUiEvent.SignOut)
+            },
+            title = Res.string.sign_out_dialog_title,
+            body = Res.string.sign_out_dialog_body
+        )
+    }
+
+    if (showDeleteAccountDialog) {
+        GenericActionDialog(
+            onDismiss = { showDeleteAccountDialog = false },
+            onConfirm = {
+                showDeleteAccountDialog = false
+                onUiEvent(ProfileScreenUiEvent.DeleteAccount)
+            },
+            title = Res.string.delete_account_title,
+            body = Res.string.delete_account_body,
+            permanentAction = true
         )
     }
 }

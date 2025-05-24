@@ -1,6 +1,7 @@
 package data.feature.auth
 
 import data.dispatcher.DispatcherProvider
+import data.supabase.SERVICE_ROLE_KEY
 import data.supabase.supabaseSuspendCall
 import domain.feature.auth.AuthRepository
 import domain.util.resource.Cause
@@ -22,6 +23,7 @@ class AuthRepositoryImpl(
 
     override fun deleteAccount(uid: String): Flow<Resource<Unit>> =
         supabaseSuspendCall {
+            supabaseClient.auth.importAuthToken(SERVICE_ROLE_KEY)
             supabaseClient.auth.admin.deleteUser(uid)
         }.flowOn(dispatcherProvider.io)
 
