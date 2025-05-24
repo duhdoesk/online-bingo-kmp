@@ -16,6 +16,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.StringResource
@@ -24,6 +25,7 @@ import themedbingo.composeapp.generated.resources.Res
 import themedbingo.composeapp.generated.resources.action
 import themedbingo.composeapp.generated.resources.cancel_button
 import themedbingo.composeapp.generated.resources.confirm_button
+import ui.theme.LuckiestGuyFontFamily
 
 @OptIn(ExperimentalResourceApi::class)
 @Composable
@@ -43,15 +45,29 @@ fun GenericActionDialog(
         ) {
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally,
-                modifier = Modifier.padding(16.dp).fillMaxWidth()
+                modifier = Modifier
+                    .padding(
+                        horizontal = 16.dp,
+                        vertical = 8.dp
+                    )
+                    .fillMaxWidth()
             ) {
+                val titleColor =
+                    if (permanentAction) {
+                        MaterialTheme.colorScheme.error
+                    } else {
+                        MaterialTheme.colorScheme.onSurface
+                    }
+
                 Text(
                     text = stringResource(title),
-                    style = MaterialTheme.typography.titleLarge,
-                    modifier = Modifier.fillMaxWidth()
+                    color = titleColor,
+                    fontFamily = LuckiestGuyFontFamily(),
+                    fontSize = 20.sp,
+                    modifier = Modifier
+                        .padding(top = 16.dp)
+                        .fillMaxWidth()
                 )
-
-                Spacer(Modifier.height(8.dp))
 
                 Text(
                     text = stringResource(body),

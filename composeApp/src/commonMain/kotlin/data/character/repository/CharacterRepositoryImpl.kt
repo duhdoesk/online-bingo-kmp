@@ -14,8 +14,7 @@ class CharacterRepositoryImpl(
     firestore: FirebaseFirestore
 ) : CharacterRepository {
 
-    private val collection = firestore
-        .collection("themes")
+    private val collection = firestore.collection("themes")
 
     override fun observeThemeCharacters(themeId: String): Flow<List<CharacterDTO>> {
         return collection
@@ -64,7 +63,7 @@ class CharacterRepositoryImpl(
                         "picture" to picture
                     )
                 )
-        }.map { apiResult -> apiResult.toResource { } }
+        }
     }
 
     private fun buildCharacterDTO(documentSnapshot: DocumentSnapshot): CharacterDTO {

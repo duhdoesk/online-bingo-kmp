@@ -23,7 +23,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.StringResource
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
@@ -34,7 +33,6 @@ import themedbingo.composeapp.generated.resources.oops
 import themedbingo.composeapp.generated.resources.retry_button
 import themedbingo.composeapp.generated.resources.sad_tiger
 
-@OptIn(ExperimentalResourceApi::class)
 @Composable
 fun ErrorScreen(
     retry: () -> Unit,
@@ -83,6 +81,70 @@ fun ErrorScreen(
         Row(modifier = Modifier.fillMaxWidth()) {
             TextButton(
                 onClick = { popBack() },
+                modifier = Modifier.padding(16.dp)
+            ) {
+                Icon(
+                    Icons.AutoMirrored.Filled.KeyboardArrowLeft,
+                    contentDescription = stringResource(Res.string.back_button)
+                )
+
+                Text(
+                    text = stringResource(Res.string.back_button),
+                    modifier = Modifier.padding(horizontal = 6.dp)
+                )
+            }
+        }
+    }
+}
+
+@Composable
+fun ErrorScreen(
+    onPopBack: () -> Unit,
+    onRetry: () -> Unit,
+    errorMessage: String
+) {
+    Column {
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .weight(1f),
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Image(
+                painter = painterResource(Res.drawable.sad_tiger),
+                contentDescription = stringResource(Res.string.error),
+                modifier = Modifier.size(160.dp)
+            )
+
+            Spacer(Modifier.height(32.dp))
+
+            Text(
+                text = stringResource(Res.string.oops),
+                modifier = Modifier.padding(horizontal = 16.dp).fillMaxWidth(),
+                textAlign = TextAlign.Center,
+                style = MaterialTheme.typography.titleLarge,
+                fontWeight = FontWeight.Bold
+            )
+
+            Text(
+                text = errorMessage,
+                modifier = Modifier.padding(horizontal = 16.dp).fillMaxWidth(),
+                textAlign = TextAlign.Center,
+                style = MaterialTheme.typography.bodyLarge
+            )
+
+            Spacer(Modifier.height(32.dp))
+
+            Button(
+                onClick = { onRetry() },
+                modifier = Modifier.width(200.dp)
+            ) { Text(stringResource(Res.string.retry_button)) }
+        }
+
+        Row(modifier = Modifier.fillMaxWidth()) {
+            TextButton(
+                onClick = { onPopBack() },
                 modifier = Modifier.padding(16.dp)
             ) {
                 Icon(

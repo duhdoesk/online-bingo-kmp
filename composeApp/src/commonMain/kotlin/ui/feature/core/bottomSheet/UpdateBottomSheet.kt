@@ -1,3 +1,5 @@
+@file:OptIn(ExperimentalMaterial3Api::class)
+
 package ui.feature.core.bottomSheet
 
 import androidx.compose.foundation.layout.Column
@@ -11,8 +13,8 @@ import androidx.compose.foundation.layout.systemBars
 import androidx.compose.foundation.layout.windowInsetsBottomHeight
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.SheetState
@@ -25,15 +27,21 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.StringResource
 import org.jetbrains.compose.resources.stringResource
+import themedbingo.composeapp.generated.resources.Res
+import themedbingo.composeapp.generated.resources.confirm_button
+import ui.feature.core.buttons.QuitAndPrimaryButtonRow
+import ui.feature.core.text.OutlinedShadowedText
+import ui.theme.error
+import ui.theme.homeOnColor
+import ui.theme.homePrimaryColor
 
-@OptIn(ExperimentalResourceApi::class, ExperimentalMaterial3Api::class)
 @Composable
 fun UpdateBottomSheet(
     sheetState: SheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true),
@@ -43,11 +51,20 @@ fun UpdateBottomSheet(
     title: StringResource,
     body: StringResource,
     label: StringResource,
-    needsTrim: Boolean = false
+    maxLength: Int = Int.MAX_VALUE,
+    minLength: Int = 3
 ) {
     val keyboardController = LocalSoftwareKeyboardController.current
-    var data by remember { mutableStateOf(TextFieldValue(currentValue)) }
-    val isValid by remember(data) { mutableStateOf(data.text.length >= 3) }
+    var data by remember {
+        mutableStateOf(
+            TextFieldValue(
+                currentValue.let {
+                    if (it.length < maxLength) it else it.take(maxLength - 1)
+                }
+            )
+        )
+    }
+    val isValid = data.text.length >= minLength && data.text != currentValue
 
     UpdateBottomSheetContent(
         sheetState = sheetState,
@@ -56,10 +73,12 @@ fun UpdateBottomSheet(
         label = label,
         value = data,
         isValid = isValid,
-        onValueUpdate = { data = if (needsTrim) TextFieldValue(it.text.trim()) else it },
+        onValueUpdate = {
+            data = if (it.text.length <= maxLength) it else data
+        },
         onConfirm = {
             keyboardController?.hide()
-            onConfirm(data.text)
+            onConfirm(data.text.trim())
         },
         onCancel = {
             keyboardController?.hide()
@@ -68,7 +87,6 @@ fun UpdateBottomSheet(
     )
 }
 
-@OptIn(ExperimentalMaterial3Api::class, ExperimentalResourceApi::class)
 @Composable
 private fun UpdateBottomSheetContent(
     sheetState: SheetState,
@@ -89,19 +107,20 @@ private fun UpdateBottomSheetContent(
         contentWindowInsets = { WindowInsets.ime }
     ) {
         Column {
-            Text(
+            OutlinedShadowedText(
                 text = stringResource(title),
-                style = MaterialTheme.typography.titleLarge,
-                fontWeight = FontWeight.Bold,
-                modifier = Modifier
-                    .padding(horizontal = 16.dp)
-                    .fillMaxWidth()
+                fontSize = 24,
+                strokeWidth = 2f,
+                fontColor = homePrimaryColor,
+                strokeColor = homeOnColor,
+                modifier = Modifier.padding(start = 16.dp)
             )
 
             Spacer(Modifier.height(8.dp))
 
             Text(
                 text = stringResource(body),
+                fontSize = 12.sp,
                 modifier = Modifier
                     .padding(horizontal = 16.dp)
                     .fillMaxWidth()
@@ -118,12 +137,24 @@ private fun UpdateBottomSheetContent(
                 modifier = Modifier.padding(horizontal = 16.dp)
             )
 
-            BottomSheetButtons(
-                onCancel = onCancel,
-                onConfirm = onConfirm,
-                canConfirm = isValid,
+            Spacer(Modifier.height(32.dp))
+
+            QuitAndPrimaryButtonRow(
+                primaryButtonColors = ButtonDefaults.buttonColors(
+                    containerColor = homePrimaryColor,
+                    contentColor = homeOnColor
+                ),
+                iconButtonColors = ButtonDefaults.buttonColors(
+                    containerColor = homeOnColor,
+                    contentColor = error
+                ),
+                primaryText = stringResource(Res.string.confirm_button),
+                primaryEnabled = isValid,
+                quitEnabled = true,
+                onPrimaryClick = onConfirm,
+                onQuitClick = onCancel,
                 modifier = Modifier
-                    .padding(vertical = 20.dp, horizontal = 16.dp)
+                    .padding(horizontal = 16.dp, vertical = 8.dp)
                     .fillMaxWidth()
             )
 

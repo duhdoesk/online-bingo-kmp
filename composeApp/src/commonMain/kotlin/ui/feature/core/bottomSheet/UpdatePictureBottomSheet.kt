@@ -47,7 +47,7 @@ import domain.profilePictures.ProfilePictures
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.stringResource
 import themedbingo.composeapp.generated.resources.Res
-import themedbingo.composeapp.generated.resources.user_avatar
+import themedbingo.composeapp.generated.resources.not_started
 import ui.feature.core.text.OutlinedShadowedText
 import ui.theme.createUserOnColor
 import ui.theme.createUserPrimaryColor
@@ -116,7 +116,7 @@ fun EditProfilePictureCurrentUserData(
     ) {
         AsyncImage(
             model = avatarUrl,
-            contentDescription = stringResource(Res.string.user_avatar),
+            contentDescription = stringResource(Res.string.not_started),
             modifier = Modifier
                 .fillMaxSize()
                 .blur(40.dp)
@@ -131,7 +131,7 @@ fun EditProfilePictureCurrentUserData(
         ) {
             AsyncImage(
                 model = avatarUrl,
-                contentDescription = stringResource(Res.string.user_avatar),
+                contentDescription = stringResource(Res.string.not_started),
                 modifier = Modifier
                     .size(160.dp)
                     .clip(CircleShape),

@@ -33,12 +33,19 @@ fun CustomPrimaryButton(
     enabled: Boolean = true,
     elevation: Dp = 3.dp
 ) {
+    val borderColor =
+        if (enabled) {
+            colors.contentColor
+        } else {
+            ButtonDefaults.buttonColors().disabledContentColor
+        }
+
     Button(
         colors = colors,
         onClick = onClick,
         modifier = modifier.height(height),
         shape = RoundedCornerShape(12.dp),
-        border = BorderStroke(4.dp, colors.contentColor),
+        border = BorderStroke(4.dp, borderColor),
         contentPadding = PaddingValues(0.dp),
         enabled = enabled,
         elevation = ButtonDefaults.buttonElevation(elevation)

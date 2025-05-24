@@ -1,21 +1,27 @@
+@file:OptIn(FlowPreview::class)
+
 package data.supabase
 
 import domain.util.resource.Cause
 import domain.util.resource.Resource
 import io.github.jan.supabase.exceptions.HttpRequestException
 import io.github.jan.supabase.exceptions.RestException
+import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.retryWhen
+import kotlinx.coroutines.flow.timeout
 import util.Log
+import kotlin.time.Duration.Companion.seconds
 
 internal inline fun <reified T> supabaseSuspendCall(crossinline apiCall: suspend () -> T): Flow<Resource<T>> =
     flow<Resource<T>> {
         val result = apiCall()
         emit(Resource.Success(result))
     }
+        .timeout(15.seconds)
         .retryWhen { cause, attempt ->
             if (cause is HttpRequestException && attempt <= 1) {
                 Log.d(

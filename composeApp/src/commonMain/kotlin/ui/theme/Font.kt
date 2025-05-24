@@ -5,6 +5,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import org.jetbrains.compose.resources.Font
+import themedbingo.composeapp.generated.resources.Boogaloo_Regular
+import themedbingo.composeapp.generated.resources.LilitaOne_Regular
+import themedbingo.composeapp.generated.resources.LondrinaShadow_Regular
 import themedbingo.composeapp.generated.resources.LuckiestGuy_Regular
 import themedbingo.composeapp.generated.resources.Poppins_Black
 import themedbingo.composeapp.generated.resources.Poppins_Bold
@@ -60,6 +63,87 @@ fun LuckiestGuyFontFamily() = FontFamily(
 @Composable
 fun LuckiestGuyTypography() = Typography().run {
     val fontFamily = LuckiestGuyFontFamily()
+    copy(
+        displayLarge = displayLarge.copy(fontFamily = fontFamily),
+        displayMedium = displayMedium.copy(fontFamily = fontFamily),
+        displaySmall = displaySmall.copy(fontFamily = fontFamily),
+        headlineLarge = headlineLarge.copy(fontFamily = fontFamily),
+        headlineMedium = headlineMedium.copy(fontFamily = fontFamily),
+        headlineSmall = headlineSmall.copy(fontFamily = fontFamily),
+        titleLarge = titleLarge.copy(fontFamily = fontFamily),
+        titleMedium = titleMedium.copy(fontFamily = fontFamily),
+        titleSmall = titleSmall.copy(fontFamily = fontFamily),
+        bodyLarge = bodyLarge.copy(fontFamily = fontFamily),
+        bodyMedium = bodyMedium.copy(fontFamily = fontFamily),
+        bodySmall = bodySmall.copy(fontFamily = fontFamily),
+        labelLarge = labelLarge.copy(fontFamily = fontFamily),
+        labelMedium = labelMedium.copy(fontFamily = fontFamily),
+        labelSmall = labelSmall.copy(fontFamily = fontFamily)
+    )
+}
+
+@Composable
+fun LilitaOneFontFamily() = FontFamily(
+    Font(Res.font.LilitaOne_Regular, weight = FontWeight.Normal)
+)
+
+@Composable
+fun LilitaOneTypography() = Typography().run {
+    val fontFamily = LilitaOneFontFamily()
+    copy(
+        displayLarge = displayLarge.copy(fontFamily = fontFamily),
+        displayMedium = displayMedium.copy(fontFamily = fontFamily),
+        displaySmall = displaySmall.copy(fontFamily = fontFamily),
+        headlineLarge = headlineLarge.copy(fontFamily = fontFamily),
+        headlineMedium = headlineMedium.copy(fontFamily = fontFamily),
+        headlineSmall = headlineSmall.copy(fontFamily = fontFamily),
+        titleLarge = titleLarge.copy(fontFamily = fontFamily),
+        titleMedium = titleMedium.copy(fontFamily = fontFamily),
+        titleSmall = titleSmall.copy(fontFamily = fontFamily),
+        bodyLarge = bodyLarge.copy(fontFamily = fontFamily),
+        bodyMedium = bodyMedium.copy(fontFamily = fontFamily),
+        bodySmall = bodySmall.copy(fontFamily = fontFamily),
+        labelLarge = labelLarge.copy(fontFamily = fontFamily),
+        labelMedium = labelMedium.copy(fontFamily = fontFamily),
+        labelSmall = labelSmall.copy(fontFamily = fontFamily)
+    )
+}
+
+@Composable
+fun BoogalooFontFamily() = FontFamily(
+    Font(Res.font.Boogaloo_Regular, weight = FontWeight.Normal)
+)
+
+@Composable
+fun BoogalooTypography() = Typography().run {
+    val fontFamily = BoogalooFontFamily()
+    copy(
+        displayLarge = displayLarge.copy(fontFamily = fontFamily),
+        displayMedium = displayMedium.copy(fontFamily = fontFamily),
+        displaySmall = displaySmall.copy(fontFamily = fontFamily),
+        headlineLarge = headlineLarge.copy(fontFamily = fontFamily),
+        headlineMedium = headlineMedium.copy(fontFamily = fontFamily),
+        headlineSmall = headlineSmall.copy(fontFamily = fontFamily),
+        titleLarge = titleLarge.copy(fontFamily = fontFamily),
+        titleMedium = titleMedium.copy(fontFamily = fontFamily),
+        titleSmall = titleSmall.copy(fontFamily = fontFamily),
+        bodyLarge = bodyLarge.copy(fontFamily = fontFamily),
+        bodyMedium = bodyMedium.copy(fontFamily = fontFamily),
+        bodySmall = bodySmall.copy(fontFamily = fontFamily),
+        labelLarge = labelLarge.copy(fontFamily = fontFamily),
+        labelMedium = labelMedium.copy(fontFamily = fontFamily),
+        labelSmall = labelSmall.copy(fontFamily = fontFamily)
+    )
+}
+
+@Composable
+fun LondrinaShadowFontFamily() = FontFamily(
+    Font(Res.font.LondrinaShadow_Regular, weight = FontWeight.Normal)
+)
+
+@Composable
+fun LondrinaShadowTypography() = Typography().run {
+    val fontFamily = LondrinaShadowFontFamily()
     copy(
         displayLarge = displayLarge.copy(fontFamily = fontFamily),
         displayMedium = displayMedium.copy(fontFamily = fontFamily),

@@ -10,6 +10,7 @@
     <string name="cancel_button">Cancelar</string>
     <string name="edit_button">Editar</string>
     <string name="exit_button">Sair</string>
+    <string name="retry_button">Repetir</string>
     <string name="create_button">Criar</string>
     <string name="start_button">Começar</string>
     <string name="finish_button">Encerrar</string>
@@ -20,6 +21,7 @@
 
 
     <!--    Generic Labels -->
+    <string name="copied_to_clipboard">Copiado para a área de transferência</string>"
     <string name="error">Erro</string>
     <string name="success">Sucesso</string>
     <string name="action">Ação</string>
@@ -113,13 +115,23 @@
 
 
     <!--    Profile Screen -->
+    <string name="profile_screen">Perfil</string>
+    <string name="profile_my_data">Meus dados</string>
+    <string name="profile_nickname">Apelido</string>
+    <string name="profile_victory_message">Grito de Vitória</string>
+    <string name="profile_user_id">ID do usuário</string>
+    <string name="profile_email">E-mail</string>
+    <string name="profile_my_account">Minha Conta</string>
+    <string name="profile_sign_out">Sair</string>
+    <string name="profile_delete_account">Apagar Conta</string>
+    <string name="profile_error">Não conseguimos encontrar os dados do usuário. Por favor, tente novamente mais tarde.</string>
+    <string name="profile_change_picture_title">Mudar avatar</string>
+    <string name="profile_change_picture_body">Escolha seu novo avatar entre as opções disponíveis e clique no botão confirmar.</string>
+    <string name="profile_change_picture_failure">Não foi possível atualizar seu avatar.</string>
+    <string name="profile_change_username_failure">Não foi possível atualizar seu apelido.</string>
+    <string name="profile_change_victory_message_failure">Não foi possível atualizar seu grito de vitória.</string>
     <string name="sign_out_dialog_title">Sair</string>
     <string name="sign_out_dialog_body">Você realmente deseja sair da sua conta?</string>
-    <string name="account">Conta</string>
-    <string name="delete_account">Apagar Conta</string>
-    <string name="user_avatar">Avatar do Usuário</string>
-    <string name="can_change_in">Poderá mudar em</string>
-    <string name="user_data_not_found">Não conseguimos encontrar os dados do usuário. Por favor, tente novamente mais tarde.</string>
 
 
     <!--    Host / Play Screen -->
@@ -162,12 +174,12 @@
 
 
     <!--    Update Nickname Dialog -->
-    <string name="update_nickname_advice">Você não poderá alterar seu Apelido novamente pelos próximos três dias</string>
+    <string name="update_nickname_advice">Você não poderá alterar seu apelido novamente pelos próximos três dias</string>
     <string name="update_nickname_title">Alterar seu Apelido</string>
-    <string name="update_nickname_body">Seu Apelido deve conter, ao menos, 3 caracteres. Você não poderá alterar seu Apelido novamente pelos próximos três dias.</string>
+    <string name="update_nickname_body">Seu apelido deve conter entre 3 e 20 caracteres.</string>
     <string name="nickname">Apelido</string>
-    <string name="update_nickname_success">Seu Apelido foi atualizado com sucesso.</string>
-    <string name="update_nickname_failure">Não conseguimos atualizar seu Apelido neste momento. Por favor, tente novamente em alguns instantes.</string>
+    <string name="update_nickname_success">Seu apelido foi atualizado com sucesso.</string>
+    <string name="update_nickname_failure">Não conseguimos atualizar seu apelido neste momento. Por favor, tente novamente em alguns instantes.</string>
 
 
     <!--    Update Victory Message Dialog -->

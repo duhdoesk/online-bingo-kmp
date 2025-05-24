@@ -12,6 +12,7 @@ import androidx.compose.ui.graphics.Shadow
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import ui.theme.LuckiestGuyFontFamily
@@ -24,7 +25,9 @@ fun OutlinedShadowedText(
     fontColor: Color,
     strokeColor: Color,
     modifier: Modifier = Modifier,
-    textAlign: TextAlign = TextAlign.Center
+    textAlign: TextAlign = TextAlign.Center,
+    overflow: TextOverflow = TextOverflow.Ellipsis,
+    maxLines: Int = Int.MAX_VALUE
 ) {
     Box(
         modifier = modifier.offset(y = (4).dp),
@@ -42,7 +45,9 @@ fun OutlinedShadowedText(
                     offset = Offset(x = 0f, y = 4f),
                     blurRadius = 4f
                 )
-            )
+            ),
+            maxLines = maxLines,
+            overflow = overflow
         )
 
         Text(
@@ -53,7 +58,9 @@ fun OutlinedShadowedText(
                 fontSize = fontSize.sp,
                 fontFamily = LuckiestGuyFontFamily(),
                 textAlign = textAlign
-            )
+            ),
+            maxLines = maxLines,
+            overflow = overflow
         )
     }
 }

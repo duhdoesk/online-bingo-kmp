@@ -2,7 +2,7 @@ package domain.di
 
 import data.card.repository.CardRepositoryImpl
 import data.character.repository.CharacterRepositoryImpl
-import data.feature.user.UserRepositoryImpl
+import data.feature.user.UserRepositoryImplFirestore
 import data.room.repository.BingoRoomRepositoryImpl
 import data.theme.repository.BingoThemeRepositoryImpl
 import domain.billing.SubscribeToUserSubscriptionData
@@ -101,7 +101,7 @@ val domainModule = module {
     single { ObserveAvailableThemes(get()) }
 
 //    User
-    single<UserRepository> { UserRepositoryImpl(get(), get(), get()) }
+    single<UserRepository> { UserRepositoryImplFirestore(get(), get(), get()) }
     single<GetCurrentUserUseCase> { GetCurrentUserUseCase(get()) }
     single<GetUserByIdUseCase> { GetUserByIdUseCase(get()) }
     single<UpdateUserNameUseCase> { UpdateUserNameUseCase(get()) }

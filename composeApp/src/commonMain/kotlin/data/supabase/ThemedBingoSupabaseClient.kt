@@ -30,3 +30,14 @@ fun createThemeBingoSupabaseClient() = createSupabaseClient(
     /** Realtime module */
     install(Realtime)
 }
+
+fun createSupabaseAdminClient() = createSupabaseClient(
+    supabaseUrl = SUPABASE_URL,
+    supabaseKey = SUPABASE_KEY
+) {
+    /** Authentication module (core) */
+    install(Auth) {
+        host = "com.duhdoesk.themedbingocardsgenerator.ThemedBingo"
+        scheme = "themedbingo"
+    }
+}

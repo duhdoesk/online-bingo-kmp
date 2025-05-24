@@ -25,13 +25,13 @@ interface UserRepository {
     fun getListOfUsers(ids: List<String>): Flow<Resource<List<User>>>
 
     /** Updates user name */
-    fun updateUserName(id: String, name: String): Flow<Resource<Unit>>
+    fun updateUserName(name: String): Flow<Resource<Unit>>
 
     /** Updates user picture */
-    fun updateUserPictureUri(id: String, pictureUri: String): Flow<Resource<Unit>>
+    fun updateUserPictureUri(pictureUri: String): Flow<Resource<Unit>>
 
     /** Updates user victory message */
-    fun updateVictoryMessage(id: String, victoryMessage: String): Flow<Resource<Unit>>
+    fun updateVictoryMessage(victoryMessage: String): Flow<Resource<Unit>>
 
     /** Deletes user */
     fun deleteUser(id: String): Flow<Resource<Unit>>

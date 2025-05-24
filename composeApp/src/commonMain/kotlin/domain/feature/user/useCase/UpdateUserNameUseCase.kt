@@ -6,7 +6,7 @@ import kotlinx.coroutines.flow.Flow
 
 class UpdateUserNameUseCase(private val userRepository: UserRepository) {
 
-    operator fun invoke(userId: String, newName: String): Flow<Resource<Unit>> {
-        return userRepository.updateUserName(id = userId, name = newName)
+    operator fun invoke(newName: String): Flow<Resource<Unit>> {
+        return userRepository.updateUserName(name = newName)
     }
 }
