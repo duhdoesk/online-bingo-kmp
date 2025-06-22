@@ -20,8 +20,8 @@ import themedbingo.composeapp.generated.resources.Res
 import themedbingo.composeapp.generated.resources.hot_water_logo
 import themedbingo.composeapp.generated.resources.ic_edit
 import ui.feature.core.buttons.CustomIconButton
-import ui.theme.homeOnColor
-import ui.theme.homeSecondaryColor
+import ui.theme.profileOnColor
+import ui.theme.profilePrimaryColor
 
 @Composable
 fun ProfileScreenUserPicture(
@@ -36,7 +36,7 @@ fun ProfileScreenUserPicture(
                     vertical = 12.dp
                 )
                 .shadow(3.dp, RoundedCornerShape(12.dp))
-                .border(4.dp, homeOnColor, RoundedCornerShape(12.dp))
+                .border(4.dp, profileOnColor, RoundedCornerShape(12.dp))
                 .clip(RoundedCornerShape(12.dp))
                 .align(Alignment.Center)
                 .size(120.dp)
@@ -54,8 +54,8 @@ fun ProfileScreenUserPicture(
         CustomIconButton(
             icon = painterResource(Res.drawable.ic_edit),
             colors = ButtonDefaults.buttonColors(
-                containerColor = homeSecondaryColor,
-                contentColor = homeOnColor
+                containerColor = profilePrimaryColor,
+                contentColor = profileOnColor
             ),
             onClick = onPictureChange,
             modifier = Modifier.align(Alignment.BottomEnd)

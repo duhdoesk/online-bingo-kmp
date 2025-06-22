@@ -35,7 +35,7 @@ import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import themedbingo.composeapp.generated.resources.Res
-import themedbingo.composeapp.generated.resources.bg_waterfall
+import themedbingo.composeapp.generated.resources.bg_beach_volley
 import themedbingo.composeapp.generated.resources.create_button
 import themedbingo.composeapp.generated.resources.lobby
 import themedbingo.composeapp.generated.resources.unmapped_error
@@ -122,7 +122,7 @@ private fun LobbyScreenContent(
                 }
         ) {
             Image(
-                painter = painterResource(Res.drawable.bg_waterfall),
+                painter = painterResource(Res.drawable.bg_beach_volley),
                 contentDescription = null,
                 contentScale = ContentScale.Crop,
                 modifier = Modifier

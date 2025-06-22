@@ -48,7 +48,12 @@ val homePrimaryColor = Color(0xFF0A4482)
 val homeSecondaryColor = Color(0xFF54352D)
 val homeOnColor = Color.White
 
+/** Profile Screen */
+val profilePrimaryColor = Color(0xFF0A4482)
+val profileSecondaryColor = Color(0xFFFFF600)
+val profileOnColor = Color.White
+
 /** Lobby */
-val lobbyPrimaryColor = Color(0xFF5DADCD)
+val lobbyPrimaryColor = Color(0xFF0085BA)
 val lobbySecondaryColor = Color(0xFF54352D)
 val lobbyOnColor = Color.White
