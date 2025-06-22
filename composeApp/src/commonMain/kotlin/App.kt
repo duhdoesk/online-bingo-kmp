@@ -1,9 +1,7 @@
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import coil3.annotation.ExperimentalCoilApi
 import coil3.compose.setSingletonImageLoaderFactory
@@ -42,26 +40,20 @@ fun App(rootComponent: RootComponent) {
             /**
              * UI Setup
              */
-            Scaffold(modifier = Modifier) {
-                BoxWithConstraints(
-                    contentAlignment = Alignment.Center,
-                    modifier = Modifier.fillMaxSize()
-                ) {
-                    val windowInfo = rememberWindowInfo(
-                        screenHeight = this.maxHeight,
-                        screenWidth = this.maxWidth
+            BoxWithConstraints(modifier = Modifier.fillMaxSize()) {
+                val windowInfo = rememberWindowInfo(
+                    screenHeight = this.maxHeight,
+                    screenWidth = this.maxWidth
+                )
+
+                Children(
+                    stack = childStack,
+                    animation = stackAnimation(slide())
+                ) { child ->
+                    CreateScreen(
+                        instance = child.instance,
+                        windowInfo = windowInfo
                     )
-
-                    Children(
-                        stack = childStack,
-                        animation = stackAnimation(slide())
-                    ) { child ->
-
-                        CreateScreen(
-                            instance = child.instance,
-                            windowInfo = windowInfo
-                        )
-                    }
                 }
             }
         }

@@ -71,6 +71,7 @@ class UserRepositoryImplFirestore(
     }
 
     override fun getUserById(id: String): Flow<Resource<User>> {
+        if (id.isEmpty()) return flowOf(Resource.Failure(Cause.USER_NOT_AUTHENTICATED))
         return firebaseCall {
             collection
                 .document(id)

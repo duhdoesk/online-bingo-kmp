@@ -1,6 +1,6 @@
 package ui.feature.createRoom.event
 
-import domain.theme.model.BingoTheme
+import domain.theme.model.Theme
 
 sealed class CreateScreenEvent {
     data object UILoaded : CreateScreenEvent()
@@ -10,5 +10,5 @@ sealed class CreateScreenEvent {
     data class UpdateName(val name: String) : CreateScreenEvent()
     data class UpdatePassword(val password: String) : CreateScreenEvent()
     data class UpdateMaxWinners(val maxWinners: Int) : CreateScreenEvent()
-    data class UpdateTheme(val theme: BingoTheme) : CreateScreenEvent()
+    data class UpdateTheme(val theme: Theme) : CreateScreenEvent()
 }

@@ -23,8 +23,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import domain.profilePictures.ProfilePictures
-import domain.profilePictures.ProfilePictures.Category
+import domain.profilePictures.model.ProfilePictures.Category
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import themedbingo.composeapp.generated.resources.Res
@@ -113,7 +112,7 @@ private fun ChipPreview() {
     AppTheme {
         Column {
             CategoryChip(
-                category = ProfilePictures.Category("CATEGORY", emptyList()),
+                category = Category("CATEGORY", emptyList()),
                 isSelected = true,
                 onSelectCategory = { }
             )
@@ -121,7 +120,7 @@ private fun ChipPreview() {
             Spacer(Modifier.height(8.dp))
 
             CategoryChip(
-                category = ProfilePictures.Category("CATEGORY", emptyList()),
+                category = Category("CATEGORY", emptyList()),
                 isSelected = false,
                 onSelectCategory = { }
             )

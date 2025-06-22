@@ -4,25 +4,19 @@ import com.arkivanov.decompose.ComponentContext
 import domain.feature.user.model.User
 import domain.feature.user.useCase.GetRoomPlayersUseCase
 import domain.feature.user.useCase.GetUserByIdUseCase
-import domain.room.model.RoomState
-import domain.room.useCase.FlowRoomByIdUseCase
-import domain.room.useCase.GetBingoStyleUseCase
+import domain.room.useCase.GetRoomByIdUseCase
 import domain.room.useCase.RaffleNextItemUseCase
 import domain.room.useCase.UpdateRoomStateUseCase
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.combine
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 import ui.feature.room.event.RoomHostEvent
-import ui.feature.room.state.HostScreenError
 import ui.feature.room.state.RoomHostState
 import ui.feature.room.state.auxiliar.BingoStyle
-import ui.feature.room.state.auxiliar.DataState
 import ui.feature.room.state.auxiliar.RaffleButtonState
 import util.componentCoroutineScope
 
@@ -46,9 +40,8 @@ class RoomHostViewModel(
     /**
      * Necessary Use Cases to build UI State
      */
-    private val flowRoomByIdUseCase by inject<FlowRoomByIdUseCase>()
+    private val flowRoomByIdUseCase by inject<GetRoomByIdUseCase>()
     private val getRoomPlayersUseCase by inject<GetRoomPlayersUseCase>()
-    private val getBingoStyleUseCase: GetBingoStyleUseCase by inject()
     private val observeUser: GetUserByIdUseCase by inject()
 
     /**
@@ -75,48 +68,48 @@ class RoomHostViewModel(
      * Loads and manages UI State
      */
     private fun uiLoaded() {
-        coroutineScope.launch {
-            combine(
-                flowRoomByIdUseCase(roomId = roomId),
-                getRoomPlayersUseCase(roomId = roomId)
-            ) { room, players ->
-
-                val bingoStyle = getBingoStyleUseCase(
-                    bingoType = room.type,
-                    themeId = room.themeId
-                ).getOrNull()
-
-                if (bingoStyle == null) {
-                    return@combine RoomHostState.INITIAL.copy(dataState = DataState.ERROR)
-                }
-
-                val buttonState =
-                    if (canRaffleNext(room.raffled.size, bingoStyle)) {
-                        RaffleButtonState.AVAILABLE
-                    } else {
-                        RaffleButtonState.DONE
-                    }
-
-                val host =
-                    observeUser(room.hostId).first().getOrNull()
-
-                RoomHostState(
-                    dataState = DataState.SUCCESS,
-                    bingoStyle = bingoStyle,
-                    bingoState = room.state,
-                    roomName = room.name,
-                    host = host,
-                    players = players.getOrNull() ?: emptyList(),
-                    winners = getWinners(ids = room.winners, players = players.getOrNull() ?: emptyList()),
-                    maxWinners = room.maxWinners,
-                    raffledItems = room.raffled,
-                    raffleButtonState = buttonState,
-                    hostScreenError = null
-                )
-            }.collect { state ->
-                _screenState.update { state }
-            }
-        }
+//        coroutineScope.launch {
+//            combine(
+//                flowRoomByIdUseCase(roomId = roomId),
+//                getRoomPlayersUseCase(roomId = roomId)
+//            ) { room, players ->
+//
+//                val bingoStyle = getBingoStyleUseCase(
+//                    bingoType = room.type,
+//                    themeId = room.themeId
+//                ).getOrNull()
+//
+//                if (bingoStyle == null) {
+//                    return@combine RoomHostState.INITIAL.copy(dataState = DataState.ERROR)
+//                }
+//
+//                val buttonState =
+//                    if (canRaffleNext(room.raffled.size, bingoStyle)) {
+//                        RaffleButtonState.AVAILABLE
+//                    } else {
+//                        RaffleButtonState.DONE
+//                    }
+//
+//                val host =
+//                    observeUser(room.hostId).first().getOrNull()
+//
+//                RoomHostState(
+//                    dataState = DataState.SUCCESS,
+//                    bingoStyle = bingoStyle,
+//                    bingoState = room.state,
+//                    roomName = room.name,
+//                    host = host,
+//                    players = players.getOrNull() ?: emptyList(),
+//                    winners = getWinners(ids = room.winnersIds, players = players.getOrNull() ?: emptyList()),
+//                    maxWinners = room.maxWinners,
+//                    raffledItems = room.raffled,
+//                    raffleButtonState = buttonState,
+//                    hostScreenError = null
+//                )
+//            }.collect { state ->
+//                _screenState.update { state }
+//            }
+//        }
     }
 
     /**
@@ -139,10 +132,10 @@ class RoomHostViewModel(
      */
     private fun finishRaffle() {
         coroutineScope.launch {
-            updateRoomStateUseCase(
-                roomId = roomId,
-                state = RoomState.FINISHED
-            ).onFailure { _screenState.update { it.copy(hostScreenError = HostScreenError.FINISH) } }
+//            updateRoomStateUseCase(
+//                roomId = roomId,
+//                state = RoomState.FINISHED
+//            ).onFailure { _screenState.update { it.copy(hostScreenError = HostScreenError.FINISH) } }
         }
     }
 
@@ -206,10 +199,10 @@ class RoomHostViewModel(
      */
     private fun startRaffle() {
         coroutineScope.launch {
-            updateRoomStateUseCase(
-                roomId = roomId,
-                state = RoomState.RUNNING
-            ).onFailure { _screenState.update { it.copy(hostScreenError = HostScreenError.START) } }
+//            updateRoomStateUseCase(
+//                roomId = roomId,
+//                state = RoomState.RUNNING
+//            ).onFailure { _screenState.update { it.copy(hostScreenError = HostScreenError.START) } }
         }
     }
 

@@ -2,17 +2,11 @@ package domain.character.useCase
 
 import domain.character.model.Character
 import domain.character.repository.CharacterRepository
+import domain.util.resource.Resource
+import kotlinx.coroutines.flow.Flow
 
-class GetThemeCharacters(private val repository: CharacterRepository) {
-    suspend operator fun invoke(themeId: String): Result<List<Character>> {
-        repository.getThemeCharacters(themeId).fold(
-            onFailure = { exception ->
-                return Result.failure(exception)
-            },
-            onSuccess = { list ->
-                val model = list.map { dto -> dto.toModel() }
-                return Result.success(model)
-            }
-        )
+data class GetThemeCharacters(private val repository: CharacterRepository) {
+    operator fun invoke(themeId: String): Flow<Resource<List<Character>>> {
+        return repository.getThemeCharacters(themeId)
     }
 }

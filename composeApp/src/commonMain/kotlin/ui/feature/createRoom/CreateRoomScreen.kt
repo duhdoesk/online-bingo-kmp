@@ -10,7 +10,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
-import domain.room.model.BingoType
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.ExperimentalResourceApi
@@ -24,8 +23,6 @@ import ui.feature.core.bottomSheet.ThemePickerBottomSheet
 import ui.feature.core.bottomSheet.UpdateBottomSheet
 import ui.feature.core.dialog.GenericErrorDialog
 import ui.feature.createRoom.event.CreateScreenEvent
-import ui.feature.createRoom.screens.CreateClassicRoomScreen
-import ui.feature.createRoom.screens.CreateThemedRoomScreen
 import ui.util.WindowInfo
 
 @OptIn(ExperimentalResourceApi::class, ExperimentalMaterial3Api::class)
@@ -71,30 +68,32 @@ fun CreateRoomScreen(
      * Screen calling
      */
     when (windowInfo.screenOrientation) {
-        WindowInfo.DeviceOrientation.Landscape ->
+        WindowInfo.DeviceOrientation.Landscape -> {
             RotateScreen()
+        }
 
-        WindowInfo.DeviceOrientation.Portrait ->
-            when (uiState.bingoType) {
-                BingoType.CLASSIC ->
-                    CreateClassicRoomScreen(
-                        uiState = uiState,
-                        isFormOk = isFormOk,
-                        event = { component.uiEvent(it) },
-                        onEditName = { showNameBottomSheet = true },
-                        onEditPassword = { showPasswordBottomSheet = true }
-                    )
-
-                BingoType.THEMED ->
-                    CreateThemedRoomScreen(
-                        uiState = uiState,
-                        isFormOk = isFormOk,
-                        event = { component.uiEvent(it) },
-                        onEditTheme = { showThemeBottomSheet = true },
-                        onEditName = { showNameBottomSheet = true },
-                        onEditPassword = { showPasswordBottomSheet = true }
-                    )
-            }
+        WindowInfo.DeviceOrientation.Portrait -> {
+        }
+//            when (uiState.bingoType) {
+//                BingoType.CLASSIC ->
+//                    CreateClassicRoomScreen(
+//                        uiState = uiState,
+//                        isFormOk = isFormOk,
+//                        event = { component.uiEvent(it) },
+//                        onEditName = { showNameBottomSheet = true },
+//                        onEditPassword = { showPasswordBottomSheet = true }
+//                    )
+//
+//                BingoType.THEMED ->
+//                    CreateThemedRoomScreen(
+//                        uiState = uiState,
+//                        isFormOk = isFormOk,
+//                        event = { component.uiEvent(it) },
+//                        onEditTheme = { showThemeBottomSheet = true },
+//                        onEditName = { showNameBottomSheet = true },
+//                        onEditPassword = { showPasswordBottomSheet = true }
+//                    )
+//            }
     }
 
     /**

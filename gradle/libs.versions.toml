@@ -5,15 +5,15 @@ android-compileSdk = "36"
 android-minSdk = "24"
 android-targetSdk = "36"
 androidx-activityCompose = "1.10.1"
-androidx-lifecycle = "2.8.4"
+androidx-lifecycle = "2.9.1"
 
 # Code Style Check
 ktlint = "11.6.1"
 ktlintRuleset = "0.4.22"
 
 # Compose
-compose-multiplatform = "1.7.3"
-uiTooling = "1.7.8"
+compose-multiplatform = "1.8.2"
+uiTooling = "1.8.3"
 navigation = "2.8.0-alpha12"
 
 # Audio

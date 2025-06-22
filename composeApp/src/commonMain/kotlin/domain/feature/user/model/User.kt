@@ -46,3 +46,16 @@ fun getRandomPictureUri(): String {
 
     return possibilities.shuffled().first()
 }
+
+fun mockUser(): User {
+    return User(
+        id = "123456789",
+        email = "usuario@mockado.com.br",
+        createdAt = LocalDateTime(2023, 1, 1, 0, 0),
+        updatedAt = LocalDateTime(2023, 1, 1, 0, 0),
+        name = "Usuário Mockado",
+        victoryMessage = "O Bingo temático é demais!",
+        pictureUri = "",
+        tier = Tier.FREE
+    )
+}

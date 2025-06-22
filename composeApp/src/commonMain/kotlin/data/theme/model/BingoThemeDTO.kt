@@ -1,7 +1,7 @@
 package data.theme.model
 
 import androidx.compose.ui.text.intl.Locale
-import domain.theme.model.BingoTheme
+import domain.theme.model.Theme
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -12,7 +12,7 @@ class BingoThemeDTO(
     val nameSpanish: String?,
     val picture: String
 ) {
-    fun toModel(): BingoTheme {
+    fun toModel(): Theme {
         val localization = Locale.current.language
 
         val localizedName =
@@ -24,6 +24,6 @@ class BingoThemeDTO(
                 nameEnglish
             }
 
-        return BingoTheme(id = id, name = localizedName, pictureUri = picture)
+        return Theme(id = id, name = localizedName, pictureUri = picture)
     }
 }

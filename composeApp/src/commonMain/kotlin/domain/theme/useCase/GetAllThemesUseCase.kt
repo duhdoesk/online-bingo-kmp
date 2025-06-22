@@ -1,14 +1,12 @@
 package domain.theme.useCase
 
-import domain.theme.repository.BingoThemeRepository
-import kotlinx.coroutines.flow.map
+import domain.theme.model.Theme
+import domain.theme.repository.ThemeRepository
+import domain.util.resource.Resource
+import kotlinx.coroutines.flow.Flow
 
-data class GetAllThemesUseCase(private val repository: BingoThemeRepository) {
-    operator fun invoke() = repository
-        .getAllThemes()
-        .map { list ->
-            list.map { dto ->
-                dto.toModel()
-            }
-        }
+data class GetAllThemesUseCase(private val repository: ThemeRepository) {
+    operator fun invoke(): Flow<Resource<List<Theme>>> {
+        return repository.getAllThemes()
+    }
 }

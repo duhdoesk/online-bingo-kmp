@@ -1,23 +1,24 @@
 package domain.room.useCase
 
 import domain.room.model.BingoType
+import domain.room.model.RoomPrivacy
 import domain.room.repository.BingoRoomRepository
+import domain.util.resource.Resource
+import kotlinx.coroutines.flow.Flow
 
 class CreateRoomUseCase(private val roomRepository: BingoRoomRepository) {
-    suspend operator fun invoke(
+    operator fun invoke(
         hostId: String,
         name: String,
-        locked: Boolean,
-        password: String?,
+        privacy: RoomPrivacy,
         maxWinners: Int,
         type: BingoType,
         themeId: String?
-    ): Result<String> {
+    ): Flow<Resource<String>> {
         return roomRepository.createRoom(
             hostId = hostId,
             name = name,
-            locked = locked,
-            password = password,
+            privacy = privacy,
             maxWinners = maxWinners,
             type = type,
             themeId = themeId

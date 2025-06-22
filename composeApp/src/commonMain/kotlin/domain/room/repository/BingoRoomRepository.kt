@@ -1,35 +1,44 @@
 package domain.room.repository
 
-import data.room.model.BingoRoomDTO
+import domain.room.model.BingoRoom
 import domain.room.model.BingoType
+import domain.room.model.RoomPrivacy
+import domain.util.resource.Resource
 import kotlinx.coroutines.flow.Flow
 
 interface BingoRoomRepository {
-    fun getRooms(bingoType: BingoType): Flow<List<BingoRoomDTO>>
 
-    fun getNotStartedRooms(bingoType: BingoType): Flow<List<BingoRoomDTO>>
+    /** Returns a room given its ID */
+    fun getRoomById(id: String): Flow<Resource<BingoRoom>>
 
-    fun getRunningRooms(bingoType: BingoType): Flow<List<BingoRoomDTO>>
+    /** Returns all open rooms */
+    fun getAvailableRooms(bingoType: BingoType): Flow<Resource<List<BingoRoom>>>
 
-    fun flowRoomById(id: String): Flow<BingoRoomDTO>
+    /** Returns all rooms that are not started yet given a Bingo Type */
+    fun getNotStartedRooms(bingoType: BingoType): Flow<Resource<List<BingoRoom>>>
 
-    suspend fun getRoomById(id: String): Result<BingoRoomDTO>
+    /** Returns all rooms that are already running given a Bingo Type */
+    fun getRunningRooms(bingoType: BingoType): Flow<Resource<List<BingoRoom>>>
 
-    suspend fun createRoom(
+    /** Creates a new room and returns its ID */
+    fun createRoom(
         hostId: String,
         name: String,
-        locked: Boolean,
-        password: String?,
+        privacy: RoomPrivacy,
         maxWinners: Int,
         type: BingoType,
         themeId: String?
-    ): Result<String>
+    ): Flow<Resource<String>>
 
-    suspend fun joinRoom(roomId: String, userId: String): Result<Unit>
+    /** Joins a room */
+    fun joinRoom(roomId: String, userId: String): Flow<Resource<Unit>>
 
-    suspend fun updateRoomState(roomId: String, state: String): Result<Unit>
+    /** Updates room state */
+    fun updateRoomState(roomId: String, state: String): Flow<Resource<Unit>>
 
-    suspend fun addRaffledCharacter(roomId: String, characterId: String): Result<Unit>
+    /** Adds a raffled character to the room */
+    fun addRaffledCharacter(roomId: String, characterId: String): Flow<Resource<Unit>>
 
-    suspend fun addWinner(roomId: String, userId: String): Result<Unit>
+    /** Adds a winner to the room */
+    fun addWinner(roomId: String, userId: String): Flow<Resource<Unit>>
 }

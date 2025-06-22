@@ -1,6 +1,6 @@
 package ui.feature.profile.component.picture
 
-import domain.profilePictures.ProfilePictures.Category
+import domain.profilePictures.model.ProfilePictures.Category
 
 data class ChangePictureUiState(
     val isLoading: Boolean = true,

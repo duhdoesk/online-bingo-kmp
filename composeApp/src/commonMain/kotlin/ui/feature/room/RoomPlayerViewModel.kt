@@ -8,8 +8,7 @@ import domain.feature.user.useCase.GetCurrentUserUseCase
 import domain.feature.user.useCase.GetRoomPlayersUseCase
 import domain.room.model.BingoType
 import domain.room.useCase.CallBingoUseCase
-import domain.room.useCase.FlowRoomByIdUseCase
-import domain.room.useCase.GetBingoStyleUseCase
+import domain.room.useCase.GetRoomByIdUseCase
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
@@ -43,10 +42,9 @@ class RoomPlayerViewModel(
     /**
      * Necessary Use Cases to build UI State
      */
-    private val flowRoomByIdUseCase by inject<FlowRoomByIdUseCase>()
+    private val flowRoomByIdUseCase by inject<GetRoomByIdUseCase>()
     private val getRoomPlayersUseCase by inject<GetRoomPlayersUseCase>()
     private val flowCardByRoomAndUserIDUseCase by inject<FlowCardByRoomAndUserIDUseCase>()
-    private val getBingoStyleUseCase: GetBingoStyleUseCase by inject()
     private val getCurrentUserUseCase: GetCurrentUserUseCase by inject()
 
     /**
@@ -152,12 +150,12 @@ class RoomPlayerViewModel(
      * Call bingo and add player to the list of winners
      */
     private fun callBingo() {
-        coroutineScope.launch {
-            callBingoUseCase(
-                roomId = roomId,
-                userId = screenState.value.userId.orEmpty()
-            ).onFailure { exception -> errorDialogState.showDialog(exception.message) }
-        }
+//        coroutineScope.launch {
+//            callBingoUseCase(
+//                roomId = roomId,
+//                userId = screenState.value.userId.orEmpty()
+//            ).onFailure { exception -> errorDialogState.showDialog(exception.message) }
+//        }
     }
 
     /**
@@ -204,10 +202,10 @@ class RoomPlayerViewModel(
         if (items == null) return CardState.Error
 
         // Returns Error if there is card size is different than requested
-        when (bingoType) {
-            BingoType.CLASSIC -> if (items.size != 24) return CardState.Error
-            BingoType.THEMED -> if (items.size != 9) return CardState.Error
-        }
+//        when (bingoType) {
+//            BingoType.CLASSIC -> if (items.size != 24) return CardState.Error
+//            BingoType.THEMED -> if (items.size != 9) return CardState.Error
+//        }
 
         // Returns Success after passing the checks
         return CardState.Success(items = items)

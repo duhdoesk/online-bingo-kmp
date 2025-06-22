@@ -1,26 +1,11 @@
 package domain.room.useCase
 
 import domain.room.repository.BingoRoomRepository
+import domain.util.resource.Resource
+import kotlinx.coroutines.flow.Flow
 
-class JoinRoomUseCase(private val roomRepository: BingoRoomRepository) {
-
-    suspend operator fun invoke(
-        roomId: String,
-        userId: String,
-        roomPassword: String?
-    ): Result<Unit> {
-        roomRepository.getRoomById(roomId)
-            .onSuccess { room ->
-                if (room.locked && room.password != roomPassword) {
-                    return Result.failure(JoinRoomException(message = "Incorrect Password"))
-                }
-
-                return roomRepository.joinRoom(roomId, userId)
-            }
-            .onFailure { exception -> return Result.failure(exception) }
-
-        return Result.failure(JoinRoomException("No Response"))
+class JoinRoomUseCase(private val bingoRoomRepository: BingoRoomRepository) {
+    operator fun invoke(roomId: String, userId: String): Flow<Resource<Unit>> {
+        return bingoRoomRepository.joinRoom(roomId = roomId, userId = userId)
     }
 }
-
-class JoinRoomException(message: String) : Exception(message)

@@ -11,11 +11,12 @@ import domain.feature.user.model.getRandomPictureUri
 import kotlinx.datetime.Instant
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
+import util.getLocalDateTimeNow
 
-fun DocumentSnapshot.toUserModel(): User? {
+fun DocumentSnapshot.toUserModel(): User {
     val createdAt = (this.get("createdAt") as? Timestamp)?.let {
         Instant.fromEpochMilliseconds(it.toMilliseconds().toLong()).toLocalDateTime(TimeZone.UTC)
-    } ?: return null
+    } ?: getLocalDateTimeNow()
 
     val updatedAt = (this.get("updatedAt") as? Timestamp)?.let {
         Instant.fromEpochMilliseconds(it.toMilliseconds().toLong()).toLocalDateTime(TimeZone.UTC)

@@ -1,13 +1,12 @@
 package domain.theme.useCase
 
-import domain.theme.model.BingoTheme
-import domain.theme.repository.BingoThemeRepository
+import domain.theme.model.Theme
+import domain.theme.repository.ThemeRepository
+import domain.util.resource.Resource
+import kotlinx.coroutines.flow.Flow
 
-class GetThemeByIdUseCase(private val themeRepository: BingoThemeRepository) {
-    suspend operator fun invoke(themeId: String): Result<BingoTheme> {
-        themeRepository.getThemeById(themeId).fold(
-            onFailure = { return Result.failure(it) },
-            onSuccess = { dto -> return Result.success(dto.toModel()) }
-        )
+class GetThemeByIdUseCase(private val themeRepository: ThemeRepository) {
+    operator fun invoke(themeId: String): Flow<Resource<Theme>> {
+        return themeRepository.getThemeById(themeId)
     }
 }

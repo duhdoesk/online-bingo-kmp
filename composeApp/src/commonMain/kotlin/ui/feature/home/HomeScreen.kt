@@ -49,8 +49,7 @@ fun HomeScreen(component: HomeScreenComponent) {
     HomeScreen(
         uiState = uiState,
         onNavigate = component::navigate,
-        modifier = Modifier
-            .fillMaxSize()
+        modifier = Modifier.fillMaxSize()
     )
 }
 

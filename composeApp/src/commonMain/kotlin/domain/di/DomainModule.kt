@@ -3,16 +3,15 @@ package domain.di
 import data.card.repository.CardRepositoryImpl
 import data.character.repository.CharacterRepositoryImpl
 import data.feature.user.UserRepositoryImplFirestore
+import data.profilePictures.ProfilePicturesRepositoryImpl
 import data.room.repository.BingoRoomRepositoryImpl
-import data.theme.repository.BingoThemeRepositoryImpl
+import data.theme.repository.ThemeRepositoryImpl
 import domain.billing.SubscribeToUserSubscriptionData
 import domain.card.repository.CardRepository
 import domain.card.useCase.FlowCardByRoomAndUserIDUseCase
 import domain.card.useCase.SetCardByRoomAndUserIDUseCase
 import domain.character.repository.CharacterRepository
-import domain.character.useCase.GetRoomCharacters
 import domain.character.useCase.GetThemeCharacters
-import domain.character.useCase.ObserveThemeCharacters
 import domain.feature.appVersion.useCase.CheckForUpdatesUseCase
 import domain.feature.appVersion.useCase.GetInstalledVersionUseCase
 import domain.feature.auth.useCase.GetSessionInfoUseCase
@@ -28,25 +27,21 @@ import domain.feature.user.useCase.GetUserByIdUseCase
 import domain.feature.user.useCase.UpdateUserNameUseCase
 import domain.feature.user.useCase.UpdateUserPictureUseCase
 import domain.feature.user.useCase.UpdateUserVictoryMessageUseCase
+import domain.profilePictures.ProfilePicturesRepository
 import domain.room.repository.BingoRoomRepository
 import domain.room.useCase.CallBingoUseCase
 import domain.room.useCase.CreateRoomUseCase
-import domain.room.useCase.FlowRoomByIdUseCase
-import domain.room.useCase.GetBingoStyleUseCase
-import domain.room.useCase.GetNotStartedRoomsUseCase
+import domain.room.useCase.GetAvailableRoomsUseCase
+import domain.room.useCase.GetOpenRoomsUseCase
 import domain.room.useCase.GetRoomByIdUseCase
-import domain.room.useCase.GetRoomsUseCase
 import domain.room.useCase.GetRunningRoomsUseCase
 import domain.room.useCase.JoinRoomUseCase
-import domain.room.useCase.MapRoomDTOToModelUseCase
 import domain.room.useCase.RaffleNextItemUseCase
 import domain.room.useCase.UpdateRoomStateUseCase
-import domain.theme.repository.BingoThemeRepository
-import domain.theme.useCase.FlowThemeByIdUseCase
+import domain.theme.repository.ThemeRepository
 import domain.theme.useCase.GetAllThemesUseCase
-import domain.theme.useCase.GetRoomThemeUseCase
+import domain.theme.useCase.GetAvailableThemes
 import domain.theme.useCase.GetThemeByIdUseCase
-import domain.theme.useCase.ObserveAvailableThemes
 import org.koin.dsl.module
 
 val domainModule = module {
@@ -68,47 +63,43 @@ val domainModule = module {
 
 //    Card
     single<CardRepository> { CardRepositoryImpl(get()) }
-    single<FlowCardByRoomAndUserIDUseCase> { FlowCardByRoomAndUserIDUseCase(get()) }
-    single<SetCardByRoomAndUserIDUseCase> { SetCardByRoomAndUserIDUseCase(get()) }
+    factory { FlowCardByRoomAndUserIDUseCase(get()) }
+    factory { SetCardByRoomAndUserIDUseCase(get()) }
 
 //    Character
     single<CharacterRepository> { CharacterRepositoryImpl(get()) }
 
+//    Profile Pictures
+    single<ProfilePicturesRepository> { ProfilePicturesRepositoryImpl(get(), get()) }
+    factory { GetProfilePicturesUseCase(get()) }
+
 //    Room
-    single<BingoRoomRepository> { BingoRoomRepositoryImpl(get()) }
-    single { GetRoomsUseCase(get(), get()) }
-    single { GetNotStartedRoomsUseCase(get(), get()) }
-    single { GetRunningRoomsUseCase(get(), get()) }
-    single { JoinRoomUseCase(get()) }
-    single { FlowRoomByIdUseCase(get(), get()) }
-    single { GetRoomByIdUseCase(get(), get()) }
-    single { UpdateRoomStateUseCase(get()) }
-    single { RaffleNextItemUseCase(get()) }
-    single { CreateRoomUseCase(get()) }
-    single { CallBingoUseCase(get()) }
-    single { GetBingoStyleUseCase(get(), get()) }
-    single { MapRoomDTOToModelUseCase() }
+    single<BingoRoomRepository> { BingoRoomRepositoryImpl(get(), get(), get(), get()) }
+    factory { GetOpenRoomsUseCase(get()) }
+    factory { GetAvailableRoomsUseCase(get()) }
+    factory { GetRunningRoomsUseCase(get()) }
+    factory { JoinRoomUseCase(get()) }
+    factory { GetRoomByIdUseCase(get()) }
+    factory { UpdateRoomStateUseCase(get()) }
+    factory { RaffleNextItemUseCase(get()) }
+    factory { CreateRoomUseCase(get()) }
+    factory { CallBingoUseCase(get()) }
 
 //    Theme
-    single<BingoThemeRepository> { BingoThemeRepositoryImpl(get()) }
-    single { GetAllThemesUseCase(get()) }
-    single { ObserveThemeCharacters(get()) }
-    single { FlowThemeByIdUseCase(get()) }
-    single { GetRoomCharacters(get(), get()) }
-    single { GetRoomThemeUseCase(get(), get()) }
-    single { GetThemeCharacters(get()) }
-    single { GetThemeByIdUseCase(get()) }
-    single { ObserveAvailableThemes(get()) }
+    single<ThemeRepository> { ThemeRepositoryImpl(get()) }
+    factory { GetAllThemesUseCase(get()) }
+    factory { GetThemeCharacters(get()) }
+    factory { GetThemeByIdUseCase(get()) }
+    factory { GetAvailableThemes(get()) }
 
 //    User
     single<UserRepository> { UserRepositoryImplFirestore(get(), get(), get()) }
-    single<GetCurrentUserUseCase> { GetCurrentUserUseCase(get()) }
-    single<GetUserByIdUseCase> { GetUserByIdUseCase(get()) }
-    single<UpdateUserNameUseCase> { UpdateUserNameUseCase(get()) }
-    single<UpdateUserVictoryMessageUseCase> { UpdateUserVictoryMessageUseCase(get()) }
-    single<UpdateUserPictureUseCase> { UpdateUserPictureUseCase(get()) }
-    single<GetProfilePicturesUseCase> { GetProfilePicturesUseCase(get(), get()) }
-    single<GetRoomPlayersUseCase> { GetRoomPlayersUseCase(get(), get()) }
-    single<CreateUserUseCase> { CreateUserUseCase(get()) }
-    single<DeleteUserUseCase> { DeleteUserUseCase(get()) }
+    factory { GetCurrentUserUseCase(get()) }
+    factory { GetUserByIdUseCase(get()) }
+    factory { UpdateUserNameUseCase(get()) }
+    factory { UpdateUserVictoryMessageUseCase(get()) }
+    factory { UpdateUserPictureUseCase(get()) }
+    factory { GetRoomPlayersUseCase(get()) }
+    factory { CreateUserUseCase(get()) }
+    factory { DeleteUserUseCase(get()) }
 }

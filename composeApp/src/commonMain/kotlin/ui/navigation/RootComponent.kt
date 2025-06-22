@@ -29,7 +29,7 @@ import org.koin.core.component.inject
 import ui.feature.createRoom.CreateRoomScreenComponent
 import ui.feature.createUser.CreateUserComponent
 import ui.feature.home.HomeScreenComponent
-import ui.feature.joinRoom.JoinScreenComponent
+import ui.feature.lobby.LobbyScreenComponent
 import ui.feature.paywall.PaywallScreenViewModel
 import ui.feature.profile.ProfileScreenComponent
 import ui.feature.room.RoomHostViewModel
@@ -101,11 +101,13 @@ class RootComponent(
                 is Resource.Success -> {
                     navigation.replaceAll(Configuration.HomeScreen)
                 }
+
                 is Resource.Failure -> {
                     when (userResource.cause) {
                         Cause.USER_NOT_AUTHENTICATED -> {
                             navigation.replaceAll(Configuration.SignInScreen)
                         }
+
                         else -> {
                             navigation.replaceAll(Configuration.CreateUserScreen)
                         }
@@ -184,19 +186,23 @@ class RootComponent(
             )
 
             is Configuration.JoinScreen -> JoinScreen(
-                JoinScreenComponent(
+                LobbyScreenComponent(
                     componentContext = context,
                     bingoType = configuration.bingoType,
-                    onPopBack = { navigation.pop() },
-                    onJoinRoom = { config -> navigation.replaceCurrent(configuration = config) },
+                    onPopBack = {
+                        navigation.pop()
+                    },
+                    onJoinRoom = { config ->
+                        navigation.replaceCurrent(configuration = config)
+                    },
                     onCreateRoom = {
                         navigation.pushNew(
-                            Configuration.CreateScreen(
-                                configuration.bingoType
-                            )
+                            Configuration.CreateScreen(configuration.bingoType)
                         )
                     },
-                    onNavigate = { navigation.pushNew(it) }
+                    onNavigateToPaywall = {
+                        navigation.pushNew(Configuration.PaywallScreen)
+                    }
                 )
             )
 

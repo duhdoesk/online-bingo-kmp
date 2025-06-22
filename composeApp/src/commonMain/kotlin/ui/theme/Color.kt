@@ -47,3 +47,8 @@ val createUserOnColor = Color.White
 val homePrimaryColor = Color(0xFF0A4482)
 val homeSecondaryColor = Color(0xFF54352D)
 val homeOnColor = Color.White
+
+/** Lobby */
+val lobbyPrimaryColor = Color(0xFF5DADCD)
+val lobbySecondaryColor = Color(0xFF54352D)
+val lobbyOnColor = Color.White
