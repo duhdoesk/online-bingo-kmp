@@ -76,7 +76,7 @@ class UserRepositoryImplFirestore(
             collection
                 .document(id)
                 .snapshots
-                .map { it.toUserModel() ?: throw NoSuchElementException() }
+                .map { it.toUserModel() }
         }.flowOn(dispatcherProvider.io)
     }
 

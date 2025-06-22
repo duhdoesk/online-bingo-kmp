@@ -3,6 +3,7 @@ package data.feature.user.mapper
 import dev.gitlive.firebase.firestore.DocumentSnapshot
 import dev.gitlive.firebase.firestore.Timestamp
 import dev.gitlive.firebase.firestore.toMilliseconds
+import domain.billing.hasActiveEntitlements
 import domain.feature.user.model.Tier
 import domain.feature.user.model.User
 import domain.feature.user.model.getLocalizedMessage
@@ -13,7 +14,7 @@ import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
 import util.getLocalDateTimeNow
 
-fun DocumentSnapshot.toUserModel(): User {
+suspend fun DocumentSnapshot.toUserModel(): User {
     val createdAt = (this.get("createdAt") as? Timestamp)?.let {
         Instant.fromEpochMilliseconds(it.toMilliseconds().toLong()).toLocalDateTime(TimeZone.UTC)
     } ?: getLocalDateTimeNow()
@@ -21,6 +22,8 @@ fun DocumentSnapshot.toUserModel(): User {
     val updatedAt = (this.get("updatedAt") as? Timestamp)?.let {
         Instant.fromEpochMilliseconds(it.toMilliseconds().toLong()).toLocalDateTime(TimeZone.UTC)
     }
+
+    val tier = if (hasActiveEntitlements()) Tier.VIP else Tier.FREE
 
     return User(
         id = this.id,
@@ -30,6 +33,6 @@ fun DocumentSnapshot.toUserModel(): User {
         pictureUri = this.get("pictureUri") as? String? ?: getRandomPictureUri(),
         victoryMessage = this.get("victoryMessage") as? String? ?: getLocalizedMessage(),
         updatedAt = updatedAt,
-        tier = Tier.entries.find { it.name == this.get("tier") as? String? } ?: Tier.FREE
+        tier = tier
     )
 }
