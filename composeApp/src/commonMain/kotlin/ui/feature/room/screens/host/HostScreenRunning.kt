@@ -4,8 +4,6 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Check
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -16,12 +14,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import themedbingo.composeapp.generated.resources.Res
-import themedbingo.composeapp.generated.resources.finish_button
 import themedbingo.composeapp.generated.resources.finish_dialog_body
 import themedbingo.composeapp.generated.resources.finish_dialog_title
 import themedbingo.composeapp.generated.resources.pop_back_dialog_body
 import themedbingo.composeapp.generated.resources.pop_back_dialog_title
-import ui.feature.core.DoubleButtonRow
 import ui.feature.core.dialog.GenericActionDialog
 import ui.feature.room.event.RoomHostEvent
 import ui.feature.room.screens.component.RaffleNextButton
@@ -89,15 +85,15 @@ fun HostScreenRunning(
             .fillMaxWidth()
     )
 
-    DoubleButtonRow(
-        leftEnabled = true,
-        rightEnabled = true,
-        leftClicked = { showPopBackConfirmation = true },
-        rightClicked = { showFinishConfirmation = true },
-        rightText = Res.string.finish_button,
-        rightButtonIcon = Icons.Default.Check,
-        modifier = Modifier
-            .padding(8.dp)
-            .fillMaxWidth()
-    )
+//    DoubleButtonRow(
+//        leftEnabled = true,
+//        rightEnabled = true,
+//        leftClicked = { showPopBackConfirmation = true },
+//        rightClicked = { showFinishConfirmation = true },
+//        rightText = Res.string.finish_button,
+//        rightButtonIcon = Icons.Default.Check,
+//        modifier = Modifier
+//            .padding(8.dp)
+//            .fillMaxWidth()
+//    )
 }

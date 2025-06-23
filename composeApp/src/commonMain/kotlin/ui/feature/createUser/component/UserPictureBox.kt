@@ -4,8 +4,6 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -19,6 +17,7 @@ import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 import themedbingo.composeapp.generated.resources.Res
 import themedbingo.composeapp.generated.resources.hot_water_logo
+import themedbingo.composeapp.generated.resources.ic_edit
 import themedbingo.composeapp.generated.resources.not_started
 import ui.feature.core.buttons.CustomIconButton
 import ui.theme.createUserOnColor
@@ -57,7 +56,7 @@ fun UserPictureBox(
                 containerColor = createUserSecondaryColor,
                 contentColor = createUserOnColor
             ),
-            icon = Icons.Default.Edit
+            icon = painterResource(Res.drawable.ic_edit)
         )
     }
 }

@@ -14,8 +14,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.KeyboardArrowLeft
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -38,6 +36,7 @@ import themedbingo.composeapp.generated.resources.Res
 import themedbingo.composeapp.generated.resources.blue_ball
 import themedbingo.composeapp.generated.resources.go_to_first
 import themedbingo.composeapp.generated.resources.green_ball
+import themedbingo.composeapp.generated.resources.ic_back
 import themedbingo.composeapp.generated.resources.purple_ball
 import themedbingo.composeapp.generated.resources.red_ball
 import themedbingo.composeapp.generated.resources.yellow_ball
@@ -122,7 +121,7 @@ fun RaffledNumbersHorizontalPager(
                     .align(Alignment.CenterStart)
             ) {
                 Icon(
-                    imageVector = Icons.AutoMirrored.Default.KeyboardArrowLeft,
+                    painter = painterResource(Res.drawable.ic_back),
                     contentDescription = stringResource(Res.string.go_to_first)
                 )
             }

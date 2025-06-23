@@ -10,8 +10,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.KeyboardArrowLeft
 import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -29,6 +27,7 @@ import org.jetbrains.compose.resources.stringResource
 import themedbingo.composeapp.generated.resources.Res
 import themedbingo.composeapp.generated.resources.back_button
 import themedbingo.composeapp.generated.resources.error
+import themedbingo.composeapp.generated.resources.ic_back
 import themedbingo.composeapp.generated.resources.oops
 import themedbingo.composeapp.generated.resources.retry_button
 import themedbingo.composeapp.generated.resources.sad_tiger
@@ -84,7 +83,7 @@ fun ErrorScreen(
                 modifier = Modifier.padding(16.dp)
             ) {
                 Icon(
-                    Icons.AutoMirrored.Filled.KeyboardArrowLeft,
+                    painter = painterResource(Res.drawable.ic_back),
                     contentDescription = stringResource(Res.string.back_button)
                 )
 
@@ -148,7 +147,7 @@ fun ErrorScreen(
                 modifier = Modifier.padding(16.dp)
             ) {
                 Icon(
-                    Icons.AutoMirrored.Filled.KeyboardArrowLeft,
+                    painter = painterResource(Res.drawable.ic_back),
                     contentDescription = stringResource(Res.string.back_button)
                 )
 
