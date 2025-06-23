@@ -28,15 +28,15 @@ import themedbingo.composeapp.generated.resources.ic_trash
 import ui.theme.AppTheme
 import ui.theme.LilitaOneFontFamily
 import ui.theme.error
-import ui.theme.homeOnColor
-import ui.theme.homeSecondaryColor
 import ui.theme.onError
+import ui.theme.profileOnColor
+import ui.theme.profilePrimaryColor
 
 @Composable
 fun ProfileActionCard(
     colors: CardColors = CardDefaults.cardColors().copy(
-        containerColor = homeOnColor.copy(alpha = 0.9f),
-        contentColor = homeSecondaryColor
+        containerColor = profileOnColor.copy(alpha = 0.9f),
+        contentColor = profilePrimaryColor
     ),
     icon: Painter,
     label: String? = null,

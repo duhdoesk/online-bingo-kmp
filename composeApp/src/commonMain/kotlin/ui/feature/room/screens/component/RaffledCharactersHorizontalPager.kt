@@ -16,8 +16,6 @@ import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.KeyboardArrowLeft
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -38,10 +36,12 @@ import coil3.compose.AsyncImage
 import domain.character.model.Character
 import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.ExperimentalResourceApi
+import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 import themedbingo.composeapp.generated.resources.Res
 import themedbingo.composeapp.generated.resources.character_picture
 import themedbingo.composeapp.generated.resources.go_to_first
+import themedbingo.composeapp.generated.resources.ic_back
 
 @OptIn(ExperimentalFoundationApi::class, ExperimentalResourceApi::class)
 @Composable
@@ -120,7 +120,7 @@ fun RaffledCharactersHorizontalPager(
                     .align(Alignment.CenterStart)
             ) {
                 Icon(
-                    imageVector = Icons.AutoMirrored.Default.KeyboardArrowLeft,
+                    painter = painterResource(Res.drawable.ic_back),
                     contentDescription = stringResource(Res.string.go_to_first)
                 )
             }

@@ -1,7 +1,7 @@
 package ui.feature.createRoom.state
 
 import domain.room.model.BingoType
-import domain.theme.model.BingoTheme
+import domain.theme.model.Theme
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.StringResource
 
@@ -13,10 +13,10 @@ data class CreateScreenUiState constructor(
     val locked: Boolean = false,
     val password: String = "",
     val passwordErrors: List<StringResource> = emptyList(),
-    val availableThemes: List<BingoTheme>,
+    val availableThemes: List<Theme>,
     val maxWinners: Int = 1,
     val bingoType: BingoType,
-    val selectedTheme: BingoTheme?
+    val selectedTheme: Theme?
 ) {
     companion object {
         @OptIn(ExperimentalResourceApi::class)

@@ -1,6 +1,6 @@
 package ui.feature.createUser
 
-import domain.profilePictures.ProfilePictures
+import domain.profilePictures.model.ProfilePictures
 
 data class CreateUserUiState(
     val loading: Boolean = true,

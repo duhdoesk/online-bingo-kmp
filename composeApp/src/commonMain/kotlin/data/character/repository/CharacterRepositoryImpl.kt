@@ -1,46 +1,32 @@
 package data.character.repository
 
 import data.character.model.CharacterDTO
+import data.firebase.firebaseCall
 import data.firebase.firebaseSuspendCall
 import dev.gitlive.firebase.firestore.DocumentSnapshot
 import dev.gitlive.firebase.firestore.FirebaseFirestore
 import dev.gitlive.firebase.firestore.QuerySnapshot
+import domain.character.model.Character
 import domain.character.repository.CharacterRepository
 import domain.util.resource.Resource
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
-class CharacterRepositoryImpl(
-    firestore: FirebaseFirestore
-) : CharacterRepository {
+class CharacterRepositoryImpl(firestore: FirebaseFirestore) : CharacterRepository {
 
     private val collection = firestore.collection("themes")
 
-    override fun observeThemeCharacters(themeId: String): Flow<List<CharacterDTO>> {
-        return collection
-            .document(themeId)
-            .collection("characters")
-            .snapshots
-            .map { querySnapshot: QuerySnapshot ->
-                querySnapshot.documents.map { documentSnapshot: DocumentSnapshot ->
-                    buildCharacterDTO(documentSnapshot)
-                }
-            }
-    }
-
-    override suspend fun getThemeCharacters(themeId: String): Result<List<CharacterDTO>> {
-        try {
-            val characters = collection
+    override fun getThemeCharacters(themeId: String): Flow<Resource<List<Character>>> {
+        return firebaseCall {
+            collection
                 .document(themeId)
                 .collection("characters")
-                .get()
-                .documents
-                .map { documentSnapshot ->
-                    buildCharacterDTO(documentSnapshot)
+                .snapshots
+                .map { querySnapshot: QuerySnapshot ->
+                    querySnapshot.documents.map { documentSnapshot: DocumentSnapshot ->
+                        buildCharacterDTO(documentSnapshot).toModel()
+                    }
                 }
-            return Result.success(characters)
-        } catch (e: Exception) {
-            return Result.failure(e)
         }
     }
 

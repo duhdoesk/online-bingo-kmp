@@ -29,7 +29,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
-import domain.theme.model.BingoTheme
+import domain.theme.model.Theme
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.stringResource
 import themedbingo.composeapp.generated.resources.Res
@@ -38,9 +38,9 @@ import themedbingo.composeapp.generated.resources.select_theme
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalResourceApi::class)
 @Composable
 fun ThemePickerBottomSheet(
-    themes: List<BingoTheme>,
+    themes: List<Theme>,
     sheetState: SheetState,
-    onThemePick: (theme: BingoTheme) -> Unit,
+    onThemePick: (theme: Theme) -> Unit,
     onDismiss: () -> Unit
 ) {
     ModalBottomSheet(
@@ -76,7 +76,7 @@ fun ThemePickerBottomSheet(
 
 @Composable
 fun ThemeCard(
-    theme: BingoTheme,
+    theme: Theme,
     modifier: Modifier = Modifier,
     onClick: () -> Unit
 ) {

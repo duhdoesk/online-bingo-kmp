@@ -17,8 +17,6 @@ import org.jetbrains.compose.resources.ExperimentalResourceApi
 import themedbingo.composeapp.generated.resources.Res
 import themedbingo.composeapp.generated.resources.pop_back_dialog_body
 import themedbingo.composeapp.generated.resources.pop_back_dialog_title
-import themedbingo.composeapp.generated.resources.start_button
-import ui.feature.core.DoubleButtonRow
 import ui.feature.core.dialog.GenericActionDialog
 import ui.feature.room.event.RoomHostEvent
 import ui.feature.room.screens.component.RoomInfo
@@ -57,14 +55,14 @@ fun HostScreenNotStarted(
         )
     }
 
-    DoubleButtonRow(
-        leftEnabled = true,
-        rightEnabled = true,
-        leftClicked = { showPopBackConfirmation = true },
-        rightClicked = { event(RoomHostEvent.StartRaffle) },
-        rightText = Res.string.start_button,
-        modifier = Modifier
-            .padding(horizontal = 16.dp, vertical = 8.dp)
-            .fillMaxWidth()
-    )
+//    DoubleButtonRow(
+//        leftEnabled = true,
+//        rightEnabled = true,
+//        leftClicked = { showPopBackConfirmation = true },
+//        rightClicked = { event(RoomHostEvent.StartRaffle) },
+//        rightText = Res.string.start_button,
+//        modifier = Modifier
+//            .padding(horizontal = 16.dp, vertical = 8.dp)
+//            .fillMaxWidth()
+//    )
 }

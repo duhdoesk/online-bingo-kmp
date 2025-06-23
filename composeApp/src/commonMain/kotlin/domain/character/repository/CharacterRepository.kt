@@ -1,13 +1,15 @@
 package domain.character.repository
 
-import data.character.model.CharacterDTO
+import domain.character.model.Character
 import domain.util.resource.Resource
 import kotlinx.coroutines.flow.Flow
 
 interface CharacterRepository {
-    fun observeThemeCharacters(themeId: String): Flow<List<CharacterDTO>>
-    suspend fun getThemeCharacters(themeId: String): Result<List<CharacterDTO>>
 
+    /** Returns a list of characters given a theme ID */
+    fun getThemeCharacters(themeId: String): Flow<Resource<List<Character>>>
+
+    /** Creates a character */
     fun uploadNewCharacter(
         themeId: String,
         name: String,

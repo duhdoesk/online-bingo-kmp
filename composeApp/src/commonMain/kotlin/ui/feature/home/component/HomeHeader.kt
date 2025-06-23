@@ -3,6 +3,7 @@ package ui.feature.home.component
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
@@ -52,6 +53,7 @@ fun HomeHeader(
     ) {
         UserPicture(
             pictureUrl = uiState.pictureUrl,
+            onClick = onNavigateToMenu,
             modifier = Modifier
                 .padding(start = 20.dp)
                 .padding(vertical = 8.dp)
@@ -62,6 +64,7 @@ fun HomeHeader(
             UserInfo(
                 name = uiState.username,
                 message = uiState.message,
+                onClick = onNavigateToMenu,
                 modifier = Modifier
                     .padding(end = 48.dp)
                     .padding(vertical = 8.dp)
@@ -82,6 +85,7 @@ fun HomeHeader(
 @Composable
 private fun UserPicture(
     pictureUrl: String,
+    onClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     Box(
@@ -89,6 +93,7 @@ private fun UserPicture(
             .shadow(3.dp, RoundedCornerShape(12.dp))
             .border(4.dp, homeOnColor, RoundedCornerShape(12.dp))
             .clip(RoundedCornerShape(12.dp))
+            .clickable { onClick() }
     ) {
         AsyncImage(
             model = pictureUrl,
@@ -105,6 +110,7 @@ private fun UserPicture(
 private fun UserInfo(
     name: String,
     message: String,
+    onClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     Box(
@@ -112,6 +118,7 @@ private fun UserInfo(
             .shadow(3.dp, RoundedCornerShape(12.dp))
             .border(4.dp, homeOnColor, RoundedCornerShape(12.dp))
             .clip(RoundedCornerShape(12.dp))
+            .clickable { onClick() }
     ) {
         Image(
             painter = painterResource(Res.drawable.bg_pool_water),

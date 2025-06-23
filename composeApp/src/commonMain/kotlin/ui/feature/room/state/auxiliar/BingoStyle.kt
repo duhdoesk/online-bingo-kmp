@@ -3,7 +3,7 @@
 package ui.feature.room.state.auxiliar
 
 import domain.character.model.Character
-import domain.theme.model.BingoTheme
+import domain.theme.model.Theme
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.StringResource
 import themedbingo.composeapp.generated.resources.Res
@@ -21,7 +21,7 @@ sealed class BingoStyle constructor(val stringResource: StringResource) {
      * Represents our original bingo style, played with themes and characters
      */
     data class Themed(
-        val theme: BingoTheme,
+        val theme: Theme,
         val characters: List<Character>
     ) : BingoStyle(stringResource = Res.string.themed_bingo_type)
 }

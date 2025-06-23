@@ -1,18 +1,13 @@
 package domain.room.useCase
 
+import domain.room.model.BingoRoom
 import domain.room.model.BingoType
 import domain.room.repository.BingoRoomRepository
-import kotlinx.coroutines.flow.map
+import domain.util.resource.Resource
+import kotlinx.coroutines.flow.Flow
 
-class GetRunningRoomsUseCase(
-    private val bingoRoomRepository: BingoRoomRepository,
-    private val mapRoomDTOToModelUseCase: MapRoomDTOToModelUseCase
-) {
-    operator fun invoke(bingoType: BingoType) = bingoRoomRepository
-        .getRunningRooms(bingoType)
-        .map { list ->
-            list.map { dto ->
-                mapRoomDTOToModelUseCase(dto)
-            }
-        }
+class GetRunningRoomsUseCase(private val bingoRoomRepository: BingoRoomRepository) {
+    operator fun invoke(bingoType: BingoType): Flow<Resource<List<BingoRoom>>> {
+        return bingoRoomRepository.getRunningRooms(bingoType)
+    }
 }

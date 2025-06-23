@@ -72,7 +72,8 @@
     <string name="select_theme"> Select a Theme</string>
 
 
-    <!--    Join Room Screen -->
+    <!--    Lobby Screen -->
+    <string name="lobby">Lobby</string>
     <string name="not_started">Not Started</string>
     <string name="in_progress">In Progress</string>
     <string name="join_unlocked_room_body">Do you want to join the room</string>

@@ -7,6 +7,7 @@ import domain.feature.user.model.getLocalizedName
 import domain.feature.user.model.getRandomPictureUri
 import domain.feature.user.useCase.CreateUserUseCase
 import domain.feature.user.useCase.GetProfilePicturesUseCase
+import domain.profilePictures.model.ProfilePictures
 import domain.util.resource.Resource
 import io.github.jan.supabase.SupabaseClient
 import io.github.jan.supabase.auth.auth
@@ -61,8 +62,9 @@ class CreateUserComponent(
         _pictureUri,
         getProfilePicturesUseCase(),
         _loading
-    ) { userName, message, pictureUri, profilePictures, loading ->
+    ) { userName, message, pictureUri, profilePicturesRes, loading ->
         val canProceed = canProceed(userName, message)
+        val profilePictures = profilePicturesRes.getOrNull() ?: ProfilePictures(emptyList())
 
         CreateUserUiState(
             loading = loading,

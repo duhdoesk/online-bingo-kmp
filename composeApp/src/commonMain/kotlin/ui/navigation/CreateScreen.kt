@@ -6,7 +6,7 @@ import org.jetbrains.compose.resources.ExperimentalResourceApi
 import ui.feature.createRoom.CreateRoomScreen
 import ui.feature.createUser.CreateUserScreen
 import ui.feature.home.HomeScreen
-import ui.feature.joinRoom.JoinScreen
+import ui.feature.lobby.LobbyScreen
 import ui.feature.paywall.PaywallScreen
 import ui.feature.profile.ProfileScreen
 import ui.feature.room.screens.host.HostScreen
@@ -42,9 +42,8 @@ fun CreateScreen(
             viewModel = instance.component
         )
 
-        is Child.JoinScreen -> JoinScreen(
-            component = instance.component,
-            windowInfo = windowInfo
+        is Child.JoinScreen -> LobbyScreen(
+            viewModel = instance.component
         )
 
         is Child.PaywallScreen -> PaywallScreen(

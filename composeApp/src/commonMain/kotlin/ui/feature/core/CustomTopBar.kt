@@ -40,7 +40,7 @@ fun CustomTopBar(
     Row(
         verticalAlignment = Alignment.CenterVertically,
         modifier = Modifier
-            .padding(WindowInsets.safeDrawing.asPaddingValues())
+            .padding(top = WindowInsets.safeDrawing.asPaddingValues().calculateTopPadding())
             .fillMaxWidth()
     ) {
         CustomIconButton(

@@ -4,8 +4,8 @@ import com.arkivanov.decompose.ComponentContext
 import domain.feature.user.useCase.GetCurrentUserUseCase
 import domain.room.model.BingoType
 import domain.room.useCase.CreateRoomUseCase
-import domain.theme.model.BingoTheme
-import domain.theme.useCase.ObserveAvailableThemes
+import domain.theme.model.Theme
+import domain.theme.useCase.GetAvailableThemes
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.asStateFlow
@@ -43,7 +43,7 @@ class CreateRoomScreenComponent(
      * Use Cases
      */
     private val createRoomUseCase by inject<CreateRoomUseCase>()
-    private val observeAvailableThemes: ObserveAvailableThemes by inject()
+    private val observeAvailableThemes: GetAvailableThemes by inject()
     private val getCurrentUserUseCase: GetCurrentUserUseCase by inject()
 
     /**
@@ -61,10 +61,10 @@ class CreateRoomScreenComponent(
                 _isFormOk.update { false }
                 return@onEach
             }
-            if (bingoType == BingoType.THEMED && state.selectedTheme == null) {
-                _isFormOk.update { false }
-                return@onEach
-            }
+//            if (bingoType == BingoType.THEMED && state.selectedTheme == null) {
+//                _isFormOk.update { false }
+//                return@onEach
+//            }
             if (state.locked && state.password.length < 4) {
                 _isFormOk.update { false }
                 return@onEach
@@ -104,45 +104,45 @@ class CreateRoomScreenComponent(
      * Functions to handle each of the UI Events
      */
     private fun uiLoaded() {
-        coroutineScope.launch {
-            when (bingoType) {
-                BingoType.CLASSIC -> {
-                    _uiState.update {
-                        CreateScreenUiState(
-                            loading = false,
-                            name = "",
-                            nameErrors = listOf(),
-                            locked = false,
-                            password = "",
-                            passwordErrors = listOf(),
-                            availableThemes = listOf(),
-                            maxWinners = 1,
-                            bingoType = bingoType,
-                            selectedTheme = null
-                        )
-                    }
-                }
-
-                BingoType.THEMED -> {
-                    observeAvailableThemes().collect { themes ->
-                        _uiState.update {
-                            CreateScreenUiState(
-                                loading = false,
-                                name = "",
-                                nameErrors = listOf(),
-                                locked = false,
-                                password = "",
-                                passwordErrors = listOf(),
-                                availableThemes = themes,
-                                maxWinners = 1,
-                                bingoType = bingoType,
-                                selectedTheme = themes.first()
-                            )
-                        }
-                    }
-                }
-            }
-        }
+//        coroutineScope.launch {
+//            when (bingoType) {
+//                BingoType.CLASSIC -> {
+//                    _uiState.update {
+//                        CreateScreenUiState(
+//                            loading = false,
+//                            name = "",
+//                            nameErrors = listOf(),
+//                            locked = false,
+//                            password = "",
+//                            passwordErrors = listOf(),
+//                            availableThemes = listOf(),
+//                            maxWinners = 1,
+//                            bingoType = bingoType,
+//                            selectedTheme = null
+//                        )
+//                    }
+//                }
+//
+//                BingoType.THEMED -> {
+//                    observeAvailableThemes().collect { themes ->
+//                        _uiState.update {
+//                            CreateScreenUiState(
+//                                loading = false,
+//                                name = "",
+//                                nameErrors = listOf(),
+//                                locked = false,
+//                                password = "",
+//                                passwordErrors = listOf(),
+//                                availableThemes = themes,
+//                                maxWinners = 1,
+//                                bingoType = bingoType,
+//                                selectedTheme = themes.first()
+//                            )
+//                        }
+//                    }
+//                }
+//            }
+//        }
     }
 
     private fun updateName(name: String) {
@@ -185,7 +185,7 @@ class CreateRoomScreenComponent(
         }
     }
 
-    private fun updateTheme(theme: BingoTheme) {
+    private fun updateTheme(theme: Theme) {
         _uiState.update {
             uiState.value.copy(
                 selectedTheme = theme
@@ -203,27 +203,27 @@ class CreateRoomScreenComponent(
 
     private fun createRoom() {
         coroutineScope.launch {
-            getCurrentUserUseCase().collect { collectedUser ->
-                uiState.value.run {
-                    createRoomUseCase(
-                        hostId = collectedUser.getOrNull()?.id ?: "",
-                        name = name,
-                        locked = locked,
-                        password = password,
-                        maxWinners = maxWinners,
-                        type = bingoType,
-                        themeId = selectedTheme?.id.orEmpty()
-                    )
-                        .onSuccess { roomId ->
-                            val config = when (bingoType) {
-                                BingoType.CLASSIC -> Configuration.HostScreenClassic(roomId)
-                                BingoType.THEMED -> Configuration.HostScreenThemed(roomId)
-                            }
-                            onCreateRoom(config)
-                        }
-                        .onFailure { showErrorDialog.showDialog(null) }
-                }
-            }
+//            getCurrentUserUseCase().collect { collectedUser ->
+//                uiState.value.run {
+//                    createRoomUseCase(
+//                        hostId = collectedUser.getOrNull()?.id ?: "",
+//                        name = name,
+//                        locked = locked,
+//                        password = password,
+//                        maxWinners = maxWinners,
+//                        type = bingoType,
+//                        themeId = selectedTheme?.id.orEmpty()
+//                    )
+//                        .onSuccess { roomId ->
+//                            val config = when (bingoType) {
+//                                BingoType.CLASSIC -> Configuration.HostScreenClassic(roomId)
+//                                BingoType.THEMED -> Configuration.HostScreenThemed(roomId)
+//                            }
+//                            onCreateRoom(config)
+//                        }
+//                        .onFailure { showErrorDialog.showDialog(null) }
+//                }
+//            }
         }
     }
 

@@ -47,7 +47,7 @@ import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import themedbingo.composeapp.generated.resources.Res
-import themedbingo.composeapp.generated.resources.bg_waterfall
+import themedbingo.composeapp.generated.resources.bg_rocket
 import themedbingo.composeapp.generated.resources.copied_to_clipboard
 import themedbingo.composeapp.generated.resources.delete_account_body
 import themedbingo.composeapp.generated.resources.delete_account_title
@@ -83,9 +83,9 @@ import ui.feature.profile.component.picture.ChangePictureBottomSheet
 import ui.feature.profile.component.picture.ProfileScreenUserPicture
 import ui.theme.AppTheme
 import ui.theme.error
-import ui.theme.homeOnColor
-import ui.theme.homeSecondaryColor
 import ui.theme.onError
+import ui.theme.profileOnColor
+import ui.theme.profilePrimaryColor
 import ui.util.collectInLaunchedEffect
 import util.getLocalDateTimeNow
 
@@ -153,8 +153,8 @@ private fun ProfileScreen(
         topBar = {
             CustomTopBar(
                 text = stringResource(Res.string.profile_screen),
-                primaryColor = homeSecondaryColor,
-                onPrimaryColor = homeOnColor,
+                primaryColor = profilePrimaryColor,
+                onPrimaryColor = profileOnColor,
                 onBackPressed = { onUiEvent(ProfileScreenUiEvent.PopBack) }
             )
         }
@@ -164,7 +164,7 @@ private fun ProfileScreen(
             modifier = Modifier.fillMaxSize()
         ) {
             Image(
-                painter = painterResource(Res.drawable.bg_waterfall),
+                painter = painterResource(Res.drawable.bg_rocket),
                 contentDescription = null,
                 contentScale = ContentScale.Crop,
                 modifier = Modifier.fillMaxSize()
@@ -189,7 +189,7 @@ private fun ProfileScreen(
                         .padding(top = 16.dp)
                         .height(1.dp)
                         .fillMaxWidth()
-                        .background(homeOnColor)
+                        .background(profileOnColor)
                 )
 
                 Column(
@@ -202,8 +202,8 @@ private fun ProfileScreen(
                         text = stringResource(Res.string.profile_my_data),
                         fontSize = 24,
                         strokeWidth = 2f,
-                        fontColor = homeOnColor,
-                        strokeColor = homeSecondaryColor,
+                        fontColor = profileOnColor,
+                        strokeColor = profilePrimaryColor,
                         textAlign = TextAlign.Start,
                         modifier = Modifier.padding(start = 20.dp, top = 16.dp)
                     )
@@ -276,8 +276,8 @@ private fun ProfileScreen(
                         text = stringResource(Res.string.profile_my_account),
                         fontSize = 24,
                         strokeWidth = 2f,
-                        fontColor = homeOnColor,
-                        strokeColor = homeSecondaryColor,
+                        fontColor = profileOnColor,
+                        strokeColor = profilePrimaryColor,
                         textAlign = TextAlign.Start,
                         modifier = Modifier.padding(start = 20.dp, top = 32.dp)
                     )

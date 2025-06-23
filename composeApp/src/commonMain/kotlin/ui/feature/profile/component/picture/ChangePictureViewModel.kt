@@ -5,7 +5,7 @@ package ui.feature.profile.component.picture
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import domain.feature.user.useCase.GetProfilePicturesUseCase
-import domain.profilePictures.ProfilePictures
+import domain.profilePictures.model.ProfilePictures
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -18,7 +18,9 @@ class ChangePictureViewModel(getProfilePicturesUseCase: GetProfilePicturesUseCas
     private val selectedCategories = MutableStateFlow<List<ProfilePictures.Category>>(emptyList())
 
     val uiState: StateFlow<ChangePictureUiState> =
-        combine(selectedCategories, getProfilePicturesUseCase()) { selectedCategories, pictures ->
+        combine(selectedCategories, getProfilePicturesUseCase()) { selectedCategories, picturesRes ->
+            val pictures = picturesRes.getOrNull() ?: ProfilePictures(emptyList())
+
             val availablePictures =
                 if (selectedCategories.isEmpty()) {
                     pictures.categories.flatMap { it.pictures }

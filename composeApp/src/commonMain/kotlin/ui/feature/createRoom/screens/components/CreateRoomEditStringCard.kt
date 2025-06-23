@@ -14,8 +14,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
@@ -38,7 +36,10 @@ import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.StringResource
+import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
+import themedbingo.composeapp.generated.resources.Res
+import themedbingo.composeapp.generated.resources.ic_edit
 import ui.util.getRandomLightColor
 
 @OptIn(ExperimentalResourceApi::class)
@@ -107,7 +108,7 @@ fun CreateRoomEditStringCard(
                     }
 
                     Icon(
-                        imageVector = Icons.Default.Edit,
+                        painter = painterResource(Res.drawable.ic_edit),
                         contentDescription = "Action Icon"
                     )
                 }

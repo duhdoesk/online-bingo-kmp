@@ -62,7 +62,7 @@
     <string name="theme_textField">Tema</string>
     <string name="password_textField">Senha</string>
     <string name="private_session_checkbox">Sala Privada</string>
-    <string name="max_winners">Máximo de Vencedores</string>
+    <string name="max_winners">Possíveis Vencedores</string>
     <string name="theme_picture">Capa do Tema</string>
     <string name="key_icon">Chave</string>
     <string name="name_length_error">O nome da sala deve conter ao menos 4 caracteres.</string>
@@ -72,7 +72,8 @@
     <string name="select_theme">Selecione um Tema</string>
 
 
-    <!--    Join Room Screen -->
+    <!--    Lobby Screen -->
+    <string name="lobby">Lobby</string>
     <string name="not_started">Não Iniciados</string>
     <string name="in_progress">Sorteando</string>
     <string name="join_unlocked_room_body">Você deseja entrar na sala</string>
