@@ -9,7 +9,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -27,14 +26,14 @@ import org.jetbrains.compose.resources.vectorResource
 import themedbingo.composeapp.generated.resources.Res
 import themedbingo.composeapp.generated.resources.baseline_abc_24
 import themedbingo.composeapp.generated.resources.name_textField
-import ui.feature.createRoom.state.CreateScreenUiState
+import ui.feature.createRoom.CreateRoomUiState
 import ui.util.getRandomLightColor
 
 @OptIn(ExperimentalResourceApi::class)
 @Composable
 fun CreateRoomName(
     modifier: Modifier = Modifier,
-    uiState: CreateScreenUiState,
+    uiState: CreateRoomUiState,
     leadingIconModifier: Modifier,
     onUpdateName: (name: String) -> Unit
 ) {
@@ -83,11 +82,11 @@ fun CreateRoomName(
             .fillMaxWidth(),
         contentAlignment = Alignment.CenterEnd
     ) {
-        for (error in uiState.nameErrors) {
-            Text(
-                text = stringResource(error),
-                color = MaterialTheme.colorScheme.error
-            )
-        }
+//        for (error in uiState.nameErrors) {
+//            Text(
+//                text = stringResource(error),
+//                color = MaterialTheme.colorScheme.error
+//            )
+//        }
     }
 }

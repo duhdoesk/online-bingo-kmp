@@ -147,7 +147,7 @@ class RootComponent(
                     componentContext = context,
                     bingoType = configuration.bingoType,
                     onPopBack = { navigation.pop() },
-                    onCreateRoom = { receivedConfig ->
+                    onRoomCreated = { receivedConfig ->
                         navigation.replaceCurrent(configuration = receivedConfig)
                     }
                 )

@@ -55,6 +55,7 @@
 
 
     <!--    Create Room Screen -->
+    <string name="create_error">We could not create your room at the moment. Please, try again in a few moments.</string>
     <string name="create_room_title">Create Themed Bingo Room</string>
     <string name="create_classic_room_title">Create Classic Bingo Room</string>
     <string name="create_session_button">Create</string>

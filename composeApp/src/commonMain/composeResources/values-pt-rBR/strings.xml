@@ -55,6 +55,7 @@
 
 
     <!--    Create Room Screen -->
+    <string name="create_error">Não foi possível criar sua sala neste momento. Por favor, tente novamente em alguns instantes.</string>
     <string name="create_room_title">Criar Sala Temática</string>
     <string name="create_classic_room_title">Criar Sala Clássica</string>
     <string name="create_session_button">Criar</string>

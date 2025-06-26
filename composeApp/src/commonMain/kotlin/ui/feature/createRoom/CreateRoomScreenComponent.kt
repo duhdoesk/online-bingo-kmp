@@ -1,233 +1,139 @@
 package ui.feature.createRoom
 
 import com.arkivanov.decompose.ComponentContext
-import domain.feature.user.useCase.GetCurrentUserUseCase
 import domain.room.model.BingoType
+import domain.room.model.RoomPrivacy
 import domain.room.useCase.CreateRoomUseCase
-import domain.theme.model.Theme
-import domain.theme.useCase.GetAvailableThemes
+import domain.util.resource.Resource
+import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.flow.take
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import org.jetbrains.compose.resources.ExperimentalResourceApi
-import org.jetbrains.compose.resources.StringResource
+import org.jetbrains.compose.resources.getString
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 import themedbingo.composeapp.generated.resources.Res
-import themedbingo.composeapp.generated.resources.name_length_error
-import themedbingo.composeapp.generated.resources.password_length_error
-import ui.feature.core.dialog.dialogState.mutableDialogStateOf
-import ui.feature.createRoom.event.CreateScreenEvent
-import ui.feature.createRoom.state.CreateScreenUiState
+import themedbingo.composeapp.generated.resources.create_error
 import ui.navigation.Configuration
 import util.componentCoroutineScope
 
-@OptIn(ExperimentalResourceApi::class)
 class CreateRoomScreenComponent(
     componentContext: ComponentContext,
-    private val bingoType: BingoType,
+    bingoType: BingoType,
     private val onPopBack: () -> Unit,
-    private val onCreateRoom: (configuration: Configuration) -> Unit
+    private val onRoomCreated: (configuration: Configuration) -> Unit
 ) : ComponentContext by componentContext, KoinComponent {
 
-    /**
-     * Coroutine Scope to handle each suspend operation
-     */
+    /** Coroutine Scope to handle each suspend operation */
     private val coroutineScope = componentCoroutineScope()
 
-    /**
-     * Use Cases
-     */
-    private val createRoomUseCase by inject<CreateRoomUseCase>()
-    private val observeAvailableThemes: GetAvailableThemes by inject()
-    private val getCurrentUserUseCase: GetCurrentUserUseCase by inject()
+    /** Use Cases */
+    private val createRoomUseCase: CreateRoomUseCase by inject()
 
-    /**
-     * Modal visibility holders
-     */
-    val showErrorDialog = mutableDialogStateOf<StringResource?>(null)
+    private val _uiMessage = Channel<String>()
+    val uiMessage = _uiMessage.receiveAsFlow()
 
-    /**
-     * UI State holder
-     */
-    private val _uiState = MutableStateFlow(CreateScreenUiState.INITIAL)
-    val uiState = _uiState
-        .onEach { state ->
-            if (state.name.length < 4) {
-                _isFormOk.update { false }
-                return@onEach
-            }
-//            if (bingoType == BingoType.THEMED && state.selectedTheme == null) {
-//                _isFormOk.update { false }
-//                return@onEach
-//            }
-            if (state.locked && state.password.length < 4) {
-                _isFormOk.update { false }
-                return@onEach
-            }
+    /** UI State holder */
+    private val _name = MutableStateFlow<String>("")
+    private val _maxWinners = MutableStateFlow<Int>(1)
+    private val _privacy = MutableStateFlow<RoomPrivacy>(RoomPrivacy.Open)
+    private val _type = MutableStateFlow<CreateRoomUiState.Type>(
+        CreateRoomUiState.Type.parseFromEnum(bingoType)
+    )
 
-            _isFormOk.update { true }
+    val uiState = combine(
+        _name,
+        _maxWinners,
+        _privacy,
+        _type
+    ) { name, maxWinners, privacy, type ->
+        val canProceed = {
+            val name = name.trim().length > 2
+            val privacy =
+                privacy is RoomPrivacy.Open || privacy is RoomPrivacy.Private && privacy.password.length > 2
+            val type =
+                type == CreateRoomUiState.Type.Classic || type is CreateRoomUiState.Type.Themed && type.theme != null
+            name && privacy && type
         }
+
+        CreateRoomUiState(
+            isLoading = false,
+            canProceed = canProceed(),
+            name = name,
+            privacy = privacy,
+            maxWinners = maxWinners,
+            type = type
+        )
+    }
         .stateIn(
             coroutineScope,
-            SharingStarted.WhileSubscribed(),
-            CreateScreenUiState.INITIAL
+            started = SharingStarted.WhileSubscribed(5000),
+            initialValue = CreateRoomUiState()
         )
 
-    /**
-     * Holds a check if the user inputted all the info necessary to crete the room.
-     */
-    private val _isFormOk = MutableStateFlow(false)
-    val isFormOk = _isFormOk.asStateFlow()
-
-    /**
-     * Delegate the responsibility for the handling of each UI Event
-     */
-    fun uiEvent(event: CreateScreenEvent) {
+    /** Delegate the responsibility for the handling of each UI Event */
+    fun onUiEvent(event: CreateRoomUiEvent) {
         when (event) {
-            is CreateScreenEvent.CreateRoom -> createRoom()
-            is CreateScreenEvent.PopBack -> popBack()
-            is CreateScreenEvent.UILoaded -> uiLoaded()
-            is CreateScreenEvent.UpdateLocked -> updateLocked()
-            is CreateScreenEvent.UpdateMaxWinners -> updateMaxWinners(event.maxWinners)
-            is CreateScreenEvent.UpdateName -> updateName(event.name)
-            is CreateScreenEvent.UpdatePassword -> updatePassword(event.password)
-            is CreateScreenEvent.UpdateTheme -> updateTheme(event.theme)
+            CreateRoomUiEvent.OnCreateRoom -> onCreateRoom()
+            CreateRoomUiEvent.OnPopBack -> onPopBack()
+            is CreateRoomUiEvent.OnChangePrivacy -> onChangePrivacy(event.privacy)
+            is CreateRoomUiEvent.OnChangeMaxWinners -> onChangeMaxWinners(event.maxWinners)
+            is CreateRoomUiEvent.OnChangeName -> onChangeName(event.name)
+            is CreateRoomUiEvent.OnChangeType -> onChangeType(event.type)
         }
     }
 
-    /**
-     * Functions to handle each of the UI Events
-     */
-    private fun uiLoaded() {
-//        coroutineScope.launch {
-//            when (bingoType) {
-//                BingoType.CLASSIC -> {
-//                    _uiState.update {
-//                        CreateScreenUiState(
-//                            loading = false,
-//                            name = "",
-//                            nameErrors = listOf(),
-//                            locked = false,
-//                            password = "",
-//                            passwordErrors = listOf(),
-//                            availableThemes = listOf(),
-//                            maxWinners = 1,
-//                            bingoType = bingoType,
-//                            selectedTheme = null
-//                        )
-//                    }
-//                }
-//
-//                BingoType.THEMED -> {
-//                    observeAvailableThemes().collect { themes ->
-//                        _uiState.update {
-//                            CreateScreenUiState(
-//                                loading = false,
-//                                name = "",
-//                                nameErrors = listOf(),
-//                                locked = false,
-//                                password = "",
-//                                passwordErrors = listOf(),
-//                                availableThemes = themes,
-//                                maxWinners = 1,
-//                                bingoType = bingoType,
-//                                selectedTheme = themes.first()
-//                            )
-//                        }
-//                    }
-//                }
-//            }
-//        }
-    }
-
-    private fun updateName(name: String) {
-        val errors = mutableListOf<StringResource>()
-
-        if (name.length in 1..3) {
-            errors.add(Res.string.name_length_error)
-        }
-
-        _uiState.update {
-            uiState.value.copy(
-                name = name,
-                nameErrors = errors
-            )
-        }
-    }
-
-    private fun updateLocked() {
-        _uiState.update {
-            uiState.value.copy(
-                locked = !it.locked,
-                password = "",
-                passwordErrors = emptyList()
-            )
-        }
-    }
-
-    private fun updatePassword(password: String) {
-        val errors = mutableListOf<StringResource>()
-
-        if (password.length in 1..3) {
-            errors.add(Res.string.password_length_error)
-        }
-
-        _uiState.update {
-            uiState.value.copy(
-                password = password,
-                passwordErrors = errors
-            )
-        }
-    }
-
-    private fun updateTheme(theme: Theme) {
-        _uiState.update {
-            uiState.value.copy(
-                selectedTheme = theme
-            )
-        }
-    }
-
-    private fun updateMaxWinners(maxWinners: Int) {
-        _uiState.update {
-            uiState.value.copy(
-                maxWinners = maxWinners
-            )
-        }
-    }
-
-    private fun createRoom() {
+    private fun onCreateRoom() {
         coroutineScope.launch {
-//            getCurrentUserUseCase().collect { collectedUser ->
-//                uiState.value.run {
-//                    createRoomUseCase(
-//                        hostId = collectedUser.getOrNull()?.id ?: "",
-//                        name = name,
-//                        locked = locked,
-//                        password = password,
-//                        maxWinners = maxWinners,
-//                        type = bingoType,
-//                        themeId = selectedTheme?.id.orEmpty()
-//                    )
-//                        .onSuccess { roomId ->
-//                            val config = when (bingoType) {
-//                                BingoType.CLASSIC -> Configuration.HostScreenClassic(roomId)
-//                                BingoType.THEMED -> Configuration.HostScreenThemed(roomId)
-//                            }
-//                            onCreateRoom(config)
-//                        }
-//                        .onFailure { showErrorDialog.showDialog(null) }
-//                }
-//            }
+            val type = _type.value.toEnum()
+            val themeId = _type.value.let {
+                if (it is CreateRoomUiState.Type.Themed) it.theme?.id else null
+            }
+
+            createRoomUseCase.invoke(
+                name = _name.value.trim(),
+                privacy = _privacy.value,
+                maxWinners = _maxWinners.value,
+                type = type,
+                themeId = themeId
+            )
+                .take(1)
+                .collect { resource ->
+                    when (resource) {
+                        is Resource.Success -> {
+                            val configuration = when (type) {
+                                BingoType.THEMED -> Configuration.HostScreenThemed(resource.data)
+                                BingoType.CLASSIC -> Configuration.HostScreenClassic(resource.data)
+                            }
+                            onRoomCreated(configuration)
+                        }
+
+                        is Resource.Failure -> {
+                            _uiMessage.trySend(getString(Res.string.create_error))
+                        }
+                    }
+                }
         }
     }
 
-    private fun popBack() {
-        onPopBack()
+    private fun onChangePrivacy(privacy: RoomPrivacy) {
+        _privacy.update { privacy }
+    }
+
+    private fun onChangeMaxWinners(maxWinners: Int) {
+        _maxWinners.update { maxWinners }
+    }
+
+    private fun onChangeName(name: String) {
+        _name.update { name }
+    }
+
+    private fun onChangeType(type: CreateRoomUiState.Type) {
+        _type.update { type }
     }
 }
