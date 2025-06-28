@@ -3,6 +3,7 @@ package ui.theme
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
+import domain.room.model.BingoType
 
 private val colorScheme = lightColorScheme(
     primary = primary,
@@ -36,4 +37,37 @@ fun AppTheme(
         typography = PoppinsTypography(),
         content = content
     )
+}
+
+@Composable
+fun CreateRoomTheme(
+    content: @Composable () -> Unit,
+    type: BingoType
+) {
+    when (type) {
+        BingoType.THEMED -> {
+            MaterialTheme(
+                colorScheme = colorScheme.copy(
+                    primary = createRoomThemedColor,
+                    onPrimary = createRoomThemedOnColor,
+                    secondary = createRoomThemedColor,
+                    onSecondary = createRoomThemedOnColor
+                ),
+                typography = PoppinsTypography(),
+                content = content
+            )
+        }
+        BingoType.CLASSIC -> {
+            MaterialTheme(
+                colorScheme = colorScheme.copy(
+                    primary = createRoomClassicColor,
+                    onPrimary = createRoomClassicOnColor,
+                    secondary = createRoomClassicColor,
+                    onSecondary = createRoomClassicOnColor
+                ),
+                typography = PoppinsTypography(),
+                content = content
+            )
+        }
+    }
 }

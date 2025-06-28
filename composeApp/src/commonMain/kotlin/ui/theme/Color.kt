@@ -57,3 +57,9 @@ val profileOnColor = Color.White
 val lobbyPrimaryColor = Color(0xFF0085BA)
 val lobbySecondaryColor = Color(0xFF54352D)
 val lobbyOnColor = Color.White
+
+/** Create Room */
+val createRoomClassicColor = Color(0xFF54352D)
+val createRoomClassicOnColor = Color.White
+val createRoomThemedColor = Color(0xFF54352D)
+val createRoomThemedOnColor = Color.White

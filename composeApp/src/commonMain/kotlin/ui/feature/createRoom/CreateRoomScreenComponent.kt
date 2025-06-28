@@ -4,6 +4,7 @@ import com.arkivanov.decompose.ComponentContext
 import domain.room.model.BingoType
 import domain.room.model.RoomPrivacy
 import domain.room.useCase.CreateRoomUseCase
+import domain.theme.useCase.GetAvailableThemes
 import domain.util.resource.Resource
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -34,6 +35,7 @@ class CreateRoomScreenComponent(
 
     /** Use Cases */
     private val createRoomUseCase: CreateRoomUseCase by inject()
+    private val getAvailableThemes: GetAvailableThemes by inject()
 
     private val _uiMessage = Channel<String>()
     val uiMessage = _uiMessage.receiveAsFlow()
@@ -42,6 +44,7 @@ class CreateRoomScreenComponent(
     private val _name = MutableStateFlow<String>("")
     private val _maxWinners = MutableStateFlow<Int>(1)
     private val _privacy = MutableStateFlow<RoomPrivacy>(RoomPrivacy.Open)
+
     private val _type = MutableStateFlow<CreateRoomUiState.Type>(
         CreateRoomUiState.Type.parseFromEnum(bingoType)
     )

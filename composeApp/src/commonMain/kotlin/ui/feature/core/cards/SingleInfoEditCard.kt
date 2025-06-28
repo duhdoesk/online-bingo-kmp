@@ -59,7 +59,7 @@ fun SingleInfoEditCard(
             ) {
                 Text(
                     text = label,
-                    fontSize = 12.sp,
+                    fontSize = 14.sp,
                     fontFamily = PoppinsFontFamily()
                 )
 

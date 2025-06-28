@@ -56,12 +56,13 @@
 
     <!--    Create Room Screen -->
     <string name="create_error">Não foi possível criar sua sala neste momento. Por favor, tente novamente em alguns instantes.</string>
+    <string name="create_room">Criar nova sala</string>
     <string name="create_room_title">Criar Sala Temática</string>
     <string name="create_classic_room_title">Criar Sala Clássica</string>
     <string name="create_session_button">Criar</string>
-    <string name="name_textField">Nome</string>
+    <string name="name_textField">Nome da Sala</string>
     <string name="theme_textField">Tema</string>
-    <string name="password_textField">Senha</string>
+    <string name="password_textField">Palavra Secreta</string>
     <string name="private_session_checkbox">Sala Privada</string>
     <string name="max_winners">Possíveis Vencedores</string>
     <string name="theme_picture">Capa do Tema</string>
@@ -140,7 +141,7 @@
     <string name="host">Host</string>
     <string name="players_card">Jogadores</string>
     <string name="room_name_card">Nome da Sala</string>
-    <string name="max_winners_card">Máximo de Vencedores</string>
+    <string name="max_winners_card">Vencedores</string>
     <string name="bingo_type_card">Tipo de Bingo</string>
     <string name="classic_card">Clássico</string>
     <string name="themed_card">Temático</string>
