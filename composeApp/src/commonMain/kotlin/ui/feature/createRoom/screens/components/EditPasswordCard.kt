@@ -71,7 +71,7 @@ fun EditPasswordCard(
             SingleInfoEditCard(
                 label = stringResource(Res.string.password_textField),
                 currentValue = (privacy as? RoomPrivacy.Private)?.password ?: "",
-                onClick = { },
+                onClick = onPasswordClick,
                 containerColor = MaterialTheme.colorScheme.onSecondary,
                 contentColor = MaterialTheme.colorScheme.secondary,
                 modifier = Modifier.fillMaxWidth()

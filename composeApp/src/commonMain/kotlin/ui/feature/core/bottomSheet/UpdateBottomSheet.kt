@@ -1,5 +1,3 @@
-@file:OptIn(ExperimentalMaterial3Api::class)
-
 package ui.feature.core.bottomSheet
 
 import androidx.compose.foundation.layout.Column
@@ -24,24 +22,27 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.StringResource
 import org.jetbrains.compose.resources.stringResource
 import themedbingo.composeapp.generated.resources.Res
 import themedbingo.composeapp.generated.resources.confirm_button
-import ui.feature.core.buttons.QuitAndPrimaryButtonRow
+import ui.feature.core.buttons.CustomPrimaryButton
 import ui.feature.core.text.OutlinedShadowedText
-import ui.theme.error
 import ui.theme.homeOnColor
 import ui.theme.homePrimaryColor
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun UpdateBottomSheet(
     sheetState: SheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true),
@@ -52,9 +53,13 @@ fun UpdateBottomSheet(
     body: StringResource,
     label: StringResource,
     maxLength: Int = Int.MAX_VALUE,
-    minLength: Int = 3
+    minLength: Int = 3,
+    accentColor: Color = homePrimaryColor,
+    onAccentColor: Color = homeOnColor
 ) {
     val keyboardController = LocalSoftwareKeyboardController.current
+    val coroutineScope = rememberCoroutineScope()
+
     var data by remember {
         mutableStateOf(
             TextFieldValue(
@@ -64,6 +69,7 @@ fun UpdateBottomSheet(
             )
         )
     }
+
     val isValid = data.text.length >= minLength && data.text != currentValue
 
     UpdateBottomSheetContent(
@@ -73,20 +79,29 @@ fun UpdateBottomSheet(
         label = label,
         value = data,
         isValid = isValid,
+        accentColor = accentColor,
+        onAccentColor = onAccentColor,
         onValueUpdate = {
             data = if (it.text.length <= maxLength) it else data
         },
         onConfirm = {
-            keyboardController?.hide()
-            onConfirm(data.text.trim())
+            coroutineScope.launch { sheetState.hide() }
+                .invokeOnCompletion {
+                    keyboardController?.hide()
+                    onConfirm(data.text.trim())
+                }
         },
         onCancel = {
-            keyboardController?.hide()
-            onDismiss()
+            coroutineScope.launch { sheetState.hide() }
+                .invokeOnCompletion {
+                    keyboardController?.hide()
+                    onDismiss()
+                }
         }
     )
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun UpdateBottomSheetContent(
     sheetState: SheetState,
@@ -98,7 +113,9 @@ private fun UpdateBottomSheetContent(
     onValueUpdate: (value: TextFieldValue) -> Unit,
     onConfirm: () -> Unit,
     onCancel: () -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    accentColor: Color,
+    onAccentColor: Color
 ) {
     ModalBottomSheet(
         modifier = modifier,
@@ -111,8 +128,8 @@ private fun UpdateBottomSheetContent(
                 text = stringResource(title),
                 fontSize = 24,
                 strokeWidth = 2f,
-                fontColor = homePrimaryColor,
-                strokeColor = homeOnColor,
+                fontColor = accentColor,
+                strokeColor = onAccentColor,
                 modifier = Modifier.padding(start = 16.dp)
             )
 
@@ -139,20 +156,14 @@ private fun UpdateBottomSheetContent(
 
             Spacer(Modifier.height(32.dp))
 
-            QuitAndPrimaryButtonRow(
-                primaryButtonColors = ButtonDefaults.buttonColors(
-                    containerColor = homePrimaryColor,
-                    contentColor = homeOnColor
+            CustomPrimaryButton(
+                text = stringResource(Res.string.confirm_button),
+                enabled = isValid,
+                onClick = onConfirm,
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = accentColor,
+                    contentColor = onAccentColor
                 ),
-                iconButtonColors = ButtonDefaults.buttonColors(
-                    containerColor = homeOnColor,
-                    contentColor = error
-                ),
-                primaryText = stringResource(Res.string.confirm_button),
-                primaryEnabled = isValid,
-                quitEnabled = true,
-                onPrimaryClick = onConfirm,
-                onQuitClick = onCancel,
                 modifier = Modifier
                     .padding(horizontal = 16.dp, vertical = 8.dp)
                     .fillMaxWidth()

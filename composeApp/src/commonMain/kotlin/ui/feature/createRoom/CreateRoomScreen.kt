@@ -13,20 +13,22 @@ import androidx.compose.foundation.layout.safeDrawing
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import domain.room.model.BingoType
+import domain.room.model.RoomPrivacy
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
@@ -36,9 +38,15 @@ import themedbingo.composeapp.generated.resources.bg_forest_sunlight
 import themedbingo.composeapp.generated.resources.classic_bingo_type
 import themedbingo.composeapp.generated.resources.create_button
 import themedbingo.composeapp.generated.resources.create_room
+import themedbingo.composeapp.generated.resources.name_body
+import themedbingo.composeapp.generated.resources.name_textField
+import themedbingo.composeapp.generated.resources.password
+import themedbingo.composeapp.generated.resources.password_body
+import themedbingo.composeapp.generated.resources.password_textField
 import themedbingo.composeapp.generated.resources.room_name_card
 import themedbingo.composeapp.generated.resources.themed_bingo_type
 import ui.feature.core.CustomTopBar
+import ui.feature.core.bottomSheet.UpdateBottomSheet
 import ui.feature.core.buttons.CustomPrimaryButton
 import ui.feature.core.cards.SingleInfoEditCard
 import ui.feature.core.text.OutlinedShadowedText
@@ -49,6 +57,7 @@ import ui.theme.CreateRoomTheme
 import ui.util.WindowInfo
 import ui.util.collectInLaunchedEffect
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CreateRoomScreen(
     component: CreateRoomScreenComponent,
@@ -56,6 +65,9 @@ fun CreateRoomScreen(
 ) {
     val uiState by component.uiState.collectAsStateWithLifecycle()
     val snackbarHostState = remember { SnackbarHostState() }
+    var showNameBottomSheet by remember { mutableStateOf(false) }
+    var showPasswordBottomSheet by remember { mutableStateOf(false) }
+    var showThemesBottomSheet by remember { mutableStateOf(false) }
 
     component.uiMessage.collectInLaunchedEffect { message ->
         snackbarHostState.showSnackbar(message)
@@ -68,8 +80,50 @@ fun CreateRoomScreen(
                 uiState = uiState,
                 snackbarHostState = snackbarHostState,
                 onUiEvent = component::onUiEvent,
+                onNamePressed = { showNameBottomSheet = true },
+                onPasswordPressed = { showPasswordBottomSheet = true },
                 modifier = Modifier.fillMaxSize()
             )
+
+            if (showNameBottomSheet) {
+                UpdateBottomSheet(
+                    onDismiss = { showNameBottomSheet = false },
+                    onConfirm = {
+                        component.onUiEvent(CreateRoomUiEvent.OnChangeName(it))
+                        showNameBottomSheet = false
+                    },
+                    currentValue = uiState.name,
+                    title = Res.string.name_textField,
+                    body = Res.string.name_body,
+                    label = Res.string.name_textField,
+                    minLength = 4,
+                    maxLength = 20,
+                    accentColor = MaterialTheme.colorScheme.primary,
+                    onAccentColor = MaterialTheme.colorScheme.onPrimary
+                )
+            }
+
+            if (showPasswordBottomSheet) {
+                UpdateBottomSheet(
+                    onDismiss = { showPasswordBottomSheet = false },
+                    onConfirm = { password ->
+                        component.onUiEvent(
+                            CreateRoomUiEvent.OnChangePrivacy(
+                                RoomPrivacy.Private(password)
+                            )
+                        )
+                        showPasswordBottomSheet = false
+                    },
+                    currentValue = (uiState.privacy as? RoomPrivacy.Private)?.password.orEmpty(),
+                    title = Res.string.password_textField,
+                    body = Res.string.password_body,
+                    label = Res.string.password_textField,
+                    minLength = 4,
+                    maxLength = 12,
+                    accentColor = MaterialTheme.colorScheme.primary,
+                    onAccentColor = MaterialTheme.colorScheme.onPrimary
+                )
+            }
         }
     )
 }
@@ -79,6 +133,8 @@ private fun CreateRoomScreenContent(
     uiState: CreateRoomUiState,
     snackbarHostState: SnackbarHostState,
     onUiEvent: (CreateRoomUiEvent) -> Unit,
+    onNamePressed: () -> Unit = {},
+    onPasswordPressed: () -> Unit = {},
     modifier: Modifier = Modifier
 ) {
     Scaffold(
@@ -138,7 +194,7 @@ private fun CreateRoomScreenContent(
                 SingleInfoEditCard(
                     label = stringResource(Res.string.room_name_card),
                     currentValue = uiState.name,
-                    onClick = { }, // todo()
+                    onClick = onNamePressed,
                     containerColor = MaterialTheme.colorScheme.onPrimary,
                     contentColor = MaterialTheme.colorScheme.primary,
                     modifier = Modifier
@@ -173,7 +229,7 @@ private fun CreateRoomScreenContent(
 
                 EditPasswordCard(
                     privacy = uiState.privacy,
-                    onPasswordClick = { }, // todo()
+                    onPasswordClick = onPasswordPressed,
                     onPrivacyChange = { onUiEvent(CreateRoomUiEvent.OnChangePrivacy(it)) },
                     modifier = Modifier
                         .padding(horizontal = 20.dp)
@@ -185,12 +241,6 @@ private fun CreateRoomScreenContent(
                 text = stringResource(Res.string.create_button),
                 enabled = uiState.canProceed,
                 onClick = { onUiEvent(CreateRoomUiEvent.OnCreateRoom) },
-                colors = ButtonDefaults.buttonColors().copy(
-                    containerColor = MaterialTheme.colorScheme.primary,
-                    contentColor = MaterialTheme.colorScheme.onPrimary,
-                    disabledContainerColor = Color.LightGray,
-                    disabledContentColor = Color.White
-                ),
                 modifier = Modifier
                     .padding(horizontal = 20.dp, vertical = 8.dp)
                     .fillMaxWidth()
