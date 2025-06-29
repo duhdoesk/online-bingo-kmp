@@ -40,7 +40,6 @@ import themedbingo.composeapp.generated.resources.create_button
 import themedbingo.composeapp.generated.resources.create_room
 import themedbingo.composeapp.generated.resources.name_body
 import themedbingo.composeapp.generated.resources.name_textField
-import themedbingo.composeapp.generated.resources.password
 import themedbingo.composeapp.generated.resources.password_body
 import themedbingo.composeapp.generated.resources.password_textField
 import themedbingo.composeapp.generated.resources.room_name_card
@@ -67,7 +66,6 @@ fun CreateRoomScreen(
     val snackbarHostState = remember { SnackbarHostState() }
     var showNameBottomSheet by remember { mutableStateOf(false) }
     var showPasswordBottomSheet by remember { mutableStateOf(false) }
-    var showThemesBottomSheet by remember { mutableStateOf(false) }
 
     component.uiMessage.collectInLaunchedEffect { message ->
         snackbarHostState.showSnackbar(message)

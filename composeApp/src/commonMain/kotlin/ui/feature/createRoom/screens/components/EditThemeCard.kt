@@ -1,15 +1,19 @@
 package ui.feature.createRoom.screens.components
 
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -20,6 +24,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.layout.onGloballyPositioned
@@ -49,16 +54,54 @@ fun EditThemeCard(
     viewModel: EditThemeCardViewModel = koinViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
-    var showThemesBottomSheet by remember { mutableStateOf(false) }
+    var showDropdown by remember { mutableStateOf(false) }
 
     EditThemesCardContent(
         uiState = uiState,
         selectedTheme = selectedTheme,
-        onShowBottomSheet = { showThemesBottomSheet = true },
+        onClick = { showDropdown = true },
         modifier = modifier
     )
 
-    if (showThemesBottomSheet) {
+    Box(
+        modifier = modifier
+            .fillMaxWidth()
+            .wrapContentSize(Alignment.TopEnd)
+    ) {
+        DropdownMenu(
+            expanded = showDropdown,
+            onDismissRequest = { showDropdown = false }
+        ) {
+            uiState.availableThemes.forEach { theme ->
+                DropdownMenuItem(
+                    leadingIcon = {
+                        AsyncImage(
+                            model = theme.pictureUri,
+                            placeholder = painterResource(Res.drawable.hot_water_logo),
+                            error = painterResource(Res.drawable.hot_water_logo),
+                            contentDescription = null,
+                            contentScale = ContentScale.Crop,
+                            modifier = Modifier
+                                .size(40.dp)
+                                .clip(RoundedCornerShape(4.dp))
+                        )
+                    },
+                    text = {
+                        Text(
+                            text = theme.name,
+                            maxLines = 1,
+                            overflow = TextOverflow.Ellipsis,
+                            style = MaterialTheme.typography.titleSmall,
+                            fontSize = 16.sp
+                        )
+                    },
+                    onClick = {
+                        onThemeSelected(theme)
+                        showDropdown = false
+                    }
+                )
+            }
+        }
     }
 }
 
@@ -66,7 +109,7 @@ fun EditThemeCard(
 private fun EditThemesCardContent(
     selectedTheme: Theme?,
     uiState: EditThemeCardUiState = EditThemeCardUiState(),
-    onShowBottomSheet: () -> Unit = {},
+    onClick: () -> Unit = {},
     modifier: Modifier = Modifier
 ) {
     var columnSize by remember { mutableStateOf(Size.Zero) }
@@ -79,7 +122,7 @@ private fun EditThemesCardContent(
             contentColor = MaterialTheme.colorScheme.primary
         ),
         shape = RoundedCornerShape(12.dp),
-        onClick = { if (!uiState.isLoading) onShowBottomSheet },
+        onClick = onClick,
         elevation = CardDefaults.cardElevation(3.dp)
     ) {
         Row(
