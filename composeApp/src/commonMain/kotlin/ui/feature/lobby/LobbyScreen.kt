@@ -34,12 +34,9 @@ import androidx.compose.ui.unit.dp
 import domain.feature.user.model.Tier
 import domain.room.model.BingoRoom
 import domain.room.model.BingoType
-import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import themedbingo.composeapp.generated.resources.Res
-import themedbingo.composeapp.generated.resources.bg_beach_volley
-import themedbingo.composeapp.generated.resources.bg_forest_sunlight
 import themedbingo.composeapp.generated.resources.create_button
 import themedbingo.composeapp.generated.resources.lobby
 import ui.feature.core.CustomTopBar
@@ -47,7 +44,8 @@ import ui.feature.core.buttons.CustomPrimaryButton
 import ui.feature.lobby.component.JoinBottomSheet
 import ui.feature.lobby.component.RoomsLazyColumn
 import ui.feature.lobby.component.SearchTextField
-import ui.theme.CreateRoomTheme
+import ui.theme.BingoTypeTheme
+import ui.theme.GetBingoTypeBackground
 import ui.util.collectInLaunchedEffect
 
 @Composable
@@ -63,7 +61,7 @@ fun LobbyScreen(viewModel: LobbyScreenComponent) {
         }
     }
 
-    CreateRoomTheme(
+    BingoTypeTheme(
         type = viewModel.bingoType,
         content = {
             LobbyScreenContent(
@@ -112,13 +110,8 @@ private fun LobbyScreenContent(
                     )
                 }
         ) {
-            val painter = when (bingoType) {
-                BingoType.THEMED -> Res.drawable.bg_forest_sunlight
-                BingoType.CLASSIC -> Res.drawable.bg_beach_volley
-            }
-
             Image(
-                painter = painterResource(painter),
+                painter = GetBingoTypeBackground(bingoType),
                 contentDescription = null,
                 contentScale = ContentScale.Crop,
                 modifier = Modifier

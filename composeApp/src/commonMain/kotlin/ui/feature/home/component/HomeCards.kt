@@ -44,10 +44,10 @@ import themedbingo.composeapp.generated.resources.vip_description
 import themedbingo.composeapp.generated.resources.vip_full_access
 import ui.feature.core.text.OutlinedText
 import ui.theme.AppTheme
-import ui.theme.classicBingoOnColor
 import ui.theme.classicBingoPrimaryColor
+import ui.theme.homeCardClassicBingoOnColor
+import ui.theme.homeCardThemedBingoOnColor
 import ui.theme.homeOnColor
-import ui.theme.themedBingoOnColor
 import ui.theme.themedBingoPrimaryColor
 import ui.theme.vipOnColor
 import ui.theme.vipPrimaryColor
@@ -84,7 +84,7 @@ fun ThemedBingoCard(
                     text = stringResource(Res.string.themed_bingo_type),
                     fontSize = 24,
                     strokeWidth = 2f,
-                    fontColor = themedBingoOnColor,
+                    fontColor = homeCardThemedBingoOnColor,
                     strokeColor = themedBingoPrimaryColor,
                     modifier = Modifier.padding(start = 16.dp, end = 44.dp)
                 )
@@ -149,7 +149,7 @@ fun ClassicBingoCard(
                     textAlign = TextAlign.End,
                     fontSize = 24,
                     strokeWidth = 2f,
-                    fontColor = classicBingoOnColor,
+                    fontColor = homeCardClassicBingoOnColor,
                     strokeColor = classicBingoPrimaryColor,
                     modifier = Modifier.padding(end = 16.dp, start = 60.dp)
                 )

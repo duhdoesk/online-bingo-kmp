@@ -29,12 +29,9 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import domain.room.model.BingoType
 import domain.room.model.RoomPrivacy
-import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import themedbingo.composeapp.generated.resources.Res
-import themedbingo.composeapp.generated.resources.bg_beach_volley
-import themedbingo.composeapp.generated.resources.bg_forest_sunlight
 import themedbingo.composeapp.generated.resources.classic_bingo_type
 import themedbingo.composeapp.generated.resources.create_button
 import themedbingo.composeapp.generated.resources.create_room
@@ -52,7 +49,8 @@ import ui.feature.core.text.OutlinedShadowedText
 import ui.feature.createRoom.screens.components.EditMaxWinnersCard
 import ui.feature.createRoom.screens.components.EditPasswordCard
 import ui.feature.createRoom.screens.components.EditThemeCard
-import ui.theme.CreateRoomTheme
+import ui.theme.BingoTypeTheme
+import ui.theme.GetBingoTypeBackground
 import ui.util.WindowInfo
 import ui.util.collectInLaunchedEffect
 
@@ -71,7 +69,7 @@ fun CreateRoomScreen(
         snackbarHostState.showSnackbar(message)
     }
 
-    CreateRoomTheme(
+    BingoTypeTheme(
         type = uiState.type.toEnum(),
         content = {
             CreateRoomScreenContent(
@@ -154,13 +152,8 @@ private fun CreateRoomScreenContent(
         modifier = modifier
     ) { innerPadding ->
         Box {
-            val painter = when (uiState.type) {
-                CreateRoomUiState.Type.Classic -> Res.drawable.bg_beach_volley
-                is CreateRoomUiState.Type.Themed -> Res.drawable.bg_forest_sunlight
-            }
-
             Image(
-                painter = painterResource(painter),
+                painter = GetBingoTypeBackground(uiState.type.toEnum()),
                 contentScale = ContentScale.Crop,
                 contentDescription = null,
                 modifier = Modifier.fillMaxSize()
@@ -250,7 +243,7 @@ private fun CreateRoomScreenContent(
 @Preview
 @Composable
 private fun Preview() {
-    CreateRoomTheme(
+    BingoTypeTheme(
         type = BingoType.CLASSIC,
         content = {
             CreateRoomScreenContent(

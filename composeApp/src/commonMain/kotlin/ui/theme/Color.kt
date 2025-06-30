@@ -33,10 +33,10 @@ val vipPrimaryColor = Color(0xFFFF5045)
 val vipOnColor = Color.White
 
 /** Bingo Types */
-val themedBingoPrimaryColor = Color(0xFF0A4482)
-val themedBingoOnColor = Color.White
-val classicBingoPrimaryColor = Color(0xFF2B6027)
-val classicBingoOnColor = Color.White
+val homeCardThemedBingoPrimaryColor = Color(0xFF0A4482)
+val homeCardThemedBingoOnColor = Color.White
+val homeCardClassicBingoPrimaryColor = Color(0xFF2B6027)
+val homeCardClassicBingoOnColor = Color.White
 
 /** Create User Screen */
 val createUserPrimaryColor = Color(0xFF015CC5)
@@ -58,8 +58,8 @@ val lobbyPrimaryColor = Color(0xFF0085BA)
 val lobbySecondaryColor = Color(0xFF54352D)
 val lobbyOnColor = Color.White
 
-/** Create Room */
-val createRoomClassicColor = Color(0xFF54352D)
-val createRoomClassicOnColor = Color.White
-val createRoomThemedColor = Color(0xFF54352D)
-val createRoomThemedOnColor = Color.White
+/** Classic Bingo */
+val classicBingoPrimaryColor = Color(0xFF54352D)
+val classicBingoOnPrimaryColor = Color.White
+val themedBingoPrimaryColor = Color(0xFF54352D)
+val themedBingoOnPrimaryColor = Color.White

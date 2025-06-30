@@ -3,7 +3,12 @@ package ui.theme
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.graphics.painter.Painter
 import domain.room.model.BingoType
+import org.jetbrains.compose.resources.painterResource
+import themedbingo.composeapp.generated.resources.Res
+import themedbingo.composeapp.generated.resources.bg_beach_volley
+import themedbingo.composeapp.generated.resources.bg_forest_sunlight
 
 private val colorScheme = lightColorScheme(
     primary = primary,
@@ -40,7 +45,7 @@ fun AppTheme(
 }
 
 @Composable
-fun CreateRoomTheme(
+fun BingoTypeTheme(
     content: @Composable () -> Unit,
     type: BingoType
 ) {
@@ -48,10 +53,10 @@ fun CreateRoomTheme(
         BingoType.THEMED -> {
             MaterialTheme(
                 colorScheme = colorScheme.copy(
-                    primary = createRoomThemedColor,
-                    onPrimary = createRoomThemedOnColor,
-                    secondary = createRoomThemedColor,
-                    onSecondary = createRoomThemedOnColor
+                    primary = themedBingoPrimaryColor,
+                    onPrimary = themedBingoOnPrimaryColor,
+                    secondary = themedBingoPrimaryColor,
+                    onSecondary = themedBingoOnPrimaryColor
                 ),
                 typography = PoppinsTypography(),
                 content = content
@@ -60,14 +65,25 @@ fun CreateRoomTheme(
         BingoType.CLASSIC -> {
             MaterialTheme(
                 colorScheme = colorScheme.copy(
-                    primary = createRoomClassicColor,
-                    onPrimary = createRoomClassicOnColor,
-                    secondary = createRoomClassicColor,
-                    onSecondary = createRoomClassicOnColor
+                    primary = classicBingoPrimaryColor,
+                    onPrimary = classicBingoOnPrimaryColor,
+                    secondary = classicBingoPrimaryColor,
+                    onSecondary = classicBingoOnPrimaryColor
                 ),
                 typography = PoppinsTypography(),
                 content = content
             )
         }
     }
+}
+
+@Composable
+fun GetBingoTypeBackground(
+    type: BingoType
+): Painter {
+    val resource = when (type) {
+        BingoType.THEMED -> Res.drawable.bg_forest_sunlight
+        BingoType.CLASSIC -> Res.drawable.bg_beach_volley
+    }
+    return painterResource(resource)
 }

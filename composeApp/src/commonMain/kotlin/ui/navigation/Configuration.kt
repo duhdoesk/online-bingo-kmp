@@ -43,8 +43,5 @@ sealed class Configuration {
     data object SplashScreen : Configuration()
 
     @Serializable
-    data object ThemesScreen : Configuration()
-
-    @Serializable
     data class UpdateScreen(val updateUrl: String) : Configuration()
 }

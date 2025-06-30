@@ -26,7 +26,7 @@ import themedbingo.composeapp.generated.resources.ic_decrease
 import themedbingo.composeapp.generated.resources.ic_increase
 import themedbingo.composeapp.generated.resources.max_winners
 import ui.feature.core.text.OutlinedText
-import ui.theme.CreateRoomTheme
+import ui.theme.BingoTypeTheme
 
 @OptIn(ExperimentalResourceApi::class)
 @Composable
@@ -97,7 +97,7 @@ fun EditMaxWinnersCard(
 @Preview
 @Composable
 private fun Preview() {
-    CreateRoomTheme(
+    BingoTypeTheme(
         type = BingoType.THEMED,
         content = {
             Surface {
