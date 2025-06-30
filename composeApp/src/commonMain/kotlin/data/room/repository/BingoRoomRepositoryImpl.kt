@@ -6,6 +6,7 @@ import data.room.model.BingoRoomDTO
 import data.room.model.bingoRoomDTOFromDocumentSnapshot
 import dev.gitlive.firebase.firestore.FieldValue
 import dev.gitlive.firebase.firestore.FirebaseFirestore
+import dev.gitlive.firebase.firestore.Timestamp
 import dev.gitlive.firebase.firestore.toMilliseconds
 import domain.character.repository.CharacterRepository
 import domain.feature.user.UserRepository
@@ -28,7 +29,6 @@ import kotlinx.datetime.Instant
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
 import ui.feature.room.state.auxiliar.BingoState
-import util.getLocalDateTimeNow
 
 class BingoRoomRepositoryImpl(
     firestore: FirebaseFirestore,
@@ -157,7 +157,7 @@ class BingoRoomRepositoryImpl(
                                     "winners" to emptyList<String>(),
                                     "players" to emptyList<String>(),
                                     "drawnCharactersIds" to emptyList<String>(),
-                                    "createdAt" to getLocalDateTimeNow().toString()
+                                    "createdAt" to Timestamp.now()
                                 )
                             )
                             documentReference.id
