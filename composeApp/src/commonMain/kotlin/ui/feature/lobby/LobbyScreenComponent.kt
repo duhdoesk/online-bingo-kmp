@@ -34,7 +34,7 @@ import util.componentCoroutineScope
 
 class LobbyScreenComponent(
     componentContext: ComponentContext,
-    private val bingoType: BingoType,
+    val bingoType: BingoType,
     private val onPopBack: () -> Unit,
     private val onJoinRoom: (configuration: Configuration) -> Unit,
     private val onCreateRoom: () -> Unit,
@@ -72,14 +72,24 @@ class LobbyScreenComponent(
                 _loading
             ) { query, roomsRes, userRes, loading ->
                 val user = userRes.getOrNull()
-                if (user == null) return@combine LobbyScreenUiState.Failure()
+                if (user == null) {
+                    return@combine LobbyScreenUiState(
+                        isLoading = false,
+                        isError = true
+                    )
+                }
 
                 val rooms = roomsRes.getOrNull()
-                if (rooms == null) return@combine LobbyScreenUiState.Failure()
+                if (rooms == null) {
+                    return@combine LobbyScreenUiState(
+                        isLoading = false,
+                        isError = true
+                    )
+                }
 
-                LobbyScreenUiState.Success(
+                LobbyScreenUiState(
                     isLoading = loading,
-                    type = bingoType,
+                    isError = false,
                     availableRooms = rooms.filter {
                         val name = it.name.lowercase().contains(query.lowercase())
                         val host = it.host.name.lowercase().contains(query.lowercase())
@@ -98,7 +108,7 @@ class LobbyScreenComponent(
         .stateIn(
             scope = coroutineScope,
             started = SharingStarted.WhileSubscribed(5_000),
-            initialValue = LobbyScreenUiState.Idle
+            initialValue = LobbyScreenUiState()
         )
 
     /**

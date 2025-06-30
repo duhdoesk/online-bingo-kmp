@@ -6,6 +6,7 @@ import data.room.model.BingoRoomDTO
 import data.room.model.bingoRoomDTOFromDocumentSnapshot
 import dev.gitlive.firebase.firestore.FieldValue
 import dev.gitlive.firebase.firestore.FirebaseFirestore
+import dev.gitlive.firebase.firestore.Timestamp
 import dev.gitlive.firebase.firestore.toMilliseconds
 import domain.character.repository.CharacterRepository
 import domain.feature.user.UserRepository
@@ -17,14 +18,17 @@ import domain.room.repository.BingoRoomRepository
 import domain.theme.repository.ThemeRepository
 import domain.util.resource.Cause
 import domain.util.resource.Resource
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.take
 import kotlinx.datetime.Instant
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
 import ui.feature.room.state.auxiliar.BingoState
-import util.getLocalDateTimeNow
 
 class BingoRoomRepositoryImpl(
     firestore: FirebaseFirestore,
@@ -122,8 +126,8 @@ class BingoRoomRepositoryImpl(
             }
     }
 
+    @OptIn(ExperimentalCoroutinesApi::class)
     override fun createRoom(
-        hostId: String,
         name: String,
         privacy: RoomPrivacy,
         maxWinners: Int,
@@ -133,26 +137,38 @@ class BingoRoomRepositoryImpl(
         val locked = privacy is RoomPrivacy.Private
         val password = if (privacy is RoomPrivacy.Private) privacy.password else null
 
-        return firebaseSuspendCall {
-            val documentReference = collection
-                .add(
-                    data = hashMapOf(
-                        "hostId" to hostId,
-                        "name" to name,
-                        "locked" to locked,
-                        "password" to password,
-                        "maxWinners" to maxWinners,
-                        "type" to type.name,
-                        "themeId" to themeId,
-                        "state" to "NOT_STARTED",
-                        "winners" to emptyList<String>(),
-                        "players" to emptyList<String>(),
-                        "drawnCharactersIds" to emptyList<String>(),
-                        "createdAt" to getLocalDateTimeNow().toString()
-                    )
-                )
-            documentReference.id
-        }
+        return userRepository.getCurrentUser()
+            .take(1)
+            .flatMapLatest { userResource ->
+                when (userResource) {
+                    is Resource.Success -> {
+                        val hostId = userResource.data.id
+                        firebaseSuspendCall {
+                            val documentReference = collection.add(
+                                hashMapOf(
+                                    "hostId" to hostId,
+                                    "name" to name,
+                                    "locked" to locked,
+                                    "password" to password,
+                                    "maxWinners" to maxWinners,
+                                    "type" to type.name,
+                                    "themeId" to themeId,
+                                    "state" to "NOT_STARTED",
+                                    "winners" to emptyList<String>(),
+                                    "players" to emptyList<String>(),
+                                    "drawnCharactersIds" to emptyList<String>(),
+                                    "createdAt" to Timestamp.now()
+                                )
+                            )
+                            documentReference.id
+                        }
+                    }
+
+                    is Resource.Failure -> {
+                        flow { emit(Resource.Failure(userResource.cause)) }
+                    }
+                }
+            }
     }
 
     override fun joinRoom(roomId: String, userId: String): Flow<Resource<Unit>> {
@@ -234,7 +250,8 @@ class BingoRoomRepositoryImpl(
                 state = BingoState.valueOf(dto.state),
                 players = dto.players,
                 winnersIds = dto.winners,
-                createdAt = Instant.fromEpochMilliseconds(dto.createdAt.toMilliseconds().toLong()).toLocalDateTime(TimeZone.UTC)
+                createdAt = Instant.fromEpochMilliseconds(dto.createdAt.toMilliseconds().toLong())
+                    .toLocalDateTime(TimeZone.UTC)
             )
         )
     }

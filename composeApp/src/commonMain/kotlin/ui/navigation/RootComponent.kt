@@ -36,7 +36,6 @@ import ui.feature.room.RoomHostViewModel
 import ui.feature.room.RoomPlayerViewModel
 import ui.feature.signIn.SignInScreenComponent
 import ui.feature.splash.SplashScreenComponent
-import ui.feature.themes.ThemesScreenComponent
 import ui.feature.update.UpdateScreenComponent
 import ui.navigation.Child.CreateUserScreen
 import ui.navigation.Child.HomeScreen
@@ -47,7 +46,6 @@ import ui.navigation.Child.PlayerScreen
 import ui.navigation.Child.ProfileScreen
 import ui.navigation.Child.SignInScreen
 import ui.navigation.Child.SplashScreen
-import ui.navigation.Child.ThemesScreen
 import ui.navigation.Child.UpdateScreen
 import util.componentCoroutineScope
 
@@ -135,19 +133,12 @@ class RootComponent(
                 )
             )
 
-            Configuration.ThemesScreen -> ThemesScreen(
-                ThemesScreenComponent(
-                    componentContext = context,
-                    onPopBack = { navigation.pop() }
-                )
-            )
-
             is Configuration.CreateScreen -> Child.CreateScreen(
                 CreateRoomScreenComponent(
                     componentContext = context,
                     bingoType = configuration.bingoType,
                     onPopBack = { navigation.pop() },
-                    onCreateRoom = { receivedConfig ->
+                    onRoomCreated = { receivedConfig ->
                         navigation.replaceCurrent(configuration = receivedConfig)
                     }
                 )

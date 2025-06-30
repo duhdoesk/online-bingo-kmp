@@ -37,7 +37,7 @@ fun CustomPrimaryButton(
         if (enabled) {
             colors.contentColor
         } else {
-            ButtonDefaults.buttonColors().disabledContentColor
+            colors.disabledContentColor
         }
 
     Button(

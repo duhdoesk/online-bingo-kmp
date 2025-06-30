@@ -22,7 +22,6 @@ interface BingoRoomRepository {
 
     /** Creates a new room and returns its ID */
     fun createRoom(
-        hostId: String,
         name: String,
         privacy: RoomPrivacy,
         maxWinners: Int,

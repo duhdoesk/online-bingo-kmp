@@ -13,7 +13,6 @@ import ui.feature.room.screens.host.HostScreen
 import ui.feature.room.screens.player.PlayerScreen
 import ui.feature.signIn.SignInScreen
 import ui.feature.splash.SplashScreen
-import ui.feature.themes.ThemesScreen
 import ui.feature.update.UpdateScreen
 import ui.util.WindowInfo
 
@@ -64,11 +63,6 @@ fun CreateScreen(
 
         is Child.SplashScreen -> SplashScreen(
             component = instance.component
-        )
-
-        is Child.ThemesScreen -> ThemesScreen(
-            component = instance.component,
-            windowInfo = windowInfo
         )
 
         is Child.UpdateScreen -> UpdateScreen(

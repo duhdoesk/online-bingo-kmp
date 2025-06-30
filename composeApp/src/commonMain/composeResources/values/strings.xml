@@ -55,10 +55,12 @@
 
 
     <!--    Create Room Screen -->
+    <string name="create_error">We could not create your room at the moment. Please, try again in a few moments.</string>
+    <string name="create_room">Create new room</string>
     <string name="create_room_title">Create Themed Bingo Room</string>
     <string name="create_classic_room_title">Create Classic Bingo Room</string>
     <string name="create_session_button">Create</string>
-    <string name="name_textField">Name</string>
+    <string name="name_textField">Room Name</string>
     <string name="theme_textField">Theme</string>
     <string name="password_textField">Password</string>
     <string name="private_session_checkbox">Private Room</string>
@@ -67,7 +69,7 @@
     <string name="key_icon">Key</string>
     <string name="name_length_error">The name must be at least 4 characters.</string>
     <string name="password_length_error">The password must be at least 4 characters.</string>
-    <string name="name_body">You must define a name to your room with, at least, 4 characters. This name will be displayed in the app for the other players in the join room screen.</string>
+    <string name="name_body">You must define a name to your room with, at least, 4 characters. This name will be displayed in the app for the other players in the lobby.</string>
     <string name="password_body">You must define a password to your room with, at least, 4 characters. Your friends will need this password to join your room.</string>
     <string name="select_theme"> Select a Theme</string>
 

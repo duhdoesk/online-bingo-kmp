@@ -1,165 +1,257 @@
 package ui.feature.createRoom
 
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.safeDrawing
+import androidx.compose.foundation.layout.widthIn
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.rememberModalBottomSheetState
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
-import org.jetbrains.compose.resources.ExperimentalResourceApi
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import domain.room.model.BingoType
+import domain.room.model.RoomPrivacy
+import org.jetbrains.compose.resources.stringResource
+import org.jetbrains.compose.ui.tooling.preview.Preview
 import themedbingo.composeapp.generated.resources.Res
+import themedbingo.composeapp.generated.resources.classic_bingo_type
+import themedbingo.composeapp.generated.resources.create_button
+import themedbingo.composeapp.generated.resources.create_room
 import themedbingo.composeapp.generated.resources.name_body
 import themedbingo.composeapp.generated.resources.name_textField
 import themedbingo.composeapp.generated.resources.password_body
 import themedbingo.composeapp.generated.resources.password_textField
-import ui.feature.core.RotateScreen
-import ui.feature.core.bottomSheet.ThemePickerBottomSheet
+import themedbingo.composeapp.generated.resources.room_name_card
+import themedbingo.composeapp.generated.resources.themed_bingo_type
+import ui.feature.core.CustomTopBar
 import ui.feature.core.bottomSheet.UpdateBottomSheet
-import ui.feature.core.dialog.GenericErrorDialog
-import ui.feature.createRoom.event.CreateScreenEvent
+import ui.feature.core.buttons.CustomPrimaryButton
+import ui.feature.core.cards.SingleInfoEditCard
+import ui.feature.core.text.OutlinedShadowedText
+import ui.feature.createRoom.screens.components.EditMaxWinnersCard
+import ui.feature.createRoom.screens.components.EditPasswordCard
+import ui.feature.createRoom.screens.components.EditThemeCard
+import ui.theme.BingoTypeTheme
+import ui.theme.GetBingoTypeBackground
 import ui.util.WindowInfo
+import ui.util.collectInLaunchedEffect
 
-@OptIn(ExperimentalResourceApi::class, ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CreateRoomScreen(
     component: CreateRoomScreenComponent,
     windowInfo: WindowInfo
 ) {
-    /**
-     * Triggers viewModel's initial data loading function
-     */
-    LaunchedEffect(Unit) { component.uiEvent(CreateScreenEvent.UILoaded) }
-
-    /**
-     * Coroutine Scope to handle suspend operations
-     */
-    val coroutineScope = rememberCoroutineScope()
-
-    /**
-     * UI State listeners
-     */
-    val uiState by component.uiState.collectAsState()
-    val isFormOk by component.isFormOk.collectAsState()
-
-    /**
-     * Bottom Sheet State holders
-     */
-    val nameBottomSheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
+    val uiState by component.uiState.collectAsStateWithLifecycle()
+    val snackbarHostState = remember { SnackbarHostState() }
     var showNameBottomSheet by remember { mutableStateOf(false) }
-
-    val passwordBottomSheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
     var showPasswordBottomSheet by remember { mutableStateOf(false) }
 
-    val themeBottomSheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
-    var showThemeBottomSheet by remember { mutableStateOf(false) }
+    component.uiMessage.collectInLaunchedEffect { message ->
+        snackbarHostState.showSnackbar(message)
+    }
 
-    /**
-     * Modal visibility listeners
-     */
-    val showErrorDialog = component.showErrorDialog
+    BingoTypeTheme(
+        type = uiState.type.toEnum(),
+        content = {
+            CreateRoomScreenContent(
+                uiState = uiState,
+                snackbarHostState = snackbarHostState,
+                onUiEvent = component::onUiEvent,
+                onNamePressed = { showNameBottomSheet = true },
+                onPasswordPressed = { showPasswordBottomSheet = true },
+                modifier = Modifier.fillMaxSize()
+            )
 
-    /**
-     * Screen calling
-     */
-    when (windowInfo.screenOrientation) {
-        WindowInfo.DeviceOrientation.Landscape -> {
-            RotateScreen()
+            if (showNameBottomSheet) {
+                UpdateBottomSheet(
+                    onDismiss = { showNameBottomSheet = false },
+                    onConfirm = {
+                        component.onUiEvent(CreateRoomUiEvent.OnChangeName(it))
+                        showNameBottomSheet = false
+                    },
+                    currentValue = uiState.name,
+                    title = Res.string.name_textField,
+                    body = Res.string.name_body,
+                    label = Res.string.name_textField,
+                    minLength = 4,
+                    maxLength = 20,
+                    accentColor = MaterialTheme.colorScheme.primary,
+                    onAccentColor = MaterialTheme.colorScheme.onPrimary
+                )
+            }
+
+            if (showPasswordBottomSheet) {
+                UpdateBottomSheet(
+                    onDismiss = { showPasswordBottomSheet = false },
+                    onConfirm = { password ->
+                        component.onUiEvent(
+                            CreateRoomUiEvent.OnChangePrivacy(
+                                RoomPrivacy.Private(password)
+                            )
+                        )
+                        showPasswordBottomSheet = false
+                    },
+                    currentValue = (uiState.privacy as? RoomPrivacy.Private)?.password.orEmpty(),
+                    title = Res.string.password_textField,
+                    body = Res.string.password_body,
+                    label = Res.string.password_textField,
+                    minLength = 4,
+                    maxLength = 12,
+                    accentColor = MaterialTheme.colorScheme.primary,
+                    onAccentColor = MaterialTheme.colorScheme.onPrimary
+                )
+            }
+        }
+    )
+}
+
+@Composable
+private fun CreateRoomScreenContent(
+    uiState: CreateRoomUiState,
+    snackbarHostState: SnackbarHostState,
+    onUiEvent: (CreateRoomUiEvent) -> Unit,
+    onNamePressed: () -> Unit = {},
+    onPasswordPressed: () -> Unit = {},
+    modifier: Modifier = Modifier
+) {
+    Scaffold(
+        topBar = {
+            val title = when (uiState.type) {
+                CreateRoomUiState.Type.Classic -> Res.string.classic_bingo_type
+                is CreateRoomUiState.Type.Themed -> Res.string.themed_bingo_type
+            }
+
+            CustomTopBar(
+                text = stringResource(title),
+                primaryColor = MaterialTheme.colorScheme.primary,
+                onPrimaryColor = MaterialTheme.colorScheme.onPrimary,
+                onBackPressed = { onUiEvent(CreateRoomUiEvent.OnPopBack) }
+            )
+        },
+        snackbarHost = { SnackbarHost(snackbarHostState) },
+        contentWindowInsets = WindowInsets.safeDrawing,
+        modifier = modifier
+    ) { innerPadding ->
+        Box {
+            Image(
+                painter = GetBingoTypeBackground(uiState.type.toEnum()),
+                contentScale = ContentScale.Crop,
+                contentDescription = null,
+                modifier = Modifier.fillMaxSize()
+            )
         }
 
-        WindowInfo.DeviceOrientation.Portrait -> {
+        Column(
+            modifier = Modifier
+                .padding(innerPadding)
+                .fillMaxHeight()
+                .widthIn(max = 600.dp)
+        ) {
+            Column(
+                verticalArrangement = Arrangement.Center,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .weight(1f)
+                    .verticalScroll(rememberScrollState())
+            ) {
+                OutlinedShadowedText(
+                    text = stringResource(Res.string.create_room),
+                    fontSize = 24,
+                    strokeWidth = 2f,
+                    fontColor = MaterialTheme.colorScheme.onPrimary,
+                    strokeColor = MaterialTheme.colorScheme.primary,
+                    modifier = Modifier.padding(start = 20.dp)
+                )
+
+                SingleInfoEditCard(
+                    label = stringResource(Res.string.room_name_card),
+                    currentValue = uiState.name,
+                    onClick = onNamePressed,
+                    containerColor = MaterialTheme.colorScheme.onPrimary,
+                    contentColor = MaterialTheme.colorScheme.primary,
+                    modifier = Modifier
+                        .padding(horizontal = 20.dp)
+                        .padding(top = 12.dp)
+                        .fillMaxWidth()
+                )
+
+                EditMaxWinnersCard(
+                    currentValue = uiState.maxWinners,
+                    onClick = { onUiEvent(CreateRoomUiEvent.OnChangeMaxWinners(it)) },
+                    modifier = Modifier
+                        .padding(horizontal = 20.dp)
+                        .padding(top = 12.dp)
+                )
+
+                if (uiState.type is CreateRoomUiState.Type.Themed) {
+                    EditThemeCard(
+                        selectedTheme = uiState.type.theme,
+                        onThemeSelected = {
+                            onUiEvent(
+                                CreateRoomUiEvent.OnChangeType(
+                                    CreateRoomUiState.Type.Themed(it)
+                                )
+                            )
+                        },
+                        modifier = Modifier
+                            .padding(horizontal = 20.dp)
+                            .padding(top = 12.dp)
+                    )
+                }
+
+                EditPasswordCard(
+                    privacy = uiState.privacy,
+                    onPasswordClick = onPasswordPressed,
+                    onPrivacyChange = { onUiEvent(CreateRoomUiEvent.OnChangePrivacy(it)) },
+                    modifier = Modifier
+                        .padding(horizontal = 20.dp)
+                        .padding(top = 24.dp)
+                )
+            }
+
+            CustomPrimaryButton(
+                text = stringResource(Res.string.create_button),
+                enabled = uiState.canProceed,
+                onClick = { onUiEvent(CreateRoomUiEvent.OnCreateRoom) },
+                modifier = Modifier
+                    .padding(horizontal = 20.dp, vertical = 8.dp)
+                    .fillMaxWidth()
+            )
         }
-//            when (uiState.bingoType) {
-//                BingoType.CLASSIC ->
-//                    CreateClassicRoomScreen(
-//                        uiState = uiState,
-//                        isFormOk = isFormOk,
-//                        event = { component.uiEvent(it) },
-//                        onEditName = { showNameBottomSheet = true },
-//                        onEditPassword = { showPasswordBottomSheet = true }
-//                    )
-//
-//                BingoType.THEMED ->
-//                    CreateThemedRoomScreen(
-//                        uiState = uiState,
-//                        isFormOk = isFormOk,
-//                        event = { component.uiEvent(it) },
-//                        onEditTheme = { showThemeBottomSheet = true },
-//                        onEditName = { showNameBottomSheet = true },
-//                        onEditPassword = { showPasswordBottomSheet = true }
-//                    )
-//            }
     }
+}
 
-    /**
-     * Modals
-     */
-    if (showErrorDialog.isVisible.value) {
-        GenericErrorDialog(
-            body = showErrorDialog.dialogData.value,
-            onDismiss = { showErrorDialog.hideDialog() }
-        )
-    }
-
-    /**
-     * Bottom Sheets
-     */
-    if (showNameBottomSheet) {
-        UpdateBottomSheet(
-            sheetState = nameBottomSheetState,
-            onDismiss = { showNameBottomSheet = false },
-            onConfirm = {
-                coroutineScope.launch {
-                    delay(200)
-                    component.uiEvent(CreateScreenEvent.UpdateName(it))
-                    nameBottomSheetState.hide()
-                    showNameBottomSheet = false
-                }
-            },
-            currentValue = uiState.name,
-            title = Res.string.name_textField,
-            body = Res.string.name_body,
-            label = Res.string.name_textField
-        )
-    }
-
-    if (showPasswordBottomSheet) {
-        UpdateBottomSheet(
-            sheetState = passwordBottomSheetState,
-            onDismiss = { showPasswordBottomSheet = false },
-            onConfirm = {
-                coroutineScope.launch {
-                    delay(200)
-                    component.uiEvent(CreateScreenEvent.UpdatePassword(it))
-                    passwordBottomSheetState.hide()
-                    showPasswordBottomSheet = false
-                }
-            },
-            currentValue = uiState.password,
-            title = Res.string.password_textField,
-            body = Res.string.password_body,
-            label = Res.string.password_textField
-        )
-    }
-
-    if (showThemeBottomSheet) {
-        ThemePickerBottomSheet(
-            themes = uiState.availableThemes,
-            sheetState = themeBottomSheetState,
-            onThemePick = {
-                coroutineScope.launch {
-                    delay(200)
-                    component.uiEvent(CreateScreenEvent.UpdateTheme(it))
-                    themeBottomSheetState.hide()
-                    showThemeBottomSheet = false
-                }
-            },
-            onDismiss = { showThemeBottomSheet = false }
-        )
-    }
+@Preview
+@Composable
+private fun Preview() {
+    BingoTypeTheme(
+        type = BingoType.CLASSIC,
+        content = {
+            CreateRoomScreenContent(
+                uiState = CreateRoomUiState(isLoading = false, name = "Atumalaca"),
+                snackbarHostState = SnackbarHostState(),
+                onUiEvent = { },
+                modifier = Modifier.fillMaxSize()
+            )
+        }
+    )
 }

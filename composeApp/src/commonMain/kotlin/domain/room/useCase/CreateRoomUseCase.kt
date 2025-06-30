@@ -8,7 +8,6 @@ import kotlinx.coroutines.flow.Flow
 
 class CreateRoomUseCase(private val roomRepository: BingoRoomRepository) {
     operator fun invoke(
-        hostId: String,
         name: String,
         privacy: RoomPrivacy,
         maxWinners: Int,
@@ -16,7 +15,6 @@ class CreateRoomUseCase(private val roomRepository: BingoRoomRepository) {
         themeId: String?
     ): Flow<Resource<String>> {
         return roomRepository.createRoom(
-            hostId = hostId,
             name = name,
             privacy = privacy,
             maxWinners = maxWinners,
